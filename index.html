@@ -593,13 +593,13 @@
            <span class="m-status is-live"><i class="dot"></i>Live</span>
            <span class="m-arrow">↗</span>
          </a> -->
-    <div class="m-row is-next">
+    <a class="m-row" href="https://build-100.com/001/">
       <span class="m-no">001</span>
-      <span class="m-name">???<span data-en="First site — in build">第一个网站，构建中</span></span>
-      <span class="m-url">—</span>
-      <span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span>
-      <span class="m-arrow"></span>
-    </div>
+      <span class="m-name">COMBO-001<span data-en="AI subscription optimizer — pay for what you use">AI 订阅最优搭配器 — 只为用到的付费</span></span>
+      <span class="m-url">build-100.com/001</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
     <div class="m-row">
       <span class="m-no">002</span>
       <span class="m-name"><span class="redact" style="width: 9em;"></span></span>
@@ -695,9 +695,11 @@
 
 <script>
   // ===== 站点配置：更新进度只需要改这里 =====
-  const SITE = { completed: 0, total: 100, updated: "2026.07", started: "2026-07-10" };
+  const SITE = { completed: 1, total: 100, updated: "2026.07", started: "2026-07-10" };
   // 已上线项目（顺序对应进度格 1、2、3…），每上线一个往后加一条：{ name: "名字", url: "https://xxx.build-100.com" }
-  const PROJECTS = [];
+  const PROJECTS = [
+    { name: "COMBO-001 · AI 订阅最优搭配器", url: "https://build-100.com/001/" },
+  ];
   // =========================================
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
