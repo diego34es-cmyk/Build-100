@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COMBO-001 · AI 订阅最优搭配器</title>
+<meta name="description" content="输入预算与使用习惯，算出你的 AI 订阅最优搭配——预算内勉强够用的组合，以及要真正满足需求还差多少。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/001/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E001%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --neon: #b794f6;          /* 赛博朋克紫，呼应提案 §8 */
+    --neon-glow: rgba(183, 148, 246, 0.35);
+    --delta: #fbbf24;         /* 「再加 $X」的视觉锚点色 */
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--neon); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  /* Nav —— 与主站同家族 */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; }
+  .nav-brand span { color: var(--neon); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  /* Hero */
+  .hero { margin-bottom: clamp(36px, 6vh, 56px); }
+  .hero .eyebrow { color: var(--neon); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--neon); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p { color: var(--muted); max-width: 36em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p strong { color: var(--ink); font-weight: 500; }
+
+  /* Form blocks */
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field:last-of-type { border-bottom: 1px solid var(--line); }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  /* Budget */
+  .budget-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .budget-input {
+    background: var(--bg-raise); border: 1px solid var(--line-strong); color: var(--ink);
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.4rem; font-weight: 500;
+    padding: 10px 14px; width: 120px; border-radius: 4px;
+  }
+  .budget-input::-webkit-outer-spin-button, .budget-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .budget-input[type=number] { -moz-appearance: textfield; }
+  .budget-prefix { font-family: var(--mono); font-size: 1.4rem; color: var(--faint); }
+  .quick-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 7px 13px; border-radius: 999px; cursor: pointer; transition: all .18s;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--ink); }
+  .chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .budget-err { color: #f87171; font-size: 0.85rem; margin-top: 10px; min-height: 1.2em; font-family: var(--mono); letter-spacing: 0.02em; }
+
+  /* Intensity radios */
+  .intensity-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .int-opt {
+    border: 1px solid var(--line-strong); border-radius: 6px; padding: 14px 16px; cursor: pointer;
+    transition: border-color .18s, background .18s; background: var(--bg-raise);
+  }
+  .int-opt:hover { border-color: var(--muted); }
+  .int-opt.selected { border-color: var(--neon); background: rgba(183, 148, 246, 0.08); box-shadow: 0 0 0 1px var(--neon) inset; }
+  .int-opt .lvl { font-family: var(--mono); font-size: 11px; color: var(--faint); letter-spacing: 0.1em; }
+  .int-opt .lbl { display: block; font-size: 0.92rem; margin-top: 4px; }
+  .int-opt.selected .lvl { color: var(--neon); }
+
+  /* Sliders */
+  .slider-row { display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .slider-row:last-child { border-bottom: none; }
+  .slider-row .name { font-size: 0.95rem; }
+  .slider-row .name small { display: block; color: var(--faint); font-size: 0.78rem; }
+  .slider-val { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.1rem; color: var(--neon); min-width: 2ch; text-align: right; }
+  .slider-val.zero { color: var(--faint); }
+  input[type=range] {
+    grid-column: 1 / -1; -webkit-appearance: none; appearance: none; width: 100%; height: 4px;
+    background: var(--line-strong); border-radius: 2px; outline: none; margin-top: 4px;
+  }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--neon); cursor: pointer; box-shadow: 0 0 8px var(--neon-glow); }
+  input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border: none; border-radius: 50%; background: var(--neon); cursor: pointer; }
+
+  /* Submit */
+  .submit-wrap { margin-top: clamp(32px, 5vh, 48px); }
+  .submit-btn {
+    width: 100%; font-family: var(--mono); font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase;
+    padding: 18px; border: 1px solid var(--neon); background: rgba(183, 148, 246, 0.1); color: var(--ink);
+    cursor: pointer; transition: all .2s; border-radius: 4px;
+  }
+  .submit-btn:hover:not(:disabled) { background: var(--neon); color: var(--bg); box-shadow: 0 0 24px var(--neon-glow); }
+  .submit-btn:disabled { opacity: 0.5; cursor: wait; }
+
+  /* Computing overlay */
+  .computing { display: none; text-align: center; padding: 80px 0; }
+  .computing.show { display: block; }
+  .computing .pulse {
+    display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--neon);
+    box-shadow: 0 0 16px var(--neon-glow); animation: pulse 1s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+  .computing .txt { margin-top: 18px; font-family: var(--mono); letter-spacing: 0.18em; color: var(--muted); font-size: 13px; }
+
+  /* Result */
+  .result { display: none; }
+  .result.show { display: block; animation: fadeUp .5s cubic-bezier(0.16,1,0.3,1); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+  .result-head { margin-bottom: 28px; }
+  .result-head h2 { font-size: clamp(1.5rem, 3.4vw, 2.2rem); font-weight: 700; line-height: 1.25; text-wrap: balance; margin-bottom: 6px; }
+
+  .delta-banner {
+    margin: 0 0 28px; padding: clamp(24px, 4vh, 34px); border: 1px solid var(--delta); border-radius: 8px;
+    background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(251,191,36,0.02));
+    text-align: center;
+  }
+  .delta-banner.merged { border-color: var(--live); background: linear-gradient(135deg, rgba(74,222,128,0.1), rgba(74,222,128,0.02)); }
+  .delta-banner .label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
+  .delta-banner .big {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 500;
+    font-size: clamp(2.6rem, 8vw, 4rem); line-height: 1; margin: 10px 0; color: var(--delta);
+  }
+  .delta-banner.merged .big { color: var(--live); }
+  .delta-banner .sub { color: var(--muted); font-size: 0.92rem; }
+
+  .plan-card {
+    border: 1px solid var(--line-strong); border-radius: 8px; padding: clamp(20px, 3vw, 28px);
+    margin-bottom: 20px; background: var(--bg-raise);
+  }
+  .plan-card.primary { border-color: var(--neon); box-shadow: 0 0 0 1px rgba(183,148,246,0.2); }
+  .plan-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--neon); margin-bottom: 14px; }
+  .plan-card.satisfy .plan-tag { color: var(--delta); }
+  .plan-price { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.6rem; font-weight: 500; margin-bottom: 2px; }
+  .plan-price small { color: var(--faint); font-size: 0.55em; font-weight: 400; }
+  .plan-vs { color: var(--muted); font-size: 0.85rem; margin-bottom: 18px; }
+  .plan-vs b { color: var(--ink); font-weight: 500; font-family: var(--mono); }
+
+  .product-list { list-style: none; }
+  .product-item { display: flex; gap: 14px; padding: 14px 0; border-top: 1px solid var(--line); align-items: flex-start; }
+  .product-item:first-child { border-top: none; }
+  .product-logo {
+    flex-shrink: 0; width: 40px; height: 40px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-weight: 700; font-size: 15px; color: var(--bg);
+  }
+  .product-body { flex: 1; min-width: 0; }
+  .product-name { font-weight: 700; font-size: 0.98rem; }
+  .product-name .pv { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); font-weight: 400; margin-left: 8px; }
+  .product-note { color: var(--muted); font-size: 0.86rem; margin-top: 3px; }
+  .product-price { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 0.92rem; color: var(--ink); flex-shrink: 0; }
+
+  .why-box { margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--line); color: var(--muted); font-size: 0.9rem; line-height: 1.7; }
+  .why-box .ttl { color: var(--ink); font-weight: 500; display: block; margin-bottom: 4px; }
+
+  .alt-box { margin-top: 20px; }
+  .alt-toggle {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--muted);
+    background: none; border: 1px solid var(--line); padding: 10px 16px; border-radius: 4px; cursor: pointer; width: 100%; text-align: left;
+    transition: color .2s, border-color .2s;
+  }
+  .alt-toggle:hover { color: var(--ink); border-color: var(--muted); }
+  .alt-toggle .arrow { float: right; transition: transform .2s; }
+  .alt-toggle.open .arrow { transform: rotate(90deg); }
+  .alt-content { display: none; margin-top: 12px; }
+  .alt-content.open { display: block; }
+
+  /* Share */
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .restart-btn {
+    margin-top: 36px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted); padding: 12px 24px; cursor: pointer; border-radius: 999px;
+    transition: all .2s;
+  }
+  .restart-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* 引流卡：结果页末尾，讲 BUILD-100 的故事 */
+  .origin-card {
+    margin-top: 48px; padding: clamp(24px, 4vw, 32px);
+    border: 1px solid var(--line); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(183,148,246,0.06), transparent 55%);
+  }
+  .origin-eyebrow { color: var(--neon); margin-bottom: 12px; }
+  .origin-text { color: var(--muted); font-size: 0.95rem; max-width: 34em; }
+  .origin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .origin-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); border-radius: 4px;
+    color: var(--muted); cursor: pointer; transition: all .2s;
+  }
+  .origin-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .origin-btn.primary { border-color: var(--neon); color: var(--ink); background: rgba(183,148,246,0.1); }
+  .origin-btn.primary:hover { background: var(--neon); color: var(--bg); }
+
+  footer { border-top: 1px solid var(--line); padding: 24px var(--pad); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  .err-banner { display: none; margin-bottom: 20px; padding: 14px 18px; border: 1px solid #f87171; border-radius: 6px; color: #fca5a5; font-size: 0.9rem; background: rgba(248,113,113,0.08); }
+  .err-banner.show { display: block; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .computing .pulse, .result.show { animation: none; }
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">COMBO<span>·001</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <!-- ===== Form State ===== -->
+  <div id="formView">
+    <header class="hero">
+      <p class="mono eyebrow"><span class="tick">●</span>&nbsp; COMBO-001 · AI SUBSCRIPTION OPTIMIZER</p>
+      <h1 data-en="Pay for the AI you actually use.">只为你真正用到的 AI 付费。</h1>
+      <p data-en='Four questions. Thirty seconds. You get two numbers: the best combo <strong>within your budget</strong>, and exactly what it costs to <strong>fully cover</strong> your needs.'>
+        四个问题，三十秒。你会得到两个数字：<strong>预算内</strong>的最优组合，以及<strong>完全满足</strong>需求要花多少。
+      </p>
+    </header>
+
+    <div class="err-banner" id="errBanner"></div>
+
+    <!-- Field 1: Budget -->
+    <div class="field">
+      <div class="field-head">
+        <span class="field-no">01</span>
+        <span class="field-title" data-en="Monthly budget">月预算</span>
+        <span class="field-hint" data-en="How much are you willing to spend per month? ($0–300)">每个月愿意花多少钱？（$0–300）</span>
+      </div>
+      <div class="budget-row">
+        <span class="budget-prefix">$</span>
+        <input class="budget-input" id="budgetInput" type="number" inputmode="numeric" min="0" max="300" value="40" aria-label="Monthly budget in USD">
+        <div class="quick-chips" id="quickChips">
+          <button class="chip" type="button" data-v="20">$20</button>
+          <button class="chip active" type="button" data-v="40">$40</button>
+          <button class="chip" type="button" data-v="60">$60</button>
+          <button class="chip" type="button" data-v="100">$100</button>
+          <button class="chip" type="button" data-v="200">$200</button>
+        </div>
+      </div>
+      <div class="budget-err" id="budgetErr"></div>
+    </div>
+
+    <!-- Field 2: Intensity -->
+    <div class="field">
+      <div class="field-head">
+        <span class="field-no">02</span>
+        <span class="field-title" data-en="Usage intensity">使用强度</span>
+        <span class="field-hint" data-en="On average, how many times a day do you hit usage limits? (AI subs reset every ~5h, so ~4× a day max.)">平均每天触发几次限额？（AI 订阅约 5 小时一窗口，一天最多约 4 次。）</span>
+      </div>
+      <div class="intensity-grid" id="intensityGrid">
+        <div class="int-opt" data-v="1" tabindex="0"><span class="lvl">LV.1</span><span class="lbl" data-en="Rarely (light use)">几乎不触发（用得少）</span></div>
+        <div class="int-opt selected" data-v="2" tabindex="0"><span class="lvl">LV.2</span><span class="lbl" data-en="About once a day">每天 1 次左右</span></div>
+        <div class="int-opt" data-v="3" tabindex="0"><span class="lvl">LV.3</span><span class="lbl" data-en="2–3 times a day">每天 2–3 次</span></div>
+        <div class="int-opt" data-v="4" tabindex="0"><span class="lvl">LV.4</span><span class="lbl" data-en="4× a day, still not enough">每天 4 次，顶格还不够用</span></div>
+      </div>
+    </div>
+
+    <!-- Field 3: Scenarios (sliders) -->
+    <div class="field">
+      <div class="field-head">
+        <span class="field-no">03</span>
+        <span class="field-title" data-en="Main use cases">主要使用场景</span>
+        <span class="field-hint" data-en="Slide 0–10 for each (0 = don't care). At least one above 0.">每项 0–10 打分，0 = 不需要。至少 1 项大于 0。</span>
+      </div>
+      <div id="scenSliders">
+        <div class="slider-row" data-k="reasoning">
+          <span class="name" data-en="High-level planning &amp; complex reasoning">高阶规划与复杂推理<small data-en="Deep reasoning, planning, hard problems">深度推理、规划、难题</small></span>
+          <span class="slider-val zero" data-display>0</span>
+          <input type="range" min="0" max="10" value="0" data-scenario="reasoning">
+        </div>
+        <div class="slider-row" data-k="search">
+          <span class="name" data-en="Search &amp; information">搜索与信息获取<small data-en="Look things up, stay informed">找资料、获取信息</small></span>
+          <span class="slider-val zero" data-display>0</span>
+          <input type="range" min="0" max="10" value="0" data-scenario="search">
+        </div>
+        <div class="slider-row" data-k="coding">
+          <span class="name" data-en="Coding / implementation">编程 / 代码实现<small data-en="Write code, debug, ship features">写代码、调试、做功能</small></span>
+          <span class="slider-val zero" data-display>0</span>
+          <input type="range" min="0" max="10" value="0" data-scenario="coding">
+        </div>
+        <div class="slider-row" data-k="daily">
+          <span class="name" data-en="Simple daily tasks">日常简单任务<small data-en="Quick questions, drafts, summaries">随手问、起草、总结</small></span>
+          <span class="slider-val" data-display>6</span>
+          <input type="range" min="0" max="10" value="6" data-scenario="daily">
+        </div>
+      </div>
+    </div>
+
+    <!-- Field 4: Special -->
+    <div class="field">
+      <div class="field-head">
+        <span class="field-no">04</span>
+        <span class="field-title" data-en="Special capabilities">特殊能力需求</span>
+        <span class="field-hint" data-en="Slide 0–10 for each (0 = don't care). Default 0.">每项 0–10 打分，0 = 不需要。默认全 0。</span>
+      </div>
+      <div id="sliders">
+        <div class="slider-row" data-k="vision">
+          <span class="name" data-en="Image understanding (vision)">看图能力<small data-en="Can it read/understand images?">能不能看懂图片</small></span>
+          <span class="slider-val zero" data-display>0</span>
+          <input type="range" min="0" max="10" value="0" data-special="vision">
+        </div>
+        <div class="slider-row" data-k="video">
+          <span class="name" data-en="Video generation">生成视频<small data-en="Can it generate video?">能不能生成视频</small></span>
+          <span class="slider-val zero" data-display>0</span>
+          <input type="range" min="0" max="10" value="0" data-special="video">
+        </div>
+        <div class="slider-row" data-k="audio">
+          <span class="name" data-en="Audio (voice / TTS / STT)">音频能力<small data-en="Voice chat, text-to-speech, speech-to-text">语音对话 / 朗读 / 识别</small></span>
+          <span class="slider-val zero" data-display>0</span>
+          <input type="range" min="0" max="10" value="0" data-special="audio">
+        </div>
+        <div class="slider-row" data-k="ocr">
+          <span class="name" data-en="OCR">OCR<small data-en="Extract text from images/docs">从图片/文档提取文字</small></span>
+          <span class="slider-val zero" data-display>0</span>
+          <input type="range" min="0" max="10" value="0" data-special="ocr">
+        </div>
+      </div>
+    </div>
+
+    <div class="submit-wrap">
+      <button class="submit-btn" id="submitBtn" type="button" data-en="Generate my optimal combo">生成我的最优 Combo</button>
+    </div>
+  </div>
+
+  <!-- ===== Computing State ===== -->
+  <div class="computing" id="computingView">
+    <span class="pulse"></span>
+    <div class="txt" data-en="CRUNCHING NUMBERS…">正在计算最优搭配…</div>
+  </div>
+
+  <!-- ===== Result State ===== -->
+  <div class="result" id="resultView">
+    <div class="result-head">
+      <h2 id="resultTitle" data-en="Here's your combo.">这就是你的组合。</h2>
+    </div>
+    <div id="resultBody"></div>
+
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareCanvasWrap">
+      <canvas id="shareCanvas" width="800" height="450"></canvas>
+      <p class="share-save-hint" data-en="Long-press or right-click to save the image.">长按或右键保存图片。</p>
+    </div>
+
+    <button class="restart-btn" id="restartBtn" type="button" data-en="↺ Retake test">↺ 重新测试</button>
+
+    <!-- 引流：价值交付之后，才是讲故事的时机 -->
+    <aside class="origin-card">
+      <p class="mono origin-eyebrow">BUILD-100 · 001/100</p>
+      <p class="origin-text" data-en="This tool is No.001 of BUILD-100 — one person building 100 websites with AI, in public. Ninety-nine to go.">
+        这个工具是 BUILD-100 的第 001 号作品——一个人用 AI 公开做 100 个网站。还剩 99 个。
+      </p>
+      <div class="origin-actions">
+        <a class="origin-btn primary" href="https://build-100.com/" data-en="See the project →">看看这个计划 →</a>
+        <a class="origin-btn" href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="Follow along on X">在 X 上看过程</a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" id="dataUpdated">Data updated 2026.07</span>
+</footer>
+
+<script type="module">
+  import { recommend, buildNeeds } from "./engine.js";
+  import { renderShareCanvas, buildShareText } from "./share.js";
+
+  // ===== 状态 =====
+  let PRODUCTS = [];
+  let lastResult = null;
+  let lastAnswers = null;
+  let computeTimer = null;   // §2 定时器清理跟踪
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {} // §6.3 复用主站 key
+
+  // ===== 加载数据（§1 的"接口"）=====
+  async function loadData() {
+    try {
+      const res = await fetch("./data/models.json");
+      const data = await res.json();
+      PRODUCTS = data.products || [];
+      if (data.updated) { dataUpdatedStr = data.updated.slice(0, 7).replace("-", "."); refreshDataUpdated(); }
+    } catch (e) {
+      document.getElementById("errBanner").textContent = lang === "en" ? "Failed to load product data." : "产品数据加载失败。";
+      document.getElementById("errBanner").classList.add("show");
+    }
+  }
+  loadData();
+
+  // ===== 双语切换（§6.3 复用主站机制）=====
+  const i18nEls = () => document.querySelectorAll("[data-en]");
+  let dataUpdatedStr = "";
+  function refreshDataUpdated() {
+    if (!dataUpdatedStr) return;
+    document.getElementById("dataUpdated").textContent = (lang === "en" ? "Data updated " : "数据更新 ") + dataUpdatedStr;
+  }
+  function applyLang(l) {
+    lang = l;
+    i18nEls().forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.getElementById("langBtn").textContent = l === "en" ? "中文" : "EN";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    refreshDataUpdated();
+    // 结果已渲染则重渲染（动态文案也要切语言）
+    if (lastResult) renderResult(lastResult, lastAnswers);
+  }
+  document.getElementById("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+
+  // ===== 输入收集 =====
+  function readBudget() {
+    const raw = document.getElementById("budgetInput").value;
+    const errEl = document.getElementById("budgetErr");
+    const v = Number(raw);
+    if (raw === "" || Number.isNaN(v) || !Number.isFinite(v)) { errEl.textContent = t("请输入有效数字", "Please enter a valid number"); return null; }
+    if (!Number.isInteger(v) || v < 0 || v > 300) { errEl.textContent = t("预算必须是 $0–300 的整数", "Budget must be an integer $0–300"); return null; }
+    errEl.textContent = "";
+    return v;
+  }
+  const t = (zh, en) => (lang === "en" ? en : zh);
+
+  function readAnswers() {
+    const budget = readBudget();
+    if (budget === null) return null;
+    const intensity = Number(document.querySelector(".int-opt.selected").dataset.v);
+    const scenarios = {};
+    document.querySelectorAll("input[data-scenario]").forEach((i) => { scenarios[i.dataset.scenario] = Number(i.value); });
+    const special = {};
+    document.querySelectorAll("input[data-special]").forEach((i) => { special[i.dataset.special] = Number(i.value); });
+    return { budget, intensity, scenarios, special };
+  }
+
+  // ===== 交互绑定 =====
+  const budgetInput = document.getElementById("budgetInput");
+  budgetInput.addEventListener("input", () => {
+    syncChips();
+    readBudget(); // 实时校验
+  });
+  function syncChips() {
+    const v = budgetInput.value;
+    document.querySelectorAll("#quickChips .chip").forEach((c) => c.classList.toggle("active", c.dataset.v === v));
+  }
+  document.getElementById("quickChips").addEventListener("click", (e) => {
+    const c = e.target.closest(".chip");
+    if (!c) return;
+    budgetInput.value = c.dataset.v;
+    syncChips();
+    readBudget();
+  });
+
+  document.getElementById("intensityGrid").addEventListener("click", (e) => {
+    const opt = e.target.closest(".int-opt");
+    if (!opt) return;
+    document.querySelectorAll(".int-opt").forEach((o) => o.classList.remove("selected"));
+    opt.classList.add("selected");
+  });
+  document.getElementById("intensityGrid").addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.target.closest(".int-opt")?.click(); }
+  });
+
+  // 场景滑块 & 特殊能力滑块：共用同一套显示同步逻辑
+  function bindSliderDisplay(slider) {
+    slider.addEventListener("input", () => {
+      const val = slider.value;
+      const display = slider.parentElement.querySelector("[data-display]");
+      display.textContent = val;
+      display.classList.toggle("zero", val === "0");
+    });
+  }
+  document.querySelectorAll("input[data-scenario]").forEach(bindSliderDisplay);
+  document.querySelectorAll("input[data-special]").forEach(bindSliderDisplay);
+
+  // ===== 提交 → 计算 → 结果 =====
+  document.getElementById("submitBtn").addEventListener("click", () => {
+    const answers = readAnswers();
+    if (!answers) return;
+    const scenMax = Math.max(answers.scenarios.reasoning, answers.scenarios.search, answers.scenarios.coding, answers.scenarios.daily);
+    if (scenMax === 0) {
+      const banner = document.getElementById("errBanner");
+      banner.textContent = t("至少把一个使用场景拉到大于 0", "Slide at least one use case above 0");
+      banner.classList.add("show");
+      return;
+    }
+    document.getElementById("errBanner").classList.remove("show");
+
+    // §6.1：纯函数 <100ms，加 600ms 仪式感动效但不假装很久
+    const btn = document.getElementById("submitBtn");
+    btn.disabled = true;
+    document.getElementById("formView").style.display = "none";
+    const computing = document.getElementById("computingView");
+    computing.classList.add("show");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    computeTimer = setTimeout(() => {
+      // 真正的计算（同步纯函数）
+      const result = recommend(answers, PRODUCTS);
+      lastResult = result; lastAnswers = answers;
+      computing.classList.remove("show");
+      document.getElementById("resultView").classList.add("show");
+      renderResult(result, answers);
+      btn.disabled = false;
+      computeTimer = null;
+    }, 600);
+  });
+
+  // ===== 结果渲染 =====
+  function renderResult(res, answers) {
+    const body = document.getElementById("resultBody");
+    const needs = buildNeeds(answers);
+    const L = (zh, en) => (lang === "en" ? en : zh);
+    let html = "";
+
+    // —— Delta banner（视觉锚点）——
+    if (res.merged) {
+      html += `<div class="delta-banner merged">
+        <div class="label">${L("你的预算", "YOUR BUDGET")}</div>
+        <div class="big">${L("已经够用", "IS ENOUGH")}</div>
+        <div class="sub">${L("$" + res.primary.price + "/月 即可完全满足你的需求", "$" + res.primary.price + "/mo fully covers your needs")}</div>
+      </div>`;
+    } else if (res.satisfy) {
+      const delta = res.satisfy.delta;
+      let label, sub;
+      if (delta > 0) { label = L("再加 $" + delta + "/月", "+ $" + delta + "/MO MORE"); sub = L("即可真正满足你的需求", "to truly meet your needs"); }
+      else { label = L("省 $" + (-delta) + "/月", "$" + (-delta) + "/MO LESS"); sub = L("你的预算有富余，满足需求只要 $" + res.satisfy.price, "You're over-budget — $" + res.satisfy.price + " covers it"); }
+      html += `<div class="delta-banner">
+        <div class="label">${L("满足方案", "TO BE FULLY MET")}</div>
+        <div class="big">${label}</div>
+        <div class="sub">${sub}</div>
+      </div>`;
+    } else if (res.fallback === "unsatisfiable") {
+      html += `<div class="delta-banner" style="border-color: var(--faint);">
+        <div class="label">${L("无法完全满足", "CAN'T BE FULLY MET")}</div>
+        <div class="big" style="color: var(--muted); font-size: clamp(1.2rem, 3vw, 1.8rem);">${L("当前市面订阅组合无法完全满足", "No subscription combo on the market fully meets this")}</div>
+      </div>`;
+    }
+
+    // —— 勉强方案卡 ——
+    html += planCard(res.primary, "primary", L("勉强方案 · 预算内最优", "Barely Fits · Best Within Budget"), needs, answers, res);
+
+    // —— 满足方案卡（未合并时）——
+    if (!res.merged && res.satisfy) {
+      html += planCard({ combo: res.satisfy.combo, price: res.satisfy.price, score: null, reasons: null }, "satisfy", L("满足方案 · 真正够用", "Fully Meets · Truly Enough"), needs, answers, res);
+    }
+
+    // —— 备选方案 ——
+    if (res.alternate) {
+      html += `<div class="alt-box">
+        <button class="alt-toggle" id="altToggle" type="button">${L("备选方案", "ALTERNATE")} <span class="arrow">▸</span></button>
+        <div class="alt-content" id="altContent">${planCard({ combo: res.alternate.combo, price: res.alternate.price, score: res.alternate.score, reasons: null }, "alt", L("勉强方案 · 次优解", "Barely Fits · Runner-up"), needs, answers, res, true)}</div>
+      </div>`;
+    }
+
+    body.innerHTML = html;
+
+    // 备选折叠
+    const altToggle = document.getElementById("altToggle");
+    if (altToggle) altToggle.addEventListener("click", () => {
+      const open = altToggle.classList.toggle("open");
+      document.getElementById("altContent").classList.toggle("open", open);
+    });
+
+    // 分享文案/图绑定数据
+    document.getElementById("copyBtn").classList.remove("copied");
+    document.getElementById("shareCanvasWrap").classList.remove("show");
+  }
+
+  function planCard(plan, kind, tag, needs, answers, res, isAlt) {
+    const items = plan.combo.items;
+    const L = (zh, en) => (lang === "en" ? en : zh);
+    let whyHtml = "";
+    if (plan.reasons && !isAlt) {
+      const r = plan.reasons;
+      const metNames = r.met.map((k) => L(CAP_ZH[k], CAP_EN[k]));
+      const gapNames = r.gap.map((k) => L(CAP_ZH[k], CAP_EN[k]));
+      // 整句模板按语言分开写，标点不共用（EN 态不得出现中文标点）
+      const s1 = L(
+        metNames.length ? `覆盖了 ${r.coveragePct}% 的能力需求，${metNames.join("、")}已满足。` : `覆盖了 ${r.coveragePct}% 的能力需求。`,
+        metNames.length ? `Covers ${r.coveragePct}% of what you asked for — ${metNames.join(", ")} met.` : `Covers ${r.coveragePct}% of what you asked for.`
+      );
+      const s2 = r.capacityOk
+        ? L("容量匹配你的使用强度。", "Capacity matches your usage intensity.")
+        : L("容量略低于你的强度，高峰时段可能要等。", "Capacity runs below your intensity — expect waits at peak.");
+      const s3 = gapNames.length
+        ? L(`缺口：${gapNames.join("、")}。`, `Gaps: ${gapNames.join(", ")}.`)
+        : "";
+      whyHtml = `<div class="why-box"><span class="ttl">${L("为什么是这个组合", "Why this combo")}</span>${s1} ${s2} ${s3}</div>`;
+    }
+
+    return `<div class="plan-card ${kind}">
+      <div class="plan-tag">${tag}</div>
+      <div class="plan-price">$${plan.price}<small>/mo</small></div>
+      ${kind === "primary" ? `<div class="plan-vs">${L("预算", "Budget")} <b>$${answers.budget}</b> · ${plan.price <= answers.budget ? L("省 $" + (answers.budget - plan.price), "$" + (answers.budget - plan.price) + " under") : L("超 $" + (plan.price - answers.budget), "$" + (plan.price - answers.budget) + " over")}</div>` : ""}
+      <ul class="product-list">${items.map((p) => productItem(p)).join("")}</ul>
+      ${whyHtml}
+    </div>`;
+  }
+
+  function productItem(p) {
+    const note = (p.notes && p.notes[lang]) || p.notes?.zh || "";
+    const logo = logoFor(p);
+    return `<li class="product-item">
+      <div class="product-logo" style="background:${logo.bg};color:${logo.fg};">${logo.letter}</div>
+      <div class="product-body">
+        <div class="product-name">${p.name}<span class="pv">${p.provider}</span></div>
+        <div class="product-note">${note}</div>
+      </div>
+      <div class="product-price">$${p.price === 0 ? (lang === "en" ? "Free" : "免费") : p.price + "/mo"}</div>
+    </li>`;
+  }
+
+  // 给每个 provider 一个稳定的字母块配色（不调外部图片服务，§7）
+  const LOGO_MAP = {
+    OpenAI: { letter: "O", bg: "#10a37f", fg: "#fff" },
+    Anthropic: { letter: "A", bg: "#d97757", fg: "#fff" },
+    xAI: { letter: "X", bg: "#111", fg: "#edeff1" },
+    "xAI / X": { letter: "X", bg: "#111", fg: "#edeff1" },
+    Google: { letter: "G", bg: "#4285f4", fg: "#fff" },
+    Moonshot: { letter: "K", bg: "#1a1a2e", fg: "#b794f6" },
+    DeepSeek: { letter: "D", bg: "#4d6bfe", fg: "#fff" },
+    Perplexity: { letter: "P", bg: "#20808d", fg: "#fff" },
+    Cursor: { letter: "C", bg: "#edeff1", fg: "#060709" },
+    Zhipu: { letter: "智", bg: "#3b5bdb", fg: "#fff" },
+  };
+  const logoFor = (p) => LOGO_MAP[p.provider] || { letter: p.name[0], bg: "#7d848c", fg: "#fff" };
+
+  const CAP_ZH = { reasoning: "推理", search: "搜索", coding: "编码", daily: "日常", vision: "看图", imageGen: "生图", video: "视频", audio: "音频", ocr: "OCR" };
+  const CAP_EN = { reasoning: "reasoning", search: "search", coding: "coding", daily: "daily", vision: "vision", imageGen: "image gen", video: "video", audio: "audio", ocr: "OCR" };
+
+  // ===== 分享 =====
+  document.getElementById("copyBtn").addEventListener("click", async () => {
+    if (!lastResult) return;
+    const text = buildShareText(lastResult, lastAnswers, lang);
+    try { await navigator.clipboard.writeText(text); } catch (e) {
+      // 退化方案
+      const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch (_) {} ta.remove();
+    }
+    const btn = document.getElementById("copyBtn");
+    btn.classList.add("copied");
+    const orig = btn.textContent;
+    btn.textContent = t("已复制 ✓", "Copied ✓");
+    setTimeout(() => { btn.classList.remove("copied"); btn.textContent = orig; }, 1800);
+  });
+
+  document.getElementById("shareImgBtn").addEventListener("click", () => {
+    if (!lastResult) return;
+    renderShareCanvas(document.getElementById("shareCanvas"), lastResult, lastAnswers, lang);
+    document.getElementById("shareCanvasWrap").classList.add("show");
+  });
+
+  // ===== 重新测试（§6.1：清理所有定时器）=====
+  document.getElementById("restartBtn").addEventListener("click", () => {
+    if (computeTimer) { clearTimeout(computeTimer); computeTimer = null; }
+    lastResult = null; lastAnswers = null;
+    document.getElementById("resultView").classList.remove("show");
+    document.getElementById("formView").style.display = "";
+    document.getElementById("shareCanvasWrap").classList.remove("show");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  // 页面卸载兜底清理（§2）
+  window.addEventListener("beforeunload", () => { if (computeTimer) clearTimeout(computeTimer); });
+
+  // 初始语言
+  if (lang === "en") applyLang("en");
+</script>
+</body>
+</html>

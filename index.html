@@ -1,0 +1,1042 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BUILD-100 — 100 个网站计划</title>
+<meta name="description" content="100 个网站建设挑战：金融工具、小游戏、学习网站、生活痛点。一个一个做，做完为止。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='40' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='24' fill='%23edeff1' text-anchor='middle' letter-spacing='-2'%3E100%3C/text%3E%3Crect x='12' y='48' width='40' height='4' fill='rgba(237,239,241,.22)'/%3E%3Crect x='12' y='48' width='6' height='4' fill='%234ade80'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="BUILD-100 — 100 个网站计划">
+<meta property="og:description" content="100 个网站建设挑战：金融工具、小游戏、学习网站、生活痛点。一个一个做，做完为止。">
+<meta property="og:url" content="https://build-100.com/">
+<meta property="og:image" content="https://build-100.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="BUILD-100 — 100 个网站计划">
+<meta name="twitter:description" content="100 个网站建设挑战：金融工具、小游戏、学习网站、生活痛点。一个一个做，做完为止。">
+<meta name="twitter:image" content="https://build-100.com/og.png">
+<style>
+  body { margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  canvas, img { max-width: 100%; }
+</style>
+</head>
+<body>
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--ink); color: var(--bg); }
+
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible {
+    outline: 1px solid var(--ink);
+    outline-offset: 3px;
+  }
+
+  .mono {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ---------- Boot（首次进站的开机序列） ---------- */
+  .boot {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.55s ease;
+  }
+  .boot.off { opacity: 0; pointer-events: none; }
+  .boot-text {
+    font-family: var(--mono);
+    font-size: clamp(12px, 1.5vw, 15px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 2.2;
+    min-height: 9.2em;
+    width: min(460px, 84vw);
+    white-space: pre-wrap;
+  }
+  .boot-skip {
+    position: absolute;
+    bottom: 28px;
+    right: 28px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: none;
+    border: 1px solid var(--line-strong);
+    color: var(--muted);
+    padding: 8px 18px;
+    cursor: pointer;
+  }
+  .boot-skip:hover { color: var(--ink); }
+
+  /* ---------- Nav ---------- */
+  .nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 var(--pad);
+    height: 60px;
+    background: rgba(6, 7, 9, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-brand {
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  .nav-brand span { color: var(--muted); font-weight: 400; }
+  .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 32px); }
+  .nav-links a.mono { color: var(--muted); transition: color 0.2s; }
+  .nav-links a.mono:hover { color: var(--ink); }
+  .nav-x {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    padding: 7px 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    color: var(--ink);
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+  .nav-x:hover { background: var(--ink); color: var(--bg); }
+  .nav-lang {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: none;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    color: var(--muted);
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+    white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+  @media (max-width: 640px) { .nav-links a.mono { display: none; } }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 120px var(--pad) clamp(32px, 6vh, 64px);
+  }
+  #stars {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .hero-mark {
+    position: absolute;
+    right: -0.04em;
+    top: 42%;
+    transform: translateY(-50%);
+    font-family: var(--mono);
+    font-size: clamp(180px, 34vw, 520px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.06em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(237, 239, 241, 0.08);
+    pointer-events: none;
+    user-select: none;
+  }
+  .hero-inner { position: relative; max-width: 1200px; }
+  .hero-eyebrow { margin-bottom: 24px; }
+  .hero-eyebrow .tick { color: var(--ink); }
+  .hero h1 {
+    font-size: clamp(2.5rem, 6.8vw, 5.4rem);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: 0.01em;
+    text-wrap: balance;
+    margin-bottom: 28px;
+    max-width: 18em;
+  }
+  .hero-sub {
+    max-width: 34em;
+    color: var(--muted);
+    font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+    margin-bottom: clamp(40px, 8vh, 88px);
+  }
+  .hero-sub strong { color: var(--ink); font-weight: 500; }
+  .hero-sub .sub-link {
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+  .hero-sub .sub-link:hover { opacity: 0.6; }
+  .hero-sub .sub-link .arrow { font-size: 1.1em; }
+  .hero-sub .sub-paren {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .hero-gh:hover { border-bottom-color: var(--ink); }
+
+  .hero-counter {
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 24px 64px;
+    position: relative;
+  }
+  .counter-num {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(4rem, 11vw, 8.5rem);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+  .counter-num small {
+    font-size: 0.32em;
+    color: var(--faint);
+    letter-spacing: 0;
+  }
+  .counter-meta { display: flex; flex-direction: column; gap: 12px; flex: 1; min-width: 220px; padding-bottom: 8px; }
+  .bar {
+    height: 2px;
+    background: var(--line);
+    overflow: hidden;
+  }
+  .bar i {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--ink);
+    transition: width 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.6s;
+  }
+  .telemetry {
+    color: var(--faint);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    font-variant-numeric: tabular-nums;
+    min-height: 1.2em;
+  }
+  .scroll-cue {
+    position: absolute;
+    right: 0;
+    bottom: 8px;
+    color: var(--faint);
+  }
+  @media (max-width: 640px) { .scroll-cue { display: none; } }
+
+  /* ---------- Ticker ---------- */
+  .ticker {
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    padding: 13px 0;
+    white-space: nowrap;
+  }
+  .ticker-track {
+    display: inline-block;
+    animation: tick 48s linear infinite;
+  }
+  .ticker-track > span {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-right: 56px;
+  }
+  .ticker-track > span b { color: var(--muted); font-weight: 400; }
+  @keyframes tick { to { transform: translateX(-50%); } }
+
+  /* ---------- Sections ---------- */
+  section {
+    position: relative;
+    padding: clamp(72px, 12vh, 140px) var(--pad);
+    border-top: 1px solid var(--line);
+  }
+  section::before, section::after {
+    content: "+";
+    position: absolute;
+    top: -0.72em;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--faint);
+    pointer-events: none;
+  }
+  section::before { left: calc(var(--pad) - 5px); }
+  section::after { right: calc(var(--pad) - 5px); }
+  .sec-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: clamp(36px, 6vh, 64px);
+  }
+  .sec-title {
+    font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.25;
+    text-wrap: balance;
+    max-width: 24em;
+  }
+
+  /* Mission + Progress combined */
+  .mp-wrap {
+    display: grid;
+    grid-template-columns: 1fr minmax(320px, 440px);
+    gap: clamp(36px, 6vw, 110px);
+    align-items: start;
+  }
+  @media (max-width: 900px) { .mp-wrap { grid-template-columns: 1fr; } }
+  .tenets-v { border-top: 1px solid var(--line); }
+  .tenet-row {
+    display: grid;
+    grid-template-columns: minmax(130px, auto) 1fr;
+    gap: 8px 36px;
+    align-items: baseline;
+    padding: clamp(22px, 3.5vh, 34px) 4px;
+    border-bottom: 1px solid var(--line);
+  }
+  .tenet-row .big {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(2.2rem, 4.2vw, 3.2rem);
+    line-height: 1;
+  }
+  .tenet-row .big em { font-style: normal; color: var(--faint); font-size: 0.45em; }
+  .tenet-row h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+  .tenet-row p { color: var(--muted); font-size: 0.9rem; }
+  @media (max-width: 520px) {
+    .tenet-row { grid-template-columns: 1fr; gap: 10px; }
+  }
+
+  /* Manifest */
+  .manifest { border-top: 1px solid var(--line); }
+  .m-row {
+    display: grid;
+    grid-template-columns: 72px 1.4fr 1fr auto 32px;
+    align-items: center;
+    gap: 20px;
+    padding: 22px 12px;
+    border-bottom: 1px solid var(--line);
+    transition: background 0.2s;
+  }
+  a.m-row:hover { background: rgba(237, 239, 241, 0.045); }
+  a.m-row:hover .m-arrow { transform: translate(3px, -3px); color: var(--ink); }
+  .m-no {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    color: var(--faint);
+  }
+  .m-hash {
+    display: block;
+    font-style: normal;
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    color: var(--faint);
+    opacity: 0.7;
+    margin-top: 3px;
+  }
+  .m-name { font-weight: 700; font-size: clamp(1rem, 2vw, 1.25rem); }
+  .m-name span { display: block; font-weight: 400; font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+  .m-url { font-family: var(--mono); font-size: 12px; letter-spacing: 0.05em; color: var(--muted); overflow-wrap: anywhere; }
+  .m-status {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .is-live .dot { background: var(--live); box-shadow: 0 0 8px rgba(74, 222, 128, 0.6); }
+  .is-live { color: var(--live); }
+  .is-dev .dot { border: 1px solid var(--muted); animation: pulse 2.4s ease-in-out infinite; }
+  .is-dev { color: var(--muted); }
+  @keyframes pulse { 50% { opacity: 0.3; } }
+  .m-arrow { color: var(--faint); font-size: 18px; transition: transform 0.2s, color 0.2s; text-align: right; }
+  .m-row.is-next { opacity: 0.55; }
+  @media (max-width: 760px) {
+    .m-row { grid-template-columns: 44px 1fr auto; }
+    .m-url, .m-arrow { display: none; }
+    .m-cat { grid-column: 2 / 4; grid-row: 2; }
+  }
+
+  /* Pipeline (classified) */
+  .redact {
+    display: inline-block;
+    height: 13px;
+    max-width: 100%;
+    background: rgba(237, 239, 241, 0.16);
+    border-radius: 1px;
+    vertical-align: baseline;
+  }
+  .m-row:hover .redact { background: rgba(237, 239, 241, 0.24); }
+  .m-cat {
+    font-size: 0.86rem;
+    color: var(--muted);
+  }
+  .m-cat .mono { font-size: 10px; margin-left: 10px; }
+  .pipe-note {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--faint);
+    margin-top: 24px;
+  }
+  .scramble { font-family: var(--mono); letter-spacing: 0.04em; }
+  .scramble.dim { color: var(--muted); font-size: 12px; }
+  .cell.done.linked { cursor: pointer; }
+  .cell.done.linked:hover { box-shadow: 0 0 16px rgba(237, 239, 241, 0.6); }
+  .m-row.revealed { cursor: pointer; }
+  .m-row.revealed:hover { background: rgba(237, 239, 241, 0.045); }
+  .row-flash { animation: flash 1.4s ease-out; }
+  @keyframes flash { 0% { background: rgba(74, 222, 128, 0.1); } 100% { background: transparent; } }
+
+  /* Progress grid */
+  .prog-side { display: flex; flex-direction: column; gap: 18px; }
+  .prog-side .cap { color: var(--muted); font-size: 0.9rem; }
+  .grid100 {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 7px;
+    width: min(420px, 100%);
+    flex-shrink: 0;
+    margin-bottom: 6px;
+  }
+  .cell {
+    aspect-ratio: 1;
+    border-radius: 2px;
+    background: rgba(237, 239, 241, 0.08);
+  }
+  .cell.done {
+    background: var(--ink);
+    box-shadow: 0 0 12px rgba(237, 239, 241, 0.35);
+    opacity: 0;
+    transform: scale(0.4);
+    transition: opacity 0.5s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .grid100.lit .cell.done { opacity: 1; transform: scale(1); }
+  .stat-line {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    border-left: 2px solid var(--ink);
+    padding-left: 14px;
+  }
+  #statBreakdown { color: var(--muted); border-left-color: var(--faint); }
+
+  /* Signal / follow */
+  .signal { text-align: left; }
+  .signal p { color: var(--muted); max-width: 36em; margin-bottom: 36px; }
+  .btn-x {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    border: 1px solid var(--line-strong);
+    transition: background 0.2s, color 0.2s;
+  }
+  .btn-x:hover { background: var(--ink); color: var(--bg); }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 32px var(--pad);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+    justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+
+  /* Reveal on scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .cell.done { opacity: 1; transform: none; transition: none; }
+    .bar i { transition: none; }
+    .is-dev .dot { animation: none; }
+    .row-flash { animation: none; }
+    .ticker-track { animation: none; }
+  }
+</style>
+
+<nav class="nav">
+  <a class="nav-brand" href="#top">BUILD-100<span>.COM</span></a>
+  <div class="nav-links">
+    <a class="mono" href="#manifest" data-en="Manifest">清单 Manifest</a>
+    <a class="mono" href="#status" data-en="Mission">任务 Mission</a>
+    <a class="mono" href="#signal" data-en="Signal">记录 Signal</a>
+    <button class="nav-lang mono" id="langBtn" type="button" aria-label="Switch language">EN</button>
+    <a class="nav-x" href="https://x.com/Jcheng557" target="_blank" rel="noopener" data-en="Follow&nbsp;↗">关注 X ↗</a>
+  </div>
+</nav>
+
+<div class="boot" id="boot" aria-hidden="true">
+  <div class="boot-text" id="bootText"></div>
+  <button class="boot-skip" id="bootSkip" type="button">Skip ▸</button>
+</div>
+
+<header class="hero" id="top">
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="hero-mark" aria-hidden="true">100</div>
+  <div class="hero-inner">
+    <p class="mono hero-eyebrow reveal in"><span class="tick">●</span>&nbsp; The 100 Websites Project</p>
+    <h1 class="reveal in" data-en="Building 100 websites with AI.">用 AI 造 100 个网站。</h1>
+    <p class="hero-sub reveal in" data-en='From #000 to #100. Finance tools, mini games, learning sites, everyday pain points — <strong>code open-sourced</strong> <span class="sub-paren">(<a class="sub-link" href="https://github.com/diego34es-cmyk" target="_blank" rel="noopener">GitHub<span class="arrow">↗</span></a>)</span>, with the workflow, cost, failures, and debriefs.'>从第 000 个到第 100 个。金融工具、小游戏、学习网站、生活痛点——<strong>代码开源</strong> <span class="sub-paren">(<a class="sub-link" href="https://github.com/diego34es-cmyk" target="_blank" rel="noopener">GitHub<span class="arrow">↗</span></a>)</span>，工作流、成本、翻车、复盘。</p>
+    <div class="hero-counter">
+      <div class="counter-num" id="counter">000<small>/100</small></div>
+      <div class="counter-meta">
+        <span class="mono" data-en="Current Count">当前进度 Current Count</span>
+        <div class="bar"><i id="bar"></i></div>
+        <span class="mono telemetry" id="telemetry"></span>
+      </div>
+      <a class="mono scroll-cue" href="#manifest">Scroll ↓</a>
+    </div>
+  </div>
+</header>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack">
+    <span>100 Websites</span><span><b>Finance Tools</b></span><span>Mini Games</span><span><b>Learning Sites</b></span><span>Everyday Fixes</span><span><b>No Deadline</b></span><span>Built with</span><span><b>Claude</b></span><span>GPT</span><span><b>GLM</b></span><span>MiniMax</span><span><b>Cursor</b></span><span>build-100.com</span><span><b>Est. 2026</b></span>
+  </div>
+</div>
+
+<section id="manifest">
+  <div class="sec-head reveal">
+    <h2 class="sec-title" data-en="Manifest">项目清单</h2>
+    <span class="mono" data-en="01">01 / Manifest</span>
+  </div>
+  <div class="manifest reveal">
+    <!-- 清单排序规则：最新上线的排最上面，往下依次是更早的 Live、In Dev、Classified。
+         项目上线当天：把对应的机密行剪切到清单最顶部，并给它加上 data-name / data-sub / data-url 三个属性，
+         访客一进清单就会看到涂黑条解码成真名（状态翻成 Live，行变成链接）。例：
+         <div class="m-row" data-name="EJEMPLO" data-sub="一句话描述" data-url="ejemplo.build-100.com">
+         同时把 SITE 配置里的 completed 加一、PROJECTS 数组加一条。
+         发布期过后，把涂黑条换成真名的永久写法，模板如下：
+         <a class="m-row" href="https://ejemplo.build-100.com" target="_blank" rel="noopener">
+           <span class="m-no">001</span>
+           <span class="m-name">EJEMPLO<span>一句话描述</span></span>
+           <span class="m-url">ejemplo.build-100.com</span>
+           <span class="m-status is-live"><i class="dot"></i>Live</span>
+           <span class="m-arrow">↗</span>
+         </a> -->
+    <div class="m-row is-next">
+      <span class="m-no">001</span>
+      <span class="m-name">???<span data-en="First site — in build">第一个网站，构建中</span></span>
+      <span class="m-url">—</span>
+      <span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span>
+      <span class="m-arrow"></span>
+    </div>
+    <div class="m-row">
+      <span class="m-no">002</span>
+      <span class="m-name"><span class="redact" style="width: 9em;"></span></span>
+      <span class="m-cat" data-en='<span class="mono">Health</span>'>健康<span class="mono">Health</span></span>
+      <span class="m-status is-dev is-classified"><i class="dot"></i>Classified</span>
+      <span class="m-arrow"></span>
+    </div>
+    <div class="m-row">
+      <span class="m-no">003</span>
+      <span class="m-name"><span class="redact" style="width: 12em;"></span></span>
+      <span class="m-cat" data-en='<span class="mono">Travel · Docs</span>'>出行 · 证件<span class="mono">Travel</span></span>
+      <span class="m-status is-dev is-classified"><i class="dot"></i>Classified</span>
+      <span class="m-arrow"></span>
+    </div>
+    <div class="m-row">
+      <span class="m-no">004</span>
+      <span class="m-name"><span class="redact" style="width: 7em;"></span></span>
+      <span class="m-cat" data-en='<span class="mono">Markets · Data</span>'>市场 · 数据<span class="mono">Markets</span></span>
+      <span class="m-status is-dev is-classified"><i class="dot"></i>Classified</span>
+      <span class="m-arrow"></span>
+    </div>
+    <div class="m-row">
+      <span class="m-no">005</span>
+      <span class="m-name"><span class="redact" style="width: 10em;"></span></span>
+      <span class="m-cat" data-en='<span class="mono">Living Abroad</span>'>海外生活<span class="mono">Living</span></span>
+      <span class="m-status is-dev is-classified"><i class="dot"></i>Classified</span>
+      <span class="m-arrow"></span>
+    </div>
+    <div class="m-row">
+      <span class="m-no">006</span>
+      <span class="m-name"><span class="redact" style="width: 5em;"></span></span>
+      <span class="m-cat" data-en='<span class="mono">Utilities</span>'>效率<span class="mono">Utilities</span></span>
+      <span class="m-status is-dev is-classified"><i class="dot"></i>Classified</span>
+      <span class="m-arrow"></span>
+    </div>
+  </div>
+  <p class="pipe-note reveal" data-en="Classified rows reveal only a category — declassified in place on launch day">Classified 行只公布方向 — 上线时就地解密</p>
+</section>
+
+<section id="status">
+  <div class="sec-head reveal">
+    <h2 class="sec-title" data-en="Mission &amp; Progress">任务与进度</h2>
+    <span class="mono" data-en="02">02 / Mission · Progress</span>
+  </div>
+  <div class="mp-wrap">
+    <div class="tenets-v reveal">
+      <div class="tenet-row">
+        <div class="big">100<em data-en="&nbsp;Sites">&nbsp;网站</em></div>
+        <div>
+          <h3 data-en="Goal">目标</h3>
+          <p data-en="Build 100 websites with off-the-shelf AI tools.">用市面上的 AI 工具，做出 100 个网站。</p>
+        </div>
+      </div>
+      <div class="tenet-row">
+        <div class="big">01<em data-en="&nbsp;Problem">&nbsp;问题</em></div>
+        <div>
+          <h3 data-en="Scope">范围</h3>
+          <p data-en="Finance tools, mini games, learning sites — each solves one specific pain point.">金融工具、小游戏、学习网站——每个只解决一个具体的痛点。</p>
+        </div>
+      </div>
+      <div class="tenet-row">
+        <div class="big">00<em data-en="&nbsp;Deadline">&nbsp;期限</em></div>
+        <div>
+          <h3 data-en="Pace">节奏</h3>
+          <p data-en="No deadline. Done when it&#39;s done.">不设截止日期，做完为止。</p>
+        </div>
+      </div>
+    </div>
+    <div class="prog-side reveal">
+      <div class="grid100" id="grid100" role="img" aria-label="进度网格：100 格中已点亮 0 格"></div>
+      <p class="stat-line" id="statLine">000 / 100 — 0% Complete</p>
+      <p class="stat-line" id="statBreakdown"></p>
+      <p class="cap" data-en="Each cell is one launched website.">每一格代表一个已上线的网站。</p>
+      <span class="mono" id="updated">Updated 2026.07</span>
+    </div>
+  </div>
+</section>
+
+<section id="signal" class="signal">
+  <div class="sec-head reveal">
+    <h2 class="sec-title" data-en="Signal">记录</h2>
+    <span class="mono" data-en="03">03 / Signal</span>
+  </div>
+  <p class="reveal" data-en="Build logs and updates, posted on X.">构建过程与更新，发布在 X。</p>
+  <a class="btn-x reveal" href="https://x.com/Jcheng557" target="_blank" rel="noopener" data-en="Follow on X&nbsp;↗">在 X 上关注 Follow&nbsp;↗</a>
+</section>
+
+<footer>
+  <span class="mono">build-100.com</span>
+  <span class="mono">The 100 Websites Project</span>
+  <span class="mono">© 2026 Jcheng</span>
+</footer>
+
+<script>
+  // ===== 站点配置：更新进度只需要改这里 =====
+  const SITE = { completed: 0, total: 100, updated: "2026.07", started: "2026-07-10" };
+  // 已上线项目（顺序对应进度格 1、2、3…），每上线一个往后加一条：{ name: "名字", url: "https://xxx.build-100.com" }
+  const PROJECTS = [];
+  // =========================================
+
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // 进度计数器 + 进度条
+  const counter = document.getElementById("counter");
+  const bar = document.getElementById("bar");
+  const pad = (n) => String(n).padStart(3, "0");
+  const pct = (SITE.completed / SITE.total) * 100;
+
+  document.getElementById("statLine").textContent =
+    pad(SITE.completed) + " / " + SITE.total + " — " + pct.toFixed(0) + "% Complete";
+  document.getElementById("updated").textContent = "Updated " + SITE.updated;
+
+  // 状态统计：从清单自动统计（解密动画播完后会重新统计）
+  function updateBreakdown() {
+    const nLive = document.querySelectorAll(".m-status.is-live").length;
+    const nClassified = document.querySelectorAll(".m-status.is-classified").length;
+    const nDev = document.querySelectorAll(".m-status.is-dev").length - nClassified;
+    document.getElementById("statBreakdown").textContent =
+      "Live " + pad(nLive) + " · In Dev " + pad(nDev) + " · Classified " + pad(nClassified);
+  }
+  updateBreakdown();
+
+  // 任务时钟：T+ 天数 + 马德里当地时间
+  const telemetry = document.getElementById("telemetry");
+  const clock = new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit", minute: "2-digit", second: "2-digit",
+    hour12: false, timeZone: "Europe/Madrid",
+  });
+  function updateTelemetry() {
+    const days = Math.max(0, Math.floor((Date.now() - new Date(SITE.started + "T00:00:00Z")) / 86400000));
+    telemetry.textContent =
+      "T+" + pad(days) + " Days · 40.42°N 3.70°W Madrid · " + clock.format(new Date()) + " Local";
+  }
+  updateTelemetry();
+  setInterval(updateTelemetry, 1000);
+
+  function setCount(n) {
+    counter.innerHTML = pad(n) + "<small>/" + SITE.total + "</small>";
+  }
+
+  let heroStarted = false;
+  function startHero() {
+    if (heroStarted) return;
+    heroStarted = true;
+    if (reduced) {
+      setCount(SITE.completed);
+      bar.style.transition = "none";
+      bar.style.width = pct + "%";
+    } else {
+      const t0 = performance.now();
+      const dur = 1400;
+      (function tick(now) {
+        const p = Math.min((now - t0) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        setCount(Math.round(eased * SITE.completed));
+        if (p < 1) requestAnimationFrame(tick);
+      })(t0);
+      requestAnimationFrame(() => { bar.style.width = pct + "%"; });
+    }
+  }
+
+  // 100 格进度网格：已点亮的格子可以悬停看名字、点击直达项目
+  const grid = document.getElementById("grid100");
+  grid.setAttribute("aria-label", "进度网格：" + SITE.total + " 格中已点亮 " + SITE.completed + " 格");
+  for (let i = 0; i < SITE.total; i++) {
+    const c = document.createElement("i");
+    c.className = "cell" + (i < SITE.completed ? " done" : "");
+    if (i < SITE.completed) {
+      // 点亮节奏自适应：格子多时整体压缩在 ~2.4 秒内点完
+      c.style.transitionDelay = (Math.min(0.15, 2.4 / SITE.completed) * i).toFixed(3) + "s";
+      const p = PROJECTS[i];
+      if (p) {
+        c.classList.add("linked");
+        c.title = pad(i + 1) + " · " + p.name;
+        c.setAttribute("role", "link");
+        c.setAttribute("aria-label", c.title);
+        c.tabIndex = 0;
+        const go = () => window.open(p.url, "_blank", "noopener");
+        c.addEventListener("click", go);
+        c.addEventListener("keydown", (e) => { if (e.key === "Enter") go(); });
+      }
+    }
+    grid.appendChild(c);
+  }
+
+  // 行哈希：由编号+名字生成的固定伪哈希，纯视觉（机密行也有——哈希公开，内容保密）
+  document.querySelectorAll(".m-row").forEach((row, i) => {
+    const no = row.querySelector(".m-no");
+    if (!no) return;
+    const src = no.textContent + (row.dataset.name || "") + i;
+    let seed = 7;
+    for (const ch of src) seed = (seed * 31 + ch.charCodeAt(0)) >>> 0;
+    seed = Math.imul(seed ^ (seed >>> 13), 0x5bd1e995) >>> 0;
+    seed = (seed ^ (seed >>> 15)) >>> 0;
+    const tag = document.createElement("i");
+    tag.className = "m-hash";
+    tag.textContent = "0x" + ("00000" + (seed % 0xffffff).toString(16)).slice(-6).toUpperCase();
+    no.appendChild(tag);
+  });
+
+  // 机密行悬停：涂黑条闪一下乱码又锁回去
+  document.querySelectorAll(".m-row .redact").forEach((bar) => {
+    const row = bar.closest(".m-row");
+    let busy = false;
+    row.addEventListener("mouseenter", () => {
+      if (busy || reduced || !bar.isConnected || bar.style.display === "none") return;
+      busy = true;
+      const n = Math.max(6, Math.round(bar.offsetWidth / 9));
+      const span = document.createElement("span");
+      span.className = "scramble dim";
+      bar.style.display = "none";
+      bar.parentElement.insertBefore(span, bar);
+      let f = 0;
+      const iv = setInterval(() => {
+        let s = "";
+        for (let i = 0; i < n; i++) s += CHARS[(Math.random() * CHARS.length) | 0];
+        span.textContent = s;
+        if (++f >= 7) {
+          clearInterval(iv);
+          span.remove();
+          bar.style.display = "";
+          busy = false;
+        }
+      }, 55);
+    });
+  });
+
+  // 解密动画：清单里带 data-name 的行，滚入视野自动播放
+  const CHARS = "▓▒░<>/\\|=+*#01ABCDEF";
+  function declassify(row) {
+    const name = row.dataset.name;
+    const sub = row.dataset.sub || "";
+    const url = row.dataset.url || "";
+    const nameEl = row.querySelector(".m-name");
+    const statusEl = row.querySelector(".m-status");
+    const arrowEl = row.querySelector(".m-arrow");
+    function finish() {
+      nameEl.textContent = name;
+      const s = document.createElement("span");
+      s.textContent = sub || url;
+      nameEl.appendChild(s);
+      statusEl.className = "m-status is-live";
+      statusEl.innerHTML = '<i class="dot"></i>Live';
+      if (arrowEl) arrowEl.textContent = "↗";
+      row.classList.add("revealed", "row-flash");
+      updateBreakdown();
+      if (url) {
+        row.setAttribute("role", "link");
+        row.setAttribute("tabindex", "0");
+        const go = () => window.open("https://" + url, "_blank", "noopener");
+        row.addEventListener("click", go);
+        row.addEventListener("keydown", (e) => { if (e.key === "Enter") go(); });
+      }
+    }
+    if (reduced) { finish(); return; }
+    const scr = document.createElement("span");
+    scr.className = "scramble";
+    nameEl.textContent = "";
+    nameEl.appendChild(scr);
+    const dur = 3000;
+    const t0 = performance.now();
+    (function step(now) {
+      const p = Math.min((now - t0) / dur, 1);
+      const solved = Math.floor(p * name.length);
+      let out = name.slice(0, solved);
+      for (let i = solved; i < name.length; i++) out += CHARS[(Math.random() * CHARS.length) | 0];
+      scr.textContent = out;
+      if (p < 1) { requestAnimationFrame(step); } else { finish(); }
+    })(t0);
+  }
+  const secretRows = document.querySelectorAll(".manifest .m-row[data-name]");
+  if (secretRows.length) {
+    const rio = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        rio.unobserve(e.target);
+        setTimeout(() => declassify(e.target), 700);
+      }
+    }, { threshold: 0.6 });
+    secretRows.forEach((r) => rio.observe(r));
+  }
+
+  // 滚动显现：露出任意一部分即触发（固定比例阈值对长列表永远达不到）
+  function markIn(el) {
+    el.classList.add("in");
+    if (el.id === "grid100" || el.querySelector("#grid100")) grid.classList.add("lit");
+  }
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      markIn(e.target);
+      io.unobserve(e.target);
+    }
+  }, { threshold: 0, rootMargin: "0px 0px -8% 0px" });
+  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+  // 保险扫描：某些内嵌 WebView 的 IntersectionObserver 不可靠时兜底
+  function sweepReveals() {
+    document.querySelectorAll(".reveal:not(.in)").forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.94 && r.bottom > 0) { markIn(el); io.unobserve(el); }
+    });
+  }
+  window.addEventListener("scroll", () => { requestAnimationFrame(sweepReveals); }, { passive: true });
+
+  // 顶部 ticker：复制一份内容做无缝循环
+  const track = document.getElementById("tickerTrack");
+  track.innerHTML += track.innerHTML;
+  if (reduced) track.style.animation = "none";
+
+  // 星空（hero 背景）
+  const canvas = document.getElementById("stars");
+  const ctx = canvas.getContext("2d");
+  let stars = [];
+  let meteors = [];
+
+  function initStars() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const { clientWidth: w, clientHeight: h } = canvas;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.floor((w * h) / 5200);
+    stars = Array.from({ length: n }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.3 + 0.2,
+      v: Math.random() * 0.05 + 0.01,
+      tw: Math.random() * Math.PI * 2,
+    }));
+    meteors = [];
+  }
+
+  function drawStars(t) {
+    const { clientWidth: w, clientHeight: h } = canvas;
+    ctx.clearRect(0, 0, w, h);
+    for (const s of stars) {
+      const a = 0.25 + 0.55 * Math.abs(Math.sin(s.tw + t * 0.0006));
+      ctx.globalAlpha = a;
+      ctx.fillStyle = "#edeff1";
+      ctx.fillRect(s.x, s.y, s.r, s.r);
+      if (!reduced) {
+        s.y -= s.v;
+        if (s.y < -2) { s.y = h + 2; s.x = Math.random() * w; }
+      }
+    }
+    if (!reduced) {
+      if (Math.random() < 0.004 && meteors.length < 2) {
+        meteors.push({
+          x: Math.random() * w * 0.8 + w * 0.2,
+          y: Math.random() * h * 0.4,
+          vx: -(Math.random() * 4 + 3),
+          vy: Math.random() * 2 + 1.5,
+          life: 1,
+        });
+      }
+      for (const m of meteors) {
+        ctx.globalAlpha = m.life * 0.7;
+        ctx.strokeStyle = "#edeff1";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(m.x, m.y);
+        ctx.lineTo(m.x - m.vx * 9, m.y - m.vy * 9);
+        ctx.stroke();
+        m.x += m.vx;
+        m.y += m.vy;
+        m.life -= 0.018;
+      }
+      meteors = meteors.filter((m) => m.life > 0 && m.x > -60 && m.y < h + 60);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  initStars();
+  if (reduced) {
+    drawStars(0);
+  } else {
+    (function loop(t) { drawStars(t); requestAnimationFrame(loop); })(0);
+  }
+  window.addEventListener("resize", () => { initStars(); if (reduced) drawStars(0); });
+
+  // 语言切换：中文 ↔ 英文。data-en 驱动；双语标签（如「清单 Manifest」）在英文态只留英文，不重复
+  const langBtn = document.getElementById("langBtn");
+  const i18nEls = document.querySelectorAll("[data-en]");
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  function applyLang(l) {
+    lang = l;
+    i18nEls.forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.title = l === "en" ? "BUILD-100 — The 100 Websites Project" : "BUILD-100 — 100 个网站计划";
+    langBtn.textContent = l === "en" ? "中文" : "EN";
+    grid.setAttribute("aria-label", l === "en"
+      ? "Progress grid: " + SITE.completed + " of " + SITE.total + " cells lit"
+      : "进度网格：" + SITE.total + " 格中已点亮 " + SITE.completed + " 格");
+    try { localStorage.setItem("lang", l); } catch (e) {}
+  }
+  langBtn.addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+  if (lang === "en") applyLang("en");
+
+  // 开机序列：每个会话只播一次，播完才启动 hero 计数器
+  const bootEl = document.getElementById("boot");
+  const bootTextEl = document.getElementById("bootText");
+  let booted = false;
+  try { booted = sessionStorage.getItem("booted") === "1"; } catch (e) { /* 无痕模式等 */ }
+  function endBoot() {
+    if (!bootEl.isConnected) return;
+    bootEl.classList.add("off");
+    setTimeout(() => bootEl.remove(), 600);
+    startHero();
+  }
+  if (reduced || booted) {
+    bootEl.remove();
+    startHero();
+  } else {
+    try { sessionStorage.setItem("booted", "1"); } catch (e) {}
+    const entries = document.querySelectorAll(".m-row").length;
+    const full = [
+      "> BUILD-100.COM",
+      "> ACCESS GRANTED",
+      "> LOADING MANIFEST ... " + pad(entries) + " ENTRIES",
+      "> PROGRESS " + pad(SITE.completed) + "/" + SITE.total + " CONFIRMED",
+    ].join("\n");
+    let idx = 0;
+    const iv = setInterval(() => {
+      idx += 2;
+      bootTextEl.textContent = full.slice(0, idx) + "▌";
+      if (idx >= full.length) {
+        clearInterval(iv);
+        bootTextEl.textContent = full;
+        setTimeout(endBoot, 1000);
+      }
+    }, 38);
+    document.getElementById("bootSkip").addEventListener("click", () => { clearInterval(iv); endBoot(); });
+  }
+</script>
+</body>
+</html>

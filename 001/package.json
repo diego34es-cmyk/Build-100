@@ -1,0 +1,10 @@
+{
+  "name": "combo-001",
+  "version": "1.0.0",
+  "private": true,
+  "description": "COMBO-001 · AI 订阅最优搭配器（build-100 第 001 号作品）",
+  "type": "module",
+  "scripts": {
+    "test": "node --test engine.test.js"
+  }
+}
