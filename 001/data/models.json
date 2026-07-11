@@ -4,7 +4,17 @@
     "zh": "金额均为整数美元/月。人民币定价按 2026-07 汇率（约 1 USD = 6.78 CNY）四舍五入取整，原价见 priceCNY。",
     "en": "All prices are whole USD/month. CNY-priced products are rounded at the 2026-07 rate (~1 USD = 6.78 CNY); see priceCNY for the original."
   },
-  "capabilities": ["reasoning", "search", "coding", "daily", "vision", "imageGen", "video", "audio", "ocr"],
+  "capabilities": [
+    "reasoning",
+    "search",
+    "coding",
+    "daily",
+    "vision",
+    "imageGen",
+    "video",
+    "audio",
+    "ocr"
+  ],
   "products": [
     {
       "id": "chatgpt-free",
@@ -16,7 +26,17 @@
       "category": "chat",
       "conflictGroup": "chatgpt",
       "capacity": 1,
-      "caps": { "reasoning": 7, "search": 6, "coding": 6, "daily": 8, "vision": 7, "imageGen": 5, "video": 0, "audio": 5, "ocr": 7 },
+      "caps": {
+        "reasoning": 7,
+        "search": 6,
+        "coding": 6,
+        "daily": 8,
+        "vision": 7,
+        "imageGen": 5,
+        "video": 0,
+        "audio": 5,
+        "ocr": 7
+      },
       "notes": {
         "zh": "什么都能试一点，什么都有上限。美国区带广告",
         "en": "A taste of everything, with a cap on everything. Ads in the US"
@@ -32,7 +52,17 @@
       "category": "chat",
       "conflictGroup": "chatgpt",
       "capacity": 2,
-      "caps": { "reasoning": 7, "search": 7, "coding": 6, "daily": 9, "vision": 7, "imageGen": 6, "video": 0, "audio": 6, "ocr": 7 },
+      "caps": {
+        "reasoning": 7,
+        "search": 7,
+        "coding": 6,
+        "daily": 9,
+        "vision": 7,
+        "imageGen": 6,
+        "video": 0,
+        "audio": 6,
+        "ocr": 7
+      },
       "notes": {
         "zh": "免费版 10 倍消息量，日常够用。仍有广告，也没有高端模型",
         "en": "10× the free tier's messages — enough for daily use. Still has ads, no frontier models"
@@ -48,7 +78,17 @@
       "category": "chat",
       "conflictGroup": "chatgpt",
       "capacity": 2,
-      "caps": { "reasoning": 8, "search": 8, "coding": 8, "daily": 9, "vision": 8, "imageGen": 8, "video": 6, "audio": 8, "ocr": 8 },
+      "caps": {
+        "reasoning": 8,
+        "search": 8,
+        "coding": 8,
+        "daily": 9,
+        "vision": 8,
+        "imageGen": 8,
+        "video": 6,
+        "audio": 8,
+        "ocr": 8
+      },
       "notes": {
         "zh": "全能型：GPT-5.4 + 生图 + Sora 视频 + 高级语音，每项都有量",
         "en": "The all-rounder: GPT-5.4 + image gen + Sora video + Advanced Voice, each with its own quota"
@@ -64,7 +104,17 @@
       "category": "chat",
       "conflictGroup": "chatgpt",
       "capacity": 3,
-      "caps": { "reasoning": 9, "search": 9, "coding": 8, "daily": 9, "vision": 8, "imageGen": 8, "video": 7, "audio": 8, "ocr": 8 },
+      "caps": {
+        "reasoning": 9,
+        "search": 9,
+        "coding": 8,
+        "daily": 9,
+        "vision": 8,
+        "imageGen": 8,
+        "video": 7,
+        "audio": 8,
+        "ocr": 8
+      },
       "notes": {
         "zh": "Plus 的 5 倍用量 + 50 次深度研究/月。重度用户的中间档",
         "en": "5× Plus usage + 50 deep research sessions a month. The middle tier for heavy users"
@@ -80,7 +130,17 @@
       "category": "chat",
       "conflictGroup": "chatgpt",
       "capacity": 4,
-      "caps": { "reasoning": 10, "search": 9, "coding": 9, "daily": 9, "vision": 9, "imageGen": 9, "video": 7, "audio": 9, "ocr": 9 },
+      "caps": {
+        "reasoning": 10,
+        "search": 9,
+        "coding": 9,
+        "daily": 9,
+        "vision": 9,
+        "imageGen": 9,
+        "video": 7,
+        "audio": 9,
+        "ocr": 9
+      },
       "notes": {
         "zh": "GPT-5.4 Pro 近乎不限量，OpenAI 家的天花板",
         "en": "GPT-5.4 Pro at near-unlimited usage — OpenAI's ceiling"
@@ -96,7 +156,17 @@
       "category": "chat",
       "conflictGroup": "claude",
       "capacity": 1,
-      "caps": { "reasoning": 7, "search": 6, "coding": 8, "daily": 8, "vision": 7, "imageGen": 0, "video": 0, "audio": 2, "ocr": 7 },
+      "caps": {
+        "reasoning": 7,
+        "search": 6,
+        "coding": 8,
+        "daily": 8,
+        "vision": 7,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 2,
+        "ocr": 7
+      },
       "notes": {
         "zh": "模型强，额度少。写代码最强的免费选手",
         "en": "Strong model, small quota. The best free option for code"
@@ -112,7 +182,17 @@
       "category": "chat",
       "conflictGroup": "claude",
       "capacity": 2,
-      "caps": { "reasoning": 9, "search": 8, "coding": 10, "daily": 9, "vision": 9, "imageGen": 0, "video": 0, "audio": 3, "ocr": 9 },
+      "caps": {
+        "reasoning": 9,
+        "search": 8,
+        "coding": 10,
+        "daily": 9,
+        "vision": 9,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 3,
+        "ocr": 9
+      },
       "notes": {
         "zh": "深度推理和写代码的主力。不生图、不生视频，专注文字活",
         "en": "Your main engine for deep reasoning and code. No image or video gen — it does words"
@@ -128,7 +208,17 @@
       "category": "chat",
       "conflictGroup": "claude",
       "capacity": 3,
-      "caps": { "reasoning": 9, "search": 9, "coding": 10, "daily": 9, "vision": 9, "imageGen": 0, "video": 0, "audio": 3, "ocr": 9 },
+      "caps": {
+        "reasoning": 9,
+        "search": 9,
+        "coding": 10,
+        "daily": 9,
+        "vision": 9,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 3,
+        "ocr": 9
+      },
       "notes": {
         "zh": "Pro 的 5 倍用量。每天要顶几次限额的人，来这一档",
         "en": "5× Pro usage. If you hit limits a few times a day, this is your tier"
@@ -144,7 +234,17 @@
       "category": "chat",
       "conflictGroup": "claude",
       "capacity": 4,
-      "caps": { "reasoning": 9, "search": 9, "coding": 10, "daily": 9, "vision": 9, "imageGen": 0, "video": 0, "audio": 3, "ocr": 9 },
+      "caps": {
+        "reasoning": 9,
+        "search": 9,
+        "coding": 10,
+        "daily": 9,
+        "vision": 9,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 3,
+        "ocr": 9
+      },
       "notes": {
         "zh": "20 倍用量，写代码基本不再看限额",
         "en": "20× usage — code all day without watching the meter"
@@ -160,7 +260,17 @@
       "category": "chat",
       "conflictGroup": "grok",
       "capacity": 2,
-      "caps": { "reasoning": 9, "search": 8, "coding": 8, "daily": 9, "vision": 8, "imageGen": 8, "video": 8, "audio": 7, "ocr": 7 },
+      "caps": {
+        "reasoning": 9,
+        "search": 8,
+        "coding": 7,
+        "daily": 9,
+        "vision": 8,
+        "imageGen": 8,
+        "video": 8,
+        "audio": 7,
+        "ocr": 7
+      },
       "notes": {
         "zh": "一份订阅覆盖文字、生图、视频、语音。全模态里最均衡的一档",
         "en": "One subscription covers text, images, video, and voice. The most balanced multimodal tier"
@@ -176,7 +286,17 @@
       "category": "chat",
       "conflictGroup": "grok",
       "capacity": 4,
-      "caps": { "reasoning": 10, "search": 8, "coding": 9, "daily": 9, "vision": 8, "imageGen": 8, "video": 8, "audio": 7, "ocr": 7 },
+      "caps": {
+        "reasoning": 10,
+        "search": 8,
+        "coding": 8,
+        "daily": 9,
+        "vision": 8,
+        "imageGen": 8,
+        "video": 8,
+        "audio": 7,
+        "ocr": 7
+      },
       "notes": {
         "zh": "多智能体并行推理，市面最贵的个人订阅。为难题而生",
         "en": "Multi-agent parallel reasoning, the priciest consumer sub on the market. Built for hard problems"
@@ -192,7 +312,17 @@
       "category": "social",
       "conflictGroup": "grok",
       "capacity": 2,
-      "caps": { "reasoning": 9, "search": 8, "coding": 8, "daily": 9, "vision": 8, "imageGen": 8, "video": 8, "audio": 7, "ocr": 7 },
+      "caps": {
+        "reasoning": 9,
+        "search": 8,
+        "coding": 7,
+        "daily": 9,
+        "vision": 8,
+        "imageGen": 8,
+        "video": 8,
+        "audio": 7,
+        "ocr": 7
+      },
       "notes": {
         "zh": "SuperGrok 全部能力 + X 的免广告、认证、创作者分成。多 $10 买社交权益",
         "en": "Everything in SuperGrok, plus ad-free X, the checkmark, and creator payouts. $10 more for the social layer"
@@ -208,7 +338,17 @@
       "category": "chat",
       "conflictGroup": "gemini",
       "capacity": 1,
-      "caps": { "reasoning": 7, "search": 7, "coding": 7, "daily": 8, "vision": 8, "imageGen": 6, "video": 5, "audio": 6, "ocr": 8 },
+      "caps": {
+        "reasoning": 7,
+        "search": 7,
+        "coding": 6,
+        "daily": 8,
+        "vision": 8,
+        "imageGen": 6,
+        "video": 5,
+        "audio": 6,
+        "ocr": 8
+      },
       "notes": {
         "zh": "看图和 OCR 是免费档里最强的，配合 Google 全家桶白送",
         "en": "The strongest free tier for vision and OCR, and it comes with the Google ecosystem"
@@ -224,7 +364,17 @@
       "category": "chat",
       "conflictGroup": "gemini",
       "capacity": 2,
-      "caps": { "reasoning": 7, "search": 7, "coding": 7, "daily": 8, "vision": 8, "imageGen": 7, "video": 6, "audio": 6, "ocr": 8 },
+      "caps": {
+        "reasoning": 7,
+        "search": 7,
+        "coding": 6,
+        "daily": 8,
+        "vision": 8,
+        "imageGen": 7,
+        "video": 6,
+        "audio": 6,
+        "ocr": 8
+      },
       "notes": {
         "zh": "低价拿到更多 Gemini 用量和云存储，轻度用户的省钱档",
         "en": "More Gemini quota and cloud storage at a low price — the saver tier for light users"
@@ -240,7 +390,17 @@
       "category": "chat",
       "conflictGroup": "gemini",
       "capacity": 2,
-      "caps": { "reasoning": 9, "search": 8, "coding": 8, "daily": 9, "vision": 9, "imageGen": 8, "video": 8, "audio": 7, "ocr": 9 },
+      "caps": {
+        "reasoning": 9,
+        "search": 8,
+        "coding": 7,
+        "daily": 9,
+        "vision": 9,
+        "imageGen": 8,
+        "video": 8,
+        "audio": 7,
+        "ocr": 9
+      },
       "notes": {
         "zh": "Gemini 3.1 Pro + Veo 视频生成 + NotebookLM。看图看文档是强项",
         "en": "Gemini 3.1 Pro + Veo video gen + NotebookLM. Vision and documents are its strong suit"
@@ -256,7 +416,17 @@
       "category": "chat",
       "conflictGroup": "gemini",
       "capacity": 3,
-      "caps": { "reasoning": 9, "search": 8, "coding": 8, "daily": 9, "vision": 9, "imageGen": 9, "video": 9, "audio": 7, "ocr": 9 },
+      "caps": {
+        "reasoning": 9,
+        "search": 8,
+        "coding": 7,
+        "daily": 9,
+        "vision": 9,
+        "imageGen": 9,
+        "video": 9,
+        "audio": 7,
+        "ocr": 9
+      },
       "notes": {
         "zh": "Pro 的 5 倍用量 + 更高的 Veo 额度。视频创作者的中间档",
         "en": "5× Pro usage with a bigger Veo allowance. The middle tier for video creators"
@@ -272,7 +442,17 @@
       "category": "chat",
       "conflictGroup": "gemini",
       "capacity": 4,
-      "caps": { "reasoning": 9, "search": 9, "coding": 8, "daily": 9, "vision": 9, "imageGen": 9, "video": 10, "audio": 8, "ocr": 9 },
+      "caps": {
+        "reasoning": 9,
+        "search": 9,
+        "coding": 7,
+        "daily": 9,
+        "vision": 9,
+        "imageGen": 9,
+        "video": 10,
+        "audio": 8,
+        "ocr": 9
+      },
       "notes": {
         "zh": "20 倍 Pro 用量，Veo 视频生成的天花板",
         "en": "20× Pro usage and the ceiling for Veo video generation"
@@ -288,7 +468,17 @@
       "category": "chat",
       "conflictGroup": "kimi",
       "capacity": 1,
-      "caps": { "reasoning": 7, "search": 6, "coding": 8, "daily": 8, "vision": 6, "imageGen": 3, "video": 2, "audio": 4, "ocr": 6 },
+      "caps": {
+        "reasoning": 7,
+        "search": 6,
+        "coding": 7,
+        "daily": 8,
+        "vision": 6,
+        "imageGen": 3,
+        "video": 2,
+        "audio": 4,
+        "ocr": 6
+      },
       "notes": {
         "zh": "K2.6 免费用，编码和智能体任务偏强，额度有限",
         "en": "K2.6 for free — leans strong on coding and agent tasks, quota is tight"
@@ -304,7 +494,17 @@
       "category": "chat",
       "conflictGroup": "kimi",
       "capacity": 2,
-      "caps": { "reasoning": 8, "search": 7, "coding": 9, "daily": 8, "vision": 7, "imageGen": 3, "video": 2, "audio": 4, "ocr": 6 },
+      "caps": {
+        "reasoning": 8,
+        "search": 7,
+        "coding": 8,
+        "daily": 8,
+        "vision": 7,
+        "imageGen": 3,
+        "video": 2,
+        "audio": 4,
+        "ocr": 6
+      },
       "notes": {
         "zh": "¥49 拿到 K2.6 完整版 + 深度研究额度。入门付费里的性价比选手",
         "en": "Full K2.6 plus deep-research quota for ~$7. The value pick among entry paid tiers"
@@ -320,7 +520,17 @@
       "category": "chat",
       "conflictGroup": "kimi",
       "capacity": 2,
-      "caps": { "reasoning": 8, "search": 7, "coding": 9, "daily": 8, "vision": 7, "imageGen": 3, "video": 2, "audio": 4, "ocr": 6 },
+      "caps": {
+        "reasoning": 8,
+        "search": 7,
+        "coding": 8,
+        "daily": 8,
+        "vision": 7,
+        "imageGen": 3,
+        "video": 2,
+        "audio": 4,
+        "ocr": 6
+      },
       "notes": {
         "zh": "更大额度 + 多设备登录，Andante 的加量版",
         "en": "Bigger quotas and multi-device login — Andante with more headroom"
@@ -336,7 +546,17 @@
       "category": "chat",
       "conflictGroup": "kimi",
       "capacity": 3,
-      "caps": { "reasoning": 8, "search": 7, "coding": 9, "daily": 8, "vision": 7, "imageGen": 4, "video": 3, "audio": 4, "ocr": 6 },
+      "caps": {
+        "reasoning": 8,
+        "search": 7,
+        "coding": 8,
+        "daily": 8,
+        "vision": 7,
+        "imageGen": 4,
+        "video": 3,
+        "audio": 4,
+        "ocr": 6
+      },
       "notes": {
         "zh": "Kimi 顶档：Agent Swarm 并行任务 + 高速模型优先",
         "en": "Kimi's top tier: Agent Swarm parallel tasks plus priority on the fast model"
@@ -352,7 +572,17 @@
       "category": "chat",
       "conflictGroup": "deepseek",
       "capacity": 2,
-      "caps": { "reasoning": 9, "search": 6, "coding": 8, "daily": 8, "vision": 6, "imageGen": 2, "video": 1, "audio": 3, "ocr": 5 },
+      "caps": {
+        "reasoning": 9,
+        "search": 6,
+        "coding": 7,
+        "daily": 8,
+        "vision": 6,
+        "imageGen": 2,
+        "video": 1,
+        "audio": 3,
+        "ocr": 5
+      },
       "notes": {
         "zh": "V4 满血免费，推理 9 分不要钱。没有付费档，这就是全部，也足够多",
         "en": "Full V4 for free — 9/10 reasoning at zero cost. There is no paid tier; this is all of it, and it's a lot"
@@ -368,7 +598,17 @@
       "category": "search",
       "conflictGroup": "perplexity",
       "capacity": 1,
-      "caps": { "reasoning": 6, "search": 9, "coding": 5, "daily": 7, "vision": 5, "imageGen": 2, "video": 0, "audio": 3, "ocr": 5 },
+      "caps": {
+        "reasoning": 6,
+        "search": 9,
+        "coding": 5,
+        "daily": 7,
+        "vision": 5,
+        "imageGen": 2,
+        "video": 0,
+        "audio": 3,
+        "ocr": 5
+      },
       "notes": {
         "zh": "找信息带引用来源，免费档就够体验。Pro Search 次数有限",
         "en": "Answers with citations. The free tier is a real taste — Pro Searches are limited"
@@ -384,7 +624,17 @@
       "category": "search",
       "conflictGroup": "perplexity",
       "capacity": 2,
-      "caps": { "reasoning": 7, "search": 10, "coding": 6, "daily": 8, "vision": 6, "imageGen": 6, "video": 5, "audio": 5, "ocr": 6 },
+      "caps": {
+        "reasoning": 7,
+        "search": 10,
+        "coding": 6,
+        "daily": 8,
+        "vision": 6,
+        "imageGen": 6,
+        "video": 5,
+        "audio": 5,
+        "ocr": 6
+      },
       "notes": {
         "zh": "搜索 10 分满分，还能路由 GPT/Claude/Gemini 回答。查资料的最优解",
         "en": "10/10 search that routes GPT, Claude, and Gemini under the hood. The best answer for research"
@@ -400,7 +650,17 @@
       "category": "search",
       "conflictGroup": "perplexity",
       "capacity": 4,
-      "caps": { "reasoning": 8, "search": 10, "coding": 6, "daily": 8, "vision": 7, "imageGen": 7, "video": 6, "audio": 5, "ocr": 6 },
+      "caps": {
+        "reasoning": 8,
+        "search": 10,
+        "coding": 6,
+        "daily": 8,
+        "vision": 7,
+        "imageGen": 7,
+        "video": 6,
+        "audio": 5,
+        "ocr": 6
+      },
       "notes": {
         "zh": "不限量 Labs + Comet 浏览器 + 万级 Computer 额度。搜索重度户的顶配",
         "en": "Unlimited Labs, the Comet browser, and 10k Computer credits. The top tier for search power users"
@@ -416,7 +676,17 @@
       "category": "coding-tool",
       "conflictGroup": "cursor",
       "capacity": 1,
-      "caps": { "reasoning": 7, "search": 2, "coding": 8, "daily": 4, "vision": 4, "imageGen": 0, "video": 0, "audio": 0, "ocr": 3 },
+      "caps": {
+        "reasoning": 7,
+        "search": 2,
+        "coding": 8,
+        "daily": 4,
+        "vision": 4,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 0,
+        "ocr": 3
+      },
       "notes": {
         "zh": "免费版 AI 编辑器，Tab 补全 + 有限 Agent。它是编辑器，不是聊天框",
         "en": "The free AI editor: Tab completions plus a limited Agent. It's an editor, not a chatbox"
@@ -432,7 +702,17 @@
       "category": "coding-tool",
       "conflictGroup": "cursor",
       "capacity": 2,
-      "caps": { "reasoning": 8, "search": 2, "coding": 10, "daily": 4, "vision": 4, "imageGen": 0, "video": 0, "audio": 0, "ocr": 3 },
+      "caps": {
+        "reasoning": 8,
+        "search": 2,
+        "coding": 10,
+        "daily": 4,
+        "vision": 4,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 0,
+        "ocr": 3
+      },
       "notes": {
         "zh": "$20 前沿模型额度 + Auto 模式不限量。和聊天订阅互补的编码主力",
         "en": "$20 of frontier-model credit plus unlimited Auto mode. The coding workhorse that pairs with a chat sub"
@@ -448,7 +728,17 @@
       "category": "coding-tool",
       "conflictGroup": "cursor",
       "capacity": 3,
-      "caps": { "reasoning": 8, "search": 2, "coding": 10, "daily": 4, "vision": 4, "imageGen": 0, "video": 0, "audio": 0, "ocr": 3 },
+      "caps": {
+        "reasoning": 8,
+        "search": 2,
+        "coding": 10,
+        "daily": 4,
+        "vision": 4,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 0,
+        "ocr": 3
+      },
       "notes": {
         "zh": "Pro 的 3 倍额度。每天写代码但还没到全天候的那批人",
         "en": "3× Pro credits. For people who code daily but not around the clock"
@@ -464,7 +754,17 @@
       "category": "coding-tool",
       "conflictGroup": "cursor",
       "capacity": 4,
-      "caps": { "reasoning": 8, "search": 2, "coding": 10, "daily": 4, "vision": 4, "imageGen": 0, "video": 0, "audio": 0, "ocr": 3 },
+      "caps": {
+        "reasoning": 8,
+        "search": 2,
+        "coding": 10,
+        "daily": 4,
+        "vision": 4,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 0,
+        "ocr": 3
+      },
       "notes": {
         "zh": "20 倍额度，全天候编码工作流",
         "en": "20× credits for an all-day coding workflow"
@@ -480,7 +780,17 @@
       "category": "coding-tool",
       "conflictGroup": "opencode",
       "capacity": 2,
-      "caps": { "reasoning": 8, "search": 3, "coding": 9, "daily": 5, "vision": 5, "imageGen": 0, "video": 0, "audio": 0, "ocr": 4 },
+      "caps": {
+        "reasoning": 8,
+        "search": 3,
+        "coding": 9,
+        "daily": 5,
+        "vision": 5,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 0,
+        "ocr": 4
+      },
       "notes": {
         "zh": "$10 一次拿到 GLM-5.2、Kimi K2.7、DeepSeek V4 等 14 个开源模型的编码额度。市面最便宜的多模型编码订阅",
         "en": "GLM-5.2, Kimi K2.7, DeepSeek V4 and 11 more coding models for $10. The cheapest multi-model coding plan on the market"
@@ -496,7 +806,17 @@
       "category": "coding-tool",
       "conflictGroup": "glm-coding",
       "capacity": 2,
-      "caps": { "reasoning": 8, "search": 4, "coding": 9, "daily": 5, "vision": 6, "imageGen": 0, "video": 0, "audio": 0, "ocr": 5 },
+      "caps": {
+        "reasoning": 8,
+        "search": 4,
+        "coding": 9,
+        "daily": 5,
+        "vision": 6,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 0,
+        "ocr": 5
+      },
       "notes": {
         "zh": "¥49 接入 GLM-5.2 写代码，接 Claude Code 这类 CLI 用。编码档里的价格杀手",
         "en": "GLM-5.2 for code at ~$7, plugs into CLIs like Claude Code. The price killer among coding plans"
@@ -512,7 +832,17 @@
       "category": "coding-tool",
       "conflictGroup": "glm-coding",
       "capacity": 3,
-      "caps": { "reasoning": 8, "search": 4, "coding": 9, "daily": 5, "vision": 6, "imageGen": 0, "video": 0, "audio": 0, "ocr": 5 },
+      "caps": {
+        "reasoning": 8,
+        "search": 4,
+        "coding": 9,
+        "daily": 5,
+        "vision": 6,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 0,
+        "ocr": 5
+      },
       "notes": {
         "zh": "Lite 的 5 倍额度 + 完整 GLM-5 系列。日常重度编码的甜点档",
         "en": "5× Lite quota with the full GLM-5 lineup. The sweet spot for daily heavy coding"
@@ -528,11 +858,22 @@
       "category": "coding-tool",
       "conflictGroup": "glm-coding",
       "capacity": 4,
-      "caps": { "reasoning": 8, "search": 4, "coding": 9, "daily": 5, "vision": 6, "imageGen": 0, "video": 0, "audio": 0, "ocr": 5 },
+      "caps": {
+        "reasoning": 8,
+        "search": 4,
+        "coding": 9,
+        "daily": 5,
+        "vision": 6,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 0,
+        "ocr": 5
+      },
       "notes": {
         "zh": "顶格额度，给重度开发者或小团队",
         "en": "Ceiling-tier quota, for heavy developers or a small team"
       }
     }
-  ]
+  ],
+  "capsCalibration": "coding 分按各套餐所含模型在 arena.ai/leaderboard/agent 的排名校准 · 2026-07-11"
 }

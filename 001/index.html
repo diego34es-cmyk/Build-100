@@ -180,6 +180,8 @@
   .plan-card.primary { border-color: var(--neon); box-shadow: 0 0 0 1px rgba(183,148,246,0.2); }
   .plan-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--neon); margin-bottom: 14px; }
   .plan-card.satisfy .plan-tag { color: var(--delta); }
+  .plan-card.freebie { border-style: dashed; }
+  .plan-card.freebie .plan-tag { color: var(--live); }
   .plan-price { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.6rem; font-weight: 500; margin-bottom: 2px; }
   .plan-price small { color: var(--faint); font-size: 0.55em; font-weight: 400; }
   .plan-vs { color: var(--muted); font-size: 0.85rem; margin-bottom: 18px; }
@@ -624,6 +626,15 @@
       html += planCard({ combo: res.satisfy.combo, price: res.satisfy.price, score: null, reasons: null }, "satisfy", L("满足方案 · 真正够用", "Fully Meets · Truly Enough"), needs, answers, res);
     }
 
+    // —— 免费加餐（r2-1：不占组合坑位、不冲突的免费产品）——
+    if (res.freebies && res.freebies.length) {
+      html += `<div class="plan-card freebie">
+        <div class="plan-tag">${L("免费加餐 · 顺手领了", "Free Extras · Grab These Too")}</div>
+        <div class="plan-vs">${L("和上面的组合不冲突，零成本补短板", "No conflicts with your combo — zero-cost gap fillers")}</div>
+        <ul class="product-list">${res.freebies.map((p) => productItem(p)).join("")}</ul>
+      </div>`;
+    }
+
     // —— 备选方案 ——
     if (res.alternate) {
       html += `<div class="alt-box">
@@ -660,7 +671,9 @@
         metNames.length ? `Covers ${r.coveragePct}% of what you asked for — ${metNames.join(", ")} met.` : `Covers ${r.coveragePct}% of what you asked for.`
       );
       const s2 = r.capacityOk
-        ? L("容量匹配你的使用强度。", "Capacity matches your usage intensity.")
+        ? (r.codingStacked
+            ? L("双编码订阅叠加限额，顶格写代码也扛得住。", "Two coding subscriptions stack their limits — heavy coding holds up.")
+            : L("容量匹配你的使用强度。", "Capacity matches your usage intensity."))
         : L("容量略低于你的强度，高峰时段可能要等。", "Capacity runs below your intensity — expect waits at peak.");
       const s3 = gapNames.length
         ? L(`缺口：${gapNames.join("、")}。`, `Gaps: ${gapNames.join(", ")}.`)
@@ -686,7 +699,7 @@
         <div class="product-name">${p.name}<span class="pv">${p.provider}</span></div>
         <div class="product-note">${note}</div>
       </div>
-      <div class="product-price">$${p.price === 0 ? (lang === "en" ? "Free" : "免费") : p.price + "/mo"}</div>
+      <div class="product-price">${p.price === 0 ? (lang === "en" ? "Free" : "免费") : "$" + p.price + "/mo"}</div>
     </li>`;
   }
 

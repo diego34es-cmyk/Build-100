@@ -1,12 +1,16 @@
 // engine.js — COMBO-001 推荐引擎（纯函数，无 DOM 依赖）
-// 规范依据：combo-001-实施规范.md §4
+// 规范依据：combo-001-实施规范.md §4 + r2 修订（2026-07-11 作者拍板）：
+//   r2-1 组合只由付费产品构成；免费产品作为"附赠层"单独推荐（freebies）
+//   r2-2 容量按维度分组判定（coding / general），同组多个付费订阅可叠加容量
+//        —— 编码 10 级的重度用户，答案可以是 Claude Pro + OpenCode Go 双订阅
 // 全部纯函数：输入（用户答案 + products）→ 输出（推荐结果对象），可被 node --test 直接测试。
 
 export const CAP_KEYS = ["reasoning", "search", "coding", "daily", "vision", "imageGen", "video", "audio", "ocr"];
+const GENERAL_KEYS = CAP_KEYS.filter((k) => k !== "coding");
 
 // ────────────────────────────────────────────────────────────
 // §4.1 buildNeeds —— 把用户 4 项输入转成统一 needs 对象
-// answers: { budget, intensity, scenarios: string[], special: {vision,video,audio,ocr} }
+// answers: { budget, intensity, scenarios: {reasoning,search,coding,daily}, special: {vision,video,audio,ocr} }
 // ────────────────────────────────────────────────────────────
 export function buildNeeds(answers) {
   const { budget, intensity, scenarios = {}, special = {} } = answers;
@@ -25,8 +29,7 @@ export function buildNeeds(answers) {
     throw new Error("intensity must be an integer in [1, 4]");
   }
 
-  // §3.3 场景 & §3.4 特殊能力：均为 0–10 滑块，值直接作为能力需求（0 = 不需要）
-  // （原"选中=8/未选=2"的多选映射已改为滑块，由用户直接给出 0–10）
+  // §3.3/3.4 滑块 0–10 原值透传（0 = 不需要），滑块方案为作者定稿
   const caps = {
     reasoning: clamp0_10(scenarios.reasoning),
     search: clamp0_10(scenarios.search),
@@ -48,21 +51,64 @@ function clamp0_10(v) {
 }
 
 // ────────────────────────────────────────────────────────────
+// r2-2 维度分组容量模型
+// coding 组：caps.coding ≥ 8 的产品都能扛编码负载（含带 Claude Code/Codex 的聊天订阅）
+// general 组：聊天/搜索/社交类产品（coding-tool 扛不了日常聊天）
+// ────────────────────────────────────────────────────────────
+const servesCoding = (p) => (p.caps.coding ?? 0) >= 8;
+const servesGeneral = (p) => p.category !== "coding-tool";
+
+// 组内需求档位 → 该组要求的容量档位（滑块高低本身就是该维度的强度信号）
+export function groupReq(intensity, needMax) {
+  if (needMax <= 0) return 0;            // 不需要该组
+  if (needMax >= 7) return intensity;    // 重度依赖：全强度要求
+  if (needMax >= 4) return Math.max(1, intensity - 1);
+  return 1;                              // 轻度：有就行
+}
+
+// 组容量：组内最强产品容量；≥2 个付费产品可分流 +1，上限 4
+export function computeGroupCapacity(items, serves) {
+  const serving = items.filter(serves);
+  if (!serving.length) return 0;
+  let cap = Math.max(...serving.map((p) => p.capacity));
+  if (serving.filter((p) => p.price > 0).length >= 2) cap = Math.min(4, cap + 1);
+  return cap;
+}
+
+function groupNeeds(needs) {
+  const codingNeed = needs.caps.coding;
+  const generalNeed = Math.max(...GENERAL_KEYS.map((k) => needs.caps[k]));
+  return {
+    coding: { needMax: codingNeed, weight: codingNeed, req: groupReq(needs.intensity, codingNeed) },
+    general: {
+      needMax: generalNeed,
+      weight: GENERAL_KEYS.reduce((s, k) => s + needs.caps[k], 0),
+      req: groupReq(needs.intensity, generalNeed),
+    },
+  };
+}
+
+const FIT_LADDER = [1, 0.6, 0.3, 0]; // 差 0/1/2/3 档
+
+function groupFit(capacity, req) {
+  if (req <= 0) return null; // 该组无需求，不参与
+  const diff = req - capacity;
+  return diff <= 0 ? 1 : FIT_LADDER[diff] ?? 0;
+}
+
+// ────────────────────────────────────────────────────────────
 // §4.2 enumerateCombos —— 暴力枚举 1–3 个产品的组合
-// §4.5 约束：同一 conflictGroup 不得共存
+// 传入什么就枚举什么（recommend 内部只传付费产品，r2-1）
 // ────────────────────────────────────────────────────────────
 export function enumerateCombos(products) {
   const combos = [];
   const n = products.length;
-  // 1-元组
   for (let i = 0; i < n; i++) pushCombo(combos, [products[i]]);
-  // 2-元组
   for (let i = 0; i < n; i++)
     for (let j = i + 1; j < n; j++) {
       if (conflicts(products[i], products[j])) continue;
       pushCombo(combos, [products[i], products[j]]);
     }
-  // 3-元组
   for (let i = 0; i < n; i++)
     for (let j = i + 1; j < n; j++) {
       if (conflicts(products[i], products[j])) continue;
@@ -78,23 +124,20 @@ function conflicts(a, b) {
   return a.conflictGroup === b.conflictGroup && !!a.conflictGroup;
 }
 
-// §4.3 组合能力/容量/价格
+// §4.3 组合能力/价格；容量改为分组模型（r2-2），此处存两组容量
 function pushCombo(out, items) {
   const caps = {};
   for (const k of CAP_KEYS) caps[k] = Math.max(...items.map((p) => p.caps[k] ?? 0)); // 能力取最强者
   const price = items.reduce((s, p) => s + p.price, 0); // §2 整数运算
-  // §4.3 容量：取最大；≥2 个付费聊天类则 +1，上限 4
-  const chatPaid = items.filter((p) => p.category === "chat" && p.price > 0);
-  let capacity = Math.max(...items.map((p) => p.capacity));
-  if (chatPaid.length >= 2) capacity = Math.min(4, capacity + 1);
-  out.push({ items, price, capacity, caps });
+  const capCoding = computeGroupCapacity(items, servesCoding);
+  const capGeneral = computeGroupCapacity(items, servesGeneral);
+  out.push({ items, price, caps, capCoding, capGeneral });
 }
 
 // ────────────────────────────────────────────────────────────
-// §4.4 scoreCombo —— 打分
+// §4.4 scoreCombo —— 打分（容量项 = 各需求组 fit 的需求加权平均）
 // ────────────────────────────────────────────────────────────
 export function scoreCombo(combo, needs) {
-  // 能力覆盖率：只算 need>0 的能力，加权（权重即需求值）
   let covered = 0;
   let wanted = 0;
   for (const k of CAP_KEYS) {
@@ -105,9 +148,14 @@ export function scoreCombo(combo, needs) {
   }
   const coverage = wanted > 0 ? covered / wanted : 1;
 
-  // 容量匹配分档
-  const diff = needs.intensity - combo.capacity;
-  const capacityFit = diff <= 0 ? 1 : [0, 0.6, 0.3, 0][diff] ?? 0;
+  const g = groupNeeds(needs);
+  const fits = [];
+  const fCoding = groupFit(combo.capCoding ?? 0, g.coding.req);
+  if (fCoding !== null) fits.push({ fit: fCoding, w: g.coding.weight });
+  const fGeneral = groupFit(combo.capGeneral ?? 0, g.general.req);
+  if (fGeneral !== null) fits.push({ fit: fGeneral, w: g.general.weight });
+  const wSum = fits.reduce((s, f) => s + f.w, 0);
+  const capacityFit = fits.length && wSum > 0 ? fits.reduce((s, f) => s + f.fit * f.w, 0) / wSum : 1;
 
   const score = coverage * 0.65 + capacityFit * 0.35;
   return { coverage: round4(coverage), capacityFit: round4(capacityFit), score: round4(score) };
@@ -115,22 +163,65 @@ export function scoreCombo(combo, needs) {
 
 const round4 = (x) => Math.round(x * 10000) / 10000;
 
+// §4.5 "完全满足"：所有 need>0 能力 ≥ 需求值，且每个有需求的组容量 ≥ 该组要求
+export function isFullySatisfied(combo, needs) {
+  for (const k of CAP_KEYS) {
+    if (needs.caps[k] > 0 && combo.caps[k] < needs.caps[k]) return false;
+  }
+  const g = groupNeeds(needs);
+  if (g.coding.req > 0 && (combo.capCoding ?? 0) < g.coding.req) return false;
+  if (g.general.req > 0 && (combo.capGeneral ?? 0) < g.general.req) return false;
+  return true;
+}
+
+// ────────────────────────────────────────────────────────────
+// r2-1 附赠层：与组合不冲突、能补需求的免费产品（最多 3 个）
+// ────────────────────────────────────────────────────────────
+export function pickFreebies(needs, comboItems, products) {
+  const usedGroups = new Set(comboItems.map((p) => p.conflictGroup).filter(Boolean));
+  const scored = products
+    .filter((p) => p.price === 0 && !usedGroups.has(p.conflictGroup))
+    .map((p) => {
+      let rel = 0;
+      for (const k of CAP_KEYS) {
+        if (needs.caps[k] > 0) rel += Math.min(p.caps[k] ?? 0, needs.caps[k]);
+      }
+      return { p, rel };
+    })
+    .filter((x) => x.rel > 0)
+    .sort((a, b) => b.rel - a.rel);
+  // 附赠层内部也不重复同 conflictGroup
+  const out = [];
+  const seen = new Set();
+  for (const { p } of scored) {
+    if (seen.has(p.conflictGroup)) continue;
+    seen.add(p.conflictGroup);
+    out.push(p);
+    if (out.length >= 3) break;
+  }
+  return out;
+}
+
 // ────────────────────────────────────────────────────────────
 // §4.5 两段式输出 + §4.6 recommend 主入口
 // ────────────────────────────────────────────────────────────
 export function recommend(answers, products) {
   const needs = buildNeeds(answers); // 也会校验 budget（§4.7-7）
-  const all = enumerateCombos(products).map((c) => ({ ...c, ...scoreCombo(c, needs) }));
+  const paid = products.filter((p) => p.price > 0); // r2-1：组合只由付费产品构成
+  const all = enumerateCombos(paid).map((c) => ({ ...c, ...scoreCombo(c, needs) }));
 
   // ===== 第一段 · 勉强方案（预算 ±10 内最优）=====
   let primary = null;
   let fallback = "none";
-  // 候选池：用于选备选方案。budget=0 时只有免费组合当候选。
   let pool;
-  // §4.7-⑥：预算 $0 是硬边界 —— 只出免费组合并标 free-only（即便 price=0 落在 ±10 区间也不走 within 分支）
   if (needs.budget === 0) {
-    pool = all.filter((c) => c.items.every((p) => p.price === 0)).sort(byScoreThenPrice);
-    primary = pool[0];
+    // §4.7-⑥：预算 $0 → 免费产品堆一个伪组合（附赠层逻辑复用）
+    const frees = pickFreebies(needs, [], products);
+    const items = frees.length ? frees : products.filter((p) => p.price === 0).slice(0, 1);
+    const tmp = [];
+    pushCombo(tmp, items);
+    primary = { ...tmp[0], ...scoreCombo(tmp[0], needs) };
+    pool = [primary];
     fallback = "free-only";
   } else {
     const within = all.filter((c) => Math.abs(c.price - needs.budget) <= 10);
@@ -138,16 +229,17 @@ export function recommend(answers, products) {
       pool = within;
       primary = pickBest(within);
     } else {
-      // 无任何组合落在 ±10：取 price ≤ budget+10 中最优
       const under = all.filter((c) => c.price <= needs.budget + 10).sort(byScoreThenPrice);
       if (under.length) {
         pool = under;
         primary = under[0];
         fallback = "under-budget";
       } else {
-        // 连 budget+10 都没有（极端）：全免费组合
-        pool = all.filter((c) => c.items.every((p) => p.price === 0)).sort(byScoreThenPrice);
-        primary = pool[0];
+        const frees = pickFreebies(needs, [], products);
+        const tmp = [];
+        pushCombo(tmp, frees.length ? frees : products.filter((p) => p.price === 0).slice(0, 1));
+        primary = { ...tmp[0], ...scoreCombo(tmp[0], needs) };
+        pool = [primary];
         fallback = "free-only";
       }
     }
@@ -168,15 +260,16 @@ export function recommend(answers, products) {
   let merged = false;
 
   if (primarySatisfied) {
-    // 边界情况 1：勉强方案本身已完全满足 → 两段合并
     merged = true;
   } else if (fullySatisfy.length) {
     const s = fullySatisfy[0];
     satisfy = { combo: toComboView(s), price: s.price, delta: s.price - needs.budget };
   } else {
-    // 边界情况 2：不存在任何完全满足的组合
     fallback = "unsatisfiable";
   }
+
+  // r2-1 附赠层：基于主方案挑不冲突的免费产品（免费伪组合模式下不再重复推）
+  const freebies = fallback === "free-only" ? [] : pickFreebies(needs, primary.items, products);
 
   return {
     primary: { combo: toComboView(primary), price: primary.price, score: primary.score, reasons: primary.reasons },
@@ -184,6 +277,7 @@ export function recommend(answers, products) {
     merged,
     fallback,
     alternate,
+    freebies,
   };
 }
 
@@ -195,14 +289,6 @@ function pickBest(list) {
   return [...list].sort(byScoreThenPrice)[0];
 }
 
-// §4.5 "完全满足"定义：所有 need>0 能力 ≥ 需求值，且容量 ≥ intensity
-function isFullySatisfied(combo, needs) {
-  for (const k of CAP_KEYS) {
-    if (needs.caps[k] > 0 && combo.caps[k] < needs.caps[k]) return false;
-  }
-  return combo.capacity >= needs.intensity;
-}
-
 // 组合产品集合相等性
 function sameSet(a, b) {
   if (a.length !== b.length) return false;
@@ -211,14 +297,13 @@ function sameSet(a, b) {
   return sa.every((id, i) => id === sb[i]);
 }
 
-// 剥离打分中间字段，返回干净的对外 combo 视图（保留 caps/capacity 供 UI 与断言用）
+// 对外 combo 视图（保留 caps 与分组容量供 UI/断言用）
 function toComboView(c) {
-  return { items: c.items, price: c.price, capacity: c.capacity, caps: c.caps };
+  return { items: c.items, price: c.price, caps: c.caps, capCoding: c.capCoding, capGeneral: c.capGeneral };
 }
 
 // ────────────────────────────────────────────────────────────
 // §4.5 附加输出 · "为什么这个组合最优"（模板生成，不调 LLM）
-// 返回结构化对象，UI 层按 lang 渲染成 2-3 句
 // ────────────────────────────────────────────────────────────
 export function buildReasons(combo, needs) {
   const met = [];
@@ -228,7 +313,12 @@ export function buildReasons(combo, needs) {
       (combo.caps[k] >= needs.caps[k] ? met : gap).push(k);
     }
   }
-  const capacityOk = combo.capacity >= needs.intensity;
+  const g = groupNeeds(needs);
+  const capacityOk =
+    (g.coding.req <= 0 || (combo.capCoding ?? 0) >= g.coding.req) &&
+    (g.general.req <= 0 || (combo.capGeneral ?? 0) >= g.general.req);
+  // 编码组是否靠双订阅叠加达标（给 UI 讲故事用）
+  const codingStacked = g.coding.req > 0 && combo.items.filter((p) => servesCoding(p) && p.price > 0).length >= 2;
   const coveragePct = Math.round((met.length / Math.max(1, met.length + gap.length)) * 100);
-  return { met, gap, capacityOk, coveragePct, intensity: needs.intensity, capacity: combo.capacity };
+  return { met, gap, capacityOk, codingStacked, coveragePct, intensity: needs.intensity };
 }
