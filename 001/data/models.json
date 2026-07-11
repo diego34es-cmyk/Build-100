@@ -51,7 +51,7 @@
       "priceSource": "openai.com/index/introducing-chatgpt-go（2026-01 全球上线，美区 $8）· verified 2026-07-11",
       "category": "chat",
       "conflictGroup": "chatgpt",
-      "capacity": 2,
+      "capacity": 1,
       "caps": {
         "reasoning": 7,
         "search": 7,
@@ -545,7 +545,7 @@
       "priceSource": "kimi.com/membership/pricing（¥199/月，含 Agent Swarm）· verified 2026-07-11",
       "category": "chat",
       "conflictGroup": "kimi",
-      "capacity": 3,
+      "capacity": 2,
       "caps": {
         "reasoning": 8,
         "search": 7,
@@ -875,5 +875,6 @@
       }
     }
   ],
-  "capsCalibration": "coding 分按各套餐所含模型在 arena.ai/leaderboard/agent 的排名校准 · 2026-07-11"
+  "capsCalibration": "coding 分按各套餐所含模型在 arena.ai/leaderboard/agent 的排名校准 · 2026-07-11",
+  "capacityNote": "capacity 档位≈价格/配额级别：免费=1；$7-30 标准付费=2；5x 级（约$60-150）=3；20x/顶格（$200+）=4。编码套餐按配额实际情况可上浮。"
 }

@@ -66,12 +66,16 @@ export function groupReq(intensity, needMax) {
   return 1;                              // 轻度：有就行
 }
 
-// 组容量：组内最强产品容量；≥2 个付费产品可分流 +1，上限 4
+// 组容量：组内最强产品容量；双付费订阅可分流 +1，上限 4。
+// 反"凑顶格"约束（r3）：+1 要求第二强的付费订阅容量 ≥2；
+// 要叠到 4（顶格），第二强必须 ≥3——两个 5x 级订阅 ≈ 一个顶格，中档+入门凑不出顶格。
 export function computeGroupCapacity(items, serves) {
   const serving = items.filter(serves);
   if (!serving.length) return 0;
-  let cap = Math.max(...serving.map((p) => p.capacity));
-  if (serving.filter((p) => p.price > 0).length >= 2) cap = Math.min(4, cap + 1);
+  const cap = Math.max(...serving.map((p) => p.capacity));
+  const paidCaps = serving.filter((p) => p.price > 0).map((p) => p.capacity).sort((a, b) => b - a);
+  const second = paidCaps.length >= 2 ? paidCaps[1] : 0;
+  if (second >= 2 && (cap < 3 || second >= 3)) return Math.min(4, cap + 1);
   return cap;
 }
 
@@ -282,8 +286,9 @@ export function recommend(answers, products) {
 }
 
 // 工具：排序与选择
-const byScoreThenPrice = (a, b) => b.score - a.score || a.price - b.price;
-const byPriceThenScore = (a, b) => a.price - b.price || b.score - a.score;
+// 同分平局：先选订阅数更少的（没有凑预算的死重、管理成本低），再选更便宜的（r3）
+const byScoreThenPrice = (a, b) => b.score - a.score || a.items.length - b.items.length || a.price - b.price;
+const byPriceThenScore = (a, b) => a.price - b.price || b.score - a.score || a.items.length - b.items.length;
 
 function pickBest(list) {
   return [...list].sort(byScoreThenPrice)[0];

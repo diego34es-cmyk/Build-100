@@ -233,6 +233,28 @@ describe("recommend — r2 新行为", () => {
     }
   });
 
+  test("r3 回归：LV.4 顶格用户不能被 \$40 的中档组合糊弄成'已经够用'", () => {
+    // 作者实测抓到的荒谬案例：预算40 + 每天4次顶格还不够用 + 推理7/搜索6/编码7/日常6/看图5
+    // 旧行为：ChatGPT Go + Kimi Allegretto ≈ \$37 → merged=true（"已经够用"）
+    const res = recommend(
+      { budget: 40, intensity: 4, scenarios: { reasoning: 7, search: 6, coding: 7, daily: 6 }, special: { vision: 5, video: 0, audio: 0, ocr: 0 } },
+      PRODUCTS
+    );
+    assert.equal(res.merged, false, "LV.4 重度需求绝不可能被 \$50 以内组合完全满足");
+    assert(res.satisfy, "必须给出真正的满足方案");
+    assert(res.satisfy.price >= 100, `满足 LV.4 的方案不可能低于 \$100，实际: \$${res.satisfy.price}`);
+    assert(res.satisfy.delta > 0, "必须明确告知需要加钱");
+  });
+
+  test("r3 叠容量到 4（顶格）要求两个 ≥3 级订阅；3+2 只能到 3", () => {
+    const servesGeneral = (p) => p.category !== "coding-tool";
+    const max5x = PRODUCTS.find((p) => p.id === "claude-max-5x");        // capacity 3
+    const andante = PRODUCTS.find((p) => p.id === "kimi-andante");       // capacity 2
+    const pro100 = PRODUCTS.find((p) => p.id === "chatgpt-pro-100");     // capacity 3
+    assert.equal(computeGroupCapacity([max5x, andante], servesGeneral), 3, "3+2 不能凑顶格");
+    assert.equal(computeGroupCapacity([max5x, pro100], servesGeneral), 4, "3+3 = 两个 5x 级 ≈ 顶格");
+  });
+
   test("r2-2 编码 10 级 + 强度 3 + 低预算 → satisfy 用双编码订阅叠容量（如 Claude Pro + OpenCode Go）", () => {
     const res = recommend(
       { budget: 30, intensity: 3, scenarios: { reasoning: 2, search: 0, coding: 10, daily: 2 }, special: {} },

@@ -438,8 +438,9 @@
 </footer>
 
 <script type="module">
-  import { recommend, buildNeeds } from "./engine.js";
-  import { renderShareCanvas, buildShareText } from "./share.js";
+  // 版本号：每次部署 js/json 必须一起 +1，穿透 nginx 静态缓存
+  import { recommend, buildNeeds } from "./engine.js?v=3";
+  import { renderShareCanvas, buildShareText } from "./share.js?v=3";
 
   // ===== 状态 =====
   let PRODUCTS = [];
@@ -452,7 +453,7 @@
   // ===== 加载数据（§1 的"接口"）=====
   async function loadData() {
     try {
-      const res = await fetch("./data/models.json");
+      const res = await fetch("./data/models.json?v=3");
       const data = await res.json();
       PRODUCTS = data.products || [];
       if (data.updated) { dataUpdatedStr = data.updated.slice(0, 7).replace("-", "."); refreshDataUpdated(); }
