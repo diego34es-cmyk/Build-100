@@ -140,6 +140,7 @@
   }
   .submit-btn:hover:not(:disabled) { background: var(--neon); color: var(--bg); box-shadow: 0 0 24px var(--neon-glow); }
   .submit-btn:disabled { opacity: 0.5; cursor: wait; }
+  .db-line { text-align: center; margin-top: 14px; letter-spacing: 0.12em; }
 
   /* Computing overlay */
   .computing { display: none; text-align: center; padding: 80px 0; }
@@ -386,6 +387,7 @@
 
     <div class="submit-wrap">
       <button class="submit-btn" id="submitBtn" type="button" data-en="Generate my optimal combo">生成我的最优 Combo</button>
+      <p class="db-line mono" id="dbLine"></p>
     </div>
   </div>
 
@@ -452,6 +454,12 @@
       const data = await res.json();
       PRODUCTS = data.products || [];
       if (data.updated) { dataUpdatedStr = data.updated.slice(0, 7).replace("-", "."); refreshDataUpdated(); }
+      // 覆盖面说明：让用户知道推荐是在多大的候选池里算出来的
+      const providers = new Set(PRODUCTS.map((p) => p.provider.split(" /")[0])).size;
+      const dbLine = document.getElementById("dbLine");
+      dbLine.dataset.en = `Computed across ${PRODUCTS.length} plans from ${providers} providers · verified ${data.updated || ""}`;
+      dbLine.dataset.zh = `在 ${providers} 家 ${PRODUCTS.length} 个套餐里为你计算 · ${data.updated || ""} 核实`;
+      dbLine.innerHTML = lang === "en" ? dbLine.dataset.en : dbLine.dataset.zh;
     } catch (e) {
       document.getElementById("errBanner").textContent = lang === "en" ? "Failed to load product data." : "产品数据加载失败。";
       document.getElementById("errBanner").classList.add("show");

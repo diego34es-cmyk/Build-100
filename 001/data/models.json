@@ -471,6 +471,22 @@
       }
     },
     {
+      "id": "opencode-go",
+      "provider": "OpenCode",
+      "name": "OpenCode Go",
+      "price": 10,
+      "priceCNY": null,
+      "priceSource": "opencode.ai/go（$10/月，首月 $5，14 个开源模型）· verified 2026-07-11",
+      "category": "coding-tool",
+      "conflictGroup": "opencode",
+      "capacity": 2,
+      "caps": { "reasoning": 8, "search": 3, "coding": 9, "daily": 5, "vision": 5, "imageGen": 0, "video": 0, "audio": 0, "ocr": 4 },
+      "notes": {
+        "zh": "$10 一次拿到 GLM-5.2、Kimi K2.7、DeepSeek V4 等 14 个开源模型的编码额度。市面最便宜的多模型编码订阅",
+        "en": "GLM-5.2, Kimi K2.7, DeepSeek V4 and 11 more coding models for $10. The cheapest multi-model coding plan on the market"
+      }
+    },
+    {
       "id": "glm-coding-lite",
       "provider": "Zhipu",
       "name": "GLM Coding Lite",
