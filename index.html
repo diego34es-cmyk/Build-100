@@ -282,6 +282,18 @@
     color: var(--faint);
   }
   @media (max-width: 640px) { .scroll-cue { display: none; } }
+  /* §2 最新上线挂牌：counter 下方一条可点的"活着的证据" */
+  .hero-latest {
+    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    margin-top: 22px; padding: 14px 18px;
+    border: 1px solid rgba(237, 239, 241, 0.16); border-radius: 6px;
+    transition: border-color .2s, background .2s; cursor: pointer;
+  }
+  .hero-latest:hover { border-color: rgba(237, 239, 241, 0.45); background: rgba(237, 239, 241, 0.03); }
+  .hero-latest .latest-tag { color: #4ade80; letter-spacing: 0.2em; }
+  .hero-latest .latest-body { color: var(--ink); font-size: 0.95rem; flex: 1; min-width: 200px; }
+  .hero-latest .latest-go { color: var(--muted); letter-spacing: 0.1em; }
+  .hero-latest:hover .latest-go { color: var(--ink); }
 
   /* ---------- Ticker ---------- */
   .ticker {
@@ -397,6 +409,7 @@
   .m-name { font-weight: 700; font-size: clamp(1rem, 2vw, 1.25rem); }
   .m-name span { display: block; font-weight: 400; font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
   .m-url { font-family: var(--mono); font-size: 12px; letter-spacing: 0.05em; color: var(--muted); overflow-wrap: anywhere; }
+  .m-url a:hover { color: var(--ink); }
   .m-status {
     font-family: var(--mono);
     font-size: 10px;
@@ -489,6 +502,13 @@
   /* Signal / follow */
   .signal { text-align: left; }
   .signal p { color: var(--muted); max-width: 36em; margin-bottom: 36px; }
+  .signal-log { list-style: none; margin-bottom: 28px; }
+  .signal-log li { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; padding: 14px 0; border-top: 1px solid var(--line); }
+  .signal-log li:last-child { border-bottom: 1px solid var(--line); }
+  .signal-log .log-date { color: var(--faint); letter-spacing: 0.08em; }
+  .signal-log .log-text { flex: 1; min-width: 220px; font-size: 0.95rem; }
+  .signal-log .log-link { color: var(--muted); letter-spacing: 0.1em; }
+  .signal-log .log-link:hover { color: var(--ink); }
   .btn-x {
     display: inline-flex;
     align-items: center;
@@ -565,6 +585,12 @@
       </div>
       <a class="mono scroll-cue" href="#manifest">Scroll ↓</a>
     </div>
+    <!-- §2 改版方案：counter 旁永远挂最新可点击成品，数字证明进度，链接证明是真的 -->
+    <a class="hero-latest reveal in" href="https://build-100.com/001/">
+      <span class="mono latest-tag" data-en="Latest">最新</span>
+      <span class="latest-body" data-en="#001 COMBO-001 — your optimal AI subscription combo in 30 seconds">#001 COMBO-001 —— 30 秒算出你的 AI 订阅怎么买</span>
+      <span class="mono latest-go" data-en="Try it ↗">进去看看 ↗</span>
+    </a>
   </div>
 </header>
 
@@ -593,13 +619,14 @@
            <span class="m-status is-live"><i class="dot"></i>Live</span>
            <span class="m-arrow">↗</span>
          </a> -->
-    <a class="m-row" href="https://build-100.com/001/">
+    <!-- §4 双链接卡片：LIVE 进成品，SOURCE 进仓库——开源承诺逐项兑现 -->
+    <div class="m-row revealed" onclick="window.open('https://build-100.com/001/','_self')">
       <span class="m-no">001</span>
       <span class="m-name">COMBO-001<span data-en="AI subscription optimizer — pay for what you use">AI 订阅最优搭配器 — 只为用到的付费</span></span>
-      <span class="m-url">build-100.com/001</span>
+      <span class="m-url"><a href="https://build-100.com/001/" onclick="event.stopPropagation()">LIVE&nbsp;↗</a>&ensp;·&ensp;<a href="https://github.com/diego34es-cmyk/Build-100/tree/main/001" target="_blank" rel="noopener" onclick="event.stopPropagation()">SOURCE&nbsp;↗</a></span>
       <span class="m-status is-live"><i class="dot"></i>Live</span>
       <span class="m-arrow">↗</span>
-    </a>
+    </div>
     <div class="m-row">
       <span class="m-no">002</span>
       <span class="m-name"><span class="redact" style="width: 9em;"></span></span>
@@ -683,8 +710,16 @@
     <h2 class="sec-title" data-en="Signal">记录</h2>
     <span class="mono" data-en="03">03 / Signal</span>
   </div>
-  <p class="reveal" data-en="Build logs and updates, posted on X.">构建过程与更新，发布在 X。</p>
-  <a class="btn-x reveal" href="https://x.com/Jcheng557" target="_blank" rel="noopener" data-en="Follow on X&nbsp;↗">在 X 上关注 Follow&nbsp;↗</a>
+  <!-- §5 改版方案：最近更新直接列在页面上（手动维护，最多 3 条，新的在上），别让访客离开后再决定关不关注 -->
+  <ul class="signal-log reveal">
+    <li>
+      <span class="mono log-date">2026-07-11</span>
+      <span class="log-text" data-en="#001 COMBO-001 launched — AI subscription optimizer, engine hand-tuned through three rounds of real-input testing">#001 COMBO-001 上线 —— AI 订阅最优搭配器，推荐引擎经三轮真实输入实测打磨</span>
+      <a class="mono log-link" href="https://build-100.com/001/">看看&nbsp;↗</a>
+    </li>
+  </ul>
+  <p class="reveal" data-en="Full build logs and debriefs, posted on X.">完整构建过程与复盘，发布在 X。</p>
+  <a class="btn-x reveal" href="https://x.com/Jcheng557" target="_blank" rel="noopener" data-en="Don&#39;t miss #002&nbsp;↗">不想错过第 002 个&nbsp;↗</a>
 </section>
 
 <footer>
