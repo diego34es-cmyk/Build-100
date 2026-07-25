@@ -8,6 +8,17 @@
 <meta name="theme-color" content="#060709">
 <link rel="canonical" href="https://build-100.com/001/">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E001%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="COMBO-001 · AI 订阅最优搭配器">
+<meta property="og:description" content="输入预算与使用习惯，算出你的 AI 订阅最优搭配——预算内勉强够用的组合，以及要真正满足需求还差多少。">
+<meta property="og:url" content="https://build-100.com/001/">
+<meta property="og:image" content="https://build-100.com/001/og-001.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="COMBO-001 · AI 订阅最优搭配器">
+<meta name="twitter:description" content="输入预算与使用习惯，算出你的 AI 订阅最优搭配——预算内勉强够用的组合，以及要真正满足需求还差多少。">
+<meta name="twitter:image" content="https://build-100.com/001/og-001.png">
 <style>
   :root {
     --bg: #060709;
@@ -300,13 +311,13 @@
       </div>
       <div class="budget-row">
         <span class="budget-prefix">$</span>
-        <input class="budget-input" id="budgetInput" type="number" inputmode="numeric" min="0" max="300" value="40" aria-label="Monthly budget in USD">
+        <input class="budget-input" id="budgetInput" type="number" inputmode="numeric" min="0" max="300" value="80" aria-label="Monthly budget in USD">
         <div class="quick-chips" id="quickChips">
-          <button class="chip" type="button" data-v="20">$20</button>
-          <button class="chip active" type="button" data-v="40">$40</button>
-          <button class="chip" type="button" data-v="60">$60</button>
-          <button class="chip" type="button" data-v="100">$100</button>
-          <button class="chip" type="button" data-v="200">$200</button>
+          <button class="chip" type="button" data-v="55">$55</button>
+          <button class="chip active" type="button" data-v="80">$80</button>
+          <button class="chip" type="button" data-v="120">$120</button>
+          <button class="chip" type="button" data-v="145">$145</button>
+          <button class="chip" type="button" data-v="175">$175</button>
         </div>
       </div>
       <div class="budget-err" id="budgetErr"></div>
@@ -722,7 +733,11 @@
     "Cursor": { bg: "#edeff1", fg: "#060709", d: "M11.503.131 1.891 5.678a.84.84 0 0 0-.42.726v11.188c0 .3.162.575.42.724l9.609 5.55a1 1 0 0 0 .998 0l9.61-5.55a.84.84 0 0 0 .42-.724V6.404a.84.84 0 0 0-.42-.726L12.497.131a1.01 1.01 0 0 0-.996 0M2.657 6.338h18.55c.263 0 .43.287.297.515L12.23 22.918c-.062.107-.229.064-.229-.06V12.335a.59.59 0 0 0-.295-.51l-9.11-5.257c-.109-.063-.064-.23.061-.23" },
     "OpenCode": { bg: "#0b0d10", fg: "#f1f1ef", d: "M22 24H2V0h20zM17 4.8H7v14.4h10z" },
   };
-  const LOGO_FALLBACK = { Zhipu: { letter: "智", bg: "#3b5bdb", fg: "#fff" } };
+  const LOGO_FALLBACK = {
+    Zhipu: { letter: "智", bg: "#3b5bdb", fg: "#fff" },
+    Kiro: { letter: "K", bg: "#ff9900", fg: "#0b0d10" },
+    MiniMax: { letter: "M", bg: "#e11d48", fg: "#fff" },
+  };
   function logoHtml(p) {
     const s = LOGO_SVG[p.provider];
     if (s) return `<div class="product-logo" style="background:${s.bg};"><svg viewBox="0 0 24 24" width="22" height="22" fill="${s.fg}" aria-hidden="true"><path d="${s.d}"/></svg></div>`;

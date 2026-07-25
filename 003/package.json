@@ -1,0 +1,10 @@
+{
+  "name": "prompt-003",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PROMPT-003 · 提示词结构器（build-100 第 003 号作品）",
+  "type": "module",
+  "scripts": {
+    "test": "node --test engine.test.js"
+  }
+}

@@ -1,0 +1,1085 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>如果你每月能存___，多少岁就能退休？｜只管存钱的退休计算器 · BUILD-100</title>
+<meta name="description" content="输入年龄、每月能存多少钱和你想过的退休水平，在通胀、利率、缩水三种经济假设下，算出只管存钱能几岁退休。不卖保险，不卖基金，不卖任何东西。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/002/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='40' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='19' fill='%23edeff1' text-anchor='middle'%3E002%3C/text%3E%3Crect x='12' y='48' width='40' height='4' fill='rgba(237,239,241,.22)'/%3E%3Crect x='12' y='48' width='9' height='4' fill='%235b8caa'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="只管存钱的退休计算器 · RETIRE-002">
+<meta property="og:description" content="输入年龄、每月能存多少钱和你想过的退休水平，算出只管存钱能几岁退休。不卖保险，不卖基金，不卖任何东西。">
+<meta property="og:url" content="https://build-100.com/002/">
+<meta property="og:image" content="https://build-100.com/002/og-002.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="只管存钱的退休计算器 · RETIRE-002">
+<meta name="twitter:description" content="输入年龄、每月能存多少钱和你想过的退休水平，算出只管存钱能几岁退休。">
+<meta name="twitter:image" content="https://build-100.com/002/og-002.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --accent: #5b8caa;
+    --accent-glow: rgba(91, 140, 170, 0.35);
+    --delta: #fbbf24;
+    --loss: #f87171;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  /* Nav —— 与主站同家族 */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--faint); white-space: nowrap; }
+
+  main { max-width: 760px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  /* Hero */
+  .hero { margin-bottom: clamp(36px, 6vh, 56px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--accent); }
+  .hero h1 {
+    font-size: clamp(1.7rem, 5vw, 2.9rem); font-weight: 700; line-height: 1.32;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .blank {
+    display: inline-block; font-family: var(--mono); font-variant-numeric: tabular-nums;
+    color: var(--delta); border-bottom: 3px solid var(--accent); padding: 0 2px; white-space: nowrap;
+  }
+  .hero p.sub { color: var(--muted); max-width: 36em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  /* Fields */
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field:last-of-type { border-bottom: 1px solid var(--line); }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; letter-spacing: 0.08em; color: var(--faint); }
+  .field-title { font-size: clamp(1.02rem, 2vw, 1.2rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .num-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .num-input {
+    background: var(--bg-raise); border: 1px solid var(--line-strong); color: var(--ink);
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.3rem; font-weight: 500;
+    padding: 10px 14px; width: 130px; border-radius: 4px;
+  }
+  .num-input::-webkit-outer-spin-button, .num-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .num-input[type=number] { -moz-appearance: textfield; }
+  .num-prefix { font-family: var(--mono); font-size: 1.3rem; color: var(--faint); }
+  .quick-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 7px 13px; border-radius: 999px; cursor: pointer; transition: all .18s;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--ink); }
+  .chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  /* Card groups (field 04 / 05) */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .opt-card {
+    border: 1px solid var(--line-strong); border-radius: 6px; padding: 14px 16px; cursor: pointer;
+    transition: border-color .18s, background .18s; background: var(--bg-raise);
+  }
+  .opt-card:hover { border-color: var(--muted); }
+  .opt-card.selected { border-color: var(--accent); background: rgba(91, 140, 170, 0.08); box-shadow: 0 0 0 1px var(--accent) inset; }
+  .opt-card .price { font-family: var(--mono); font-size: 12px; color: var(--faint); letter-spacing: 0.06em; }
+  .opt-card.selected .price { color: var(--accent); }
+  .opt-card .lbl { display: block; font-size: 0.98rem; font-weight: 700; margin-top: 4px; }
+  .opt-card .desc { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 6px; line-height: 1.5; }
+
+  /* Custom scenario panel */
+  .custom-panel {
+    display: none; margin-top: 14px; padding: 18px; border: 1px dashed var(--line-strong); border-radius: 8px;
+  }
+  .custom-panel.open { display: block; }
+  .slider-row { display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .slider-row:last-child { border-bottom: none; }
+  .slider-row .name { font-size: 0.92rem; }
+  .slider-val { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.05rem; color: var(--accent); min-width: 4.5ch; text-align: right; }
+  input[type=range] {
+    grid-column: 1 / -1; -webkit-appearance: none; appearance: none; width: 100%; height: 4px;
+    background: var(--line-strong); border-radius: 2px; outline: none; margin-top: 4px;
+  }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; box-shadow: 0 0 8px var(--accent-glow); }
+  input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border: none; border-radius: 50%; background: var(--accent); cursor: pointer; }
+
+  /* Submit */
+  .submit-wrap { margin-top: clamp(32px, 5vh, 48px); }
+  .submit-btn {
+    width: 100%; font-family: var(--mono); font-size: 13px; letter-spacing: 0.24em; text-transform: uppercase;
+    padding: 18px; border: 1px solid var(--accent); background: rgba(91, 140, 170, 0.1); color: var(--ink);
+    cursor: pointer; transition: all .2s; border-radius: 4px;
+  }
+  .submit-btn:hover { background: var(--accent); color: var(--bg); box-shadow: 0 0 24px var(--accent-glow); }
+  .submit-err { text-align: center; margin-top: 14px; color: #f87171; font-size: 0.85rem; font-family: var(--mono); letter-spacing: 0.02em; min-height: 1.2em; }
+
+  /* Result */
+  .result { display: none; }
+  .result.show { display: block; animation: fadeUp .5s cubic-bezier(0.16,1,0.3,1); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+  .result-card {
+    margin-top: clamp(32px, 5vh, 48px); padding: clamp(24px, 4vh, 36px); border: 1px solid var(--line-strong);
+    border-radius: 10px; background: var(--bg-raise); text-align: center;
+  }
+  .result-lead { color: var(--muted); font-size: 0.92rem; margin-bottom: 8px; }
+  .result-lead strong { color: var(--ink); font-weight: 500; }
+  .result-big {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700; color: var(--delta);
+    font-size: clamp(3.4rem, 13vw, 6.5rem); line-height: 1; margin: 6px 0;
+  }
+  .result-big.forever { color: var(--accent); }
+  .result-tail { color: var(--muted); font-size: 0.95rem; margin-top: 4px; }
+  .result-tail.happy { color: var(--live); }
+  /* 4b 购买力三段式：NOM / REAL / LOSS 依次揭示 */
+  .deflate-block { margin-top: clamp(28px, 4vh, 40px); }
+  .deflate-row {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+    padding: 14px 0; border-top: 1px solid var(--line);
+    opacity: 0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease;
+  }
+  .deflate-row.show { opacity: 1; transform: none; }
+  .deflate-row:first-child { border-top: none; }
+  .deflate-label { color: var(--muted); font-size: 0.92rem; }
+  .deflate-val { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
+  .deflate-val.nom { color: var(--live); font-size: clamp(1.3rem, 3.2vw, 1.7rem); }
+  .deflate-val.real { color: var(--delta); font-size: clamp(1.6rem, 4vw, 2.1rem); }
+  .deflate-val.loss { color: var(--loss); font-size: clamp(1.05rem, 2.4vw, 1.25rem); }
+  .deflate-val.loss.gain { color: var(--live); }
+
+  /* 4c 实物换算表 */
+  .goods-block { margin-top: clamp(24px, 3.5vh, 32px); }
+  .goods-row {
+    display: grid; grid-template-columns: 1fr auto 18px auto; gap: 4px 8px; align-items: center;
+    padding: 12px 0; border-top: 1px solid var(--line);
+  }
+  .goods-row:first-child { border-top: none; }
+  .goods-row.goods-head { padding-bottom: 8px; }
+  .goods-name { font-size: 0.9rem; color: var(--muted); }
+  .goods-today, .goods-then {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right;
+    font-size: clamp(13px, 3vw, 0.95rem); white-space: nowrap;
+  }
+  .goods-today { color: var(--live); }
+  .goods-then { color: var(--delta); }
+  .goods-row.goods-head .goods-name { visibility: hidden; }
+  .goods-row.goods-head .goods-today, .goods-row.goods-head .goods-then {
+    color: var(--faint); font-size: 11px; letter-spacing: 0.04em; white-space: normal;
+  }
+  .goods-row .arrow { color: var(--faint); text-align: center; font-size: 0.85rem; }
+  .goods-row.goods-head .arrow { visibility: hidden; }
+
+  .swap-hint { text-align: center; margin: 18px 0 0; color: var(--faint); }
+
+  /* Chart */
+  .chart-block { margin-top: clamp(32px, 5vh, 48px); }
+  .chart-title { font-size: 1rem; font-weight: 700; margin-bottom: 14px; }
+  .chart-wrap { border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: var(--bg-raise); }
+  .chart-wrap canvas { max-width: 100%; height: auto; display: block; }
+  .chart-legend { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 12px; font-size: 0.82rem; color: var(--muted); }
+  .chart-legend span.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+
+  /* Prompt block */
+  .prompt-block {
+    margin-top: clamp(32px, 5vh, 48px); padding: clamp(22px, 4vh, 32px); border: 1px solid var(--line-strong);
+    border-radius: 10px; background: var(--bg-raise);
+  }
+  .prompt-block h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
+  .prompt-block .sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 16px; line-height: 1.6; }
+  .prompt-textarea {
+    width: 100%; min-height: 260px; background: var(--bg); border: 1px solid var(--line-strong); border-radius: 6px;
+    color: var(--ink); font-family: var(--mono); font-size: 12.5px; line-height: 1.7; padding: 14px; resize: vertical;
+  }
+  .prompt-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .prompt-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 12px 20px; border-radius: 4px; cursor: pointer; transition: all .2s;
+  }
+  .prompt-btn.primary { border: 1px solid var(--accent); background: rgba(91,140,170,0.1); color: var(--ink); }
+  .prompt-btn.primary:hover { background: var(--accent); color: var(--bg); }
+  .prompt-btn.primary.copied { border-color: var(--live); background: rgba(74,222,128,0.1); color: var(--live); }
+  .prompt-btn.secondary { border: 1px solid var(--line-strong); background: none; color: var(--muted); }
+  .prompt-btn.secondary:hover { color: var(--ink); border-color: var(--ink); }
+
+  .share-wrap { display: none; margin-top: 18px; }
+  .share-wrap.show { display: block; }
+  .share-wrap img { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); display: block; }
+  .share-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  /* Footnotes */
+  .footnotes { margin-top: clamp(40px, 6vh, 64px); padding-top: 24px; border-top: 1px solid var(--line); }
+  .footnotes ol { padding-left: 1.3em; color: var(--faint); font-size: 0.8rem; line-height: 1.9; }
+
+  footer { border-top: 1px solid var(--line); padding: 24px var(--pad); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .result.show { animation: none; }
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/">← 返回主站</a>
+  <span class="nav-brand">RETIRE<span>·002</span></span>
+  <span class="nav-tag mono">NO ADS · NO SALES</span>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; RETIRE-002 · SAVINGS-ONLY RETIREMENT CALCULATOR</p>
+    <h1>如果我每月能存 <span class="blank" id="h1Save">____</span>，<span class="blank" id="h1Age">____</span> 岁就能退休。</h1>
+    <p class="sub">这是一个<strong>只管存钱</strong>的退休计算器。它不卖保险，不卖基金，不讲课，<strong>不卖任何东西</strong>。它只算一件事：你的存款，能不能追上退休的负债。</p>
+  </header>
+
+  <!-- Field 01 -->
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <span class="field-title">你今年多大？</span>
+    </div>
+    <div class="num-row">
+      <input class="num-input" id="ageInput" type="number" inputmode="numeric" min="16" max="80" value="30" aria-label="年龄">
+      <div class="quick-chips" id="ageChips">
+        <button class="chip" type="button" data-v="25">25</button>
+        <button class="chip active" type="button" data-v="30">30</button>
+        <button class="chip" type="button" data-v="35">35</button>
+        <button class="chip" type="button" data-v="40">40</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Field 02 -->
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <span class="field-title">每月能存下多少钱？</span>
+    </div>
+    <div class="num-row">
+      <span class="num-prefix">¥</span>
+      <input class="num-input" id="saveInput" type="number" inputmode="numeric" min="0" value="3000" aria-label="每月能存多少钱">
+      <div class="quick-chips" id="saveChips">
+        <button class="chip" type="button" data-v="1000">¥1,000</button>
+        <button class="chip active" type="button" data-v="3000">¥3,000</button>
+        <button class="chip" type="button" data-v="5000">¥5,000</button>
+        <button class="chip" type="button" data-v="10000">¥10,000</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Field 03 -->
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">03</span>
+      <span class="field-title">现在已经存了多少钱？</span>
+    </div>
+    <div class="num-row">
+      <span class="num-prefix">¥</span>
+      <input class="num-input" id="initInput" type="number" inputmode="numeric" min="0" value="0" aria-label="现在已有存款">
+    </div>
+  </div>
+
+  <!-- Field 04 -->
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">04</span>
+      <span class="field-title">退休以后，打算过什么水平的日子？</span>
+      <span class="field-hint">本计算器只算吃饭——不含医疗、房租、水电、人情。这是活着的底价。</span>
+    </div>
+    <div class="card-grid" id="costGrid">
+      <div class="opt-card" data-cost="30" tabindex="0">
+        <span class="price">¥30 / 天（今日价）</span>
+        <span class="lbl">石头</span>
+        <span class="desc">自己做饭吃食堂的饭，荤素简单，不是主角。</span>
+      </div>
+      <div class="opt-card selected" data-cost="65" tabindex="0">
+        <span class="price">¥65 / 天（今日价）</span>
+        <span class="lbl">家常</span>
+        <span class="desc">买菜做饭，偶尔在外吃一两次，想吃水果就买。</span>
+      </div>
+      <div class="opt-card" data-cost="130" tabindex="0">
+        <span class="price">¥130 / 天（今日价）</span>
+        <span class="lbl">讲究</span>
+        <span class="desc">想吃什么吃什么，食材随便买，隔三差五吃顿好的。</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Field 05 -->
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">05</span>
+      <span class="field-title">未来几十年，经济会是什么样？</span>
+      <span class="field-hint">没人知道答案，所以三种都给你。点一下切换，看看你的退休年龄怎么变。</span>
+    </div>
+    <div class="card-grid" id="scenGrid">
+      <div class="opt-card" data-infl="0.5" data-rate="1.0" tabindex="0">
+        <span class="price">通胀 0.5% · 利率 1.0%</span>
+        <span class="lbl">现在这样</span>
+        <span class="desc">物价涨得不多，利息也没多少。</span>
+      </div>
+      <div class="opt-card selected" data-infl="2.35" data-rate="1.75" tabindex="0">
+        <span class="price">通胀 2.35% · 利率 1.75%</span>
+        <span class="lbl">缓慢过去</span>
+        <span class="desc">物价温和上涨，利息追不上。</span>
+      </div>
+      <div class="opt-card" data-infl="5.5" data-rate="1.5" tabindex="0">
+        <span class="price">通胀 5.5% · 利率 1.5%</span>
+        <span class="lbl">钱毛了</span>
+        <span class="desc">物价飞涨，利息趴地，躺平梦碎。</span>
+      </div>
+      <div class="opt-card" data-custom="1" tabindex="0">
+        <span class="price">自己拉滑块</span>
+        <span class="lbl">自定义</span>
+        <span class="desc">不信这三种剧本？自己拉。</span>
+      </div>
+    </div>
+    <div class="custom-panel" id="customPanel">
+      <div class="slider-row">
+        <span class="name">每年吃饭涨价（通胀）</span>
+        <span class="slider-val" id="customInflVal">2.0%</span>
+        <input type="range" id="customInfl" min="-2" max="10" step="0.1" value="2.0">
+      </div>
+      <div class="slider-row">
+        <span class="name">存款年利率</span>
+        <span class="slider-val" id="customRateVal">2.00%</span>
+        <input type="range" id="customRate" min="0" max="5" step="0.05" value="2.00">
+      </div>
+    </div>
+  </div>
+
+  <div class="submit-wrap">
+    <button class="submit-btn" id="submitBtn" type="button">▸ 算算我哪年能退休</button>
+    <p class="submit-err" id="submitErr"></p>
+  </div>
+
+  <!-- Result -->
+  <div class="result" id="resultView">
+    <div class="result-card">
+      <p class="result-lead" id="resultLead"></p>
+      <div class="result-big" id="resultBig">51</div>
+      <p class="result-tail" id="resultTail"></p>
+    </div>
+
+    <div class="deflate-block" id="deflateBlock">
+      <div class="deflate-row" id="deflateRowNom">
+        <span class="deflate-label">到那天，你账户里</span>
+        <span class="deflate-val nom" id="deflateNom">¥0</span>
+      </div>
+      <div class="deflate-row" id="deflateRowReal">
+        <span class="deflate-label">但只值今天的</span>
+        <span class="deflate-val real" id="deflateReal">¥0</span>
+      </div>
+      <div class="deflate-row" id="deflateRowLoss">
+        <span class="deflate-label" id="deflateLossLabel">被通胀吃掉</span>
+        <span class="deflate-val loss" id="deflateLoss">¥0（0%）</span>
+      </div>
+    </div>
+
+    <div class="goods-block">
+      <div class="goods-row goods-head">
+        <span class="goods-name">·</span>
+        <span class="goods-today" id="goodsHead1">这笔钱，今天能买</span>
+        <span class="arrow">·</span>
+        <span class="goods-then" id="goodsHead2">到那天，只能买</span>
+      </div>
+      <div class="goods-row" data-item="cola">
+        <span class="goods-name">一瓶可乐</span>
+        <span class="goods-today" id="goodsColaToday">0 瓶</span>
+        <span class="arrow">→</span>
+        <span class="goods-then" id="goodsColaThen">0 瓶</span>
+      </div>
+      <div class="goods-row" data-item="waimai">
+        <span class="goods-name">一份外卖</span>
+        <span class="goods-today" id="goodsWaimaiToday">0 份</span>
+        <span class="arrow">→</span>
+        <span class="goods-then" id="goodsWaimaiThen">0 份</span>
+      </div>
+      <div class="goods-row" data-item="gpt">
+        <span class="goods-name">GPT 基础订阅</span>
+        <span class="goods-today" id="goodsGptToday">0 个月</span>
+        <span class="arrow">→</span>
+        <span class="goods-then" id="goodsGptThen">0 个月</span>
+      </div>
+    </div>
+
+    <p class="swap-hint mono">换个剧本试试 · 上面第 05 项的卡片现在是活的</p>
+
+    <div class="chart-block">
+      <p class="chart-title">你的存款 vs 今天的购买力</p>
+      <div class="chart-wrap">
+        <canvas id="chart" width="1320" height="640"></canvas>
+      </div>
+      <div class="chart-legend">
+        <span><span class="dot" style="background:#4ade80"></span>你的存款</span>
+        <span><span class="dot" style="background:#fbbf24"></span>换算成今天的购买力</span>
+      </div>
+    </div>
+
+    <div class="prompt-block">
+      <h3>拿着你的数字，去问你的 AI</h3>
+      <p class="sub">这个网站到此为止——它不会告诉你该怎么办。下面这段提示词已经带上了你的所有参数，复制它，去问任何一个你信任的 AI。</p>
+      <textarea class="prompt-textarea" id="promptText" readonly></textarea>
+      <div class="prompt-actions">
+        <button class="prompt-btn primary" id="copyBtn" type="button">📋 复制提示词</button>
+        <button class="prompt-btn secondary" id="shareBtn" type="button">↓ 下载分享图</button>
+      </div>
+      <div class="share-wrap" id="shareWrap">
+        <img id="shareImg" alt="分享图">
+        <p class="share-hint">长按图片保存到相册（iOS）· 桌面端右键另存为，或点按钮自动下载。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footnotes">
+    <ol>
+      <li>本页只计算每天吃饭，结果是退休的<strong style="color:var(--muted)">上限乐观值</strong>——医疗、房租、水电、人情全都没算。真实答案只会更晚，不会更早。</li>
+      <li>存款按利息复利滚存，吃饭花销按通胀逐年上涨，预期寿命按 85 岁计算。"能退休"的定义是：存款足以覆盖从退休那天到 85 岁的每一顿饭。</li>
+      <li>通货紧缩与存款购买力增值，会让退休年龄提前——数学是笃定的，但请注意，通缩往往伴随经济衰退与失业风险，本计算器假设你的月存金额永不中断。</li>
+      <li>本页不收集任何数据，所有计算都在你的浏览器里完成，不发送任何请求，也不构成任何理财建议。</li>
+    </ol>
+  </div>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">BUILD-100 · 002 / 100 · 用 AI 公开搭建 100 个网站</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var LIFE = 85;
+  var GOODS = {
+    cola: { name: "一瓶可乐", price: 3.5, unit: "瓶" },
+    waimai: { name: "一份外卖", price: 25, unit: "份" },
+    gpt: { name: "GPT 基础订阅", price: 145, unit: "个月" }
+  };
+  var reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var state = {
+    age: 30, save: 3000, init: 0,
+    cost: 65, costName: "家常",
+    infl: 2.35, rate: 1.75, scenName: "缓慢过去",
+    customMode: false
+  };
+
+  var hasSubmitted = false;
+  var bigNumTimer = null;
+
+  // ---------- 核心算法（§4）----------
+  function compute(age0, save, init, dailyCost, i, r) {
+    var maxK = LIFE - age0;
+    var bal = new Array(maxK + 1);
+    bal[0] = init;
+    for (var k = 1; k <= maxK; k++) {
+      bal[k] = bal[k - 1] * (1 + r / 100) + save * 12;
+    }
+    var Tmax = LIFE - 1 - age0;
+    var need = new Array(maxK + 1);
+    var R = null;
+    for (var k2 = 0; k2 <= maxK; k2++) {
+      var n = 0;
+      for (var t = Tmax; t >= k2; t--) {
+        n = (n + dailyCost * 365 * Math.pow(1 + i / 100, t)) / (1 + r / 100);
+      }
+      need[k2] = n * (1 + r / 100);
+      // k2 === maxK (age 85) is a trivial boundary: need is always 0 there
+      // (no years left to fund), so it must not count as a real retirement age.
+      if (R === null && k2 < maxK && bal[k2] >= need[k2]) R = age0 + k2;
+    }
+    return { bal: bal, need: need, R: R, maxK: maxK };
+  }
+
+  function fmt(n) {
+    return Math.round(n).toLocaleString("zh-CN");
+  }
+
+  // ---------- 输入读取 ----------
+  function readInputs() {
+    var age = parseInt(document.getElementById("ageInput").value, 10);
+    var save = parseFloat(document.getElementById("saveInput").value);
+    var init = parseFloat(document.getElementById("initInput").value);
+    if (isNaN(init)) init = 0;
+    return { age: age, save: save, init: init };
+  }
+
+  function validate(vals) {
+    if (isNaN(vals.age) || vals.age < 16 || vals.age > 80) return "请填写 16–80 之间的年龄。";
+    if (isNaN(vals.save) || vals.save < 0) return "请填写每月能存多少钱，才能开始算。";
+    return null;
+  }
+
+  // ---------- Field 01 年龄 ----------
+  var ageInput = document.getElementById("ageInput");
+  var ageChips = document.getElementById("ageChips");
+  function syncAgeChips() {
+    var v = ageInput.value;
+    ageChips.querySelectorAll(".chip").forEach(function (c) {
+      c.classList.toggle("active", c.dataset.v === v);
+    });
+  }
+  ageInput.addEventListener("input", function () { syncAgeChips(); liveUpdate(); });
+  ageChips.addEventListener("click", function (e) {
+    var c = e.target.closest(".chip");
+    if (!c) return;
+    ageInput.value = c.dataset.v;
+    syncAgeChips();
+    liveUpdate();
+  });
+
+  // ---------- Field 02 月存 ----------
+  var saveInput = document.getElementById("saveInput");
+  var saveChips = document.getElementById("saveChips");
+  function syncSaveChips() {
+    var v = saveInput.value;
+    saveChips.querySelectorAll(".chip").forEach(function (c) {
+      c.classList.toggle("active", c.dataset.v === v);
+    });
+  }
+  saveInput.addEventListener("input", function () { syncSaveChips(); liveUpdate(); });
+  saveChips.addEventListener("click", function (e) {
+    var c = e.target.closest(".chip");
+    if (!c) return;
+    saveInput.value = c.dataset.v;
+    syncSaveChips();
+    liveUpdate();
+  });
+
+  // ---------- Field 03 已有存款 ----------
+  document.getElementById("initInput").addEventListener("input", liveUpdate);
+
+  // ---------- Field 04 消费水平 ----------
+  var costGrid = document.getElementById("costGrid");
+  costGrid.addEventListener("click", function (e) {
+    var opt = e.target.closest(".opt-card");
+    if (!opt) return;
+    costGrid.querySelectorAll(".opt-card").forEach(function (o) { o.classList.remove("selected"); });
+    opt.classList.add("selected");
+    state.cost = Number(opt.dataset.cost);
+    state.costName = opt.querySelector(".lbl").textContent;
+    liveUpdate();
+  });
+  costGrid.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.target.closest(".opt-card") && e.target.closest(".opt-card").click(); }
+  });
+
+  // ---------- Field 05 经济假设 ----------
+  var scenGrid = document.getElementById("scenGrid");
+  var customPanel = document.getElementById("customPanel");
+  var customInfl = document.getElementById("customInfl");
+  var customRate = document.getElementById("customRate");
+  var customInflVal = document.getElementById("customInflVal");
+  var customRateVal = document.getElementById("customRateVal");
+
+  function selectScenCard(card) {
+    scenGrid.querySelectorAll(".opt-card").forEach(function (o) { o.classList.remove("selected"); });
+    card.classList.add("selected");
+  }
+
+  scenGrid.addEventListener("click", function (e) {
+    var opt = e.target.closest(".opt-card");
+    if (!opt) return;
+    selectScenCard(opt);
+    if (opt.dataset.custom) {
+      state.customMode = true;
+      customPanel.classList.add("open");
+      state.infl = parseFloat(customInfl.value);
+      state.rate = parseFloat(customRate.value);
+      state.scenName = "自定义";
+    } else {
+      state.customMode = false;
+      customPanel.classList.remove("open");
+      state.infl = Number(opt.dataset.infl);
+      state.rate = Number(opt.dataset.rate);
+      state.scenName = opt.querySelector(".lbl").textContent;
+    }
+    liveUpdate();
+  });
+  scenGrid.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.target.closest(".opt-card") && e.target.closest(".opt-card").click(); }
+  });
+
+  function syncCustomLabels() {
+    customInflVal.textContent = parseFloat(customInfl.value).toFixed(1) + "%";
+    customRateVal.textContent = parseFloat(customRate.value).toFixed(2) + "%";
+  }
+  function activateCustomFromSlider() {
+    var customCard = scenGrid.querySelector(".opt-card[data-custom]");
+    selectScenCard(customCard);
+    state.customMode = true;
+    state.scenName = "自定义";
+    customPanel.classList.add("open");
+  }
+  customInfl.addEventListener("input", function () {
+    syncCustomLabels();
+    activateCustomFromSlider();
+    state.infl = parseFloat(customInfl.value);
+    liveUpdate(true);
+  });
+  customRate.addEventListener("input", function () {
+    syncCustomLabels();
+    activateCustomFromSlider();
+    state.rate = parseFloat(customRate.value);
+    liveUpdate(true);
+  });
+  syncCustomLabels();
+
+  // ---------- 提交 ----------
+  document.getElementById("submitBtn").addEventListener("click", function () {
+    var vals = readInputs();
+    var err = validate(vals);
+    var errEl = document.getElementById("submitErr");
+    if (err) { errEl.textContent = err; return; }
+    errEl.textContent = "";
+    state.age = vals.age; state.save = vals.save; state.init = vals.init;
+    hasSubmitted = true;
+    document.getElementById("resultView").classList.add("show");
+    renderAll(true);
+  });
+
+  // ---------- 实时联动（结果区出现后） ----------
+  function liveUpdate(fromSlider) {
+    if (!hasSubmitted) return;
+    var vals = readInputs();
+    var err = validate(vals);
+    if (err) return; // 结果区已出现后，输入还没填对时先不报错，维持上次结果
+    state.age = vals.age; state.save = vals.save; state.init = vals.init;
+    renderAll(!fromSlider);
+  }
+
+  // ---------- 大数字滚动动画 ----------
+  function animateBigNumber(target) {
+    var el = document.getElementById("resultBig");
+    if (bigNumTimer) { clearInterval(bigNumTimer); bigNumTimer = null; }
+    el.classList.remove("forever");
+
+    if (target === null) {
+      if (reducedMotion) { el.textContent = "永远"; el.classList.add("forever"); return; }
+      var frame = 0;
+      bigNumTimer = setInterval(function () {
+        el.textContent = String(10 + Math.floor(Math.random() * 89));
+        frame++;
+        if (frame >= 12) {
+          clearInterval(bigNumTimer); bigNumTimer = null;
+          el.textContent = "永远"; el.classList.add("forever");
+        }
+      }, 55);
+      return;
+    }
+
+    if (reducedMotion) { el.textContent = target; return; }
+    var start = Math.max(0, target - 25);
+    var cur = start;
+    el.textContent = cur;
+    bigNumTimer = setInterval(function () {
+      cur++;
+      el.textContent = cur;
+      if (cur >= target) { clearInterval(bigNumTimer); bigNumTimer = null; el.textContent = target; }
+    }, 22);
+  }
+
+  // ---------- 渲染结果 ----------
+  var lastResult = null;
+  var lastDeflate = null;
+  var deflateRevealTimers = [];
+
+  function renderAll(animate) {
+    var r = compute(state.age, state.save, state.init, state.cost, state.infl, state.rate);
+    lastResult = r;
+
+    // H1 填空
+    document.getElementById("h1Save").textContent = "¥" + fmt(state.save);
+    document.getElementById("h1Age").textContent = r.R === null ? "∞" : r.R;
+
+    // 大数字区
+    document.getElementById("resultLead").innerHTML =
+      "每月存 ¥" + fmt(state.save) + "，过「" + state.costName + "」的日子退休——";
+
+    if (animate) animateBigNumber(r.R);
+    else {
+      // 清掉可能仍在跑的上一次滚动动画计时器，避免它稍后把这次的即时结果覆盖掉
+      if (bigNumTimer) { clearInterval(bigNumTimer); bigNumTimer = null; }
+      var el = document.getElementById("resultBig");
+      el.classList.toggle("forever", r.R === null);
+      el.textContent = r.R === null ? "永远" : r.R;
+    }
+
+    var tailEl = document.getElementById("resultTail");
+    tailEl.classList.remove("happy");
+    if (r.R === null) {
+      tailEl.textContent = "岁——到 85 岁，你的存款也追不上吃饭涨价的速度。";
+    } else if (r.R <= state.age) {
+      tailEl.textContent = "岁。恭喜，按这个假设，你现在就可以退休。";
+      tailEl.classList.add("happy");
+    } else {
+      tailEl.textContent = "岁，你的存款刚好能撑住吃饭，一直到 85 岁。";
+    }
+
+    // 购买力换算（§3b）：纯储蓄这条路，钱在名义上变多，但买得动的东西在变少
+    var retireAge = r.R === null ? LIFE : r.R;
+    var yrs = retireAge - state.age;
+    var deflator = Math.pow(1 + state.infl / 100, yrs);
+    var NOM = r.bal[yrs];
+    var REAL = NOM / deflator;
+    var LOSS = NOM - REAL;
+    var pct = NOM === 0 ? 0 : (LOSS / NOM) * 100;
+    lastDeflate = { yrs: yrs, deflator: deflator, NOM: NOM, REAL: REAL, LOSS: LOSS, pct: pct, retireAge: retireAge };
+
+    document.getElementById("deflateNom").textContent = "¥" + fmt(NOM);
+    document.getElementById("deflateReal").textContent = "¥" + fmt(REAL);
+    var lossEl = document.getElementById("deflateLoss");
+    var lossLabelEl = document.getElementById("deflateLossLabel");
+    if (LOSS >= 0) {
+      lossLabelEl.textContent = "被通胀吃掉";
+      lossEl.textContent = "¥" + fmt(LOSS) + "（" + pct.toFixed(1) + "%）";
+      lossEl.classList.remove("gain");
+    } else {
+      lossLabelEl.textContent = "购买力反而多出";
+      lossEl.textContent = "¥" + fmt(-LOSS) + "（" + (-pct).toFixed(1) + "%）";
+      lossEl.classList.add("gain");
+    }
+
+    // 4c 实物换算表
+    var goodsHead2 = document.getElementById("goodsHead2");
+    goodsHead2.textContent = LOSS >= 0 ? "到那天，只能买" : "到那天，能买";
+    Object.keys(GOODS).forEach(function (key) {
+      var g = GOODS[key];
+      var countToday = NOM / g.price;
+      var countThen = NOM / (g.price * deflator);
+      document.getElementById("goods" + key[0].toUpperCase() + key.slice(1) + "Today").textContent =
+        Math.round(countToday).toLocaleString("zh-CN") + " " + g.unit;
+      document.getElementById("goods" + key[0].toUpperCase() + key.slice(1) + "Then").textContent =
+        Math.round(countThen).toLocaleString("zh-CN") + " " + g.unit;
+    });
+
+    // 4b 依次揭示（仅离散变化时播放；滑块拖动/reduced-motion 直出）
+    var deflateRows = [
+      document.getElementById("deflateRowNom"),
+      document.getElementById("deflateRowReal"),
+      document.getElementById("deflateRowLoss")
+    ];
+    deflateRevealTimers.forEach(function (t) { clearTimeout(t); });
+    deflateRevealTimers = [];
+    if (animate && !reducedMotion) {
+      deflateRows.forEach(function (row) { row.classList.remove("show"); });
+      deflateRows.forEach(function (row, idx) {
+        deflateRevealTimers.push(setTimeout(function () { row.classList.add("show"); }, idx * 500));
+      });
+    } else {
+      deflateRows.forEach(function (row) { row.classList.add("show"); });
+    }
+
+    drawChart(r);
+    buildPrompt(r);
+  }
+
+  // ---------- 图表 ----------
+  function formatY(v) {
+    if (v >= 1e8) return (v / 1e8).toFixed(1) + "亿";
+    return (v / 1e4).toFixed(0) + "万";
+  }
+
+  function drawChart(r) {
+    var canvas = document.getElementById("chart");
+    var ctx = canvas.getContext("2d");
+    var W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    var padL = 90, padR = 30, padT = 30, padB = 50;
+    var plotW = W - padL - padR, plotH = H - padT - padB;
+
+    // 存款换算成今天购买力的路径：realPath[k] = bal[k] / (1+i)^k
+    var realPath = new Array(r.maxK + 1);
+    for (var k0 = 0; k0 <= r.maxK; k0++) {
+      realPath[k0] = r.bal[k0] / Math.pow(1 + state.infl / 100, k0);
+    }
+
+    var maxVal = 0;
+    for (var i = 0; i <= r.maxK; i++) {
+      maxVal = Math.max(maxVal, r.bal[i], realPath[i]);
+    }
+    maxVal = maxVal * 1.08 || 1;
+
+    function xOf(k) { return padL + (k / r.maxK) * plotW; }
+    function yOf(v) { return padT + plotH - (v / maxVal) * plotH; }
+
+    // 网格线（每 10 年）+ x 轴标签
+    ctx.strokeStyle = "rgba(237,239,241,.08)";
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "20px ui-monospace, Menlo, monospace";
+    ctx.textAlign = "center";
+    ctx.lineWidth = 1;
+    for (var k = 0; k <= r.maxK; k += 10) {
+      var x = xOf(k);
+      ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT + plotH); ctx.stroke();
+      ctx.fillText(state.age + k, x, H - 14);
+    }
+    // 最后一个刻度
+    var lastX = xOf(r.maxK);
+    ctx.beginPath(); ctx.moveTo(lastX, padT); ctx.lineTo(lastX, padT + plotH); ctx.stroke();
+    ctx.fillText(LIFE, lastX, H - 14);
+
+    // y 轴标签（4 档）
+    ctx.textAlign = "right";
+    for (var g = 0; g <= 4; g++) {
+      var val = (maxVal / 4) * g;
+      var y = yOf(val);
+      ctx.strokeStyle = "rgba(237,239,241,.06)";
+      ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + plotW, y); ctx.stroke();
+      ctx.fillText(formatY(val), padL - 14, y + 7);
+    }
+
+    // 两线之间的梯形阴影：通胀吃掉的部分（bal > realPath）用红，缩水反而多出（realPath > bal）用绿
+    var gapIsLoss = r.bal[r.maxK] >= realPath[r.maxK];
+    ctx.fillStyle = gapIsLoss ? "rgba(248,113,113,.18)" : "rgba(74,222,128,.14)";
+    ctx.beginPath();
+    ctx.moveTo(xOf(0), yOf(r.bal[0]));
+    for (var kf = 0; kf <= r.maxK; kf++) ctx.lineTo(xOf(kf), yOf(r.bal[kf]));
+    for (var kb = r.maxK; kb >= 0; kb--) ctx.lineTo(xOf(kb), yOf(realPath[kb]));
+    ctx.closePath();
+    ctx.fill();
+
+    // 存款线（名义余额）
+    ctx.strokeStyle = "#4ade80";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    for (var k1 = 0; k1 <= r.maxK; k1++) {
+      var px = xOf(k1), py = yOf(r.bal[k1]);
+      if (k1 === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // 换算成今天购买力的路径
+    ctx.strokeStyle = "#fbbf24";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    for (var k3 = 0; k3 <= r.maxK; k3++) {
+      var px2 = xOf(k3), py2 = yOf(realPath[k3]);
+      if (k3 === 0) ctx.moveTo(px2, py2); else ctx.lineTo(px2, py2);
+    }
+    ctx.stroke();
+
+    // 梯形最宽处标注被吃掉/多出的金额
+    var widestK = 0, widestGap = -Infinity;
+    for (var kw = 0; kw <= r.maxK; kw++) {
+      var gap = Math.abs(r.bal[kw] - realPath[kw]);
+      if (gap > widestGap) { widestGap = gap; widestK = kw; }
+    }
+    if (widestGap > 0) {
+      var wx = xOf(widestK), wyTop = yOf(Math.max(r.bal[widestK], realPath[widestK]));
+      ctx.fillStyle = "#edeff1";
+      ctx.font = "500 18px ui-monospace, Menlo, monospace";
+      ctx.textAlign = wx > W - 280 ? "right" : "left";
+      var wLabelX = wx > W - 280 ? wx - 14 : wx + 14;
+      var wLabel = gapIsLoss
+        ? "被通胀吃掉的 ¥" + (widestGap / 1e4).toFixed(0) + "万"
+        : "购买力反而多出的 ¥" + (widestGap / 1e4).toFixed(0) + "万";
+      ctx.fillText(wLabel, wLabelX, Math.max(wyTop - 14, 26));
+    }
+
+    // 退休年龄竖线
+    if (r.R !== null) {
+      var kR = r.R - state.age;
+      var ix = xOf(kR);
+      ctx.strokeStyle = "#5b8caa";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 6]);
+      ctx.beginPath(); ctx.moveTo(ix, padT); ctx.lineTo(ix, padT + plotH); ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = "#5b8caa";
+      ctx.font = "600 20px ui-monospace, Menlo, monospace";
+      ctx.textAlign = ix > W - 200 ? "right" : "left";
+      var labelX = ix > W - 200 ? ix - 12 : ix + 12;
+      ctx.fillText(r.R + "岁退休", labelX, padT + plotH - 34);
+    }
+  }
+
+  // ---------- AI 提示词 ----------
+  function buildPrompt(r) {
+    var d = lastDeflate;
+    var retireLine = r.R === null
+      ? "我最终没能只靠存款撑住退休——即使工作到 85 岁，也无法只靠存款撑住吃饭"
+      : (r.R <= state.age ? "我现在就已经可以退休" : "我最终 " + r.R + " 岁退休");
+
+    var N1 = Math.round(d.NOM / GOODS.waimai.price).toLocaleString("zh-CN");
+    var N2 = Math.round(d.NOM / (GOODS.waimai.price * d.deflator)).toLocaleString("zh-CN");
+    var M1 = Math.round(d.NOM / GOODS.gpt.price).toLocaleString("zh-CN");
+    var M2 = Math.round(d.NOM / (GOODS.gpt.price * d.deflator)).toLocaleString("zh-CN");
+
+    var text =
+"我做了一个「只管存钱能不能退休」的推算，请基于我的真实数字帮我想清楚。\n\n" +
+"我的情况：\n" +
+"· 年龄：" + state.age + " 岁，每月能存：¥" + fmt(state.save) + "，已有存款：¥" + fmt(state.init) + "\n" +
+"· 我对退休后消费水平的设想：「" + state.costName + "」，按今天的物价约 ¥" + state.cost + "/天\n" +
+"· 推算所用的宏观假设：「" + state.scenName + "」（年通胀 " + state.infl + "%，存款年利率 " + state.rate + "%），预期寿命按 85 岁\n\n" +
+"推算结果：\n" +
+"· " + retireLine + "\n" +
+"· 届时储蓄余额 ¥" + fmt(d.NOM) + "，换算成今天购买力 ¥" + fmt(d.REAL) + "，" + (d.LOSS >= 0 ? "缩水 " + d.pct.toFixed(1) + "%" : "反而多出 " + (-d.pct).toFixed(1) + "%") + "\n" +
+"· 直观换算：这笔钱今天能买 " + N1 + " 份外卖，到那天只能买 " + N2 + " 份；今天能付 " + M1 + " 个月的 GPT 订阅，到那天只能付 " + M2 + " 个月\n" +
+"（该推算只算了吃饭，不含医疗、房租、水电、人情，因此这是最乐观的下限。）\n\n" +
+"请你回答：\n" +
+"1. 纯储蓄之外，普通人有哪些常见方式可以让资产增值跑赢通胀？各自的风险和门槛是什么？\n" +
+"2. 在我的存钱水平下，社保/公积金大概能补上多少缺口，还是应该只算自己账户里的准确数字？\n" +
+"3. 对一个从未理财过、对风险很谨慎的人，学习理财的第一步应该是什么？\n" +
+"4. 我上面的推算和假设，有哪些漏洞值得我先想清楚？\n\n" +
+"要求：请不要向我推荐任何具体的金融产品，多帮我把问题本身想清楚。";
+
+    document.getElementById("promptText").value = text;
+  }
+
+  // ---------- 复制提示词 ----------
+  var copyBtn = document.getElementById("copyBtn");
+  var copyResetTimer = null;
+  copyBtn.addEventListener("click", function () {
+    var ta = document.getElementById("promptText");
+    var text = ta.value;
+    function done() {
+      if (copyResetTimer) clearTimeout(copyResetTimer);
+      copyBtn.textContent = "✓ 已复制，去问你的 AI 吧";
+      copyBtn.classList.add("copied");
+      copyResetTimer = setTimeout(function () {
+        copyBtn.textContent = "📋 复制提示词";
+        copyBtn.classList.remove("copied");
+        copyResetTimer = null;
+      }, 2200);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(ta, done); });
+    } else {
+      fallbackCopy(ta, done);
+    }
+  });
+  function fallbackCopy(ta, cb) {
+    try {
+      ta.focus(); ta.select();
+      document.execCommand("copy");
+    } catch (e) {}
+    cb();
+  }
+
+  // ---------- 分享图 ----------
+  document.getElementById("shareBtn").addEventListener("click", function () {
+    if (!lastResult) return;
+    var canvas = document.createElement("canvas");
+    canvas.width = 1000; canvas.height = 1250;
+    var ctx = canvas.getContext("2d");
+    var W = canvas.width, H = canvas.height;
+
+    var g = ctx.createLinearGradient(0, 0, W, H);
+    g.addColorStop(0, "#0b0d10"); g.addColorStop(1, "#060709");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+    ctx.fillStyle = "rgba(237,239,241,0.05)";
+    for (var x = 0; x < W; x += 36) for (var y = 0; y < H; y += 36) ctx.fillRect(x, y, 1, 1);
+
+    ctx.fillStyle = "#4ade80";
+    ctx.font = "600 20px ui-monospace, Menlo, monospace";
+    ctx.textBaseline = "top";
+    ctx.fillText("●", 56, 58);
+    ctx.fillStyle = "#5b8caa";
+    ctx.fillText("RETIRE-002 · 只管存钱的退休计算器", 78, 58);
+
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 40px 'Helvetica Neue', Helvetica, Arial, sans-serif";
+    wrapText(ctx, "如果我每月能存 ¥" + fmt(state.save) + "，", 56, 150, W - 112, 52);
+    var line2 = lastResult.R === null ? "那就永远退不了休。" : (lastResult.R + " 岁就能退休。");
+    ctx.fillText(line2, 56, 210);
+
+    var d = lastDeflate;
+    var nomWan = Math.round(d.NOM / 1e4);
+    var realWan = Math.round(d.REAL / 1e4);
+    ctx.fillStyle = "#4ade80";
+    ctx.font = "700 108px ui-monospace, Menlo, monospace";
+    ctx.fillText("¥" + fmt(nomWan) + "万", 56, 340);
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "24px 'Helvetica Neue', Helvetica, Arial, sans-serif";
+    ctx.fillText("只值今天的", 56, 470);
+    ctx.fillStyle = "#fbbf24";
+    ctx.font = "700 132px ui-monospace, Menlo, monospace";
+    ctx.fillText("¥" + fmt(realWan) + "万", 56, 510);
+
+    var N1 = Math.round(d.NOM / GOODS.waimai.price).toLocaleString("zh-CN");
+    var N2 = Math.round(d.NOM / (GOODS.waimai.price * d.deflator)).toLocaleString("zh-CN");
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "24px 'Helvetica Neue', Helvetica, Arial, sans-serif";
+    ctx.fillText("今天能买 " + N1 + " 份外卖 → 到那天只能买 " + N2 + " 份", 56, 980);
+
+    ctx.strokeStyle = "rgba(237,239,241,.15)";
+    ctx.beginPath(); ctx.moveTo(56, 1140); ctx.lineTo(W - 56, 1140); ctx.stroke();
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "20px ui-monospace, Menlo, monospace";
+    ctx.fillText("build-100.com/002 · 不卖任何东西", 56, 1170);
+
+    var dataUrl = canvas.toDataURL("image/png");
+    var img = document.getElementById("shareImg");
+    img.src = dataUrl;
+    document.getElementById("shareWrap").classList.add("show");
+
+    var a = document.createElement("a");
+    a.href = dataUrl; a.download = "retire-002.png";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  });
+
+  function wrapText(ctx, text, x, y, maxW, lh) {
+    var line = "", curY = y;
+    for (var idx = 0; idx < text.length; idx++) {
+      var ch = text[idx];
+      var test = line + ch;
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line, x, curY); line = ch; curY += lh;
+      } else {
+        line = test;
+      }
+    }
+    if (line) ctx.fillText(line, x, curY);
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-11",
+  "updated": "2026-07-24",
   "currencyNote": {
     "zh": "金额均为整数美元/月。人民币定价按 2026-07 汇率（约 1 USD = 6.78 CNY）四舍五入取整，原价见 priceCNY。",
     "en": "All prices are whole USD/month. CNY-priced products are rounded at the 2026-07 rate (~1 USD = 6.78 CNY); see priceCNY for the original."
@@ -22,7 +22,7 @@
       "name": "ChatGPT Free",
       "price": 0,
       "priceCNY": null,
-      "priceSource": "chatgpt.com/pricing · verified 2026-07-11",
+      "priceSource": "chatgpt.com/pricing · verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "chatgpt",
       "capacity": 1,
@@ -38,8 +38,8 @@
         "ocr": 7
       },
       "notes": {
-        "zh": "什么都能试一点，什么都有上限。美国区带广告",
-        "en": "A taste of everything, with a cap on everything. Ads in the US"
+        "zh": "什么都能试一点，什么都有上限。美国区带广告；不含 GPT-5.6 Sol",
+        "en": "A taste of everything, with a cap on everything. Ads in the US; no GPT-5.6 Sol"
       }
     },
     {
@@ -48,7 +48,7 @@
       "name": "ChatGPT Go",
       "price": 8,
       "priceCNY": null,
-      "priceSource": "openai.com/index/introducing-chatgpt-go（2026-01 全球上线，美区 $8）· verified 2026-07-11",
+      "priceSource": "openai.com/index/introducing-chatgpt-go（2026-01 全球上线，美区 $8）· verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "chatgpt",
       "capacity": 1,
@@ -64,8 +64,8 @@
         "ocr": 7
       },
       "notes": {
-        "zh": "免费版 10 倍消息量，日常够用。仍有广告，也没有高端模型",
-        "en": "10× the free tier's messages — enough for daily use. Still has ads, no frontier models"
+        "zh": "免费版 10 倍消息量，日常够用。仍有广告，也没有 GPT-5.6 Sol",
+        "en": "10× the free tier's messages — enough for daily use. Still has ads, no GPT-5.6 Sol"
       }
     },
     {
@@ -74,14 +74,14 @@
       "name": "ChatGPT Plus",
       "price": 20,
       "priceCNY": null,
-      "priceSource": "chatgpt.com/pricing · verified 2026-07-11",
+      "priceSource": "chatgpt.com/pricing · verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "chatgpt",
       "capacity": 2,
       "caps": {
-        "reasoning": 8,
+        "reasoning": 9,
         "search": 8,
-        "coding": 8,
+        "coding": 9,
         "daily": 9,
         "vision": 8,
         "imageGen": 8,
@@ -90,8 +90,8 @@
         "ocr": 8
       },
       "notes": {
-        "zh": "全能型：GPT-5.4 + 生图 + Sora 视频 + 高级语音，每项都有量",
-        "en": "The all-rounder: GPT-5.4 + image gen + Sora video + Advanced Voice, each with its own quota"
+        "zh": "全能型：GPT-5.6 Sol（Medium/High）+ 生图 + Sora 视频 + 高级语音，每项都有量",
+        "en": "The all-rounder: GPT-5.6 Sol (Medium/High) + image gen + Sora video + Advanced Voice, each with its own quota"
       }
     },
     {
@@ -100,14 +100,14 @@
       "name": "ChatGPT Pro ($100)",
       "price": 100,
       "priceCNY": null,
-      "priceSource": "chatgpt.com/pricing（2026-04-09 新增 $100 档，5× Plus 用量）· verified 2026-07-11",
+      "priceSource": "chatgpt.com/pricing（2026-04-09 新增 $100 档，5× Plus 用量）· verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "chatgpt",
       "capacity": 3,
       "caps": {
         "reasoning": 9,
         "search": 9,
-        "coding": 8,
+        "coding": 9,
         "daily": 9,
         "vision": 8,
         "imageGen": 8,
@@ -116,8 +116,8 @@
         "ocr": 8
       },
       "notes": {
-        "zh": "Plus 的 5 倍用量 + 50 次深度研究/月。重度用户的中间档",
-        "en": "5× Plus usage + 50 deep research sessions a month. The middle tier for heavy users"
+        "zh": "5× Plus 用量 + Sol Extra High/Pro 档。重度用户的中间档",
+        "en": "5× Plus usage plus Sol Extra High/Pro reasoning. The middle tier for heavy users"
       }
     },
     {
@@ -126,14 +126,14 @@
       "name": "ChatGPT Pro ($200)",
       "price": 200,
       "priceCNY": null,
-      "priceSource": "chatgpt.com/pricing · verified 2026-07-11",
+      "priceSource": "chatgpt.com/pricing · verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "chatgpt",
       "capacity": 4,
       "caps": {
         "reasoning": 10,
         "search": 9,
-        "coding": 9,
+        "coding": 10,
         "daily": 9,
         "vision": 9,
         "imageGen": 9,
@@ -142,8 +142,8 @@
         "ocr": 9
       },
       "notes": {
-        "zh": "GPT-5.4 Pro 近乎不限量，OpenAI 家的天花板",
-        "en": "GPT-5.4 Pro at near-unlimited usage — OpenAI's ceiling"
+        "zh": "GPT-5.6 Sol Pro 近乎不限量，OpenAI 家的天花板",
+        "en": "GPT-5.6 Sol Pro at near-unlimited usage — OpenAI's ceiling"
       }
     },
     {
@@ -152,7 +152,7 @@
       "name": "Claude Free",
       "price": 0,
       "priceCNY": null,
-      "priceSource": "claude.com/pricing · verified 2026-07-11",
+      "priceSource": "claude.com/pricing · verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "claude",
       "capacity": 1,
@@ -168,8 +168,8 @@
         "ocr": 7
       },
       "notes": {
-        "zh": "模型强，额度少。写代码最强的免费选手",
-        "en": "Strong model, small quota. The best free option for code"
+        "zh": "模型强，额度少。写代码最强的免费选手；不含 Opus 5 / Fable 5",
+        "en": "Strong model, small quota. The best free option for code; no Opus 5 / Fable 5"
       }
     },
     {
@@ -178,12 +178,12 @@
       "name": "Claude Pro",
       "price": 20,
       "priceCNY": null,
-      "priceSource": "claude.com/pricing · verified 2026-07-11",
+      "priceSource": "claude.com/pricing · verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "claude",
       "capacity": 2,
       "caps": {
-        "reasoning": 9,
+        "reasoning": 10,
         "search": 8,
         "coding": 10,
         "daily": 9,
@@ -194,8 +194,8 @@
         "ocr": 9
       },
       "notes": {
-        "zh": "深度推理和写代码的主力。不生图、不生视频，专注文字活",
-        "en": "Your main engine for deep reasoning and code. No image or video gen — it does words"
+        "zh": "默认 Opus 5：近 Fable 5 智能、半价日常主力。Fable 5 需另购用量积分",
+        "en": "Opus 5 by default — near-Fable intelligence at half the price. Fable 5 needs usage credits"
       }
     },
     {
@@ -204,12 +204,12 @@
       "name": "Claude Max 5x",
       "price": 100,
       "priceCNY": null,
-      "priceSource": "claude.com/pricing（2026-05-06 起 5 小时限额翻倍）· verified 2026-07-11",
+      "priceSource": "claude.com/pricing（2026-05-06 起 5 小时限额翻倍）· verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "claude",
       "capacity": 3,
       "caps": {
-        "reasoning": 9,
+        "reasoning": 10,
         "search": 9,
         "coding": 10,
         "daily": 9,
@@ -220,8 +220,8 @@
         "ocr": 9
       },
       "notes": {
-        "zh": "Pro 的 5 倍用量。每天要顶几次限额的人，来这一档",
-        "en": "5× Pro usage. If you hit limits a few times a day, this is your tier"
+        "zh": "默认 Opus 5 + 含 Fable 5（周限额一半）。每天顶限额的人来这一档",
+        "en": "Opus 5 by default, plus Fable 5 (up to half weekly limit). If you hit caps daily, this is your tier"
       }
     },
     {
@@ -230,12 +230,12 @@
       "name": "Claude Max 20x",
       "price": 200,
       "priceCNY": null,
-      "priceSource": "claude.com/pricing · verified 2026-07-11",
+      "priceSource": "claude.com/pricing · verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "claude",
       "capacity": 4,
       "caps": {
-        "reasoning": 9,
+        "reasoning": 10,
         "search": 9,
         "coding": 10,
         "daily": 9,
@@ -246,8 +246,8 @@
         "ocr": 9
       },
       "notes": {
-        "zh": "20 倍用量，写代码基本不再看限额",
-        "en": "20× usage — code all day without watching the meter"
+        "zh": "20 倍用量 + Opus 5 / Fable 5，写代码基本不再看限额",
+        "en": "20× usage with Opus 5 / Fable 5 — code all day without watching the meter"
       }
     },
     {
@@ -256,38 +256,12 @@
       "name": "SuperGrok",
       "price": 30,
       "priceCNY": null,
-      "priceSource": "x.ai / grok.com pricing · verified 2026-07-11",
+      "priceSource": "x.ai / grok.com pricing · verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "grok",
       "capacity": 2,
       "caps": {
         "reasoning": 9,
-        "search": 8,
-        "coding": 7,
-        "daily": 9,
-        "vision": 8,
-        "imageGen": 8,
-        "video": 8,
-        "audio": 7,
-        "ocr": 7
-      },
-      "notes": {
-        "zh": "一份订阅覆盖文字、生图、视频、语音。全模态里最均衡的一档",
-        "en": "One subscription covers text, images, video, and voice. The most balanced multimodal tier"
-      }
-    },
-    {
-      "id": "supergrok-heavy",
-      "provider": "xAI",
-      "name": "SuperGrok Heavy",
-      "price": 300,
-      "priceCNY": null,
-      "priceSource": "x.ai（Heavy $300/月）· verified 2026-07-11",
-      "category": "chat",
-      "conflictGroup": "grok",
-      "capacity": 4,
-      "caps": {
-        "reasoning": 10,
         "search": 8,
         "coding": 8,
         "daily": 9,
@@ -298,24 +272,24 @@
         "ocr": 7
       },
       "notes": {
-        "zh": "多智能体并行推理，市面最贵的个人订阅。为难题而生",
-        "en": "Multi-agent parallel reasoning, the priciest consumer sub on the market. Built for hard problems"
+        "zh": "Grok 4.5 + 生图、视频、语音。全模态里最均衡的一档",
+        "en": "Grok 4.5 plus images, video, and voice. The most balanced multimodal tier"
       }
     },
     {
-      "id": "x-premium-plus",
-      "provider": "xAI / X",
-      "name": "X Premium+",
-      "price": 40,
+      "id": "supergrok-heavy",
+      "provider": "xAI",
+      "name": "SuperGrok Heavy",
+      "price": 300,
       "priceCNY": null,
-      "priceSource": "help.x.com（网页价 $40/月）· verified 2026-07-11",
-      "category": "social",
+      "priceSource": "x.ai（Heavy $300/月）· verified 2026-07-24",
+      "category": "chat",
       "conflictGroup": "grok",
-      "capacity": 2,
+      "capacity": 4,
       "caps": {
-        "reasoning": 9,
+        "reasoning": 10,
         "search": 8,
-        "coding": 7,
+        "coding": 9,
         "daily": 9,
         "vision": 8,
         "imageGen": 8,
@@ -324,8 +298,34 @@
         "ocr": 7
       },
       "notes": {
-        "zh": "SuperGrok 全部能力 + X 的免广告、认证、创作者分成。多 $10 买社交权益",
-        "en": "Everything in SuperGrok, plus ad-free X, the checkmark, and creator payouts. $10 more for the social layer"
+        "zh": "多智能体并行推理 + Grok 4.5，市面最贵的个人订阅。为难题而生",
+        "en": "Multi-agent parallel reasoning plus Grok 4.5 — the priciest consumer sub. Built for hard problems"
+      }
+    },
+    {
+      "id": "x-premium-plus",
+      "provider": "xAI / X",
+      "name": "X Premium+",
+      "price": 40,
+      "priceCNY": null,
+      "priceSource": "help.x.com（网页价 $40/月）· verified 2026-07-24",
+      "category": "social",
+      "conflictGroup": "grok",
+      "capacity": 2,
+      "caps": {
+        "reasoning": 9,
+        "search": 8,
+        "coding": 8,
+        "daily": 9,
+        "vision": 8,
+        "imageGen": 8,
+        "video": 8,
+        "audio": 7,
+        "ocr": 7
+      },
+      "notes": {
+        "zh": "SuperGrok 全部能力（含 Grok 4.5）+ X 免广告、认证、创作者分成。多 $10 买社交权益",
+        "en": "Everything in SuperGrok (incl. Grok 4.5), plus ad-free X, the checkmark, and creator payouts. $10 more for the social layer"
       }
     },
     {
@@ -334,7 +334,7 @@
       "name": "Gemini Free",
       "price": 0,
       "priceCNY": null,
-      "priceSource": "gemini.google/subscriptions · verified 2026-07-11",
+      "priceSource": "gemini.google/subscriptions · verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "gemini",
       "capacity": 1,
@@ -360,7 +360,7 @@
       "name": "Google AI Plus",
       "price": 8,
       "priceCNY": null,
-      "priceSource": "one.google.com/about/google-ai-plans（$7.99 记 $8）· verified 2026-07-11",
+      "priceSource": "one.google.com/about/google-ai-plans（$7.99 记 $8）· verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "gemini",
       "capacity": 2,
@@ -386,7 +386,7 @@
       "name": "Google AI Pro",
       "price": 20,
       "priceCNY": null,
-      "priceSource": "gemini.google/subscriptions（$19.99 记 $20）· verified 2026-07-11",
+      "priceSource": "gemini.google/subscriptions（$19.99 记 $20）· verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "gemini",
       "capacity": 2,
@@ -412,7 +412,7 @@
       "name": "Google AI Ultra ($100)",
       "price": 100,
       "priceCNY": null,
-      "priceSource": "blog.google（I/O 2026-05 新增 $99.99 档，约 5× Pro 用量）· verified 2026-07-11",
+      "priceSource": "blog.google（I/O 2026-05 新增 $99.99 档，约 5× Pro 用量）· verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "gemini",
       "capacity": 3,
@@ -438,7 +438,7 @@
       "name": "Google AI Ultra ($200)",
       "price": 200,
       "priceCNY": null,
-      "priceSource": "blog.google（I/O 2026-05 由 $250 调整为 $200，最高 20× Pro）· verified 2026-07-11",
+      "priceSource": "blog.google（I/O 2026-05 由 $250 调整为 $200，最高 20× Pro）· verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "gemini",
       "capacity": 4,
@@ -464,24 +464,24 @@
       "name": "Kimi Free",
       "price": 0,
       "priceCNY": 0,
-      "priceSource": "kimi.com/membership/pricing · verified 2026-07-11",
+      "priceSource": "kimi.com/membership/pricing · verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "kimi",
       "capacity": 1,
       "caps": {
-        "reasoning": 7,
+        "reasoning": 8,
         "search": 6,
-        "coding": 7,
+        "coding": 8,
         "daily": 8,
-        "vision": 6,
+        "vision": 7,
         "imageGen": 3,
         "video": 2,
         "audio": 4,
         "ocr": 6
       },
       "notes": {
-        "zh": "K2.6 免费用，编码和智能体任务偏强，额度有限",
-        "en": "K2.6 for free — leans strong on coding and agent tasks, quota is tight"
+        "zh": "K3 免费用，编码和智能体偏强；额度紧，新付费订阅近期曾暂停开闸",
+        "en": "K3 for free — strong on coding and agents; tight quota, and new paid signups were recently paused"
       }
     },
     {
@@ -490,14 +490,14 @@
       "name": "Kimi Andante",
       "price": 7,
       "priceCNY": 49,
-      "priceSource": "kimi.com/membership/pricing（¥49/月）· verified 2026-07-11",
+      "priceSource": "kimi.com/membership/pricing（¥49/月）· verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "kimi",
       "capacity": 2,
       "caps": {
-        "reasoning": 8,
+        "reasoning": 9,
         "search": 7,
-        "coding": 8,
+        "coding": 9,
         "daily": 8,
         "vision": 7,
         "imageGen": 3,
@@ -506,8 +506,8 @@
         "ocr": 6
       },
       "notes": {
-        "zh": "¥49 拿到 K2.6 完整版 + 深度研究额度。入门付费里的性价比选手",
-        "en": "Full K2.6 plus deep-research quota for ~$7. The value pick among entry paid tiers"
+        "zh": "¥49 拿 K3 + 深度研究额度。入门付费里的性价比选手（新订阅开闸视算力而定）",
+        "en": "K3 plus deep-research quota for ~$7. The value pick among entry paid tiers (new signups depend on capacity)"
       }
     },
     {
@@ -516,14 +516,14 @@
       "name": "Kimi Moderato",
       "price": 15,
       "priceCNY": 99,
-      "priceSource": "kimi.com/membership/pricing（¥99/月）· verified 2026-07-11",
+      "priceSource": "kimi.com/membership/pricing（¥99/月）· verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "kimi",
       "capacity": 2,
       "caps": {
-        "reasoning": 8,
+        "reasoning": 9,
         "search": 7,
-        "coding": 8,
+        "coding": 9,
         "daily": 8,
         "vision": 7,
         "imageGen": 3,
@@ -532,8 +532,8 @@
         "ocr": 6
       },
       "notes": {
-        "zh": "更大额度 + 多设备登录，Andante 的加量版",
-        "en": "Bigger quotas and multi-device login — Andante with more headroom"
+        "zh": "更大 K3 额度 + 多设备登录，Andante 的加量版",
+        "en": "Bigger K3 quotas and multi-device login — Andante with more headroom"
       }
     },
     {
@@ -542,14 +542,14 @@
       "name": "Kimi Allegretto",
       "price": 29,
       "priceCNY": 199,
-      "priceSource": "kimi.com/membership/pricing（¥199/月，含 Agent Swarm）· verified 2026-07-11",
+      "priceSource": "kimi.com/membership/pricing（¥199/月，含 Agent Swarm）· verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "kimi",
       "capacity": 2,
       "caps": {
-        "reasoning": 8,
+        "reasoning": 9,
         "search": 7,
-        "coding": 8,
+        "coding": 9,
         "daily": 8,
         "vision": 7,
         "imageGen": 4,
@@ -558,8 +558,8 @@
         "ocr": 6
       },
       "notes": {
-        "zh": "Kimi 顶档：Agent Swarm 并行任务 + 高速模型优先",
-        "en": "Kimi's top tier: Agent Swarm parallel tasks plus priority on the fast model"
+        "zh": "Kimi 顶档：K3 + Agent Swarm 并行任务 + 高速模型优先",
+        "en": "Kimi's top tier: K3 plus Agent Swarm parallel tasks and priority on the fast model"
       }
     },
     {
@@ -568,7 +568,7 @@
       "name": "DeepSeek Free",
       "price": 0,
       "priceCNY": 0,
-      "priceSource": "chat.deepseek.com（确认仍无个人付费订阅，仅按量 API）· verified 2026-07-11",
+      "priceSource": "chat.deepseek.com（确认仍无个人付费订阅，仅按量 API）· verified 2026-07-24",
       "category": "chat",
       "conflictGroup": "deepseek",
       "capacity": 2,
@@ -594,7 +594,7 @@
       "name": "Perplexity Free",
       "price": 0,
       "priceCNY": null,
-      "priceSource": "perplexity.ai · verified 2026-07-11",
+      "priceSource": "perplexity.ai · verified 2026-07-24",
       "category": "search",
       "conflictGroup": "perplexity",
       "capacity": 1,
@@ -620,7 +620,7 @@
       "name": "Perplexity Pro",
       "price": 20,
       "priceCNY": null,
-      "priceSource": "perplexity.ai/pro · verified 2026-07-11",
+      "priceSource": "perplexity.ai/pro · verified 2026-07-24",
       "category": "search",
       "conflictGroup": "perplexity",
       "capacity": 2,
@@ -646,7 +646,7 @@
       "name": "Perplexity Max",
       "price": 200,
       "priceCNY": null,
-      "priceSource": "perplexity.ai/help-center（Max $200/月）· verified 2026-07-11",
+      "priceSource": "perplexity.ai/help-center（Max $200/月）· verified 2026-07-24",
       "category": "search",
       "conflictGroup": "perplexity",
       "capacity": 4,
@@ -672,7 +672,7 @@
       "name": "Cursor Hobby",
       "price": 0,
       "priceCNY": null,
-      "priceSource": "cursor.com/pricing · verified 2026-07-11",
+      "priceSource": "cursor.com/pricing · verified 2026-07-24",
       "category": "coding-tool",
       "conflictGroup": "cursor",
       "capacity": 1,
@@ -688,8 +688,8 @@
         "ocr": 3
       },
       "notes": {
-        "zh": "免费版 AI 编辑器，Tab 补全 + 有限 Agent。它是编辑器，不是聊天框",
-        "en": "The free AI editor: Tab completions plus a limited Agent. It's an editor, not a chatbox"
+        "zh": "免费版 AI 编辑器，Tab 补全 + 有限 Agent（含 Grok 4.5）。它是编辑器，不是聊天框",
+        "en": "The free AI editor: Tab completions plus a limited Agent (incl. Grok 4.5). It's an editor, not a chatbox"
       }
     },
     {
@@ -698,12 +698,12 @@
       "name": "Cursor Pro",
       "price": 20,
       "priceCNY": null,
-      "priceSource": "cursor.com/pricing（$20 月度用量额度制）· verified 2026-07-11",
+      "priceSource": "cursor.com/pricing（$20 月度用量额度制）· verified 2026-07-24",
       "category": "coding-tool",
       "conflictGroup": "cursor",
       "capacity": 2,
       "caps": {
-        "reasoning": 8,
+        "reasoning": 9,
         "search": 2,
         "coding": 10,
         "daily": 4,
@@ -714,8 +714,8 @@
         "ocr": 3
       },
       "notes": {
-        "zh": "$20 前沿模型额度 + Auto 模式不限量。和聊天订阅互补的编码主力",
-        "en": "$20 of frontier-model credit plus unlimited Auto mode. The coding workhorse that pairs with a chat sub"
+        "zh": "$20 前沿模型额度（Opus 5 / Sol / Grok 4.5）+ Auto 不限量。和聊天订阅互补的编码主力",
+        "en": "$20 of frontier-model credit (Opus 5 / Sol / Grok 4.5) plus unlimited Auto. The coding workhorse that pairs with a chat sub"
       }
     },
     {
@@ -724,12 +724,12 @@
       "name": "Cursor Pro+",
       "price": 60,
       "priceCNY": null,
-      "priceSource": "cursor.com/pricing（Pro+ $60，约 3× Pro 额度）· verified 2026-07-11",
+      "priceSource": "cursor.com/pricing（Pro+ $60，约 3× Pro 额度）· verified 2026-07-24",
       "category": "coding-tool",
       "conflictGroup": "cursor",
       "capacity": 3,
       "caps": {
-        "reasoning": 8,
+        "reasoning": 9,
         "search": 2,
         "coding": 10,
         "daily": 4,
@@ -750,12 +750,12 @@
       "name": "Cursor Ultra",
       "price": 200,
       "priceCNY": null,
-      "priceSource": "cursor.com/pricing（Ultra $200，约 20× Pro）· verified 2026-07-11",
+      "priceSource": "cursor.com/pricing（Ultra $200，约 20× Pro）· verified 2026-07-24",
       "category": "coding-tool",
       "conflictGroup": "cursor",
       "capacity": 4,
       "caps": {
-        "reasoning": 8,
+        "reasoning": 9,
         "search": 2,
         "coding": 10,
         "daily": 4,
@@ -776,7 +776,7 @@
       "name": "OpenCode Go",
       "price": 10,
       "priceCNY": null,
-      "priceSource": "opencode.ai/go（$10/月，首月 $5，14 个开源模型）· verified 2026-07-11",
+      "priceSource": "opencode.ai/go（$10/月，首月 $5，14 个开源模型）· verified 2026-07-24",
       "category": "coding-tool",
       "conflictGroup": "opencode",
       "capacity": 2,
@@ -792,8 +792,8 @@
         "ocr": 4
       },
       "notes": {
-        "zh": "$10 一次拿到 GLM-5.2、Kimi K2.7、DeepSeek V4 等 14 个开源模型的编码额度。市面最便宜的多模型编码订阅",
-        "en": "GLM-5.2, Kimi K2.7, DeepSeek V4 and 11 more coding models for $10. The cheapest multi-model coding plan on the market"
+        "zh": "$10 一次拿到 GLM-5.2、Kimi、DeepSeek V4 等 14 个开源模型的编码额度。市面最便宜的多模型编码订阅",
+        "en": "GLM-5.2, Kimi, DeepSeek V4 and 11 more coding models for $10. The cheapest multi-model coding plan on the market"
       }
     },
     {
@@ -802,7 +802,7 @@
       "name": "GLM Coding Lite",
       "price": 7,
       "priceCNY": 49,
-      "priceSource": "bigmodel.cn/glm-coding（Lite ¥49/月，约 80 prompts/5h）· verified 2026-07-11",
+      "priceSource": "bigmodel.cn/glm-coding（Lite ¥49/月，约 80 prompts/5h）· verified 2026-07-24",
       "category": "coding-tool",
       "conflictGroup": "glm-coding",
       "capacity": 2,
@@ -828,7 +828,7 @@
       "name": "GLM Coding Pro",
       "price": 22,
       "priceCNY": 149,
-      "priceSource": "bigmodel.cn/glm-coding（Pro ¥149/月，5× Lite 额度）· verified 2026-07-11",
+      "priceSource": "bigmodel.cn/glm-coding（Pro ¥149/月，5× Lite 额度）· verified 2026-07-24",
       "category": "coding-tool",
       "conflictGroup": "glm-coding",
       "capacity": 3,
@@ -854,7 +854,7 @@
       "name": "GLM Coding Max",
       "price": 69,
       "priceCNY": 469,
-      "priceSource": "bigmodel.cn/glm-coding（Max ¥469/月）· verified 2026-07-11",
+      "priceSource": "bigmodel.cn/glm-coding（Max ¥469/月）· verified 2026-07-24",
       "category": "coding-tool",
       "conflictGroup": "glm-coding",
       "capacity": 4,
@@ -873,8 +873,216 @@
         "zh": "顶格额度，给重度开发者或小团队",
         "en": "Ceiling-tier quota, for heavy developers or a small team"
       }
+    },
+    {
+      "id": "kiro-free",
+      "provider": "Kiro",
+      "name": "Kiro Free",
+      "price": 0,
+      "priceCNY": null,
+      "priceSource": "kiro.dev/pricing · verified 2026-07-24",
+      "category": "coding-tool",
+      "conflictGroup": "kiro",
+      "capacity": 1,
+      "caps": {
+        "reasoning": 7,
+        "search": 2,
+        "coding": 8,
+        "daily": 4,
+        "vision": 4,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 0,
+        "ocr": 3
+      },
+      "notes": {
+        "zh": "免费 50 credits，开源模型 + Sonnet。AWS 的 AI IDE，Specs 规格驱动编码",
+        "en": "50 free credits, open-weight models plus Sonnet. AWS's AI IDE with Specs-driven coding"
+      }
+    },
+    {
+      "id": "kiro-pro",
+      "provider": "Kiro",
+      "name": "Kiro Pro",
+      "price": 20,
+      "priceCNY": null,
+      "priceSource": "kiro.dev/pricing（1000 credits/月）· verified 2026-07-24",
+      "category": "coding-tool",
+      "conflictGroup": "kiro",
+      "capacity": 2,
+      "caps": {
+        "reasoning": 9,
+        "search": 2,
+        "coding": 10,
+        "daily": 4,
+        "vision": 4,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 0,
+        "ocr": 3
+      },
+      "notes": {
+        "zh": "1000 credits + 前沿模型（含 Opus）。和 Cursor 同价位的 Specs 编码替代",
+        "en": "1,000 credits plus frontier models (incl. Opus). A Specs-driven Cursor alternative at the same price"
+      }
+    },
+    {
+      "id": "kiro-pro-plus",
+      "provider": "Kiro",
+      "name": "Kiro Pro+",
+      "price": 40,
+      "priceCNY": null,
+      "priceSource": "kiro.dev/pricing（2000 credits/月）· verified 2026-07-24",
+      "category": "coding-tool",
+      "conflictGroup": "kiro",
+      "capacity": 2,
+      "caps": {
+        "reasoning": 9,
+        "search": 2,
+        "coding": 10,
+        "daily": 4,
+        "vision": 4,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 0,
+        "ocr": 3
+      },
+      "notes": {
+        "zh": "2000 credits，Pro 的双倍。日常开发够用、还没到重度的中间档",
+        "en": "2,000 credits — 2× Pro. The middle tier for daily coding before you go heavy"
+      }
+    },
+    {
+      "id": "kiro-pro-max",
+      "provider": "Kiro",
+      "name": "Kiro Pro Max",
+      "price": 100,
+      "priceCNY": null,
+      "priceSource": "kiro.dev/pricing（5000 credits/月）· verified 2026-07-24",
+      "category": "coding-tool",
+      "conflictGroup": "kiro",
+      "capacity": 3,
+      "caps": {
+        "reasoning": 9,
+        "search": 2,
+        "coding": 10,
+        "daily": 4,
+        "vision": 4,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 0,
+        "ocr": 3
+      },
+      "notes": {
+        "zh": "5000 credits，Pro+ 与 Power 之间的甜点。重度日常开发",
+        "en": "5,000 credits — the sweet spot between Pro+ and Power for heavy daily coding"
+      }
+    },
+    {
+      "id": "kiro-power",
+      "provider": "Kiro",
+      "name": "Kiro Power",
+      "price": 200,
+      "priceCNY": null,
+      "priceSource": "kiro.dev/pricing（10000 credits/月）· verified 2026-07-24",
+      "category": "coding-tool",
+      "conflictGroup": "kiro",
+      "capacity": 4,
+      "caps": {
+        "reasoning": 9,
+        "search": 2,
+        "coding": 10,
+        "daily": 4,
+        "vision": 4,
+        "imageGen": 0,
+        "video": 0,
+        "audio": 0,
+        "ocr": 3
+      },
+      "notes": {
+        "zh": "10000 credits，全天候高强度编码工作流",
+        "en": "10,000 credits for all-day, high-intensity coding workflows"
+      }
+    },
+    {
+      "id": "minimax-token-plus",
+      "provider": "MiniMax",
+      "name": "MiniMax Token Plus",
+      "price": 7,
+      "priceCNY": 49,
+      "priceSource": "platform.minimaxi.com/docs/guides/pricing-token-plan（Plus ¥49/月）· verified 2026-07-24",
+      "category": "coding-tool",
+      "conflictGroup": "minimax",
+      "capacity": 2,
+      "caps": {
+        "reasoning": 8,
+        "search": 4,
+        "coding": 9,
+        "daily": 5,
+        "vision": 7,
+        "imageGen": 7,
+        "video": 0,
+        "audio": 6,
+        "ocr": 5
+      },
+      "notes": {
+        "zh": "¥49 拿 M3 编码 Agent + 图/声/音乐额度。接 Claude Code / OpenClaw 用",
+        "en": "M3 coding agents plus image/speech/music quota for ~$7. Plugs into CLIs like Claude Code / OpenClaw"
+      }
+    },
+    {
+      "id": "minimax-token-max",
+      "provider": "MiniMax",
+      "name": "MiniMax Token Max",
+      "price": 18,
+      "priceCNY": 119,
+      "priceSource": "platform.minimaxi.com/docs/guides/pricing-token-plan（Max ¥119/月）· verified 2026-07-24",
+      "category": "coding-tool",
+      "conflictGroup": "minimax",
+      "capacity": 3,
+      "caps": {
+        "reasoning": 8,
+        "search": 4,
+        "coding": 9,
+        "daily": 5,
+        "vision": 7,
+        "imageGen": 7,
+        "video": 6,
+        "audio": 6,
+        "ocr": 5
+      },
+      "notes": {
+        "zh": "¥119 高频 Agent + 多模态，含视频 3 条/天。性价比最高的一档",
+        "en": "~$18 for heavy agents and multimodal, with 3 videos/day. The best-value MiniMax tier"
+      }
+    },
+    {
+      "id": "minimax-token-ultra",
+      "provider": "MiniMax",
+      "name": "MiniMax Token Ultra",
+      "price": 69,
+      "priceCNY": 469,
+      "priceSource": "platform.minimaxi.com/docs/guides/pricing-token-plan（Ultra ¥469/月）· verified 2026-07-24",
+      "category": "coding-tool",
+      "conflictGroup": "minimax",
+      "capacity": 4,
+      "caps": {
+        "reasoning": 8,
+        "search": 4,
+        "coding": 9,
+        "daily": 5,
+        "vision": 7,
+        "imageGen": 7,
+        "video": 7,
+        "audio": 6,
+        "ocr": 5
+      },
+      "notes": {
+        "zh": "¥469 顶格 Agent 并发 + 视频 5 条/天。重度工作流用",
+        "en": "~$69 ceiling-tier agent concurrency with 5 videos/day. For heavy workflows"
+      }
     }
   ],
-  "capsCalibration": "coding 分按各套餐所含模型在 arena.ai/leaderboard/agent 的排名校准 · 2026-07-11",
+  "capsCalibration": "coding / reasoning 分按 2026-07-24 前沿模型校准：Claude Opus 5（近 Fable 5）、GPT-5.6 Sol、Grok 4.5、Kimi K3、MiniMax M3；参考 Anthropic 官方评测与 Artificial Analysis / CursorBench",
   "capacityNote": "capacity 档位≈价格/配额级别：免费=1；$7-30 标准付费=2；5x 级（约$60-150）=3；20x/顶格（$200+）=4。编码套餐按配额实际情况可上浮。"
 }

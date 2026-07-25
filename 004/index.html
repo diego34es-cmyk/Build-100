@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WEEK-004 · 下周怎么了？</title>
+<meta name="description" content="Polymarket 实时一侧赔率≥60% 就当会发生，据此写出下个礼拜会怎样。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/004/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E004%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="WEEK-004 · 下周怎么了？">
+<meta property="og:description" content="实时一侧≥60% 当会发生，写出下个礼拜会怎样。">
+<meta property="og:url" content="https://build-100.com/004/">
+<meta property="og:image" content="https://build-100.com/004/og-004.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WEEK-004 · 下周怎么了？">
+<meta name="twitter:description" content="If one side is ≥60% on Polymarket right now, treat it as will happen — and write next week.">
+<meta name="twitter:image" content="https://build-100.com/004/og-004.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --neon: #5eead4;          /* 市场青绿 */
+    --neon-glow: rgba(94, 234, 212, 0.35);
+    --delta: #fbbf24;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--neon); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; }
+  .nav-brand span { color: var(--neon); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(36px, 6vh, 56px); }
+  .hero .eyebrow { color: var(--neon); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--neon); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: -0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p { color: var(--muted); max-width: 36em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p strong { color: var(--ink); font-weight: 500; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field:last-of-type { border-bottom: 1px solid var(--line); }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); letter-spacing: 0.08em; }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; }
+
+  .theme-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  @media (min-width: 640px) { .theme-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .theme-opt {
+    border: 1px solid var(--line-strong); background: transparent; border-radius: 6px;
+    padding: 16px 14px; cursor: pointer; text-align: left; transition: border-color .18s, background .18s, box-shadow .18s;
+    color: var(--ink); font: inherit;
+  }
+  .theme-opt:hover { border-color: var(--muted); }
+  .theme-opt.selected {
+    border-color: var(--neon); background: rgba(94, 234, 212, 0.08);
+    box-shadow: 0 0 0 1px var(--neon) inset;
+  }
+  .theme-opt .lbl { display: block; font-weight: 700; font-size: 0.98rem; }
+  .theme-opt .sub { display: block; margin-top: 6px; color: var(--muted); font-size: 0.78rem; }
+  .theme-opt.selected .sub { color: var(--neon); }
+
+  .slider-row { display: flex; align-items: center; gap: 16px; }
+  .thr-val {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.35rem; font-weight: 500;
+    color: var(--neon); min-width: 3.6em;
+  }
+  .thr-val small { font-size: 0.55em; color: var(--muted); font-weight: 400; margin-left: 1px; }
+  input[type=range] {
+    flex: 1; -webkit-appearance: none; appearance: none; height: 4px; background: var(--line-strong);
+    border-radius: 2px; outline: none; cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--neon); cursor: pointer; box-shadow: 0 0 8px var(--neon-glow);
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 18px; height: 18px; border: none; border-radius: 50%;
+    background: var(--neon); cursor: pointer;
+  }
+  .thr-scale {
+    width: 100%; display: flex; justify-content: space-between;
+    color: var(--faint); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; margin-top: 10px;
+  }
+
+  .submit-wrap { margin-top: clamp(32px, 5vh, 48px); }
+  .submit-btn {
+    width: 100%; font-family: var(--mono); font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase;
+    padding: 18px; border: 1px solid var(--neon); background: rgba(94, 234, 212, 0.1); color: var(--ink);
+    cursor: pointer; transition: all .2s; border-radius: 4px;
+  }
+  .submit-btn:hover:not(:disabled) { background: var(--neon); color: var(--bg); box-shadow: 0 0 24px var(--neon-glow); }
+  .submit-btn:disabled { opacity: 0.5; cursor: wait; }
+
+  .computing { display: none; text-align: center; padding: 80px 0; }
+  .computing.show { display: block; }
+  .computing .pulse {
+    display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--neon);
+    box-shadow: 0 0 16px var(--neon-glow); animation: pulse 1s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+  .computing .txt { margin-top: 18px; font-family: var(--mono); letter-spacing: 0.18em; color: var(--muted); font-size: 13px; }
+
+  .result { display: none; }
+  .result.show { display: block; animation: fadeUp .5s cubic-bezier(0.16,1,0.3,1); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+  .result-head { margin-bottom: 28px; }
+  .result-head h2 { font-size: clamp(1.5rem, 3.4vw, 2.2rem); font-weight: 700; line-height: 1.25; text-wrap: balance; margin-bottom: 6px; }
+  .result-meta { color: var(--muted); font-size: 0.9rem; }
+
+  .facts { list-style: none; margin: 0 0 8px; border-top: 1px solid var(--line); }
+  .facts-label { margin: 32px 0 12px; color: var(--muted); }
+  .facts li {
+    display: grid; grid-template-columns: 56px 1fr; gap: 14px;
+    padding: 16px 0; border-bottom: 1px solid var(--line); align-items: start;
+  }
+  .facts .pct { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--neon); font-weight: 600; font-size: 1rem; padding-top: 2px; }
+  .facts .q { font-size: 0.95rem; line-height: 1.45; }
+  .facts .out { display: block; margin-top: 4px; color: var(--muted); font-size: 0.82rem; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .story {
+    white-space: pre-wrap; line-height: 1.75; font-size: 1.02rem;
+    color: var(--ink);
+  }
+  .story strong { color: var(--neon); font-weight: 700; }
+  .disclaimer { margin-top: 18px; color: var(--faint); font-size: 0.8rem; }
+
+  .egg {
+    display: none;
+    margin: 28px 0 8px;
+    padding: 20px 18px;
+    border: 1px dashed var(--line-strong);
+    border-radius: 8px;
+    text-align: center;
+    background: rgba(94, 234, 212, 0.03);
+  }
+  .egg.show { display: block; }
+  .egg img {
+    width: 96px; height: 120px; image-rendering: pixelated; image-rendering: crisp-edges;
+    margin-bottom: 12px;
+  }
+  .egg p {
+    color: var(--muted); font-size: 0.95rem; line-height: 1.5; max-width: 28em; margin: 0 auto;
+  }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+
+  .restart-btn {
+    margin-top: 28px; width: 100%; font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em;
+    padding: 14px; border: 1px dashed var(--line-strong); background: none; color: var(--muted);
+    cursor: pointer; border-radius: 4px; text-transform: uppercase; transition: color .2s, border-color .2s;
+  }
+  .restart-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+  .origin-card {
+    margin-top: 48px; padding: 24px; border: 1px solid var(--line); border-radius: 8px;
+    background: rgba(237,239,241,0.02);
+  }
+  .origin-eyebrow { color: var(--neon); margin-bottom: 12px; }
+  .origin-text { color: var(--muted); font-size: 0.92rem; margin-bottom: 16px; line-height: 1.55; }
+  .origin-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .origin-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 10px 14px; border: 1px solid var(--line-strong); border-radius: 4px; color: var(--muted);
+    transition: all .2s;
+  }
+  .origin-btn.primary { border-color: var(--neon); color: var(--ink); background: rgba(94,234,212,0.1); }
+  .origin-btn.primary:hover { background: var(--neon); color: var(--bg); }
+  .origin-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+  .err-box {
+    display: none; margin-top: 20px; padding: 14px 16px; border: 1px solid rgba(248,113,113,0.5);
+    border-radius: 6px; color: #fecaca; background: rgba(248,113,113,0.08); font-size: 0.92rem;
+  }
+  .err-box.show { display: block; }
+
+  footer {
+    border-top: 1px solid var(--line); padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+    .computing .pulse, .result.show { animation: none; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">WEEK<span>·004</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <div id="formView">
+    <header class="hero">
+      <p class="mono eyebrow"><span class="tick">●</span>&nbsp; WEEK-004 · WHAT'S NEXT WEEK</p>
+      <h1 data-en="What happens next week?">下个礼拜会怎样？</h1>
+      <p data-en='On Polymarket right now: if one side is priced at <strong>60% or higher</strong>, this site treats it as <strong>will happen</strong> — then writes what next week looks like, and what follows.'>
+        Polymarket 里此刻一边实时赔率<strong>到了 60% 或以上</strong>，本站就当它<strong>会发生</strong>——再据此写出：下个礼拜会怎样，以及接着会扯出什么。
+      </p>
+    </header>
+
+    <div class="field">
+      <div class="field-head">
+        <span class="field-no">01</span>
+        <span class="field-title" data-en="What world do you want?">看哪个世界？</span>
+        <span class="field-hint" data-en="Politics, money, tech, or culture — the write-up follows.">政治、钱、科技还是人文——写出来的内容跟着变。</span>
+      </div>
+      <div class="theme-grid" id="themeGrid" role="radiogroup" aria-label="Theme">
+        <button type="button" class="theme-opt selected" data-theme="politics" aria-pressed="true">
+          <span class="lbl" data-en="Politics">政治</span>
+          <span class="sub" data-en="Elections · geopolitics">选举 · 地缘</span>
+        </button>
+        <button type="button" class="theme-opt" data-theme="economy" aria-pressed="false">
+          <span class="lbl" data-en="Economy">经济</span>
+          <span class="sub" data-en="Rates · markets">利率 · 市场</span>
+        </button>
+        <button type="button" class="theme-opt" data-theme="tech" aria-pressed="false">
+          <span class="lbl" data-en="Tech">科技</span>
+          <span class="sub" data-en="AI · products">AI · 产品</span>
+        </button>
+        <button type="button" class="theme-opt" data-theme="humanities" aria-pressed="false">
+          <span class="lbl" data-en="Culture">人文</span>
+          <span class="sub" data-en="Culture · sports">文化 · 体育</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-head">
+        <span class="field-no">02</span>
+        <span class="field-title" data-en="How high before it counts?">赔率过多少，才算会发生？</span>
+        <span class="field-hint" data-en="Slide it. Only markets at or above this % count as will happen (capped at 90%).">拖这条线。达到或超过这个比例，才算会发生（最高收到 90%）。</span>
+      </div>
+      <div class="slider-row">
+        <div class="thr-val"><span id="thrNum">60</span><small>%</small></div>
+        <input type="range" id="thrSlider" min="60" max="90" step="5" value="60" aria-valuemin="60" aria-valuemax="90" aria-valuenow="60">
+      </div>
+      <div class="thr-scale"><span>60%</span><span>75%</span><span>90%</span></div>
+    </div>
+
+    <div class="submit-wrap">
+      <button class="submit-btn" id="submitBtn" type="button" data-en="Write what next week looks like">写出下个礼拜</button>
+    </div>
+    <div class="err-box" id="errBox"></div>
+  </div>
+
+  <div class="computing" id="computingView">
+    <span class="pulse"></span>
+    <div class="txt" id="computingTxt" data-en="READING THE MARKETS…">正在读市场…</div>
+  </div>
+
+  <div class="result" id="resultView">
+    <div class="result-head">
+      <h2 id="resultTitle" data-en="Next week goes like this.">下周会这样。</h2>
+      <p class="result-meta" id="resultMeta"></p>
+    </div>
+    <div class="story" id="storyBox"></div>
+    <aside class="egg" id="jesusEgg" aria-label="Easter egg">
+      <img src="jesus-bye.gif" width="96" height="120" alt="" decoding="async">
+      <p data-en="Jesus isn't coming back next week either. Bye for now.">
+        对了——耶稣下周也暂时不会回来。拜拜。
+      </p>
+    </aside>
+    <p class="facts-label mono" id="factsLabel" data-en="Markets this is based on">依据这些市场</p>
+    <ul class="facts" id="factsList"></ul>
+    <p class="disclaimer" data-en="Priced-in odds, not prophecy. For orientation only — not financial advice.">这是按市场赔率写成的下周，不是预言。仅供定向参考，不构成投资建议。</p>
+
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy">复制全文</button>
+    </div>
+    <button class="restart-btn" id="restartBtn" type="button" data-en="↺ Run again">↺ 再跑一次</button>
+
+    <aside class="origin-card">
+      <p class="mono origin-eyebrow">BUILD-100 · 004/100</p>
+      <p class="origin-text" data-en="This tool is No.004 of BUILD-100 — one person building 100 websites with AI, in public. Ninety-six to go.">
+        这个工具是 BUILD-100 的第 004 号作品——一个人用 AI 公开做 100 个网站。还剩 96 个。
+      </p>
+      <div class="origin-actions">
+        <a class="origin-btn primary" href="https://build-100.com/" data-en="See the project →">看看这个计划 →</a>
+        <a class="origin-btn" href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="Follow along on X">在 X 上看过程</a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono">WEEK-004 · 下周怎么了</span>
+</footer>
+
+<script>
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  var theme = "politics";
+  var threshold = 60;
+  var lastPayload = null;
+  var hasSubmitted = false;
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.getElementById("langBtn").textContent = l === "en" ? "中文" : "EN";
+    document.title = l === "en" ? "WEEK-004 · What's next week?" : "WEEK-004 · 下周怎么了？";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    if (hasSubmitted && lastPayload) renderResult(lastPayload);
+  }
+  document.getElementById("langBtn").addEventListener("click", function () {
+    applyLang(lang === "en" ? "zh" : "en");
+  });
+
+  var themeGrid = document.getElementById("themeGrid");
+  themeGrid.querySelectorAll(".theme-opt").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      themeGrid.querySelectorAll(".theme-opt").forEach(function (b) {
+        b.classList.remove("selected");
+        b.setAttribute("aria-pressed", "false");
+      });
+      btn.classList.add("selected");
+      btn.setAttribute("aria-pressed", "true");
+      theme = btn.dataset.theme;
+    });
+  });
+
+  var thrSlider = document.getElementById("thrSlider");
+  var thrNum = document.getElementById("thrNum");
+  thrSlider.addEventListener("input", function () {
+    threshold = Number(thrSlider.value);
+    thrNum.textContent = String(threshold);
+    thrSlider.setAttribute("aria-valuenow", String(threshold));
+  });
+
+  function showErr(msg) {
+    var box = document.getElementById("errBox");
+    box.textContent = msg;
+    box.classList.add("show");
+  }
+  function clearErr() {
+    document.getElementById("errBox").classList.remove("show");
+  }
+
+  function mdLite(text) {
+    var esc = String(text)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+    return esc.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  }
+
+  function themeLabel(key) {
+    var map = {
+      politics: t("政治", "Politics"),
+      economy: t("经济", "Economy"),
+      tech: t("科技", "Tech"),
+      humanities: t("人文", "Culture"),
+    };
+    return map[key] || key;
+  }
+
+  function renderResult(data) {
+    lastPayload = data;
+    hasSubmitted = true;
+    var meta = document.getElementById("resultMeta");
+    meta.textContent = t(
+      themeLabel(data.theme) + " · ≥" + Math.round(data.threshold * 100) + "% · " + data.facts.length + " 个市场",
+      themeLabel(data.theme) + " · ≥" + Math.round(data.threshold * 100) + "% · " + data.facts.length + " markets"
+    );
+
+    var list = document.getElementById("factsList");
+    list.innerHTML = "";
+    data.facts.forEach(function (f) {
+      var li = document.createElement("li");
+      var pct = document.createElement("div");
+      pct.className = "pct";
+      pct.textContent = Math.round(f.confidence * 100) + "%";
+      var body = document.createElement("div");
+      var q = document.createElement("div");
+      q.className = "q";
+      q.textContent = f.question;
+      var out = document.createElement("span");
+      out.className = "out";
+      out.textContent = t("下周：", "Next week: ") + f.outcome +
+        (f.endDate ? " · " + String(f.endDate).slice(0, 10) : "");
+      body.appendChild(q);
+      body.appendChild(out);
+      li.appendChild(pct);
+      li.appendChild(body);
+      list.appendChild(li);
+    });
+
+    document.getElementById("storyBox").innerHTML = mdLite(data.story || "");
+
+    var egg = document.getElementById("jesusEgg");
+    if (data.theme === "humanities") egg.classList.add("show");
+    else egg.classList.remove("show");
+  }
+
+  async function run() {
+    clearErr();
+    var form = document.getElementById("formView");
+    var computing = document.getElementById("computingView");
+    var result = document.getElementById("resultView");
+    var btn = document.getElementById("submitBtn");
+    form.style.display = "none";
+    result.classList.remove("show");
+    computing.classList.add("show");
+    btn.disabled = true;
+    document.getElementById("computingTxt").textContent = t("正在读市场…", "READING THE MARKETS…");
+
+    try {
+      var r = await fetch("/api/week", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ threshold: threshold, theme: theme, lang: lang }),
+      });
+      var data = await r.json().catch(function () { return {}; });
+      if (!r.ok) throw new Error(data.error || ("HTTP " + r.status));
+      if (!data.ok) {
+        computing.classList.remove("show");
+        form.style.display = "block";
+        btn.disabled = false;
+        showErr(data.error || t("没有足够的市场。", "Not enough markets."));
+        return;
+      }
+      document.getElementById("computingTxt").textContent = t("正在写下个礼拜…", "WRITING NEXT WEEK…");
+      renderResult(data);
+      computing.classList.remove("show");
+      result.classList.add("show");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (e) {
+      computing.classList.remove("show");
+      form.style.display = "block";
+      showErr(t("没写出来：", "Couldn’t write it: ") + (e.message || "error"));
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  document.getElementById("submitBtn").addEventListener("click", run);
+  document.getElementById("restartBtn").addEventListener("click", function () {
+    document.getElementById("resultView").classList.remove("show");
+    document.getElementById("formView").style.display = "block";
+    clearErr();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  document.getElementById("copyBtn").addEventListener("click", async function () {
+    if (!lastPayload) return;
+    var lines = [];
+    lines.push(t("下周怎么了？", "What's next week?"));
+    lines.push(t(
+      "主题：" + themeLabel(lastPayload.theme) + " · ≥" + Math.round(lastPayload.threshold * 100) + "%",
+      "Theme: " + themeLabel(lastPayload.theme) + " · ≥" + Math.round(lastPayload.threshold * 100) + "%"
+    ));
+    lines.push("");
+    lastPayload.facts.forEach(function (f) {
+      lines.push("- [" + Math.round(f.confidence * 100) + "%] " + f.outcome + " · " + f.question);
+    });
+    lines.push("");
+    lines.push((lastPayload.story || "").replace(/\*\*/g, ""));
+    lines.push("");
+    lines.push("https://build-100.com/004/");
+    try {
+      await navigator.clipboard.writeText(lines.join("\n"));
+      var b = document.getElementById("copyBtn");
+      b.classList.add("copied");
+      var old = b.innerHTML;
+      b.textContent = t("已复制", "Copied");
+      setTimeout(function () {
+        b.classList.remove("copied");
+        b.innerHTML = old;
+        if (lang === "en") b.innerHTML = b.dataset.en || old;
+      }, 1600);
+    } catch (e) {}
+  });
+
+  if (lang === "en") applyLang("en");
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

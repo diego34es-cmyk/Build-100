@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROMPT-003 · 提示词结构器</title>
+<meta name="description" content="左边输入大白话，右边拿走可粘贴提示词。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/003/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E003%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PROMPT-003 · 提示词结构器">
+<meta property="og:description" content="大白话丢进去，拿回一段能直接粘贴的提示词。">
+<meta property="og:url" content="https://build-100.com/003/">
+<meta property="og:image" content="https://build-100.com/003/og-003.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PROMPT-003 · 提示词结构器">
+<meta name="twitter:description" content="Plain language in, ready-to-paste prompt out.">
+<meta name="twitter:image" content="https://build-100.com/003/og-003.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --accent: #c4a35a;
+    --accent-glow: rgba(196, 163, 90, 0.35);
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, textarea:focus-visible, select:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    color: var(--muted); transition: color .2s; white-space: nowrap;
+  }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(36px, 6vh, 56px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--accent); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p.sub { color: var(--muted); max-width: 36em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  .tool { border-top: 1px solid var(--line); padding-top: clamp(24px, 4vh, 36px); }
+  .split {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  @media (min-width: 820px) {
+    .split { grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; }
+  }
+
+  .pane {
+    display: flex; flex-direction: column; gap: 12px; min-height: 0;
+    border: 1px solid var(--line-strong); border-radius: 8px;
+    background: var(--bg-raise); padding: 14px;
+  }
+  .pane-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .pane-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--faint);
+  }
+  .pane-status {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); min-height: 1em;
+  }
+  .pane-status.is-live { color: var(--accent); }
+  .pane-status.is-done { color: var(--live); }
+
+  .raw, .out-text {
+    width: 100%; flex: 1; min-height: 240px; resize: vertical;
+    background: var(--bg); border: 1px solid var(--line); border-radius: 6px;
+    color: var(--ink); font-family: var(--sans); font-size: 0.95rem; line-height: 1.55;
+    padding: 14px; outline: none; transition: border-color .18s, box-shadow .18s;
+  }
+  .raw:focus { border-color: var(--accent); box-shadow: 0 0 0 1px rgba(196,163,90,0.25); }
+  .out-text {
+    display: none; font-family: var(--mono); font-size: 0.82rem; line-height: 1.55;
+    letter-spacing: 0.01em; color: #d5d8dc; white-space: pre-wrap; word-break: break-word;
+  }
+  .out-text.show { display: block; }
+  .out-text.typing { border-color: var(--accent); }
+
+  .opt label {
+    display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 8px;
+  }
+  .opt select {
+    width: 100%; background: var(--bg); border: 1px solid var(--line-strong);
+    border-radius: 4px; color: var(--ink); font-size: 0.9rem; padding: 10px 12px; cursor: pointer;
+  }
+
+  .out-stage { position: relative; flex: 1; min-height: 240px; display: flex; flex-direction: column; }
+  .out-stage .scan {
+    display: none; position: absolute; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.7; pointer-events: none; z-index: 2;
+  }
+  .pane-out.is-analyzing .scan {
+    display: block; animation: scan 1.6s linear infinite;
+  }
+  @keyframes scan {
+    from { top: 8%; opacity: 0; }
+    15% { opacity: 0.8; }
+    85% { opacity: 0.8; }
+    to { top: 92%; opacity: 0; }
+  }
+
+  .think {
+    display: none; flex: 1; padding: 18px 8px; flex-direction: column; justify-content: center;
+  }
+  .think.show { display: flex; }
+  .think-title {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px;
+  }
+  .think-title .pulse {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 10px var(--accent-glow); animation: pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.45; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+  .think-steps { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .think-steps li {
+    font-size: 0.92rem; color: var(--faint);
+    opacity: 0; transform: translateY(6px);
+    transition: opacity .35s ease, transform .35s ease, color .25s;
+  }
+  .think-steps li.on { opacity: 1; transform: none; color: var(--ink); }
+  .think-steps li.done { color: var(--muted); }
+  .think-steps li.on::before {
+    content: "▸ "; font-family: var(--mono); color: var(--accent); letter-spacing: 0;
+  }
+  .think-steps li.done::before { content: "✓ "; color: var(--live); }
+
+  .pane-in.is-waiting .raw,
+  .pane-in.is-analyzing .raw { border-color: rgba(196,163,90,0.45); }
+  .pane-out.is-analyzing .out-stage { box-shadow: inset 0 0 0 1px rgba(196,163,90,0.2); border-radius: 6px; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--accent); background: rgba(196, 163, 90, 0.12);
+    color: var(--ink); cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover:not(:disabled) {
+    background: var(--accent); color: var(--bg); box-shadow: 0 0 20px var(--accent-glow);
+  }
+  .share-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .share-btn.copied {
+    border-color: var(--live); background: rgba(74, 222, 128, 0.1); color: var(--live);
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 32px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 12px 32px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+    .think-title .pulse, .pane-out.is-analyzing .scan { animation: none; }
+    .think-steps li { transition: none; opacity: 1; transform: none; }
+    .pane-in.is-waiting .raw, .pane-in.is-analyzing .raw,
+    .pane-out.is-analyzing .out-stage { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">PROMPT<span>·003</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <section class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; PROMPT-003 · PROMPT BUILDER</p>
+    <h1 data-en="Plain language in.<br>Paste-ready prompt out.">大白话丢进去。<br>拿回能直接粘贴的提示词。</h1>
+    <p class="sub" data-en="BUILD-100 #003 — expand a short ask into a longer prompt you can paste into any AI. No templates, no slot bingo.">BUILD-100 第 003 个 —— 把短需求扩写成可粘贴的完整提示词。不玩槽位模板。</p>
+  </section>
+
+  <section class="tool">
+    <div class="split">
+      <div class="pane pane-in" id="paneIn">
+        <div class="pane-head">
+          <span class="pane-label" data-en="Input">输入</span>
+          <span class="pane-status" id="inStatus"></span>
+        </div>
+        <textarea
+          class="raw"
+          id="raw"
+          data-ex-zh="你是资深前端，帮我审查这段 React 登录表单代码：找出安全风险和可维护性问题，按严重程度排序，输出 Markdown 列表，不要改无关文件"
+          data-ex-en="You are a senior frontend engineer. Review this React login form: find security and maintainability issues, rank by severity, output a Markdown list, don't touch unrelated files"
+        >你是资深前端，帮我审查这段 React 登录表单代码：找出安全风险和可维护性问题，按严重程度排序，输出 Markdown 列表，不要改无关文件</textarea>
+        <div class="opt">
+          <label for="format" data-en="Output format · how the AI should deliver (optional)">Output format · AI 交活的格式（可选）</label>
+          <select id="format">
+            <option value="" data-en="None">不指定</option>
+            <option value="Plain email body ready to send" data-en="Email body" data-zh="邮件正文">邮件正文</option>
+            <option value="Bullet list" data-en="Bullet list" data-zh="分点列表">分点列表</option>
+            <option value="Markdown table" data-en="Markdown table" data-zh="Markdown 表格">Markdown 表格</option>
+            <option value="JSON" data-en="JSON" data-zh="JSON">JSON</option>
+            <option value="Structured outline" data-en="Outline" data-zh="大纲">大纲</option>
+            <option value="Runnable code" data-en="Code" data-zh="代码">代码</option>
+            <option value="Short social copy" data-en="Short copy" data-zh="短文案">短文案</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="pane pane-out" id="paneOut">
+        <div class="pane-head">
+          <span class="pane-label" data-en="Ready-to-paste prompt">可粘贴提示词</span>
+          <span class="pane-status" id="outStatus"></span>
+        </div>
+        <div class="out-stage">
+          <div class="scan" aria-hidden="true"></div>
+          <div class="think" id="think">
+            <div class="think-title"><i class="pulse" aria-hidden="true"></i><span id="thinkTitle">Analyzing</span></div>
+            <ul class="think-steps" id="thinkSteps"></ul>
+          </div>
+          <textarea class="out-text" id="out" readonly></textarea>
+        </div>
+        <div class="share-row">
+          <button type="button" class="share-btn" id="copyBtn" disabled
+            data-label-zh="复制" data-label-en="Copy"
+            data-done-zh="✓ 已复制" data-done-en="✓ Copied">复制</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono">PROMPT-003 · 可粘贴提示词</span>
+</footer>
+
+<script type="module">
+  const rawEl = document.getElementById("raw");
+  const outEl = document.getElementById("out");
+  const formatEl = document.getElementById("format");
+  const copyBtn = document.getElementById("copyBtn");
+  const langBtn = document.getElementById("langBtn");
+  const paneIn = document.getElementById("paneIn");
+  const paneOut = document.getElementById("paneOut");
+  const inStatus = document.getElementById("inStatus");
+  const outStatus = document.getElementById("outStatus");
+  const thinkEl = document.getElementById("think");
+  const thinkTitle = document.getElementById("thinkTitle");
+  const thinkSteps = document.getElementById("thinkSteps");
+  const EX_ZH = rawEl.dataset.exZh;
+  const EX_EN = rawEl.dataset.exEn;
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let copyTimer = null;
+  let debounceTimer = null;
+  let runId = 0;
+  let finalPrompt = "";
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+
+  const COPY = {
+    zh: {
+      waiting: "输入中…",
+      analyzing: "分析中",
+      writing: "生成中",
+      done: "完成",
+      think: "正在分析",
+      empty: "等待输入",
+      fail: "生成失败，请重试",
+      steps: [
+        "读入你的需求",
+        "判断任务类型与角色",
+        "补全约束与交付格式",
+        "扩写为完整提示词",
+        "整理为可粘贴版本",
+      ],
+    },
+    en: {
+      waiting: "Typing…",
+      analyzing: "Analyzing",
+      writing: "Writing",
+      done: "Done",
+      think: "Analyzing",
+      empty: "Waiting",
+      fail: "Failed — try again",
+      steps: [
+        "Reading your request",
+        "Inferring task & role",
+        "Filling constraints & format",
+        "Expanding into a full prompt",
+        "Packaging a paste-ready version",
+      ],
+    },
+  };
+
+  function t() { return COPY[lang] || COPY.zh; }
+
+  function setStatus(el, text, mode) {
+    el.textContent = text || "";
+    el.classList.remove("is-live", "is-done");
+    if (mode === "live") el.classList.add("is-live");
+    if (mode === "done") el.classList.add("is-done");
+  }
+
+  function applyLang(l, opts = {}) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.tagName === "OPTION") return;
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    formatEl.querySelectorAll("option").forEach((opt) => {
+      if (opt.dataset.en || opt.dataset.zh) {
+        const zh = opt.dataset.zh || opt.textContent;
+        const en = opt.dataset.en || opt.textContent;
+        if (!opt.dataset.zh) opt.dataset.zh = zh;
+        opt.textContent = l === "en" ? en : zh;
+      }
+    });
+    const none = formatEl.options[0];
+    if (none && none.dataset.en) {
+      if (!none.dataset.zh) none.dataset.zh = "不指定";
+      none.textContent = l === "en" ? none.dataset.en : none.dataset.zh;
+    }
+    const cur = rawEl.value.trim();
+    if (!cur || cur === EX_ZH || cur === EX_EN) {
+      rawEl.value = l === "en" ? EX_EN : EX_ZH;
+    }
+    if (!copyBtn.classList.contains("copied")) {
+      copyBtn.textContent = l === "en" ? copyBtn.dataset.labelEn : copyBtn.dataset.labelZh;
+    }
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.title = l === "en"
+      ? "PROMPT-003 · Prompt builder"
+      : "PROMPT-003 · 提示词结构器";
+    langBtn.textContent = l === "en" ? "中文" : "EN";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    if (!opts.skipSchedule) scheduleRun({ immediate: true });
+  }
+
+  function sleep(ms, id) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (id !== runId) reject(new Error("aborted"));
+        else resolve();
+      }, ms);
+    });
+  }
+
+  function resetStages() {
+    paneIn.classList.remove("is-waiting", "is-analyzing");
+    paneOut.classList.remove("is-analyzing", "is-done");
+    thinkEl.classList.remove("show");
+    thinkSteps.innerHTML = "";
+    outEl.classList.remove("show", "typing");
+    outEl.value = "";
+    finalPrompt = "";
+    copyBtn.disabled = true;
+  }
+
+  async function fetchExpanded(text, format, id) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 60000);
+    // abort if superseded
+    const watch = setInterval(() => {
+      if (id !== runId) ctrl.abort();
+    }, 120);
+    try {
+      const r = await fetch("/api/prompt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, format: format || undefined, lang }),
+        signal: ctrl.signal,
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(data.error || ("HTTP " + r.status));
+      if (!data.prompt) throw new Error("empty prompt");
+      return data.prompt;
+    } finally {
+      clearTimeout(timer);
+      clearInterval(watch);
+    }
+  }
+
+  async function playSteps(id) {
+    const steps = t().steps;
+    thinkSteps.innerHTML = "";
+    for (let i = 0; i < steps.length; i++) {
+      if (id !== runId) return;
+      const li = document.createElement("li");
+      li.innerHTML = '<span class="mark">···</span><span class="txt"></span>';
+      li.querySelector(".txt").textContent = steps[i];
+      thinkSteps.appendChild(li);
+      void li.offsetWidth;
+      li.classList.add("on");
+      await sleep(i === steps.length - 1 ? 180 : 480, id);
+      if (id !== runId) return;
+      // last step stays "···" until API returns
+      if (i < steps.length - 1) {
+        li.classList.add("done");
+        li.querySelector(".mark").textContent = "OK";
+      }
+    }
+  }
+
+  async function typewriter(text, id, immediate) {
+    thinkEl.classList.remove("show");
+    outEl.classList.add("show", "typing");
+    setStatus(outStatus, t().writing, "live");
+    outEl.value = "";
+    let i = 0;
+    const chunk = immediate ? 14 : 9;
+    const tick = immediate ? 22 : 30;
+    while (i < text.length) {
+      if (id !== runId) return;
+      i = Math.min(text.length, i + chunk);
+      outEl.value = text.slice(0, i);
+      outEl.scrollTop = outEl.scrollHeight;
+      await sleep(tick, id);
+    }
+    outEl.classList.remove("typing");
+  }
+
+  async function runPipeline(immediate) {
+    const id = ++runId;
+    const raw = rawEl.value.trim();
+    if (!raw) {
+      resetStages();
+      setStatus(inStatus, "", "");
+      setStatus(outStatus, t().empty, "");
+      return;
+    }
+
+    paneIn.classList.remove("is-waiting");
+    paneIn.classList.add("is-analyzing");
+    paneOut.classList.add("is-analyzing");
+    paneOut.classList.remove("is-done");
+    setStatus(inStatus, t().analyzing, "live");
+    setStatus(outStatus, t().analyzing, "live");
+
+    thinkTitle.textContent = t().think;
+    thinkEl.classList.add("show");
+    outEl.classList.remove("show", "typing");
+    outEl.value = "";
+    copyBtn.disabled = true;
+
+    try {
+      const apiPromise = fetchExpanded(raw, formatEl.value, id);
+      if (reduced) {
+        const text = await apiPromise;
+        if (id !== runId) return;
+        finalPrompt = text;
+        outEl.value = text;
+        outEl.classList.add("show");
+        thinkEl.classList.remove("show");
+        paneIn.classList.remove("is-analyzing");
+        paneOut.classList.remove("is-analyzing");
+        paneOut.classList.add("is-done");
+        copyBtn.disabled = false;
+        setStatus(inStatus, "", "");
+        setStatus(outStatus, t().done, "done");
+        return;
+      }
+
+      const stepsPromise = playSteps(id);
+      const text = await apiPromise;
+      if (id !== runId) return;
+
+      // finish last step
+      await stepsPromise.catch(() => {});
+      const last = thinkSteps.lastElementChild;
+      if (last) {
+        last.classList.add("done");
+        const mark = last.querySelector(".mark");
+        if (mark) mark.textContent = "OK";
+      }
+      await sleep(280, id);
+      if (id !== runId) return;
+
+      finalPrompt = text;
+      await typewriter(text, id, immediate);
+      if (id !== runId) return;
+
+      paneIn.classList.remove("is-analyzing");
+      paneOut.classList.remove("is-analyzing");
+      paneOut.classList.add("is-done");
+      copyBtn.disabled = false;
+      setStatus(inStatus, "", "");
+      setStatus(outStatus, t().done, "done");
+    } catch (e) {
+      if (e.message === "aborted" || id !== runId) return;
+      thinkEl.classList.remove("show");
+      outEl.classList.add("show");
+      outEl.value = t().fail + (e.message ? "\n\n" + e.message : "");
+      paneIn.classList.remove("is-analyzing");
+      paneOut.classList.remove("is-analyzing");
+      copyBtn.disabled = true;
+      setStatus(inStatus, "", "");
+      setStatus(outStatus, t().fail, "live");
+    }
+  }
+
+  function scheduleRun({ immediate = false } = {}) {
+    clearTimeout(debounceTimer);
+    const raw = rawEl.value.trim();
+    if (!raw) {
+      runId++;
+      resetStages();
+      setStatus(outStatus, t().empty, "");
+      setStatus(inStatus, "", "");
+      return;
+    }
+
+    if (!immediate) {
+      runId++;
+      paneIn.classList.add("is-waiting");
+      paneIn.classList.remove("is-analyzing");
+      paneOut.classList.remove("is-analyzing", "is-done");
+      thinkEl.classList.remove("show");
+      thinkSteps.innerHTML = "";
+      outEl.classList.remove("show", "typing");
+      outEl.value = "";
+      finalPrompt = "";
+      copyBtn.disabled = true;
+      setStatus(inStatus, t().waiting, "live");
+      setStatus(outStatus, "", "");
+    }
+
+    const delay = immediate ? 200 : 1100;
+    debounceTimer = setTimeout(() => runPipeline(immediate), delay);
+  }
+
+  rawEl.addEventListener("input", () => scheduleRun({ immediate: false }));
+  formatEl.addEventListener("change", () => scheduleRun({ immediate: true }));
+  langBtn.addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+
+  copyBtn.addEventListener("click", () => {
+    const text = finalPrompt || outEl.value;
+    if (!text.trim()) return;
+    const done = () => {
+      if (copyTimer) clearTimeout(copyTimer);
+      copyBtn.textContent = lang === "en" ? copyBtn.dataset.doneEn : copyBtn.dataset.doneZh;
+      copyBtn.classList.add("copied");
+      copyTimer = setTimeout(() => {
+        copyBtn.textContent = lang === "en" ? copyBtn.dataset.labelEn : copyBtn.dataset.labelZh;
+        copyBtn.classList.remove("copied");
+        copyTimer = null;
+      }, 1800);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, () => fallbackCopy(done));
+    } else {
+      fallbackCopy(done);
+    }
+  });
+
+  function fallbackCopy(cb) {
+    try {
+      outEl.focus();
+      outEl.select();
+      document.execCommand("copy");
+    } catch (e) {}
+    cb();
+  }
+
+  applyLang(lang, { skipSchedule: true });
+  scheduleRun({ immediate: true });
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>
