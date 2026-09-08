@@ -28,6 +28,7 @@
 | 项 | 命令 | 退出码 | 摘要 |
 |----|------|--------|------|
 | 全量 CI | `npm run ci` | 0 | check + 18 test jobs |
+| GitHub Actions | `ci / test` @ `d1b79ac` | SUCCESS | https://github.com/diego34es-cmyk/Build-100/actions/runs/34257084044 |
 | 005 扫描拒绝写盘 | `cd 005 && PYTHONPATH=. python3 -m research.scan_library --out data/library.json` | 2 | `refuse: ... needs --force-write` |
 
 ## P3 / P4

@@ -13,7 +13,7 @@ P0–P4 代码与文档已落地。等待 PR 与人审。未改生产机。
 - P2：审查；修 005 扫描默认写盘（`--force-write`）。
 - P3：组合卡 + 需求模型。
 - P4：评分；#1 `lab/paper-grid`；#2/#3 骨架。
-- 验证：`npm run check` 0；`npm test` 18 jobs 0。
+- 验证：`npm run check` 0；`npm test` 18 jobs 0；GitHub Actions `ci / test` SUCCESS。
 
 ## 假设（仍成立）
 
