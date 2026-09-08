@@ -9,3 +9,7 @@ sessions.jsonl
 .agents/
 .cursor/
 skills-lock.json
+.env
+__pycache__/
+*.pyc
+005/research/cache/

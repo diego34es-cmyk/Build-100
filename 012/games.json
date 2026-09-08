@@ -1,0 +1,110 @@
+{
+  "updated": "2026-09-03",
+  "timeLimitSec": 180,
+  "levels": [
+    {
+      "id": "compound",
+      "no": "01",
+      "title_zh": "复利",
+      "title_en": "Compound",
+      "kicker_zh": "关卡 01 / 03 · 限时 3 分钟",
+      "kicker_en": "Level 01 / 03 · 3 minutes",
+      "blurb_zh": "晚十年开工，终点是「差不多」还是差一整截。",
+      "blurb_en": "Start ten years later: close enough, or a missing stretch.",
+      "correct": "b",
+      "params": {
+        "monthly": 2000,
+        "annualRate": 0.06,
+        "yearsFull": 30,
+        "yearsLate": 20
+      },
+      "scenario_zh": "你 30 岁，每月能存 2,000。目标 60 岁。按名义年化 6%、期末年金计。同事说：「先玩 10 年，40 岁再开始存也差不多，反正后面还有 20 年复利会补上。」",
+      "scenario_en": "You are 30, can save 2,000 a month, aiming at 60. Nominal 6%, ordinary annuity. A colleague says: “Play for 10 years, start at 40 — close enough. Twenty years of compounding will catch it up.”",
+      "prompt_zh": "这句话差在哪？",
+      "prompt_en": "Where does that go wrong?",
+      "choices": [
+        {
+          "id": "a",
+          "zh": "差不多。少存的 10 年本金，后面 20 年复利能补上。",
+          "en": "Close enough. Twenty years of compounding replace the skipped decade."
+        },
+        {
+          "id": "b",
+          "zh": "差很多。那 10 年既少本金，也少了后面整段的利滚利。",
+          "en": "Not close. You skip deposits and the interest those deposits would have earned the whole way."
+        },
+        {
+          "id": "c",
+          "zh": "只要最后存进去的本金总数一样，终点就一样。",
+          "en": "If total principal is the same, the finish is the same."
+        }
+      ]
+    },
+    {
+      "id": "odds",
+      "no": "02",
+      "title_zh": "赔率",
+      "title_en": "Odds",
+      "kicker_zh": "关卡 02 / 03 · 限时 3 分钟",
+      "kicker_en": "Level 02 / 03 · 3 minutes",
+      "blurb_zh": "62¢ 按 004 可写成「会发生」。还能不能当 100%。",
+      "blurb_en": "62¢ can be written as will-happen. That is not 100%.",
+      "correct": "b",
+      "params": { "price": 0.62 },
+      "scenario_zh": "一个盘口买「会发生」要 0.62。WEEK-004 的写法：赔率 ≥60% 就当会发生，用来写「下个礼拜」。你在排下周计划。",
+      "scenario_en": "A contract to buy “it happens” is 0.62. WEEK-004’s rule: odds ≥60% count as will-happen when writing next week. You are planning the week.",
+      "prompt_zh": "把 62% 当成「一定会发生」，错在哪？",
+      "prompt_en": "If you treat 62% as certain, what breaks?",
+      "choices": [
+        {
+          "id": "a",
+          "zh": "没错。≥60% 就是会发生，日程按 100% 排。",
+          "en": "Nothing. ≥60% means it happens — schedule it at 100%."
+        },
+        {
+          "id": "b",
+          "zh": "可以当本周主线，但大约还有 38% 的世界里它不发生，不能删预案。",
+          "en": "Fine as the week’s main line — about 38% of worlds it doesn’t happen. Keep the other plan."
+        },
+        {
+          "id": "c",
+          "zh": "62% 太低，应该当「不会发生」。",
+          "en": "62% is too low; treat it as will-not-happen."
+        }
+      ]
+    },
+    {
+      "id": "leverage",
+      "no": "03",
+      "title_zh": "杠杆",
+      "title_en": "Leverage",
+      "kicker_zh": "关卡 03 / 03 · 限时 3 分钟",
+      "kicker_en": "Level 03 / 03 · 3 minutes",
+      "blurb_zh": "5 倍做多，标的跌 12%。本金还剩多少。",
+      "blurb_en": "5× long, underlying −12%. What is left of equity.",
+      "correct": "b",
+      "params": { "equity": 100000, "leverage": 5, "spotMove": -0.12 },
+      "scenario_zh": "账户权益 10 万，5 倍杠杆做多。标的从 100 跌到 88（−12%）。不计费、全仓。爆仓按权益归零（标的再跌 20% 才触线）。",
+      "scenario_en": "Equity 100,000, 5× long. Underlying 100 → 88 (−12%). No fees, fully used. Liquidation at equity zero (a −20% spot move).",
+      "prompt_zh": "这之后权益变成？",
+      "prompt_en": "Equity becomes?",
+      "choices": [
+        {
+          "id": "a",
+          "zh": "8.8 万。跟现货跌 12% 一样。",
+          "en": "88,000. Same 12% as spot."
+        },
+        {
+          "id": "b",
+          "zh": "4 万。5 × 12% = 60%，还没爆。",
+          "en": "40,000. 5 × 12% = 60% down, not liquidated."
+        },
+        {
+          "id": "c",
+          "zh": "0。5 倍碰到两位数跌幅就会爆仓。",
+          "en": "0. Double-digit drops bust 5×."
+        }
+      ]
+    }
+  ]
+}

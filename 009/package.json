@@ -1,0 +1,8 @@
+{
+  "name": "intuit-009",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}

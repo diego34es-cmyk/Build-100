@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PAPER-011 · 办事清单生成器</title>
+<meta name="description" content="NIE、租房合同、回国材料——中西双语清单，勾选、打印、带走。不连网也能用。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/011/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E011%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PAPER-011 · 办事清单生成器">
+<meta property="og:description" content="NIE、租房合同、回国材料——中西双语清单，勾选、打印、带走。">
+<meta property="og:url" content="https://build-100.com/011/">
+<meta property="og:image" content="https://build-100.com/011/og-011.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PAPER-011 · 办事清单生成器">
+<meta name="twitter:description" content="NIE, rental papers, return-to-China — bilingual checklists you can print.">
+<meta name="twitter:image" content="https://build-100.com/011/og-011.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #e879f9;
+    --accent-glow: rgba(232, 121, 249, 0.35);
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 44px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p.sub { color: var(--muted); max-width: 36em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+  .tab {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 10px 16px; border-radius: 999px; cursor: pointer; transition: all .18s;
+  }
+  .tab:hover { color: var(--ink); border-color: var(--ink); }
+  .tab.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+  .blurb {
+    color: var(--muted); margin-bottom: 18px; max-width: 40em; font-size: 0.95rem;
+  }
+  .prog {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .prog .num {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: 1.4rem; color: var(--accent);
+  }
+  .bar { flex: 1; min-width: 140px; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s; }
+
+  .list { list-style: none; border-top: 1px solid var(--line); }
+  .item {
+    display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: start;
+    padding: 16px 4px; border-bottom: 1px solid var(--line);
+  }
+  .item.done .main { color: var(--muted); text-decoration: line-through; }
+  .item input[type=checkbox] {
+    width: 18px; height: 18px; margin-top: 4px; accent-color: var(--accent); cursor: pointer;
+  }
+  .main { font-weight: 600; font-size: 1rem; }
+  .alt { display: block; color: var(--muted); font-size: 0.88rem; font-weight: 400; margin-top: 2px; }
+  .hint { display: block; color: var(--faint); font-size: 0.82rem; margin-top: 6px; max-width: 42em; }
+  .del {
+    background: none; border: none; color: var(--faint); cursor: pointer;
+    font-family: var(--mono); font-size: 11px; padding: 4px;
+  }
+  .del:hover { color: #f87171; }
+
+  .add-row { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+  .add-row input {
+    flex: 1; min-width: 180px; background: var(--bg-raise); border: 1px solid var(--line-strong);
+    color: var(--ink); padding: 10px 12px; border-radius: 4px; font-size: 0.95rem;
+  }
+  .add-btn, .ghost-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 12px 16px; border-radius: 4px; cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .add-btn {
+    border: 1px solid var(--accent); background: rgba(232, 121, 249, 0.12); color: var(--ink);
+  }
+  .add-btn:hover { background: var(--accent); color: var(--bg); box-shadow: 0 0 20px var(--accent-glow); }
+  .ghost-btn { border: 1px solid var(--line-strong); background: none; color: var(--muted); }
+  .ghost-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.primary {
+    border-color: var(--accent); background: rgba(232, 121, 249, 0.12);
+  }
+  .share-btn.primary:hover { background: var(--accent); color: var(--bg); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .print-meta { display: none; }
+
+  .origin-card {
+    margin-top: 48px; padding: clamp(24px, 4vw, 32px);
+    border: 1px solid var(--line); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(232,121,249,0.08), transparent 55%);
+  }
+  .origin-eyebrow { color: var(--accent); margin-bottom: 12px; }
+  .origin-text { color: var(--muted); font-size: 0.95rem; max-width: 34em; }
+  .origin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .origin-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); border-radius: 4px;
+    color: var(--muted); cursor: pointer; transition: all .2s;
+  }
+  .origin-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .origin-btn.primary { border-color: var(--accent); color: var(--ink); background: rgba(232,121,249,0.1); }
+  .origin-btn.primary:hover { background: var(--accent); color: var(--bg); }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+
+  @media print {
+    :root { --bg: #fff; --bg-raise: #fff; --ink: #111; --muted: #333; --faint: #555; --line: #ddd; --accent: #000; }
+    body {
+      background: #fff; color: #111;
+      background-image: none; font-size: 12pt; line-height: 1.45;
+    }
+    .nav, footer, .share-row, .share-canvas-wrap, .origin-card, .add-row, .del, .no-print { display: none !important; }
+    main { max-width: none; padding: 0; }
+    .hero { margin-bottom: 12px; }
+    .hero h1 { font-size: 22pt; line-height: 1.2; margin-bottom: 8px; }
+    .hero p.sub { font-size: 10pt; color: #333; }
+    .tabs { display: none; }
+    .print-meta { display: block; font-size: 10pt; color: #333; margin-bottom: 12px; }
+    .item { break-inside: avoid; border-bottom: 1px solid #ccc; padding: 8px 0; }
+    .main { text-decoration: none !important; color: #111; }
+    .alt { color: #333; }
+    .hint { color: #444; }
+    input[type=checkbox] { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .bar { background: #ddd; }
+    .bar i { background: #111; }
+    a { color: #111; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100" data-es="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">PAPER<span>·011</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Cambiar idioma">ES</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span style="color:var(--accent)">●</span>&nbsp; PAPER-011 · CHECKLIST</p>
+    <h1 data-en="Print it. Take it. Tick it." data-es="Imprímelo. Llévatelo. Márcalo.">打印。带走。勾掉。</h1>
+    <p class="sub" data-en="Three bags of paperwork for Spain / China: <strong>NIE</strong>, <strong>rental contract</strong>, <strong>going back to China</strong>. Each line is Chinese + Spanish. Works offline."
+       data-es="Tres carpetas: <strong>NIE</strong>, <strong>contrato de alquiler</strong>, <strong>volver a China</strong>. Cada línea en chino y español. Funciona sin red.">
+      三套要带去窗口的纸：<strong>NIE</strong>、<strong>租房合同</strong>、<strong>回国材料</strong>。同一条清单中西双语。勾选记在这台浏览器，打印就能离线用。
+    </p>
+  </header>
+
+  <div class="tabs" role="tablist" id="tplTabs"></div>
+  <p class="print-meta" id="printMeta"></p>
+  <p class="blurb" id="blurb"></p>
+  <div class="prog">
+    <span class="num" id="progNum"></span>
+    <div class="bar"><i id="progBar"></i></div>
+  </div>
+  <ul class="list" id="list"></ul>
+  <form class="add-row no-print" id="addForm">
+    <input id="customInput" maxlength="120" autocomplete="off">
+    <button class="add-btn" type="submit" data-en="Add line" data-es="Añadir">加入一项</button>
+    <button class="ghost-btn" type="button" id="resetBtn" data-en="Clear ticks" data-es="Borrar marcas">清空勾选</button>
+  </form>
+
+  <div class="share-row">
+    <button class="share-btn primary" id="printBtn" type="button" data-en="Print" data-es="Imprimir">打印带走</button>
+    <button class="share-btn" id="copyBtn" type="button" data-en="Copy remaining" data-es="Copiar pendientes">复制未完成</button>
+    <button class="share-btn" id="shareImgBtn" type="button" data-en="Share image" data-es="Imagen">生成分享图</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareCanvasWrap">
+    <canvas id="shareCanvas" width="800" height="450"></canvas>
+    <p class="share-save-hint" data-en="Long-press or right-click to save." data-es="Mantén pulsado o clic derecho para guardar.">长按或右键保存图片。</p>
+  </div>
+
+  <aside class="origin-card">
+    <p class="mono origin-eyebrow">BUILD-100 · 011/100</p>
+    <p class="origin-text"
+       data-en="No.011 of BUILD-100 — a printable bilingual bag list so the window clerk doesn't send you home."
+       data-es="El 011 de BUILD-100: una lista bilingüe para que en ventanilla no te manden a casa.">
+      BUILD-100 的第 011 号：一张能进包里的双语清单，免得窗口说缺材料，改天再来。
+    </p>
+    <div class="origin-actions">
+      <a class="origin-btn primary" href="https://build-100.com/" data-en="See the project →" data-es="Ver el proyecto →">看看这个计划 →</a>
+      <a class="origin-btn" href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="Follow on X" data-es="Seguir en X">在 X 上看过程</a>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="PAPER-011 · printable paperwork" data-es="PAPER-011 · trámites para imprimir">PAPER-011 · 办事清单可打印</span>
+</footer>
+
+<script type="module">
+  import {
+    DEFAULT_TEMPLATES, getTemplate, mergeTemplate,
+    checklistProgress, remainingItems, printLines,
+  } from "./engine.js?v=1";
+
+  const KEY = "paper011.state";
+  let lang = "zh";
+  try {
+    const stored = localStorage.getItem("paper011.lang");
+    if (stored === "es" || stored === "zh") lang = stored;
+  } catch (e) {}
+
+  function L(zh, es) { return lang === "es" ? es : zh; }
+  function esc(s) {
+    return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+  let state = { tpl: "nie", byTpl: {} };
+  try {
+    const raw = JSON.parse(localStorage.getItem(KEY) || "null");
+    if (raw && typeof raw === "object") state = Object.assign(state, raw);
+  } catch (e) {}
+  if (!state.byTpl) state.byTpl = {};
+  if (!["nie", "rent", "return"].includes(state.tpl)) state.tpl = "nie";
+
+  function persist() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
+  function bucket() {
+    if (!state.byTpl[state.tpl]) state.byTpl[state.tpl] = { checked: {}, custom: [] };
+    const b = state.byTpl[state.tpl];
+    if (!b.checked) b.checked = {};
+    if (!Array.isArray(b.custom)) b.custom = [];
+    return b;
+  }
+
+  function applyLang(l) {
+    lang = l === "es" ? "es" : "zh";
+    document.querySelectorAll("[data-en], [data-es]").forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      if (lang === "es") el.innerHTML = el.dataset.es || el.dataset.en || el.dataset.zh;
+      else el.innerHTML = el.dataset.zh;
+    });
+    document.documentElement.lang = lang === "es" ? "es" : "zh-CN";
+    document.title = lang === "es"
+      ? "PAPER-011 · Generador de listas de trámites"
+      : "PAPER-011 · 办事清单生成器";
+    document.getElementById("langBtn").textContent = lang === "es" ? "中文" : "ES";
+    const inp = document.getElementById("customInput");
+    inp.placeholder = L("自定义一项（中西同文）…", "Añadir una línea (mismo texto)…");
+    try {
+      localStorage.setItem("paper011.lang", lang);
+    } catch (e) {}
+    render();
+  }
+
+  document.getElementById("langBtn").addEventListener("click", () => applyLang(lang === "es" ? "zh" : "es"));
+
+  function renderTabs() {
+    const wrap = document.getElementById("tplTabs");
+    wrap.innerHTML = DEFAULT_TEMPLATES.map((t) => {
+      const label = L(t.zh, t.es);
+      const on = t.id === state.tpl;
+      return `<button class="tab${on ? " active" : ""}" type="button" data-tpl="${t.id}" aria-selected="${on}">${esc(label)}</button>`;
+    }).join("");
+  }
+
+  function render() {
+    renderTabs();
+    const tpl = getTemplate(state.tpl);
+    const items = mergeTemplate(tpl, bucket());
+    const st = checklistProgress(items);
+    document.getElementById("blurb").textContent = L(tpl.blurb_zh, tpl.blurb_es);
+    document.getElementById("progNum").textContent = `${st.done}/${st.total}`;
+    document.getElementById("progBar").style.width = st.pct + "%";
+    document.getElementById("printMeta").textContent =
+      `PAPER-011 · ${L(tpl.zh, tpl.es)} · ${st.done}/${st.total} · ${new Date().toISOString().slice(0, 10)}`;
+
+    document.getElementById("list").innerHTML = items.map((it) => {
+      const primary = L(it.zh, it.es);
+      const secondary = L(it.es, it.zh);
+      const hint = L(it.hint_zh || "", it.hint_es || "");
+      return `<li class="item${it.checked ? " done" : ""}">
+        <input type="checkbox" ${it.checked ? "checked" : ""} data-id="${esc(it.id)}" aria-label="${esc(primary)}">
+        <div>
+          <span class="main">${esc(primary)}</span>
+          <span class="alt">${esc(secondary)}</span>
+          ${hint ? `<span class="hint">${esc(hint)}</span>` : ""}
+        </div>
+        ${it.custom ? `<button class="del" type="button" data-x="${esc(it.id)}">${L("删", "Borrar")}</button>` : `<span></span>`}
+      </li>`;
+    }).join("");
+  }
+
+  document.getElementById("tplTabs").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-tpl]");
+    if (!btn) return;
+    state.tpl = btn.dataset.tpl;
+    persist(); render();
+  });
+
+  document.getElementById("list").addEventListener("change", (e) => {
+    const id = e.target.dataset.id;
+    if (!id) return;
+    bucket().checked[id] = e.target.checked;
+    persist(); render();
+  });
+  document.getElementById("list").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-x]");
+    if (!btn) return;
+    const b = bucket();
+    b.custom = b.custom.filter((c) => c.id !== btn.dataset.x);
+    delete b.checked[btn.dataset.x];
+    persist(); render();
+  });
+
+  document.getElementById("addForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const v = document.getElementById("customInput").value.trim();
+    if (!v) return;
+    bucket().custom.push({ id: "c-" + uid(), zh: v, es: v });
+    document.getElementById("customInput").value = "";
+    persist(); render();
+  });
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    bucket().checked = {};
+    persist(); render();
+  });
+
+  document.getElementById("printBtn").addEventListener("click", () => window.print());
+
+  document.getElementById("copyBtn").addEventListener("click", async () => {
+    const tpl = getTemplate(state.tpl);
+    const items = mergeTemplate(tpl, bucket());
+    const left = remainingItems(items);
+    const head = `PAPER-011 · ${L(tpl.zh, tpl.es)}\n`;
+    const body = printLines(left.length ? left : items, lang).join("\n");
+    const text = head + body + "\nhttps://build-100.com/011/";
+    try { await navigator.clipboard.writeText(text); } catch (err) {
+      const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch (_) {} ta.remove();
+    }
+    const btn = document.getElementById("copyBtn");
+    btn.classList.add("copied");
+    const orig = btn.textContent;
+    btn.textContent = L("已复制 ✓", "Copiado ✓");
+    setTimeout(() => { btn.classList.remove("copied"); btn.textContent = orig; }, 1600);
+  });
+
+  document.getElementById("shareImgBtn").addEventListener("click", () => {
+    const tpl = getTemplate(state.tpl);
+    const items = mergeTemplate(tpl, bucket());
+    const st = checklistProgress(items);
+    const c = document.getElementById("shareCanvas");
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = "#060709"; ctx.fillRect(0, 0, 800, 450);
+    ctx.fillStyle = "#e879f9"; ctx.font = "14px ui-monospace, monospace";
+    ctx.fillText("PAPER-011  ·  BUILD-100", 48, 64);
+    ctx.fillStyle = "#edeff1"; ctx.font = "700 34px Helvetica, Arial, sans-serif";
+    ctx.fillText(L(tpl.zh, tpl.es).slice(0, 28), 48, 128);
+    ctx.fillStyle = "#e879f9"; ctx.font = "500 64px ui-monospace, monospace";
+    ctx.fillText(st.done + " / " + st.total, 48, 230);
+    ctx.fillStyle = "#7d848c"; ctx.font = "16px Helvetica, Arial, sans-serif";
+    ctx.fillText(L("已勾选", "marcados") + " · " + st.pct + "%", 48, 268);
+    ctx.fillStyle = "#4a5057"; ctx.font = "13px ui-monospace, monospace";
+    ctx.fillText("build-100.com/011", 48, 400);
+    document.getElementById("shareCanvasWrap").classList.add("show");
+  });
+
+  applyLang(lang);
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

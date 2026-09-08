@@ -1,0 +1,409 @@
+{
+  "updated": "2026-09-03",
+  "sampleId": "01",
+  "columns": [
+    {
+      "id": "cash",
+      "code": "002",
+      "align": "RETIRE-002",
+      "href": "https://build-100.com/002/",
+      "title_zh": "退休 / 现金流",
+      "title_en": "Retirement / cashflow",
+      "sub_zh": "对齐「只管存钱能几岁退」",
+      "sub_en": "Aligns with savings-only retirement"
+    },
+    {
+      "id": "odds",
+      "code": "004",
+      "align": "WEEK-004",
+      "href": "https://build-100.com/004/",
+      "title_zh": "赔率 / 会发生吗",
+      "title_en": "Odds / will it happen",
+      "sub_zh": "对齐「≥60% 就当会发生」",
+      "sub_en": "Aligns with odds ≥60% as will-happen"
+    },
+    {
+      "id": "lock",
+      "code": "005",
+      "align": "LOCK-005",
+      "href": "https://build-100.com/005/",
+      "title_zh": "扫尾 / 价格锁",
+      "title_en": "Sweep / price lock",
+      "sub_zh": "对齐「站稳某档还会不会翻」",
+      "sub_en": "Aligns with dwell-then-flip locks"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "01",
+      "col": "cash",
+      "status": "ready",
+      "calc": "delay",
+      "title_zh": "晚一年开始存，少多少",
+      "title_en": "Start one year later, lose how much",
+      "blurb_zh": "同样每月存一笔，晚一年不是少 12 笔，是少一整段复利。",
+      "blurb_en": "Same monthly deposit, one year late: you lose a whole compounding stretch, not twelve deposits.",
+      "body_zh": [
+        "很多人把「晚一年开始」当成小事。每月同样存一笔、年化同样一个数、目标年数不变——晚一年不是少存 12 笔，而是少了一整段从第 1 年到终点都在滚的利息。",
+        "这个计算器只回答一件事：晚 n 年开工，终点少多少；若还想追上原来的终点，每月要多存多少。",
+        "不替你算几岁能退（那是 RETIRE-002），也不扣通胀。按期末年金、名义年化。"
+      ],
+      "body_en": [
+        "Delaying one year feels small. Same monthly amount, same nominal return, same horizon — you don't just skip twelve deposits. You skip a stretch of interest that would have compounded all the way to the end.",
+        "This calculator answers one question: if you start n years later, how much is missing at the finish; and if you still want the original finish, how much extra per month.",
+        "It does not solve retirement age (that's RETIRE-002) and it does not deflate. Ordinary annuity, nominal rate."
+      ]
+    },
+    {
+      "id": "02",
+      "col": "cash",
+      "status": "soon",
+      "title_zh": "通胀把购买力吃掉多少",
+      "title_en": "How much inflation eats",
+      "blurb_zh": "名义余额和能买到的东西，不是同一个数字。",
+      "blurb_en": "Nominal balance and what it still buys are not the same number."
+    },
+    {
+      "id": "03",
+      "col": "cash",
+      "status": "soon",
+      "title_zh": "利率差 1%，终点差几倍",
+      "title_en": "1% rate gap, how many times the finish",
+      "blurb_zh": "年化差一个点，拉长时间后不是差一个点。",
+      "blurb_en": "One point of annual return is not one point at the finish."
+    },
+    {
+      "id": "04",
+      "col": "cash",
+      "status": "soon",
+      "title_zh": "4% 规则能撑多久",
+      "title_en": "How long the 4% rule lasts",
+      "blurb_zh": "取出规则是启发式，不是保证函。",
+      "blurb_en": "A withdrawal rule is a heuristic, not a guarantee."
+    },
+    {
+      "id": "05",
+      "col": "cash",
+      "status": "soon",
+      "title_zh": "先还债还是先存钱",
+      "title_en": "Debt first or save first",
+      "blurb_zh": "比的是利率，不是道德。",
+      "blurb_en": "Compare rates, not virtue."
+    },
+    {
+      "id": "06",
+      "col": "cash",
+      "status": "soon",
+      "title_zh": "工资停了，现金流撑几月",
+      "title_en": "Paycheck stops: months of runway",
+      "blurb_zh": "备用金是月数，不是感觉。",
+      "blurb_en": "Runway is a month count, not a feeling."
+    },
+    {
+      "id": "07",
+      "col": "cash",
+      "status": "soon",
+      "title_zh": "退休后支出不是一条直线",
+      "title_en": "Retirement spending is not a straight line",
+      "blurb_zh": "前期、医护、遗赠，三段不是同一个斜率。",
+      "blurb_en": "Go-go, medical, bequest: three slopes, not one."
+    },
+    {
+      "id": "08",
+      "col": "cash",
+      "status": "soon",
+      "title_zh": "社保能替代多少工资",
+      "title_en": "How much wage social security replaces",
+      "blurb_zh": "替代率先算清楚，再谈缺口。",
+      "blurb_en": "Replacement rate first, gap second."
+    },
+    {
+      "id": "09",
+      "col": "cash",
+      "status": "soon",
+      "title_zh": "每月多存一笔，能提前几年",
+      "title_en": "Save a bit more, retire how many years sooner",
+      "blurb_zh": "边际的一笔，换的是时间不是奖状。",
+      "blurb_en": "The extra deposit buys time, not a certificate."
+    },
+    {
+      "id": "10",
+      "col": "cash",
+      "status": "soon",
+      "title_zh": "名义收益 vs 真实收益",
+      "title_en": "Nominal vs real return",
+      "blurb_zh": "先减去通胀，再谈「赚了」。",
+      "blurb_en": "Subtract inflation before you say you earned."
+    },
+    {
+      "id": "11",
+      "col": "cash",
+      "status": "soon",
+      "title_zh": "紧急备用金该放哪",
+      "title_en": "Where the emergency fund sits",
+      "blurb_zh": "能立刻变成现金的位置，才叫备用。",
+      "blurb_en": "It's a reserve only if it can become cash now."
+    },
+    {
+      "id": "12",
+      "col": "cash",
+      "status": "soon",
+      "title_zh": "大额支出会打断复利",
+      "title_en": "A lump expense interrupts compounding",
+      "blurb_zh": "中途抽走本金，后面的曲线要重画。",
+      "blurb_en": "Pull principal mid-stream and the curve redraws."
+    },
+    {
+      "id": "13",
+      "col": "cash",
+      "status": "soon",
+      "title_zh": "只管存钱的边界在哪",
+      "title_en": "Where savings-only stops working",
+      "blurb_zh": "002 的假设成立时很好；不成立时要看见。",
+      "blurb_en": "RETIRE-002's assumptions are fine until they aren't — see the edge."
+    },
+    {
+      "id": "14",
+      "col": "odds",
+      "status": "soon",
+      "title_zh": "60% 该不该当成会发生",
+      "title_en": "Should 60% count as will-happen",
+      "blurb_zh": "编辑规则和确定性不是同一件事。",
+      "blurb_en": "An editorial rule is not certainty."
+    },
+    {
+      "id": "15",
+      "col": "odds",
+      "status": "soon",
+      "title_zh": "赔率不是概率",
+      "title_en": "Odds are not probability",
+      "blurb_zh": "盘口是价格，里面掺了风险偏好和流动性。",
+      "blurb_en": "A market price mixes beliefs, risk preference, and liquidity."
+    },
+    {
+      "id": "16",
+      "col": "odds",
+      "status": "soon",
+      "title_zh": "期望值为正也可能连亏",
+      "title_en": "Positive EV can still lose a streak",
+      "blurb_zh": "均值不管路径。路径能把你打出去。",
+      "blurb_en": "The mean ignores the path. The path can knock you out."
+    },
+    {
+      "id": "17",
+      "col": "odds",
+      "status": "soon",
+      "title_zh": "相关事件不要相加",
+      "title_en": "Don't add correlated events",
+      "blurb_zh": "同一条新闻驱动的两个盘，不是两次独立机会。",
+      "blurb_en": "Two markets on one headline are not two independent shots."
+    },
+    {
+      "id": "18",
+      "col": "odds",
+      "status": "soon",
+      "title_zh": "长尾 5% 怎么标价",
+      "title_en": "How a 5% tail is priced",
+      "blurb_zh": "便宜的一边，往往是你没写进剧本的一边。",
+      "blurb_en": "The cheap side is often the side you didn't write into the script."
+    },
+    {
+      "id": "19",
+      "col": "odds",
+      "status": "soon",
+      "title_zh": "市场共识 vs 你的信息差",
+      "title_en": "Consensus vs your information",
+      "blurb_zh": "先问「我知道什么是盘口还不知道的」。",
+      "blurb_en": "Ask first: what do I know that the price doesn't."
+    },
+    {
+      "id": "20",
+      "col": "odds",
+      "status": "soon",
+      "title_zh": "「几乎肯定」其实还剩 20%",
+      "title_en": "Almost-certain still leaves 20%",
+      "blurb_zh": "80¢ 不是锁。五次里有一次反向。",
+      "blurb_en": "80¢ is not a lock. One in five still goes the other way."
+    },
+    {
+      "id": "21",
+      "col": "odds",
+      "status": "soon",
+      "title_zh": "赔率跳动是新闻还是噪音",
+      "title_en": "Odds jump: news or noise",
+      "blurb_zh": "没有新信息的波动，不要写成剧情。",
+      "blurb_en": "A move without news is not a plot twist."
+    },
+    {
+      "id": "22",
+      "col": "odds",
+      "status": "soon",
+      "title_zh": "下一周的连锁反应",
+      "title_en": "Next week's knock-ons",
+      "blurb_zh": "004 写成「会发生」之后，下一张骨牌才是文章。",
+      "blurb_en": "After WEEK-004 treats it as will-happen, the next tile is the piece."
+    },
+    {
+      "id": "23",
+      "col": "odds",
+      "status": "soon",
+      "title_zh": "把 60¢ 当成 100¢ 会错哪",
+      "title_en": "What breaks if 60¢ is treated as 100¢",
+      "blurb_zh": "主线可以按会发生写，预案不能删。",
+      "blurb_en": "You can write the main line as will-happen. You cannot delete the other 40%."
+    },
+    {
+      "id": "24",
+      "col": "odds",
+      "status": "soon",
+      "title_zh": "独立事件用乘法",
+      "title_en": "Independent events multiply",
+      "blurb_zh": "两件都发生，是相乘不是相加。",
+      "blurb_en": "Both happening is a product, not a sum."
+    },
+    {
+      "id": "25",
+      "col": "odds",
+      "status": "soon",
+      "title_zh": "校准：你说的 70% 真有七成吗",
+      "title_en": "Calibration: is your 70% actually 70%",
+      "blurb_zh": "直觉馆要的是校准，不是勇气。",
+      "blurb_en": "This hall wants calibration, not courage."
+    },
+    {
+      "id": "26",
+      "col": "odds",
+      "status": "soon",
+      "title_zh": "反向盘：不发生的价格",
+      "title_en": "The other side: price of won't-happen",
+      "blurb_zh": "Yes 和 No 加起来该接近 1，差的是费用和缝。",
+      "blurb_en": "Yes + No should sit near 1; the gap is fees and the crack."
+    },
+    {
+      "id": "27",
+      "col": "lock",
+      "status": "soon",
+      "title_zh": "价格站稳 90¢ 还会翻吗",
+      "title_en": "After 90¢ dwells, does it still flip",
+      "blurb_zh": "005 的问题原句。馆里先占位。",
+      "blurb_en": "LOCK-005's original question. A slot in this hall, not the essay."
+    },
+    {
+      "id": "28",
+      "col": "lock",
+      "status": "soon",
+      "title_zh": "扫尾盘的期望值",
+      "title_en": "Expected value of a sweep",
+      "blurb_zh": "剩下的 10¢ 要付翻盘和等待。",
+      "blurb_en": "The last 10¢ pays for both the flip risk and the wait."
+    },
+    {
+      "id": "29",
+      "col": "lock",
+      "status": "soon",
+      "title_zh": "锁价 vs 锁时间",
+      "title_en": "Lock price vs lock time",
+      "blurb_zh": "价格站稳和时间耗尽，不是同一种锁。",
+      "blurb_en": "A dwelt price and a burnt clock are different locks."
+    },
+    {
+      "id": "30",
+      "col": "lock",
+      "status": "soon",
+      "title_zh": "从 80¢ 到 90¢ 的最后一公里",
+      "title_en": "The last mile from 80¢ to 90¢",
+      "blurb_zh": "越靠近结算，同样 10¢ 含义不同。",
+      "blurb_en": "The same 10¢ means something else near resolution."
+    },
+    {
+      "id": "31",
+      "col": "lock",
+      "status": "soon",
+      "title_zh": "历史上同类盘怎么收",
+      "title_en": "How the same series resolved before",
+      "blurb_zh": "图书馆要的是同类，不是故事。",
+      "blurb_en": "The library wants the same series, not a story."
+    },
+    {
+      "id": "32",
+      "col": "lock",
+      "status": "soon",
+      "title_zh": "流动性枯竭时的价差",
+      "title_en": "Spread when liquidity dries",
+      "blurb_zh": "扫尾利润可能先被点差吃掉。",
+      "blurb_en": "The sweep's edge can vanish into the spread."
+    },
+    {
+      "id": "33",
+      "col": "lock",
+      "status": "soon",
+      "title_zh": "提前兑现 vs 拿到结算",
+      "title_en": "Exit early vs hold to resolve",
+      "blurb_zh": "锁住的是价格，不是你的持仓义务。",
+      "blurb_en": "The price can lock without locking you in."
+    },
+    {
+      "id": "34",
+      "col": "lock",
+      "status": "soon",
+      "title_zh": "「几乎锁死」的翻盘样本",
+      "title_en": "Flip samples after almost-locked",
+      "blurb_zh": "要看翻了的那些，不只看顺收的那些。",
+      "blurb_en": "Count the flips, not only the ones that sailed in."
+    },
+    {
+      "id": "35",
+      "col": "lock",
+      "status": "soon",
+      "title_zh": "价格档：0.90 / 0.95 / 0.99",
+      "title_en": "Price rungs: 0.90 / 0.95 / 0.99",
+      "blurb_zh": "三档不是线性的安全。",
+      "blurb_en": "Three rungs are not linear safety."
+    },
+    {
+      "id": "36",
+      "col": "lock",
+      "status": "soon",
+      "title_zh": "离结算越近，时间怎么衰减",
+      "title_en": "Time decay into resolution",
+      "blurb_zh": "同样的价格，剩余小时数不同，锁的硬度不同。",
+      "blurb_en": "Same price, fewer hours: a different hardness of lock."
+    },
+    {
+      "id": "37",
+      "col": "lock",
+      "status": "soon",
+      "title_zh": "两边对敲的锁",
+      "title_en": "A lock made of both sides",
+      "blurb_zh": "同时持有 Yes/No，锁的是价差不是方向。",
+      "blurb_en": "Holding both sides locks the spread, not the direction."
+    },
+    {
+      "id": "38",
+      "col": "lock",
+      "status": "soon",
+      "title_zh": "站稳一天 vs 站稳一周",
+      "title_en": "Dwell one day vs one week",
+      "blurb_zh": "005 问的是站稳之后还会不会翻。多久算站稳，本身是参数。",
+      "blurb_en": "LOCK-005 asks if it still flips after a dwell. How long counts as dwell is a parameter."
+    },
+    {
+      "id": "39",
+      "col": "lock",
+      "status": "soon",
+      "title_zh": "手续费会吃掉扫尾利润",
+      "title_en": "Fees can eat the sweep",
+      "blurb_zh": "剩下几分钱时，费率不再是小数。",
+      "blurb_en": "When a few cents remain, the fee is no longer a rounding error."
+    },
+    {
+      "id": "40",
+      "col": "lock",
+      "status": "soon",
+      "title_zh": "什么时候不该扫尾",
+      "title_en": "When not to sweep",
+      "blurb_zh": "不是每个站稳的价格都值得收。",
+      "blurb_en": "Not every dwelt price is worth collecting."
+    }
+  ]
+}

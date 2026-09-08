@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>INTUIT-009 · 金融直觉馆</title>
+<meta name="description" content="40 篇短课目录：退休/现金流、赔率/会发生吗、扫尾/价格锁。现在只有 01 写完，带一个能用的小计算器。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/009/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E009%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="INTUIT-009 · 金融直觉馆">
+<meta property="og:description" content="40 篇短课目录。对齐 002 / 004 / 005。只有 01 写完，带一个能用的小计算器。">
+<meta property="og:url" content="https://build-100.com/009/">
+<meta property="og:image" content="https://build-100.com/009/og-009.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="INTUIT-009 · 金融直觉馆">
+<meta name="twitter:description" content="40 short lessons. Only 01 is written, with a working calculator.">
+<meta name="twitter:image" content="https://build-100.com/009/og-009.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.35);
+    --delta: #fbbf24;
+    --loss: #f87171;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 44px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--accent); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p.sub { color: var(--muted); max-width: 36em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  .stat-row {
+    display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center;
+    margin-top: 20px;
+  }
+  .pill {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 6px 12px; border-radius: 999px;
+  }
+  .pill.live { color: var(--live); border-color: rgba(74, 222, 128, 0.4); }
+
+  .jump {
+    display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 22px;
+  }
+  .jump a, .jump button {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 8px 12px; border-radius: 4px; cursor: pointer;
+  }
+  .jump a:hover, .jump button:hover { color: var(--ink); border-color: var(--ink); }
+
+  .cols {
+    display: grid; grid-template-columns: 1fr; gap: 32px;
+    border-top: 1px solid var(--line); padding-top: 28px;
+  }
+  @media (min-width: 820px) {
+    .cols { grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+  }
+
+  .col-head { margin-bottom: 8px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .col-head .code { color: var(--accent); }
+  .col-head h2 { font-size: 1.02rem; font-weight: 700; margin: 6px 0 4px; }
+  .col-head .sub { color: var(--muted); font-size: 0.8rem; }
+  .col-head a.sub { display: inline-block; border-bottom: 1px solid transparent; }
+  .col-head a.sub:hover { border-bottom-color: var(--muted); color: var(--ink); }
+
+  .lesson {
+    display: grid; grid-template-columns: 2.4em 1fr auto; gap: 8px 10px;
+    width: 100%; text-align: left; background: none; border: 0;
+    border-top: 1px solid var(--line); padding: 11px 4px 11px 0;
+    cursor: pointer; color: inherit; font: inherit;
+  }
+  .lesson:first-of-type { border-top: none; }
+  .lesson:hover .title { color: var(--accent); }
+  .lesson .no {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: 11px; letter-spacing: 0.08em; color: var(--faint); padding-top: 3px;
+  }
+  .lesson.is-ready .no { color: var(--accent); }
+  .lesson .title { display: block; font-size: 0.9rem; font-weight: 650; line-height: 1.35; }
+  .lesson .blurb { display: block; font-size: 0.76rem; color: var(--muted); margin-top: 3px; line-height: 1.45; }
+  .st {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--faint); align-self: start; padding-top: 4px; white-space: nowrap;
+  }
+  .st.live { color: var(--live); }
+
+  .view { display: none; }
+  .view.show { display: block; }
+
+  .back-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    background: none; border: 0; color: var(--muted); cursor: pointer; padding: 0; margin-bottom: 22px;
+  }
+  .back-btn:hover { color: var(--ink); }
+
+  .lesson-kicker { color: var(--accent); margin-bottom: 14px; }
+  .lesson-view h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; line-height: 1.2;
+    text-wrap: balance; margin-bottom: 12px;
+  }
+  .lesson-blurb { color: var(--muted); max-width: 36em; margin-bottom: 28px; }
+  .lesson-body p { max-width: 36em; margin-bottom: 14px; color: var(--ink); }
+  .lesson-body p:last-child { margin-bottom: 0; }
+
+  .soon-box {
+    border: 1px dashed var(--line-strong); border-radius: 8px;
+    padding: clamp(20px, 3vw, 28px); background: var(--bg-raise); margin-bottom: 22px;
+  }
+  .soon-box .tag { color: var(--delta); margin-bottom: 10px; }
+  .soon-box p { color: var(--muted); max-width: 34em; }
+
+  .calc {
+    margin-top: 28px; border-top: 1px solid var(--line); padding-top: 28px;
+  }
+  .calc-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+  }
+  .calc h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
+  .calc .hint { color: var(--muted); font-size: 0.86rem; margin-bottom: 18px; }
+
+  .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .fields { grid-template-columns: 1fr; } }
+  .field label {
+    display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 8px;
+  }
+  .num-input {
+    width: 100%; background: var(--bg-raise); border: 1px solid var(--line-strong); color: var(--ink);
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.2rem; font-weight: 500;
+    padding: 10px 12px; border-radius: 4px;
+  }
+  .num-input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 1px rgba(56,189,248,0.25); }
+  .num-input:disabled { opacity: 0.4; cursor: not-allowed; }
+  .num-input::-webkit-outer-spin-button, .num-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+  .placeholder-calc {
+    border: 1px dashed var(--line-strong); border-radius: 8px; padding: 16px;
+    background: var(--bg-raise); opacity: 0.85;
+  }
+
+  .result-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 22px;
+  }
+  @media (max-width: 560px) { .result-grid { grid-template-columns: 1fr; } }
+  .stat {
+    border: 1px solid var(--line-strong); border-radius: 8px; padding: 16px 18px; background: var(--bg-raise);
+  }
+  .stat .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
+  .stat .v {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: clamp(1.35rem, 3vw, 1.8rem);
+    font-weight: 600; margin-top: 6px; line-height: 1.15;
+  }
+  .stat.gap { border-color: var(--delta); }
+  .stat.gap .v { color: var(--delta); }
+  .stat.catch { grid-column: 1 / -1; border-color: var(--accent); }
+  .stat.catch .v { color: var(--accent); }
+  .calc-err { color: var(--loss); font-size: 0.85rem; font-family: var(--mono); min-height: 1.2em; margin-top: 10px; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .err-banner {
+    display: none; margin-bottom: 20px; padding: 14px 18px;
+    border: 1px solid #f87171; border-radius: 6px; color: #fca5a5;
+    font-size: 0.9rem; background: rgba(248,113,113,0.08);
+  }
+  .err-banner.show { display: block; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">INTUIT<span>·009</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <div class="err-banner" id="errBanner"></div>
+
+  <div id="catalogView" class="view show">
+    <header class="hero">
+      <p class="mono eyebrow"><span class="tick">●</span>&nbsp; INTUIT-009 · FINANCIAL INTUITION</p>
+      <h1 data-en="Forty short lessons.<br>One calculator each.">四十篇短课。<br>一课一个小计算器。</h1>
+      <p class="sub" data-en="A catalog aligned with the live trio: <strong>RETIRE-002</strong> cashflow, <strong>WEEK-004</strong> odds ≥60% as will-happen, <strong>LOCK-005</strong> dwell-then-flip. Only lesson 01 is written. The rest are slots — no fake essays.">
+        目录对齐现有三件套：<strong>RETIRE-002</strong> 退休/现金流，<strong>WEEK-004</strong> 赔率/会发生吗，<strong>LOCK-005</strong> 扫尾/价格锁。现在只有 01 写完。其余是空位，不编课文。
+      </p>
+      <div class="stat-row">
+        <span class="pill live" id="readyPill" data-en="01 / 40 · LIVE">01 / 40 · 已写</span>
+        <span class="pill" data-en="39 coming">39 篇即将写入</span>
+      </div>
+    </header>
+
+    <div class="jump" id="jumpRow"></div>
+    <div class="cols" id="cols"></div>
+  </div>
+
+  <div id="lessonView" class="view lesson-view">
+    <button class="back-btn" id="backBtn" type="button" data-en="← Catalog">← 返回目录</button>
+    <p class="mono lesson-kicker" id="lessonKicker"></p>
+    <h1 id="lessonTitle"></h1>
+    <p class="lesson-blurb" id="lessonBlurb"></p>
+    <div id="lessonBody"></div>
+    <div id="calcMount"></div>
+    <div class="share-row" id="shareRow" hidden>
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareCanvasWrap">
+      <canvas id="shareCanvas" width="800" height="450"></canvas>
+      <p class="share-save-hint" data-en="Long-press or right-click to save the image.">长按或右键保存图片。</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="INTUIT-009 · one calculator per lesson">INTUIT-009 · 一课一计算器</span>
+</footer>
+
+<script type="module">
+  import { delayCost } from "./engine.js?v=1";
+
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  let catalog = null;
+  let lastDelay = null;
+  let copyTimer = null;
+
+  const $ = (id) => document.getElementById(id);
+  const t = (zh, en) => (lang === "en" ? en : zh);
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    document.title = l === "en" ? "INTUIT-009 · Financial intuition hall" : "INTUIT-009 · 金融直觉馆";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    if (catalog) {
+      renderCatalog();
+      syncFromHash();
+    }
+  }
+  $("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+
+  function txt(el, zh, en) {
+    el.dataset.zh = zh;
+    el.dataset.en = en;
+    el.innerHTML = lang === "en" ? en : zh;
+  }
+
+  function money(n) {
+    if (!Number.isFinite(n)) return "—";
+    const abs = Math.abs(n);
+    if (lang === "zh" && abs >= 10000) {
+      const w = n / 10000;
+      const s = Math.abs(w) >= 100 ? w.toFixed(0) : w.toFixed(1);
+      return s.replace(/\.0$/, "") + " 万";
+    }
+    return (n < 0 ? "−" : "") + Math.round(Math.abs(n)).toLocaleString(lang === "en" ? "en-US" : "zh-CN");
+  }
+
+  function pct(x) {
+    if (!Number.isFinite(x)) return "—";
+    return (x * 100).toFixed(1).replace(/\.0$/, "") + "%";
+  }
+
+  function renderCatalog() {
+    const colsEl = $("cols");
+    const jump = $("jumpRow");
+    colsEl.innerHTML = "";
+    jump.innerHTML = "";
+    const sample = document.createElement("button");
+    sample.type = "button";
+    txt(sample, "先看样课 01 →", "Open sample 01 →");
+    sample.addEventListener("click", () => { location.hash = "01"; });
+    jump.appendChild(sample);
+
+    catalog.columns.forEach((col) => {
+      const a = document.createElement("a");
+      a.href = "#col-" + col.id;
+      txt(a, col.title_zh, col.title_en);
+      jump.appendChild(a);
+
+      const lessons = catalog.lessons.filter((l) => l.col === col.id);
+      const readyN = lessons.filter((l) => l.status === "ready").length;
+      const wrap = document.createElement("section");
+      wrap.id = "col-" + col.id;
+
+      const head = document.createElement("div");
+      head.className = "col-head";
+      head.innerHTML = `<p class="mono code">${col.align} · ${col.code}</p><h2></h2><a class="sub" target="_blank" rel="noopener"></a><p class="mono" style="margin-top:8px"></p>`;
+      txt(head.querySelector("h2"), col.title_zh, col.title_en);
+      const link = head.querySelector("a.sub");
+      link.href = col.href;
+      txt(link, col.sub_zh, col.sub_en);
+      txt(head.querySelector("p.mono:last-child"), `${lessons.length} 课 · ${readyN} 篇已写`, `${lessons.length} lessons · ${readyN} written`);
+      wrap.appendChild(head);
+
+      lessons.forEach((les) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "lesson" + (les.status === "ready" ? " is-ready" : "");
+        btn.innerHTML = `<span class="no">${les.id}</span><span><span class="title"></span><span class="blurb"></span></span><span class="st ${les.status === "ready" ? "live" : ""}"></span>`;
+        txt(btn.querySelector(".title"), les.title_zh, les.title_en);
+        txt(btn.querySelector(".blurb"), les.blurb_zh, les.blurb_en);
+        txt(btn.querySelector(".st"), les.status === "ready" ? "样课" : "即将写入", les.status === "ready" ? "SAMPLE" : "SOON");
+        btn.addEventListener("click", () => { location.hash = les.id; });
+        wrap.appendChild(btn);
+      });
+      colsEl.appendChild(wrap);
+    });
+  }
+
+  function showCatalog() {
+    $("catalogView").classList.add("show");
+    $("lessonView").classList.remove("show");
+    $("shareCanvasWrap").classList.remove("show");
+  }
+
+  function openLesson(id) {
+    const les = catalog.lessons.find((l) => l.id === id);
+    if (!les) { showCatalog(); return; }
+    $("catalogView").classList.remove("show");
+    $("lessonView").classList.add("show");
+    $("shareCanvasWrap").classList.remove("show");
+    window.scrollTo(0, 0);
+
+    const col = catalog.columns.find((c) => c.id === les.col);
+    txt($("lessonKicker"), `${col.align} · ${les.id} / 40`, `${col.align} · ${les.id} / 40`);
+    txt($("lessonTitle"), les.title_zh, les.title_en);
+    txt($("lessonBlurb"), les.blurb_zh, les.blurb_en);
+
+    const body = $("lessonBody");
+    body.innerHTML = "";
+    const mount = $("calcMount");
+    mount.innerHTML = "";
+    lastDelay = null;
+
+    if (les.status === "ready" && les.body_zh) {
+      const art = document.createElement("div");
+      art.className = "lesson-body";
+      const paras = lang === "en" ? les.body_en : les.body_zh;
+      const other = lang === "en" ? les.body_zh : les.body_en;
+      paras.forEach((p, i) => {
+        const el = document.createElement("p");
+        el.dataset.zh = les.body_zh[i];
+        el.dataset.en = les.body_en[i];
+        el.textContent = p;
+        art.appendChild(el);
+      });
+      body.appendChild(art);
+      mount.appendChild(buildDelayCalc());
+      $("shareRow").hidden = false;
+      runDelay();
+    } else {
+      const box = document.createElement("div");
+      box.className = "soon-box";
+      box.innerHTML = `<p class="mono tag"></p><p></p>`;
+      txt(box.querySelector(".tag"), "即将写入", "Coming soon");
+      txt(box.querySelector("p"), "这篇课文还没写。目录位已经占上，不编假内容。下面是计算器位，尚未接入。", "This lesson is not written yet. The slot is reserved — no fake essay. Calculator mount below, not wired.");
+      body.appendChild(box);
+      mount.appendChild(buildPlaceholderCalc());
+      $("shareRow").hidden = true;
+    }
+  }
+
+  function buildPlaceholderCalc() {
+    const wrap = document.createElement("section");
+    wrap.className = "calc";
+    wrap.innerHTML = `
+      <p class="calc-label"></p>
+      <h2></h2>
+      <p class="hint"></p>
+      <div class="placeholder-calc">
+        <div class="fields">
+          <div class="field"><label></label><input class="num-input" disabled value="" placeholder="—"></div>
+          <div class="field"><label></label><input class="num-input" disabled value="" placeholder="—"></div>
+          <div class="field"><label></label><input class="num-input" disabled value="" placeholder="—"></div>
+        </div>
+      </div>`;
+    txt(wrap.querySelector(".calc-label"), "一个小计算器", "A small calculator");
+    txt(wrap.querySelector("h2"), "计算器位", "Calculator mount");
+    txt(wrap.querySelector(".hint"), "接入后：三个输入，立刻出一个数。现在是空壳。", "When written: three inputs, one number. Empty shell for now.");
+    const labels = wrap.querySelectorAll(".field label");
+    txt(labels[0], "输入 A", "Input A");
+    txt(labels[1], "输入 B", "Input B");
+    txt(labels[2], "输入 C", "Input C");
+    return wrap;
+  }
+
+  function buildDelayCalc() {
+    const wrap = document.createElement("section");
+    wrap.className = "calc";
+    wrap.id = "delayCalc";
+    wrap.innerHTML = `
+      <p class="calc-label"></p>
+      <h2></h2>
+      <p class="hint"></p>
+      <div class="fields">
+        <div class="field">
+          <label for="inMonthly"></label>
+          <input class="num-input" id="inMonthly" type="number" inputmode="decimal" min="0" max="10000000" value="3000">
+        </div>
+        <div class="field">
+          <label for="inYears"></label>
+          <input class="num-input" id="inYears" type="number" inputmode="decimal" min="1" max="80" value="30">
+        </div>
+        <div class="field">
+          <label for="inRate"></label>
+          <input class="num-input" id="inRate" type="number" inputmode="decimal" min="-50" max="50" step="0.1" value="6">
+        </div>
+        <div class="field">
+          <label for="inDelay"></label>
+          <input class="num-input" id="inDelay" type="number" inputmode="decimal" min="0" max="79" step="1" value="1">
+        </div>
+      </div>
+      <p class="calc-err" id="calcErr"></p>
+      <div class="result-grid" id="delayOut"></div>`;
+    txt(wrap.querySelector(".calc-label"), "一个小计算器", "A small calculator");
+    txt(wrap.querySelector("h2"), "晚 n 年，终点少多少", "Delay n years, miss how much");
+    txt(wrap.querySelector(".hint"), "期末年金，名义年化，不扣通胀。改数字即时重算。", "Ordinary annuity, nominal rate, no inflation. Recalculates as you type.");
+    const labels = wrap.querySelectorAll(".field label");
+    txt(labels[0], "每月存（元）", "Monthly deposit");
+    txt(labels[1], "还要存多少年", "Years until target");
+    txt(labels[2], "年化 %", "Annual %");
+    txt(labels[3], "晚几年开工", "Years of delay");
+    ["inMonthly", "inYears", "inRate", "inDelay"].forEach((id) => {
+      wrap.querySelector("#" + id).addEventListener("input", runDelay);
+    });
+    return wrap;
+  }
+
+  function runDelay() {
+    const monthly = Number($("inMonthly").value);
+    const years = Number($("inYears").value);
+    const annualRate = Number($("inRate").value) / 100;
+    const delayYears = Number($("inDelay").value);
+    const r = delayCost({ monthly, years, annualRate, delayYears });
+    const err = $("calcErr");
+    const out = $("delayOut");
+    if (!r.ok) {
+      lastDelay = null;
+      err.textContent = t("请输入有效数字（月存 0–1000 万，年数 1–80，年化 −50%～50%，晚几年 ≥0）。", "Enter valid numbers (monthly 0–10M, years 1–80, rate −50% to 50%, delay ≥0).");
+      out.innerHTML = "";
+      return;
+    }
+    err.textContent = "";
+    lastDelay = r;
+    const catchTxt = r.reachable
+      ? t(`每月 ${money(r.catchUpMonthly)}（多 ${money(r.extraMonthly)}）`, `${money(r.catchUpMonthly)} / mo (+${money(r.extraMonthly)})`)
+      : t("窗口已关，追不上", "Window closed — unreachable");
+    out.innerHTML = `
+      <div class="stat"><div class="k"></div><div class="v">${money(r.now)}</div></div>
+      <div class="stat"><div class="k"></div><div class="v">${money(r.later)}</div></div>
+      <div class="stat gap"><div class="k"></div><div class="v">${money(r.gap)} · ${pct(r.gapRatio)}</div></div>
+      <div class="stat catch"><div class="k"></div><div class="v">${catchTxt}</div></div>`;
+    const ks = out.querySelectorAll(".k");
+    txt(ks[0], "现在开始，到期约", "Start now, finish ≈");
+    txt(ks[1], `晚 ${r.delayYears} 年再开始`, `Start ${r.delayYears}y later`);
+    txt(ks[2], "少掉的那截", "The missing stretch");
+    txt(ks[3], "若要追上，每月要存", "To catch up, monthly becomes");
+  }
+
+  $("backBtn").addEventListener("click", () => {
+    history.pushState("", document.title, location.pathname + location.search);
+    showCatalog();
+  });
+
+  function shareText() {
+    if (!lastDelay) return t("INTUIT-009 金融直觉馆 https://build-100.com/009/", "INTUIT-009 https://build-100.com/009/");
+    const r = lastDelay;
+    return t(
+      `晚 ${r.delayYears} 年开始存，每月 ${money(r.monthly)}、年化 ${(r.annualRate * 100).toFixed(1)}%、${r.years} 年：现在开始约 ${money(r.now)}，晚到约 ${money(r.later)}，少 ${money(r.gap)}（${pct(r.gapRatio)}）。INTUIT-009 https://build-100.com/009/`,
+      `Delay ${r.delayYears}y, ${money(r.monthly)}/mo @ ${(r.annualRate * 100).toFixed(1)}% for ${r.years}y: start now ≈ ${money(r.now)}, late ≈ ${money(r.later)}, miss ${money(r.gap)} (${pct(r.gapRatio)}). INTUIT-009 https://build-100.com/009/`
+    );
+  }
+
+  $("copyBtn").addEventListener("click", () => {
+    const text = shareText();
+    const done = () => {
+      $("copyBtn").classList.add("copied");
+      txt($("copyBtn"), "✓ 已复制", "✓ Copied");
+      clearTimeout(copyTimer);
+      copyTimer = setTimeout(() => {
+        $("copyBtn").classList.remove("copied");
+        txt($("copyBtn"), "复制文案", "Copy summary");
+      }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, done);
+    } else { done(); }
+  });
+
+  $("shareImgBtn").addEventListener("click", () => {
+    const c = $("shareCanvas");
+    const ctx = c.getContext("2d");
+    const W = c.width, H = c.height;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.06)";
+    for (let x = 0; x < W; x += 36) for (let y = 0; y < H; y += 36) ctx.fillRect(x, y, 1, 1);
+    ctx.fillStyle = "#38bdf8";
+    ctx.font = "12px ui-monospace, Menlo, Consolas, monospace";
+    ctx.fillText("INTUIT-009  ·  01 / 40", 48, 56);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 36px Helvetica Neue, Helvetica, Arial, sans-serif";
+    ctx.fillText(t("晚一年，少多少", "One year late"), 48, 120);
+    const r = lastDelay;
+    ctx.fillStyle = "#fbbf24";
+    ctx.font = "700 64px ui-monospace, Menlo, Consolas, monospace";
+    ctx.fillText(r ? money(r.gap) : "—", 48, 220);
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "16px Helvetica Neue, Helvetica, Arial, sans-serif";
+    const line = r
+      ? t(`现在开始 ${money(r.now)}  ·  晚 ${r.delayYears} 年 ${money(r.later)}`, `Start now ${money(r.now)}  ·  late ${money(r.later)}`)
+      : "";
+    ctx.fillText(line, 48, 268);
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "13px ui-monospace, Menlo, Consolas, monospace";
+    ctx.fillText("build-100.com/009", 48, 400);
+    $("shareCanvasWrap").classList.add("show");
+  });
+
+  function syncFromHash() {
+    const id = (location.hash || "").replace(/^#/, "");
+    if (/^\d{2}$/.test(id)) openLesson(id);
+    else showCatalog();
+  }
+  window.addEventListener("hashchange", syncFromHash);
+
+  async function boot() {
+    try {
+      const res = await fetch("./lessons.json?v=1");
+      if (!res.ok) throw new Error("http " + res.status);
+      catalog = await res.json();
+    } catch (e) {
+      $("errBanner").textContent = t("目录加载失败。", "Failed to load catalog.");
+      $("errBanner").classList.add("show");
+      return;
+    }
+    applyLang(lang);
+  }
+  boot();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

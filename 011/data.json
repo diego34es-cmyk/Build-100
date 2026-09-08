@@ -1,0 +1,27 @@
+{
+  "code": "PAPER-011",
+  "updated": "2026-09-03",
+  "langs": ["zh", "es"],
+  "templates": [
+    {
+      "id": "nie",
+      "zh": "NIE",
+      "es": "NIE",
+      "count": 10
+    },
+    {
+      "id": "rent",
+      "zh": "租房合同材料",
+      "es": "Papeles del contrato de alquiler",
+      "count": 12
+    },
+    {
+      "id": "return",
+      "zh": "回国材料",
+      "es": "Papeles para volver a China",
+      "count": 14
+    }
+  ],
+  "note_zh": "清单正文在 engine.js 的 DEFAULT_TEMPLATES，离线也能用。",
+  "note_es": "Las partidas viven en DEFAULT_TEMPLATES de engine.js, para usar sin red."
+}

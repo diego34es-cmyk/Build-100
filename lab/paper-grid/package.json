@@ -1,0 +1,10 @@
+{
+  "name": "paper-grid",
+  "private": true,
+  "type": "module",
+  "description": "Paper-only grid worksheet. No live orders.",
+  "scripts": {
+    "test": "node --test engine.test.js",
+    "start": "python3 -m http.server 4180 --bind 127.0.0.1"
+  }
+}

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PAPER GRID · 纸面网格表</title>
+<meta name="description" content="只出工作表，不下单。等距网格把本金摊到买卖档。">
+<style>
+  :root { --bg:#060709; --ink:#edeff1; --muted:#7d848c; --line:rgba(237,239,241,.12); --bad:#f87171; --ok:#4ade80; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", sans-serif; background:var(--bg); color:var(--ink); }
+  main { max-width:720px; margin:0 auto; padding:28px 18px 64px; }
+  h1 { font-size:1.4rem; margin:0 0 8px; }
+  .sub { color:var(--muted); font-size:.95rem; margin-bottom:22px; }
+  label { display:block; font-size:.8rem; color:var(--muted); margin:12px 0 6px; }
+  input { width:100%; padding:10px 12px; border:1px solid var(--line); background:#0b0d10; color:var(--ink); border-radius:6px; }
+  button { margin-top:18px; padding:12px 18px; border:1px solid var(--ink); background:transparent; color:var(--ink); cursor:pointer; }
+  button:hover { background:var(--ink); color:var(--bg); }
+  .err { display:none; margin-top:14px; color:var(--bad); }
+  .err.show { display:block; }
+  .empty { color:var(--muted); margin-top:20px; }
+  table { width:100%; border-collapse:collapse; margin-top:22px; font-size:.9rem; }
+  th, td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); }
+  .tag { font-size:.75rem; letter-spacing:.08em; color:var(--ok); }
+  footer { margin-top:36px; color:var(--muted); font-size:.8rem; }
+</style>
+</head>
+<body>
+<main>
+  <p class="tag">DRY-RUN · NO LIVE ORDERS</p>
+  <h1>纸面网格表</h1>
+  <p class="sub">输入本金和价格带，得到一张买卖档工作表。不会连接交易所，不会下单。</p>
+  <form id="form">
+    <label for="capital">本金（记账货币）</label>
+    <input id="capital" type="number" min="1" step="1" value="1000" required>
+    <label for="lower">下沿价格</label>
+    <input id="lower" type="number" min="0" step="any" value="100" required>
+    <label for="upper">上沿价格</label>
+    <input id="upper" type="number" min="0" step="any" value="200" required>
+    <label for="levels">档数（2–40）</label>
+    <input id="levels" type="number" min="2" max="40" step="1" value="5" required>
+    <label for="price">当前价（须在带内）</label>
+    <input id="price" type="number" min="0" step="any" value="150" required>
+    <button type="submit">生成纸面表</button>
+  </form>
+  <p class="err" id="err" role="alert"></p>
+  <p class="empty" id="empty">还没有表。填完数字再生成。错误会留在表单上，不会假装成功。</p>
+  <div id="out" hidden>
+    <p id="sum"></p>
+    <table>
+      <thead><tr><th>档</th><th>价格</th><th>方向</th><th>数量</th><th>名义</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <footer>BUILD-100 lab · 与 004/005/012 一样：只做纸面。见 README 与 RUNBOOK。</footer>
+</main>
+<script type="module">
+import { buildGrid, summarize } from "./engine.js";
+
+const err = document.getElementById("err");
+const empty = document.getElementById("empty");
+const out = document.getElementById("out");
+const rows = document.getElementById("rows");
+
+document.getElementById("form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  err.classList.remove("show");
+  const plan = buildGrid({
+    capital: Number(document.getElementById("capital").value),
+    lower: Number(document.getElementById("lower").value),
+    upper: Number(document.getElementById("upper").value),
+    levels: Number(document.getElementById("levels").value),
+    price: Number(document.getElementById("price").value),
+  });
+  if (!plan.ok) {
+    out.hidden = true;
+    empty.hidden = true;
+    err.textContent = "无法生成：" + plan.error;
+    err.classList.add("show");
+    return;
+  }
+  empty.hidden = true;
+  out.hidden = false;
+  document.getElementById("sum").textContent = summarize(plan);
+  rows.replaceChildren();
+  for (const r of plan.rows) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${r.i}</td><td>${r.price}</td><td>${r.side}</td><td>${r.qty ? r.qty.toFixed(6) : "—"}</td><td>${r.notional.toFixed(2)}</td>`;
+    rows.appendChild(tr);
+  }
+});
+</script>
+</body>
+</html>

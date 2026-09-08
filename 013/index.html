@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>INDEX-013 · 分类总目录</title>
+<meta name="description" content="BUILD-100 的 001–013 筛选页。按金融、学习、生活、市场、工具效率过滤。Live 可进，In Dev 不给死链。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/013/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E013%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="INDEX-013 · 分类总目录">
+<meta property="og:description" content="001–013 按类筛选。Live 给真链接，尚未挂上的标 In Dev。">
+<meta property="og:url" content="https://build-100.com/013/">
+<meta property="og:image" content="https://build-100.com/013/og-013.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="INDEX-013 · 分类总目录">
+<meta name="twitter:description" content="Filter BUILD-100 sites 001–013 by category. Live links only — no dead ends.">
+<meta name="twitter:image" content="https://build-100.com/013/og-013.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #67e8f9;
+    --accent-glow: rgba(103, 232, 249, 0.35);
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, a:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    color: var(--muted); transition: color .2s; white-space: nowrap;
+  }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 44px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p.sub { color: var(--muted); max-width: 36em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 18px 0 8px; border-top: 1px solid var(--line);
+  }
+  .chip {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 8px 14px; border-radius: 999px; cursor: pointer; transition: all .18s;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--muted); }
+  .chip[aria-pressed="true"] {
+    color: var(--bg); background: var(--accent); border-color: var(--accent);
+    box-shadow: 0 0 16px var(--accent-glow);
+  }
+  .meta-line {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+    color: var(--faint); margin: 12px 0 8px; min-height: 1.2em;
+  }
+
+  .manifest { border-top: 1px solid var(--line); }
+  .m-row {
+    display: grid;
+    grid-template-columns: 72px 1.4fr 1fr auto 32px;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 8px;
+    border-bottom: 1px solid var(--line);
+    transition: background 0.2s;
+    color: inherit;
+  }
+  a.m-row:hover { background: rgba(237, 239, 241, 0.045); }
+  a.m-row:hover .m-arrow { transform: translate(3px, -3px); color: var(--ink); }
+  .m-row.is-here { box-shadow: inset 2px 0 0 var(--accent); }
+  .m-no {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: 13px; color: var(--faint);
+  }
+  .m-hash {
+    display: block; font-style: normal; font-size: 9px; letter-spacing: 0.06em;
+    color: var(--faint); opacity: 0.7; margin-top: 3px;
+  }
+  .m-name { font-weight: 700; font-size: clamp(1rem, 2vw, 1.25rem); }
+  .m-name span { display: block; font-weight: 400; font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+  .m-url { font-family: var(--mono); font-size: 12px; letter-spacing: 0.05em; color: var(--muted); overflow-wrap: anywhere; }
+  .m-cat { font-size: 0.86rem; color: var(--muted); }
+  .m-status {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+    display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .is-live .dot { background: var(--live); box-shadow: 0 0 8px rgba(74, 222, 128, 0.6); }
+  .is-live { color: var(--live); }
+  .is-dev .dot { border: 1px solid var(--muted); animation: pulse 2.4s ease-in-out infinite; }
+  .is-dev { color: var(--muted); }
+  @keyframes pulse { 50% { opacity: 0.3; } }
+  .m-arrow { color: var(--faint); font-size: 18px; transition: transform 0.2s, color 0.2s; text-align: right; }
+  .empty {
+    padding: 36px 8px; color: var(--muted); border-bottom: 1px solid var(--line);
+  }
+  @media (max-width: 760px) {
+    .m-row { grid-template-columns: 44px 1fr auto; }
+    .m-url, .m-arrow { display: none; }
+    .m-cat { grid-column: 2 / 4; grid-row: 2; }
+  }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  footer {
+    border-top: 1px solid var(--line); padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+    .is-dev .dot { animation: none; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">INDEX<span>·013</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; INDEX-013 · CATALOG</p>
+    <h1 data-en="001–013, filter by what you need.">001 到 013，按类找。</h1>
+    <p class="sub" data-en="A filterable Manifest for the first thirteen sites. <strong>Live</strong> rows open. <strong>In Dev</strong> rows stay unlinkable — no dead ends.">
+      首页清单的筛选页：金融 / 学习 / 生活 / 市场 / 工具效率。<strong>Live</strong> 给真链接，尚未挂上的标 <strong>In Dev</strong>，不给死链。
+    </p>
+  </header>
+
+  <div class="filters" id="filters" role="tablist" aria-label="分类"></div>
+  <p class="meta-line" id="metaLine"></p>
+  <div class="manifest" id="manifest"></div>
+
+  <div class="share-row">
+    <button class="share-btn" type="button" id="copyBtn" data-en="Copy this filter">复制当前筛选</button>
+    <button class="share-btn" type="button" id="cardBtn" data-en="Catalog card">生成卡片</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareCanvasWrap">
+    <canvas id="shareCanvas" width="1200" height="628" aria-label="目录卡片"></canvas>
+    <p class="share-save-hint" data-en="Right-click or long-press to save the image.">右键或长按图片即可保存。</p>
+  </div>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono">INDEX-013 · 分类总目录</span>
+</footer>
+
+<script id="catalogFallback" type="application/json">
+{"updated":"2026-09-03","filters":[{"id":"all","zh":"全部","en":"All"},{"id":"finance","zh":"金融","en":"Finance"},{"id":"learn","zh":"学习","en":"Learn"},{"id":"life","zh":"生活","en":"Life"},{"id":"market","zh":"市场","en":"Markets"},{"id":"tools","zh":"工具效率","en":"Tools"}],"sites":[{"id":"001","code":"COMBO","name":"COMBO-001","sub_zh":"AI 订阅最优搭配器 — 只为用到的付费","sub_en":"AI subscription optimizer — pay for what you use","cats":["tools"],"live":true,"url":"https://build-100.com/001/"},{"id":"002","code":"RETIRE","name":"RETIRE-002","sub_zh":"只管存钱的退休计算器 — 算算几岁能退","sub_en":"Savings-only retirement calculator — when can you retire?","cats":["finance"],"live":true,"url":"https://build-100.com/002/"},{"id":"003","code":"PROMPT","name":"PROMPT-003","sub_zh":"提示词结构器 — 大白话扩写成可粘贴提示词","sub_en":"Prompt builder — plain language expanded into paste-ready prompts","cats":["learn"],"live":true,"url":"https://build-100.com/003/"},{"id":"004","code":"WEEK","name":"WEEK-004","sub_zh":"下个礼拜会怎样 — 赔率≥60% 就当会发生","sub_en":"What happens next week — odds ≥60% count as will happen","cats":["market"],"live":true,"url":"https://build-100.com/004/"},{"id":"005","code":"LOCK","name":"LOCK-005","sub_zh":"扫尾盘图书馆 — 价格站稳某档之后还会不会翻","sub_en":"Lock library — after a price dwells, does it still flip","cats":["market"],"live":true,"url":"https://build-100.com/005/"},{"id":"006","code":"LIFE","name":"LIFE-006","sub_zh":"生活麻烦工具箱 — 订阅、租房、打包","sub_en":"Life-admin kit — subs, rent, packing lists","cats":["life","tools"],"live":false,"url":"https://build-100.com/006/"},{"id":"007","code":"PPP","name":"PPP-007","sub_zh":"欧洲 vs 国内购买力 — 同一篮子日子值多少","sub_en":"Europe vs China purchasing power — the same basket of days","cats":["life","market"],"live":false,"url":"https://build-100.com/007/"},{"id":"008","code":"REGRET","name":"REGRET-008","sub_zh":"订阅后悔计算器 — 已经买了的月费真正花在哪","sub_en":"Subscription regret — what those monthly fees actually cost","cats":["finance","tools"],"live":false,"url":"https://build-100.com/008/"},{"id":"009","code":"INTUIT","name":"INTUIT-009","sub_zh":"金融直觉馆 — 短课目录，一课一个小计算器","sub_en":"Finance intuition hall — short lessons, one tiny calculator each","cats":["finance","learn"],"live":false,"url":"https://build-100.com/009/"},{"id":"010","code":"DECIDE","name":"DECIDE-010","sub_zh":"决策一页纸 — 选项×标准，加权打分后导出","sub_en":"One-page decision — options × criteria, weighted scores, export","cats":["learn","tools"],"live":true,"url":"https://build-100.com/010/"},{"id":"011","code":"PAPER","name":"PAPER-011","sub_zh":"办事清单生成器 — NIE / 租房 / 回国材料","sub_en":"Paperwork lists — NIE, rental, going-home docs","cats":["life","tools"],"live":false,"url":"https://build-100.com/011/"},{"id":"012","code":"PLAY","name":"PLAY-012","sub_zh":"3 分钟金融小游戏 — 复利、赔率、杠杆","sub_en":"3-minute finance games — compounding, odds, leverage","cats":["finance"],"live":false,"url":"https://build-100.com/012/"},{"id":"013","code":"INDEX","name":"INDEX-013","sub_zh":"分类总目录 — 按金融 / 学习 / 生活 / 市场筛选","sub_en":"Catalog — filter by finance / learn / life / markets","cats":[],"live":true,"url":"https://build-100.com/013/"}]}
+</script>
+
+<script type="module">
+  import { FILTERS, catLabels, counts, filterSites, markLive, normalizeCat, rowHref } from "./engine.js";
+
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  let catalog = JSON.parse(document.getElementById("catalogFallback").textContent);
+  let cat = normalizeCat((location.hash || "").replace(/^#/, "") || "all");
+
+  const $ = (id) => document.getElementById(id);
+  function t(zh, en) { return lang === "en" ? en : zh; }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    renderFilters();
+    renderList();
+  }
+  $("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+
+  function rowHash(id, name) {
+    const src = id + (name || "");
+    let seed = 7;
+    for (const ch of src) seed = (seed * 31 + ch.charCodeAt(0)) >>> 0;
+    seed = Math.imul(seed ^ (seed >>> 13), 0x5bd1e995) >>> 0;
+    seed = (seed ^ (seed >>> 15)) >>> 0;
+    return "0x" + ("00000" + (seed % 0xffffff).toString(16)).slice(-6).toUpperCase();
+  }
+
+  function renderFilters() {
+    const box = $("filters");
+    box.innerHTML = FILTERS.map((f) => {
+      const label = lang === "en" ? f.en : f.zh;
+      const on = f.id === cat;
+      return `<button type="button" class="chip" role="tab" data-cat="${f.id}" aria-pressed="${on}">${label}</button>`;
+    }).join("");
+  }
+
+  function renderList() {
+    const sites = filterSites(catalog.sites, cat);
+    const all = counts(catalog.sites);
+    const shown = counts(sites);
+    const fname = FILTERS.find((f) => f.id === cat);
+    const fnameLabel = fname ? (lang === "en" ? fname.en : fname.zh) : cat;
+    $("metaLine").textContent = t(
+      `${shown.total} 个 · Live ${String(shown.live).padStart(3, "0")} · In Dev ${String(shown.dev).padStart(3, "0")} · ${fnameLabel}（全表 ${all.total}）`,
+      `${shown.total} · Live ${String(shown.live).padStart(3, "0")} · In Dev ${String(shown.dev).padStart(3, "0")} · ${fnameLabel} (of ${all.total})`
+    );
+
+    const root = $("manifest");
+    if (!sites.length) {
+      root.innerHTML = `<p class="empty">${t("这一类还没有项目。", "Nothing in this category yet.")}</p>`;
+      return;
+    }
+
+    root.innerHTML = sites.map((s) => {
+      const href = rowHref(s);
+      const sub = lang === "en" ? (s.sub_en || s.sub_zh) : (s.sub_zh || s.sub_en);
+      const cats = catLabels(s.cats, lang).join(" · ") || "—";
+      const status = s.live
+        ? `<span class="m-status is-live"><i class="dot"></i>Live</span>`
+        : `<span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span>`;
+      const urlText = s.live ? ("build-100.com/" + s.id) : t("尚未挂上", "Not shipped");
+      const here = s.id === "013" ? " is-here" : "";
+      const inner = `
+        <span class="m-no">${s.id}<i class="m-hash">${rowHash(s.id, s.name)}</i></span>
+        <span class="m-name">${esc(s.name)}<span>${esc(sub)}</span></span>
+        <span class="m-cat">${esc(cats)}<span class="mono" style="margin-left:10px">${esc(urlText)}</span></span>
+        ${status}
+        <span class="m-arrow">${href ? "↗" : ""}</span>`;
+      if (href) {
+        return `<a class="m-row${here}" href="${esc(href)}">${inner}</a>`;
+      }
+      return `<div class="m-row${here}" aria-disabled="true">${inner}</div>`;
+    }).join("");
+  }
+
+  function esc(s) {
+    return String(s ?? "")
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+  }
+
+  function setCat(next) {
+    cat = normalizeCat(next);
+    const url = new URL(location.href);
+    url.hash = cat === "all" ? "" : cat;
+    history.replaceState(null, "", url);
+    renderFilters();
+    renderList();
+  }
+
+  $("filters").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-cat]");
+    if (!btn) return;
+    setCat(btn.dataset.cat);
+  });
+  window.addEventListener("hashchange", () => setCat((location.hash || "").replace(/^#/, "") || "all"));
+
+  $("copyBtn").addEventListener("click", () => {
+    const url = location.href;
+    const btn = $("copyBtn");
+    const done = () => {
+      btn.classList.add("copied");
+      const origZh = btn.dataset.zh || "复制当前筛选";
+      const origEn = btn.dataset.en || "Copy this filter";
+      btn.textContent = t("已复制 ✓", "Copied ✓");
+      setTimeout(() => {
+        btn.classList.remove("copied");
+        btn.textContent = lang === "en" ? origEn : origZh;
+      }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done, () => fallbackCopy(url, done));
+    } else fallbackCopy(url, done);
+  });
+  function fallbackCopy(text, cb) {
+    const ta = document.createElement("textarea");
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    ta.remove();
+    cb();
+  }
+
+  $("cardBtn").addEventListener("click", () => {
+    const canvas = $("shareCanvas");
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.06)";
+    for (let x = 0; x < W; x += 36) for (let y = 0; y < H; y += 36) ctx.fillRect(x, y, 1, 1);
+    ctx.fillStyle = "#67e8f9";
+    ctx.font = "22px ui-monospace, SF Mono, Menlo, monospace";
+    ctx.fillText("INDEX-013", 64, 72);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 44px Helvetica Neue, PingFang SC, sans-serif";
+    ctx.fillText(t("001–013 分类总目录", "001–013 catalog"), 64, 140);
+    const sites = filterSites(catalog.sites, cat);
+    ctx.font = "22px ui-monospace, SF Mono, Menlo, monospace";
+    sites.slice(0, 8).forEach((s, i) => {
+      ctx.fillStyle = s.live ? "#4ade80" : "#7d848c";
+      const mark = s.live ? "LIVE" : "DEV ";
+      ctx.fillText(s.id + "  " + mark + "  " + s.code, 64, 210 + i * 40);
+    });
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "20px ui-monospace, SF Mono, Menlo, monospace";
+    ctx.fillText("build-100.com/013", 64, H - 56);
+    $("shareCanvasWrap").classList.add("show");
+  });
+
+  async function probeLive() {
+    const jobs = catalog.sites.map(async (s, i) => {
+      if (s.live) return;
+      try {
+        const r = await fetch("/" + s.id + "/", { method: "GET", cache: "no-store" });
+        if (!r.ok) return;
+        const text = await r.text();
+        // Directory listings and empty folders are 200 on some servers — only promote a real page.
+        if (/<html[\s>]/i.test(text) && /nav-brand|BUILD-100/i.test(text)) {
+          catalog.sites[i] = markLive(s, true);
+        }
+      } catch (e) {}
+    });
+    await Promise.all(jobs);
+    renderList();
+  }
+
+  async function boot() {
+    try {
+      const r = await fetch("./catalog.json", { cache: "no-store" });
+      if (r.ok) catalog = await r.json();
+    } catch (e) {}
+    renderFilters();
+    renderList();
+    probeLive();
+  }
+
+  if (lang === "en") applyLang("en");
+  boot();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>
