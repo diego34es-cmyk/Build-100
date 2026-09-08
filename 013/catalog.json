@@ -1,0 +1,143 @@
+{
+  "updated": "2026-09-03",
+  "filters": [
+    { "id": "all", "zh": "全部", "en": "All" },
+    { "id": "finance", "zh": "金融", "en": "Finance" },
+    { "id": "learn", "zh": "学习", "en": "Learn" },
+    { "id": "life", "zh": "生活", "en": "Life" },
+    { "id": "market", "zh": "市场", "en": "Markets" },
+    { "id": "tools", "zh": "工具效率", "en": "Tools" }
+  ],
+  "sites": [
+    {
+      "id": "001",
+      "code": "COMBO",
+      "name": "COMBO-001",
+      "sub_zh": "AI 订阅最优搭配器 — 只为用到的付费",
+      "sub_en": "AI subscription optimizer — pay for what you use",
+      "cats": ["tools"],
+      "live": true,
+      "url": "https://build-100.com/001/"
+    },
+    {
+      "id": "002",
+      "code": "RETIRE",
+      "name": "RETIRE-002",
+      "sub_zh": "只管存钱的退休计算器 — 算算几岁能退",
+      "sub_en": "Savings-only retirement calculator — when can you retire?",
+      "cats": ["finance"],
+      "live": true,
+      "url": "https://build-100.com/002/"
+    },
+    {
+      "id": "003",
+      "code": "PROMPT",
+      "name": "PROMPT-003",
+      "sub_zh": "提示词结构器 — 大白话扩写成可粘贴提示词",
+      "sub_en": "Prompt builder — plain language expanded into paste-ready prompts",
+      "cats": ["learn"],
+      "live": true,
+      "url": "https://build-100.com/003/"
+    },
+    {
+      "id": "004",
+      "code": "WEEK",
+      "name": "WEEK-004",
+      "sub_zh": "下个礼拜会怎样 — 赔率≥60% 就当会发生",
+      "sub_en": "What happens next week — odds ≥60% count as will happen",
+      "cats": ["market"],
+      "live": true,
+      "url": "https://build-100.com/004/"
+    },
+    {
+      "id": "005",
+      "code": "LOCK",
+      "name": "LOCK-005",
+      "sub_zh": "扫尾盘图书馆 — 价格站稳某档之后还会不会翻",
+      "sub_en": "Lock library — after a price dwells, does it still flip",
+      "cats": ["market"],
+      "live": true,
+      "url": "https://build-100.com/005/"
+    },
+    {
+      "id": "006",
+      "code": "LIFE",
+      "name": "LIFE-006",
+      "sub_zh": "生活麻烦工具箱 — 订阅、租房、打包",
+      "sub_en": "Life-admin kit — subs, rent, packing lists",
+      "cats": ["life", "tools"],
+      "live": false,
+      "url": "https://build-100.com/006/"
+    },
+    {
+      "id": "007",
+      "code": "PPP",
+      "name": "PPP-007",
+      "sub_zh": "欧洲 vs 国内购买力 — 同一篮子日子值多少",
+      "sub_en": "Europe vs China purchasing power — the same basket of days",
+      "cats": ["life", "market"],
+      "live": false,
+      "url": "https://build-100.com/007/"
+    },
+    {
+      "id": "008",
+      "code": "REGRET",
+      "name": "REGRET-008",
+      "sub_zh": "订阅后悔计算器 — 已经买了的月费真正花在哪",
+      "sub_en": "Subscription regret — what those monthly fees actually cost",
+      "cats": ["finance", "tools"],
+      "live": false,
+      "url": "https://build-100.com/008/"
+    },
+    {
+      "id": "009",
+      "code": "INTUIT",
+      "name": "INTUIT-009",
+      "sub_zh": "金融直觉馆 — 短课目录，一课一个小计算器",
+      "sub_en": "Finance intuition hall — short lessons, one tiny calculator each",
+      "cats": ["finance", "learn"],
+      "live": false,
+      "url": "https://build-100.com/009/"
+    },
+    {
+      "id": "010",
+      "code": "DECIDE",
+      "name": "DECIDE-010",
+      "sub_zh": "决策一页纸 — 选项×标准，加权打分后导出",
+      "sub_en": "One-page decision — options × criteria, weighted scores, export",
+      "cats": ["learn", "tools"],
+      "live": true,
+      "url": "https://build-100.com/010/"
+    },
+    {
+      "id": "011",
+      "code": "PAPER",
+      "name": "PAPER-011",
+      "sub_zh": "办事清单生成器 — NIE / 租房 / 回国材料",
+      "sub_en": "Paperwork lists — NIE, rental, going-home docs",
+      "cats": ["life", "tools"],
+      "live": false,
+      "url": "https://build-100.com/011/"
+    },
+    {
+      "id": "012",
+      "code": "PLAY",
+      "name": "PLAY-012",
+      "sub_zh": "3 分钟金融小游戏 — 复利、赔率、杠杆",
+      "sub_en": "3-minute finance games — compounding, odds, leverage",
+      "cats": ["finance"],
+      "live": false,
+      "url": "https://build-100.com/012/"
+    },
+    {
+      "id": "013",
+      "code": "INDEX",
+      "name": "INDEX-013",
+      "sub_zh": "分类总目录 — 按金融 / 学习 / 生活 / 市场筛选",
+      "sub_en": "Catalog — filter by finance / learn / life / markets",
+      "cats": [],
+      "live": true,
+      "url": "https://build-100.com/013/"
+    }
+  ]
+}

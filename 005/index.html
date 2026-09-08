@@ -1,0 +1,893 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOCK-005 · 扫尾盘图书馆</title>
+<meta name="description" content="按系列查：价格站稳某档之后，历史上还会不会翻。LOCK-005 扫尾盘图书馆，基于 dwell→flip 的历史研究摘要。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/005/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E005%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="LOCK-005 · 扫尾盘图书馆">
+<meta property="og:description" content="价格站稳某档之后，历史上还会不会翻？按系列浏览 dwell→flip 锁价摘要。">
+<meta property="og:url" content="https://build-100.com/005/?v=3">
+<meta property="og:image" content="https://build-100.com/005/og-lock.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="LOCK-005 · 扫尾盘图书馆">
+<meta name="twitter:description" content="Browse historical dwell→flip lock summaries for recurring Polymarket series.">
+<meta name="twitter:image" content="https://build-100.com/005/og-lock.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --neon: #f5c542;
+    --neon-glow: rgba(245, 197, 66, 0.35);
+    --delta: #fbbf24;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(circle at 82% 0%, rgba(245, 197, 66, 0.09), transparent 27rem),
+      radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: auto, 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--neon); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  button, input, select { font: inherit; }
+  .mono {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  [hidden] { display: none !important; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    color: var(--muted); transition: color .2s;
+  }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; }
+  .nav-brand span { color: var(--neon); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s;
+    white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); background: rgba(237, 239, 241, 0.05); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+  .hero { margin-bottom: clamp(36px, 6vh, 56px); }
+  .hero-top {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 24px;
+    margin-bottom: 18px;
+  }
+  .hero .eyebrow { color: var(--neon); padding-top: 8px; }
+  .hero .eyebrow .tick { color: var(--neon); }
+  .edition-badge {
+    display: inline-flex; align-items: center; gap: 9px; flex: 0 0 auto;
+    border: 1px solid rgba(245, 197, 66, 0.5); background: rgba(245, 197, 66, 0.08);
+    padding: 8px 12px; color: var(--ink); font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.05em; white-space: nowrap;
+  }
+  .badge-kicker { color: var(--neon); letter-spacing: 0.15em; }
+  .badge-sep { color: var(--faint); }
+  .edition-badge time { color: var(--muted); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: -0.02em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero h1::after {
+    content: ""; display: inline-block; width: 0.35em; height: 0.35em; margin: 0 0 0.1em 0.16em;
+    background: var(--neon); box-shadow: 0 0 16px var(--neon-glow);
+  }
+  .hero > p {
+    color: var(--muted); max-width: 40em; font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  }
+  .hero > p strong { color: var(--ink); font-weight: 500; }
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px; margin-top: 34px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    background: var(--line);
+  }
+  .hero-stat { padding: 16px 14px 14px; background: var(--bg); }
+  .hero-stat .stat-label { display: block; color: var(--faint); font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; }
+  .hero-stat strong { display: block; margin-top: 4px; color: var(--neon); font-family: var(--mono); font-size: 1.2rem; font-weight: 500; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field:last-of-type { border-bottom: 1px solid var(--line); }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); letter-spacing: 0.08em; }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; }
+
+  .read-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .read-card {
+    min-height: 172px; padding: 18px 16px; border: 1px solid var(--line);
+    border-top: 2px solid var(--line-strong); background: rgba(237, 239, 241, 0.018);
+  }
+  .read-card:first-child { border-top-color: var(--neon); }
+  .read-card:nth-child(2) { border-top-color: rgba(245, 197, 66, 0.55); }
+  .read-card:nth-child(3) { border-top-color: var(--line-strong); }
+  .read-mark { display: block; color: var(--neon); font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; margin-bottom: 24px; }
+  .read-card:nth-child(3) .read-mark { color: var(--muted); }
+  .read-card h3 { font-size: 1rem; line-height: 1.35; margin-bottom: 8px; }
+  .read-card p { color: var(--muted); font-size: 0.84rem; line-height: 1.55; }
+  .dwell-table-wrap { margin-top: 22px; border-top: 1px solid var(--line); }
+  .dwell-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  .dwell-table th, .dwell-table td { padding: 11px 0; text-align: left; border-bottom: 1px solid var(--line); }
+  .dwell-table th { color: var(--faint); font-family: var(--mono); font-size: 10px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; }
+  .dwell-table td:last-child { color: var(--neon); font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  .controls { display: grid; gap: 16px; }
+  .search-label { display: block; }
+  .control-label { display: block; color: var(--faint); font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; margin-bottom: 8px; }
+  .search-shell { position: relative; display: block; }
+  .search-shell svg { position: absolute; left: 14px; top: 50%; width: 16px; height: 16px; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+  .search-input {
+    width: 100%; padding: 13px 14px 13px 42px; border: 1px solid var(--line-strong); border-radius: 4px;
+    background: rgba(237, 239, 241, 0.025); color: var(--ink); outline: none; transition: border-color .2s, background .2s;
+  }
+  .search-input::placeholder { color: var(--faint); }
+  .search-input:focus { border-color: var(--neon); background: rgba(245, 197, 66, 0.035); }
+  .filter-line { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; }
+  .chips { display: flex; gap: 7px; flex-wrap: wrap; }
+  .chip {
+    border: 1px solid var(--line-strong); border-radius: 999px; padding: 8px 12px;
+    background: transparent; color: var(--muted); cursor: pointer; font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; transition: color .2s, border-color .2s, background .2s;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--muted); }
+  .chip.active { color: var(--bg); border-color: var(--neon); background: var(--neon); }
+  .sort-control { display: flex; align-items: center; gap: 9px; flex: 0 0 auto; }
+  .sort-control .control-label { margin: 0; }
+  .sort-select {
+    appearance: none; min-width: 126px; padding: 8px 28px 8px 10px; border: 1px solid var(--line-strong); border-radius: 3px;
+    background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='m1 1 4 4 4-4' fill='none' stroke='%237d848c' stroke-width='1.2'/%3E%3C/svg%3E") no-repeat right 10px center;
+    color: var(--ink); font-family: var(--mono); font-size: 10px; cursor: pointer;
+  }
+
+  .shelf-field { padding-bottom: 0; }
+  .shelf-heading { justify-content: space-between; }
+  .shelf-heading .field-head { margin-bottom: 0; }
+  .results-count { color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; }
+  .shelf {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
+    margin-top: 18px;
+  }
+  .shelf-card {
+    position: relative; display: block; width: 100%; min-height: 215px; padding: 17px 16px 14px;
+    border: 1px solid var(--line); border-radius: 2px; background: rgba(237, 239, 241, 0.018);
+    color: var(--ink); cursor: pointer; text-align: left; transition: transform .2s, border-color .2s, background .2s, box-shadow .2s;
+  }
+  .shelf-card::before {
+    content: ""; position: absolute; top: -1px; left: 16px; width: 28px; height: 2px; background: var(--line-strong);
+    transition: width .2s, background .2s;
+  }
+  .shelf-card:hover { transform: translateY(-2px); border-color: var(--line-strong); background: rgba(245, 197, 66, 0.035); }
+  .shelf-card:hover::before, .shelf-card.selected::before { width: 62px; background: var(--neon); }
+  .shelf-card.selected { border-color: rgba(245, 197, 66, 0.65); box-shadow: 0 0 0 1px rgba(245, 197, 66, 0.12) inset; }
+  .card-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .category-tag, .status-badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.13em; text-transform: uppercase; }
+  .category-tag { color: var(--muted); }
+  .status-badge { padding: 4px 7px; border: 1px solid var(--line-strong); color: var(--muted); }
+  .status-badge.ready { color: var(--live); border-color: rgba(74, 222, 128, 0.42); }
+  .status-badge.thin { color: var(--neon); border-color: rgba(245, 197, 66, 0.48); }
+  .status-badge.insufficient { color: var(--faint); border-style: dashed; }
+  .shelf-card h3 { min-height: 52px; padding: 19px 0 13px; font-size: 1.05rem; line-height: 1.32; font-weight: 600; }
+  .card-rule { height: 1px; background: var(--line); }
+  .card-metrics { display: grid; grid-template-columns: 1fr 1fr 0.7fr; gap: 10px; padding: 15px 0 13px; }
+  .metric-label { display: block; color: var(--faint); font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; line-height: 1.25; text-transform: uppercase; }
+  .metric-value { display: block; margin-top: 5px; color: var(--neon); font-family: var(--mono); font-size: 1.08rem; font-variant-numeric: tabular-nums; font-weight: 500; }
+  .metric-value.muted { color: var(--muted); }
+  .card-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--faint); font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; }
+  .card-arrow { color: var(--muted); font-size: 15px; transition: color .2s, transform .2s; }
+  .shelf-card:hover .card-arrow { color: var(--neon); transform: translate(2px, -2px); }
+  .empty-state { margin-top: 18px; padding: 28px 16px; border: 1px dashed var(--line-strong); color: var(--muted); text-align: center; }
+
+  .entry-panel {
+    margin-top: 28px; padding: clamp(22px, 4vw, 34px); border: 1px solid rgba(245, 197, 66, 0.46);
+    background: linear-gradient(145deg, rgba(245, 197, 66, 0.065), rgba(237, 239, 241, 0.018) 45%, rgba(6, 7, 9, 0.4));
+    animation: reveal .45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes reveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .entry-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+  .entry-kicker { color: var(--neon); margin-bottom: 10px; }
+  .entry-head h2 { font-size: clamp(1.45rem, 3.5vw, 2.15rem); line-height: 1.2; text-wrap: balance; }
+  .entry-sub { margin-top: 8px; color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em; }
+  .close-btn {
+    flex: 0 0 auto; border: 1px solid var(--line-strong); background: transparent; color: var(--muted);
+    padding: 7px 10px; cursor: pointer; font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    transition: color .2s, border-color .2s;
+  }
+  .close-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .entry-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 28px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .entry-stat { padding: 14px 12px 13px 0; }
+  .entry-stat + .entry-stat { padding-left: 12px; border-left: 1px solid var(--line); }
+  .entry-stat-label { display: block; color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; }
+  .entry-stat-value { display: block; margin-top: 4px; color: var(--neon); font-family: var(--mono); font-size: 1.35rem; font-variant-numeric: tabular-nums; font-weight: 500; }
+  .entry-stat-value.status-ready { color: var(--live); font-size: 0.95rem; padding-top: 4px; }
+  .entry-stat-value.status-thin { color: var(--neon); font-size: 0.95rem; padding-top: 4px; }
+  .entry-stat-value.status-insufficient { color: var(--muted); font-size: 0.95rem; padding-top: 4px; }
+  .curve-section { margin-top: 28px; }
+  .curve-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+  .curve-title { font-size: 1rem; font-weight: 700; }
+  .curve-legend { color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; }
+  .curve-list { border-top: 1px solid var(--line); }
+  .curve-row { display: grid; grid-template-columns: 50px minmax(0, 1fr) 58px 56px; align-items: center; gap: 10px; min-height: 38px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 10px; font-variant-numeric: tabular-nums; }
+  .curve-row.at-lock { background: rgba(245, 197, 66, 0.075); }
+  .curve-price { color: var(--ink); }
+  .curve-row.at-lock .curve-price { color: var(--neon); font-weight: 700; }
+  .curve-track { height: 7px; background: rgba(237, 239, 241, 0.09); overflow: hidden; }
+  .curve-fill { height: 100%; min-width: 3px; background: var(--neon); box-shadow: 0 0 9px rgba(245, 197, 66, 0.25); transition: width .35s ease; }
+  .curve-flip { color: var(--ink); text-align: right; }
+  .curve-n { color: var(--faint); text-align: right; }
+  .curve-empty { padding: 22px 0 4px; color: var(--muted); font-size: 0.88rem; }
+  .curve-scale { display: flex; justify-content: space-between; margin-top: 8px; color: var(--faint); font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; }
+  .entry-note { margin-top: 24px; color: var(--ink); font-size: 0.9rem; line-height: 1.55; }
+  .entry-caveat { margin-top: 8px; color: var(--muted); font-size: 0.8rem; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237, 239, 241, 0.05); }
+  .share-btn.primary { border-color: var(--neon); background: rgba(245, 197, 66, 0.1); }
+  .share-btn.primary:hover { background: var(--neon); color: var(--bg); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 5px; }
+  .share-hint { margin-top: 8px; color: var(--faint); font-size: 0.8rem; font-family: var(--mono); letter-spacing: 0.04em; }
+  .disclaimer { margin-top: 24px; color: var(--faint); font-size: 0.8rem; }
+  .load-error { margin-top: 18px; padding: 14px 16px; border: 1px solid rgba(248, 113, 113, 0.5); color: #fecaca; background: rgba(248, 113, 113, 0.08); font-size: 0.88rem; }
+
+  footer {
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+    border-top: 1px solid var(--line); padding: 24px var(--pad);
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (max-width: 680px) {
+    .hero-top { display: block; }
+    .edition-badge { margin-top: 16px; }
+    .read-grid { grid-template-columns: 1fr; }
+    .read-card { min-height: auto; }
+    .read-mark { margin-bottom: 14px; }
+    .filter-line { display: block; }
+    .sort-control { margin-top: 16px; justify-content: space-between; }
+    .sort-select { flex: 1; }
+    .shelf { grid-template-columns: 1fr; }
+    .entry-head { gap: 12px; }
+    .close-btn { padding: 7px 8px; }
+    .curve-row { grid-template-columns: 42px minmax(0, 1fr) 48px 42px; gap: 7px; }
+    footer { display: grid; gap: 8px; }
+  }
+  @media (max-width: 420px) {
+    .nav-back { font-size: 11px; }
+    .nav-brand { font-size: 13px; }
+    .nav-lang { padding: 7px 11px; }
+    .hero-stats { grid-template-columns: 1fr; }
+    .hero-stat { padding: 11px 14px; }
+    .entry-stats { grid-template-columns: 1fr; }
+    .entry-stat, .entry-stat + .entry-stat { padding: 12px 0; border-left: 0; }
+    .entry-stat + .entry-stat { border-top: 1px solid var(--line); }
+    .curve-row { grid-template-columns: 40px minmax(0, 1fr) 45px 39px; font-size: 9px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* 禁用所有动画 */
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">LOCK<span>·005</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <div class="hero-top">
+      <p class="mono eyebrow"><span class="tick">●</span>&nbsp; <span data-en="LOCK-005 · SWEEP LIBRARY">LOCK-005 · 扫尾盘图书馆</span></p>
+      <div class="edition-badge" id="editionBadge" aria-label="Edition">
+        <span class="badge-kicker" data-en="EDITION">版次</span>
+          <strong id="editionNumber" data-en="Edition 1">第 1 版</strong>
+        <span class="badge-sep">·</span>
+        <time id="editionDate" datetime="2026-08-17">2026-08-17</time>
+      </div>
+    </div>
+    <h1 data-en="Does it flip after it locks?">站稳以后，还会翻吗？</h1>
+    <p data-en="A historical shelf for recurring Polymarket series: after a side holds a price long enough, how often did the final resolution still flip? Browse the lock price, the flip curve, and the sample behind it.">给重复出现的 Polymarket 系列做一张历史书签：一边赔率站稳某个价格够久以后，最后结算还翻过多少次？按系列查锁价、翻转曲线，以及它背后的样本。</p>
+    <div class="hero-stats" aria-label="Library summary">
+      <div class="hero-stat"><span class="stat-label" data-en="SERIES">系列</span><strong id="seriesTotal">—</strong></div>
+      <div class="hero-stat"><span class="stat-label" data-en="CATEGORIES">CATEGORIES</span><strong id="categoryTotal">—</strong></div>
+      <div class="hero-stat"><span class="stat-label" data-en="PRICE GRID">价格档位</span><strong id="gridTotal">—</strong></div>
+    </div>
+  </header>
+
+  <section class="field" id="howToRead">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <span class="field-title" data-en="How to read a lock">怎么看一条锁价</span>
+      <span class="field-hint" data-en="A lock is a held threshold, not a live signal.">锁价是站稳后的历史门槛，不是实时信号。</span>
+    </div>
+    <div class="read-grid">
+      <article class="read-card">
+        <span class="read-mark" data-en="LOCK">锁价</span>
+        <h3 data-en="Wait for the hold.">先等它站稳。</h3>
+        <p data-en="The price must stay at or above a grid threshold for a lifetime-scaled dwell. A single tick is not enough.">价格要在某个档位之上连续停留一段按生命周期缩放的时间。单次触碰不算。</p>
+      </article>
+      <article class="read-card">
+        <span class="read-mark" data-en="FLIP">翻转</span>
+        <h3 data-en="Then check the final resolution.">再看最终结算。</h3>
+        <p data-en="A flip means the market settled against the side that completed its dwell. The curve shows flip rate at every price grid.">完成 dwell 的那一边，最后结算却输了，就记为一次翻转。曲线展示每个价格档的翻转率。</p>
+      </article>
+      <article class="read-card">
+        <span class="read-mark" data-en="SCOPE">范围</span>
+        <h3 data-en="Short crypto stays out.">快加密盘不进来。</h3>
+        <p data-en="Crypto markets lasting 15 minutes or less are excluded. Thin and insufficient series stay visible, but never get a made-up lock.">持续 15 分钟及以下的加密市场排除。thin 和 insufficient 仍会列出，但不会补一个不存在的锁价。</p>
+      </article>
+    </div>
+    <div class="dwell-table-wrap">
+      <table class="dwell-table">
+        <thead>
+          <tr><th data-en="Market lifetime">市场生命周期</th><th data-en="Dwell used">采用 dwell</th></tr>
+        </thead>
+        <tbody>
+          <tr><td data-en="&lt; 2 hours">少于 2 小时</td><td data-en="2 min">2 分钟</td></tr>
+          <tr><td data-en="2–24 hours">2–24 小时</td><td data-en="10 min">10 分钟</td></tr>
+          <tr><td data-en="1–7 days">1–7 天</td><td data-en="30 min">30 分钟</td></tr>
+          <tr><td data-en="&gt; 7 days">超过 7 天</td><td data-en="2 h">2 小时</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="field" id="controls">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <span class="field-title" data-en="Find a series">找一条系列</span>
+      <span class="field-hint" data-en="Search the shelf, then open a card.">搜书架，再点开一张卡。</span>
+    </div>
+    <div class="controls">
+      <label class="search-label" for="searchInput">
+        <span class="control-label" data-en="SEARCH SERIES">搜索系列</span>
+        <span class="search-shell">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
+          <input class="search-input" id="searchInput" type="search" autocomplete="off" data-zh-placeholder="搜索城市、资产、事件……" data-en-placeholder="Search a city, asset, event…" placeholder="搜索城市、资产、事件……">
+        </span>
+      </label>
+      <div class="filter-line">
+        <div class="chips" id="categoryChips" role="group" aria-label="Category filters">
+          <button class="chip active" type="button" data-category="all" data-en="All">全部</button>
+          <button class="chip" type="button" data-category="weather" data-en="Weather">天气</button>
+          <button class="chip" type="button" data-category="crypto" data-en="Crypto">加密</button>
+          <button class="chip" type="button" data-category="sports" data-en="Sports">体育</button>
+          <button class="chip" type="button" data-category="macro" data-en="Macro">宏观</button>
+          <button class="chip" type="button" data-category="other" data-en="Other">其他</button>
+        </div>
+        <label class="sort-control" for="sortSelect">
+          <span class="control-label" data-en="SORT">排序</span>
+          <select class="sort-select" id="sortSelect">
+            <option value="lock" data-en="Lock price ↑">锁价 ↑</option>
+            <option value="samples" data-en="Samples ↓">样本 ↓</option>
+            <option value="name" data-en="Name A–Z">名称 A–Z</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <section class="field shelf-field" id="shelfSection">
+    <div class="field-head shelf-heading">
+      <div class="field-head">
+        <span class="field-no">03</span>
+        <span class="field-title" data-en="The shelf">书架</span>
+        <span class="field-hint" data-en="One card, one recurring shape.">一张卡，一种重复形状。</span>
+      </div>
+      <span class="results-count" id="resultsCount" data-en="Loading…">读取中……</span>
+    </div>
+    <div class="shelf" id="shelf" role="list" aria-live="polite"></div>
+    <div class="empty-state" id="emptyState" hidden data-en="No series match that search. Try another category or clear the search.">没有符合条件的系列。换个分类，或清空搜索。</div>
+    <div class="load-error" id="loadError" hidden></div>
+  </section>
+
+  <section class="entry-panel" id="entryPanel" hidden aria-live="polite">
+    <div class="entry-head">
+      <div>
+        <p class="mono entry-kicker" data-en="ENTRY / SELECTED SERIES">条目 / 当前系列</p>
+        <h2 id="entryName">—</h2>
+        <p class="entry-sub" id="entrySub">—</p>
+      </div>
+      <button class="close-btn" id="closeEntry" type="button" data-en="Close">关闭</button>
+    </div>
+    <div class="entry-stats">
+      <div class="entry-stat"><span class="entry-stat-label" data-en="LOCK PRICE">锁价</span><strong class="entry-stat-value" id="entryLock">—</strong></div>
+      <div class="entry-stat"><span class="entry-stat-label" data-en="FLIP @ LOCK">翻转 @ 锁价</span><strong class="entry-stat-value" id="entryFlip">—</strong></div>
+      <div class="entry-stat"><span class="entry-stat-label" data-en="SAMPLE SIZE">样本量</span><strong class="entry-stat-value" id="entryN">—</strong></div>
+    </div>
+    <div class="curve-section">
+      <div class="curve-head">
+        <span class="curve-title" data-en="Flip curve · 80→99¢">翻转曲线 · 80→99¢</span>
+        <span class="curve-legend" data-en="flip rate / sample">翻转率 / 样本</span>
+      </div>
+      <div class="curve-list" id="curveList"></div>
+      <div class="curve-empty" id="curveEmpty" hidden></div>
+      <div class="curve-scale"><span>80¢</span><span>99¢</span></div>
+    </div>
+    <p class="entry-note" id="entryNote">—</p>
+    <p class="entry-caveat" id="entryCaveat">—</p>
+    <div class="share-row">
+      <button class="share-btn primary" id="copyBtn" type="button" data-en="Copy summary">复制摘要</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap">
+      <canvas id="shareCanvas" width="800" height="450" aria-label="LOCK-005 share image"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save the image.">长按或右键保存图片。</p>
+    </div>
+    <p class="disclaimer" data-en="Historical dwell→flip rates are research summaries, not guarantees. Markets change. Not financial advice.">历史 dwell→flip 比率是研究摘要，不是保证。市场会变化。不构成投资建议。</p>
+  </section>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="LOCK-005 · Sweep Library">LOCK-005 · 扫尾盘图书馆</span>
+</footer>
+
+<script>
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  var library = null;
+  var series = [];
+  var selectedId = null;
+  var activeCategory = "all";
+  var searchTerm = "";
+  var sortMode = "lock";
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.querySelectorAll("[data-en-placeholder]").forEach(function (el) {
+      el.placeholder = l === "en" ? el.dataset.enPlaceholder : el.dataset.zhPlaceholder;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.getElementById("langBtn").textContent = l === "en" ? "中文" : "EN";
+    document.title = l === "en" ? "LOCK-005 · Sweep Library" : "LOCK-005 · 扫尾盘图书馆";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    if (library) {
+      renderMeta();
+      renderShelf();
+      if (selectedId) renderEntry(findSeries(selectedId));
+    }
+    var error = document.getElementById("loadError");
+    if (!error.hidden && error.dataset.active === "true") {
+      error.textContent = t("图书馆数据读不出来。请用静态服务器打开此页。", "The library data could not be loaded. Open this page through a static server.");
+    }
+  }
+
+  function categoryLabel(category) {
+    var labels = {
+      all: ["全部", "ALL"],
+      weather: ["天气", "WEATHER"],
+      crypto: ["加密", "CRYPTO"],
+      sports: ["体育", "SPORTS"],
+      macro: ["宏观", "MACRO"],
+      other: ["其他", "OTHER"]
+    };
+    var label = labels[category] || [category, category];
+    return t(label[0], label[1]);
+  }
+
+  function statusLabel(status) {
+    var labels = {
+      ready: ["READY · 可用", "READY · usable"],
+      thin: ["THIN · 偏薄", "THIN · provisional"],
+      insufficient: ["INSUFFICIENT · 不足", "INSUFFICIENT · not enough"]
+    };
+    var label = labels[status] || [status, status];
+    return t(label[0], label[1]);
+  }
+
+  function statusHint(status) {
+    if (status === "ready") return t("满足 ready 门槛：候选锁价处 flip=0，且样本量达到 50。", "Ready floor met: flip=0 at the candidate lock with at least 50 samples.");
+    if (status === "thin") return t("曲线可以看，但样本或零翻条件偏薄；锁价只作临时参考。", "The curve is readable, but the sample or zero-flip condition is thin; treat the lock as provisional.");
+    return t("样本少于最低门槛，或没有完整 dwell 事件；不显示锁价。", "Below the sample floor or missing complete dwell events; no lock is shown.");
+  }
+
+  function nameFor(item) { return lang === "en" ? item.name_en : item.name_zh; }
+
+  function formatCents(value) {
+    return value === null || value === undefined ? "—" : Math.round(value * 100) + "¢";
+  }
+
+  function formatFlip(value) {
+    if (value === null || value === undefined) return "—";
+    if (value === 0) return "0%";
+    var pct = value * 100;
+    return (pct < 10 ? pct.toFixed(1) : pct.toFixed(0)) + "%";
+  }
+
+  function formatDuration(seconds) {
+    if (seconds >= 3600) {
+      var hours = seconds / 3600;
+      return t(hours + " h", hours + " h");
+    }
+    var minutes = Math.round(seconds / 60);
+    return t(minutes + " 分钟", minutes + " min");
+  }
+
+  function formatCount(count) {
+    return t(String(count) + " 个", String(count));
+  }
+
+  function findSeries(id) {
+    return series.find(function (item) { return item.id === id; }) || null;
+  }
+
+  function renderMeta() {
+    document.getElementById("editionNumber").textContent = t("第 " + library.edition + " 版", "Edition " + library.edition);
+    document.getElementById("editionDate").textContent = library.as_of;
+    document.getElementById("editionDate").setAttribute("datetime", library.as_of);
+    document.getElementById("seriesTotal").textContent = String(series.length);
+    document.getElementById("categoryTotal").textContent = String(new Set(series.map(function (item) { return item.category; })).size);
+    document.getElementById("gridTotal").textContent = t(String(library.method.price_grid.length) + " 档", String(library.method.price_grid.length) + " levels");
+  }
+
+  function filteredSeries() {
+    var visible = series.filter(function (item) {
+      var inCategory = activeCategory === "all" || item.category === activeCategory;
+      var haystack = (item.name_zh + " " + item.name_en + " " + item.category).toLowerCase();
+      return inCategory && (!searchTerm || haystack.indexOf(searchTerm) !== -1);
+    });
+    visible.sort(function (a, b) {
+      if (sortMode === "samples") return b.n - a.n || nameFor(a).localeCompare(nameFor(b));
+      if (sortMode === "name") return nameFor(a).localeCompare(nameFor(b));
+      var aLock = a.lock_price === null || a.lock_price === undefined ? Infinity : a.lock_price;
+      var bLock = b.lock_price === null || b.lock_price === undefined ? Infinity : b.lock_price;
+      return aLock - bLock || b.n - a.n;
+    });
+    return visible;
+  }
+
+  function metric(label, value, muted) {
+    var wrap = document.createElement("div");
+    var labelEl = document.createElement("span");
+    labelEl.className = "metric-label";
+    labelEl.textContent = label;
+    var valueEl = document.createElement("strong");
+    valueEl.className = "metric-value" + (muted ? " muted" : "");
+    valueEl.textContent = value;
+    wrap.appendChild(labelEl);
+    wrap.appendChild(valueEl);
+    return wrap;
+  }
+
+  function renderShelf() {
+    var shelf = document.getElementById("shelf");
+    shelf.innerHTML = "";
+    var visible = filteredSeries();
+    document.getElementById("resultsCount").textContent = t(visible.length + " / " + series.length + " 个系列", visible.length + " / " + series.length + " series");
+    document.getElementById("emptyState").hidden = visible.length !== 0;
+
+    visible.forEach(function (item) {
+      var card = document.createElement("button");
+      card.type = "button";
+      card.className = "shelf-card" + (selectedId === item.id ? " selected" : "");
+      card.setAttribute("role", "listitem");
+      card.setAttribute("aria-label", nameFor(item));
+      card.addEventListener("click", function () { selectSeries(item.id); });
+
+      var top = document.createElement("div");
+      top.className = "card-top";
+      var category = document.createElement("span");
+      category.className = "category-tag";
+      category.textContent = categoryLabel(item.category);
+      var status = document.createElement("span");
+      status.className = "status-badge " + item.status;
+      status.textContent = statusLabel(item.status);
+      top.appendChild(category);
+      top.appendChild(status);
+
+      var title = document.createElement("h3");
+      title.textContent = nameFor(item);
+      var rule = document.createElement("div");
+      rule.className = "card-rule";
+
+      var metrics = document.createElement("div");
+      metrics.className = "card-metrics";
+      metrics.appendChild(metric(t("锁价", "LOCK"), formatCents(item.lock_price), item.lock_price === null || item.lock_price === undefined));
+      metrics.appendChild(metric(t("翻转 @ 锁价", "FLIP @ LOCK"), formatFlip(item.flip_at_lock), item.flip_at_lock === null || item.flip_at_lock === undefined));
+      metrics.appendChild(metric(t("样本", "N"), String(item.n), false));
+
+      var foot = document.createElement("div");
+      foot.className = "card-foot";
+      var dwell = document.createElement("span");
+      dwell.textContent = t("dwell " + formatDuration(item.dwell_seconds), "dwell " + formatDuration(item.dwell_seconds));
+      var arrow = document.createElement("span");
+      arrow.className = "card-arrow";
+      arrow.setAttribute("aria-hidden", "true");
+      arrow.textContent = "↗";
+      foot.appendChild(dwell);
+      foot.appendChild(arrow);
+
+      card.appendChild(top);
+      card.appendChild(title);
+      card.appendChild(rule);
+      card.appendChild(metrics);
+      card.appendChild(foot);
+      shelf.appendChild(card);
+    });
+  }
+
+  function renderCurve(item) {
+    var list = document.getElementById("curveList");
+    var empty = document.getElementById("curveEmpty");
+    list.innerHTML = "";
+    var curve = Array.isArray(item.curve) ? item.curve : [];
+    empty.hidden = curve.length !== 0;
+    if (!curve.length) {
+      empty.textContent = t("目前没有足够的完整 dwell 事件，暂不画曲线。", "There are not enough complete dwell events to draw a curve yet.");
+      return;
+    }
+    var maxFlip = curve.reduce(function (max, point) { return Math.max(max, point.flip || 0); }, 0) || 1;
+    curve.forEach(function (point) {
+      var row = document.createElement("div");
+      row.className = "curve-row" + (item.lock_price !== null && point.price === item.lock_price ? " at-lock" : "");
+      row.setAttribute("aria-label", t(Math.round(point.price * 100) + "¢，翻转 " + formatFlip(point.flip) + "，样本 " + point.n, Math.round(point.price * 100) + " cents, " + formatFlip(point.flip) + " flip, sample " + point.n));
+      var price = document.createElement("span");
+      price.className = "curve-price";
+      price.textContent = Math.round(point.price * 100) + "¢";
+      var track = document.createElement("span");
+      track.className = "curve-track";
+      var fill = document.createElement("span");
+      fill.className = "curve-fill";
+      fill.style.width = point.flip === 0 ? "3px" : Math.max(4, (point.flip / maxFlip) * 100) + "%";
+      track.appendChild(fill);
+      var flip = document.createElement("span");
+      flip.className = "curve-flip";
+      flip.textContent = formatFlip(point.flip);
+      var count = document.createElement("span");
+      count.className = "curve-n";
+      count.textContent = "n=" + point.n;
+      row.appendChild(price);
+      row.appendChild(track);
+      row.appendChild(flip);
+      row.appendChild(count);
+      list.appendChild(row);
+    });
+  }
+
+  function renderEntry(item) {
+    if (!item) return;
+    var panel = document.getElementById("entryPanel");
+    panel.hidden = false;
+    document.getElementById("entryName").textContent = nameFor(item);
+    document.getElementById("entrySub").textContent = categoryLabel(item.category) + " · " + t("dwell " + formatDuration(item.dwell_seconds), "dwell " + formatDuration(item.dwell_seconds)) + " · " + t("第 " + library.edition + " 版", "Edition " + library.edition);
+    document.getElementById("entryLock").textContent = formatCents(item.lock_price);
+    document.getElementById("entryFlip").textContent = formatFlip(item.flip_at_lock);
+    document.getElementById("entryN").textContent = formatCount(item.n);
+    var statusValue = document.getElementById("entryN");
+    statusValue.setAttribute("aria-label", t("样本量 " + item.n, "sample size " + item.n));
+    renderCurve(item);
+    document.getElementById("entryNote").textContent = lang === "en" ? item.notes_en : item.notes_zh;
+    document.getElementById("entryCaveat").textContent = statusHint(item.status);
+    document.getElementById("shareWrap").classList.remove("show");
+    document.getElementById("copyBtn").classList.remove("copied");
+    document.getElementById("copyBtn").textContent = t("复制摘要", "Copy summary");
+  }
+
+  function selectSeries(id) {
+    selectedId = id;
+    renderShelf();
+    renderEntry(findSeries(id));
+    var panel = document.getElementById("entryPanel");
+    panel.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  }
+
+  function closeEntry() {
+    selectedId = null;
+    document.getElementById("entryPanel").hidden = true;
+    renderShelf();
+  }
+
+  function buildShareText(item) {
+    var lock = item.lock_price === null || item.lock_price === undefined ? t("未定", "No lock") : formatCents(item.lock_price);
+    var flip = item.flip_at_lock === null || item.flip_at_lock === undefined ? "—" : formatFlip(item.flip_at_lock);
+    return [
+      t("LOCK-005 · 扫尾盘图书馆", "LOCK-005 · Sweep Library"),
+      nameFor(item),
+      t("锁价：" + lock + " · 翻转 @ 锁价：" + flip + " · 样本：" + item.n, "Lock: " + lock + " · Flip @ lock: " + flip + " · Samples: " + item.n),
+      t("版次：第 " + library.edition + " 版 · " + library.as_of, "Edition " + library.edition + " · " + library.as_of),
+      "",
+      t("历史 dwell→flip 摘要，不是保证。不构成投资建议。", "Historical dwell→flip summary, not a guarantee. Not financial advice."),
+      "https://build-100.com/005/"
+    ].join("\n");
+  }
+
+  function writeClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    return new Promise(function (resolve, reject) {
+      var area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.select();
+      var copied = false;
+      try { copied = document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(area);
+      if (copied) resolve(); else reject(new Error("copy failed"));
+    });
+  }
+
+  function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight, maxLines) {
+    var words = Array.from(text);
+    var line = "";
+    var lines = [];
+    words.forEach(function (char) {
+      var next = line + char;
+      if (ctx.measureText(next).width > maxWidth && line) {
+        lines.push(line);
+        line = char;
+      } else {
+        line = next;
+      }
+    });
+    if (line) lines.push(line);
+    lines.slice(0, maxLines).forEach(function (value, index) { ctx.fillText(value, x, y + index * lineHeight); });
+    return Math.min(lines.length, maxLines);
+  }
+
+  function renderShareImage(item) {
+    var canvas = document.getElementById("shareCanvas");
+    var ctx = canvas.getContext("2d");
+    var width = canvas.width;
+    var height = canvas.height;
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, width, height);
+    ctx.fillStyle = "rgba(245, 197, 66, 0.08)";
+    ctx.fillRect(0, 0, width, 9);
+    ctx.fillStyle = "#f5c542";
+    ctx.fillRect(54, 56, 42, 4);
+    ctx.font = "700 22px Menlo, Consolas, monospace";
+    ctx.fillText("LOCK·005", 54, 105);
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "12px Menlo, Consolas, monospace";
+    ctx.fillText(t("扫尾盘图书馆 / 第 " + library.edition + " 版", "SWEEP LIBRARY / EDITION " + library.edition), 54, 130);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "600 34px Helvetica Neue, Arial, sans-serif";
+    var lineCount = drawWrappedText(ctx, nameFor(item), 54, 196, 690, 43, 2);
+    var baseY = 196 + lineCount * 43 + 34;
+    ctx.strokeStyle = "rgba(237, 239, 241, 0.16)";
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(54, baseY - 20); ctx.lineTo(width - 54, baseY - 20); ctx.stroke();
+    var lock = item.lock_price === null || item.lock_price === undefined ? "—" : formatCents(item.lock_price);
+    var flip = item.flip_at_lock === null || item.flip_at_lock === undefined ? "—" : formatFlip(item.flip_at_lock);
+    var stats = [
+      [t("锁价", "LOCK"), lock],
+      [t("翻转 @ 锁价", "FLIP @ LOCK"), flip],
+      [t("样本", "SAMPLES"), String(item.n)]
+    ];
+    stats.forEach(function (stat, index) {
+      var x = 54 + index * 230;
+      ctx.fillStyle = "#7d848c";
+      ctx.font = "11px Menlo, Consolas, monospace";
+      ctx.fillText(stat[0].toUpperCase(), x, baseY + 17);
+      ctx.fillStyle = index === 2 ? "#edeff1" : "#f5c542";
+      ctx.font = "500 27px Menlo, Consolas, monospace";
+      ctx.fillText(stat[1], x, baseY + 50);
+    });
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "11px Menlo, Consolas, monospace";
+    ctx.fillText(library.as_of + "  ·  " + t("历史研究摘要，不是投资建议", "Historical research summary, not financial advice"), 54, height - 42);
+    document.getElementById("shareCanvas").setAttribute("aria-label", t("" + nameFor(item) + " 的 LOCK-005 分享图", "LOCK-005 share image for " + nameFor(item)));
+    document.getElementById("shareWrap").classList.add("show");
+  }
+
+  async function loadLibrary() {
+    try {
+      var response = await fetch("data/library.json", { cache: "no-store" });
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      var payload = await response.json();
+      if (!payload || !Array.isArray(payload.series) || !payload.method) throw new Error("Invalid library schema");
+      library = payload;
+      series = payload.series;
+      renderMeta();
+      renderShelf();
+    } catch (error) {
+      var box = document.getElementById("loadError");
+      box.hidden = false;
+      box.dataset.active = "true";
+      box.textContent = t("图书馆数据读不出来。请用静态服务器打开此页。", "The library data could not be loaded. Open this page through a static server.");
+      document.getElementById("resultsCount").textContent = t("读取失败", "Load failed");
+    }
+  }
+
+  document.getElementById("langBtn").addEventListener("click", function () { applyLang(lang === "en" ? "zh" : "en"); });
+  document.getElementById("searchInput").addEventListener("input", function (event) {
+    searchTerm = event.target.value.trim().toLowerCase();
+    if (library) renderShelf();
+  });
+  document.getElementById("sortSelect").addEventListener("change", function (event) {
+    sortMode = event.target.value;
+    if (library) renderShelf();
+  });
+  document.getElementById("categoryChips").addEventListener("click", function (event) {
+    var chip = event.target.closest("[data-category]");
+    if (!chip) return;
+    activeCategory = chip.dataset.category;
+    document.querySelectorAll(".chip").forEach(function (button) { button.classList.toggle("active", button === chip); });
+    if (library) renderShelf();
+  });
+  document.getElementById("closeEntry").addEventListener("click", closeEntry);
+  document.getElementById("copyBtn").addEventListener("click", async function () {
+    var item = findSeries(selectedId);
+    if (!item) return;
+    var button = document.getElementById("copyBtn");
+    try {
+      await writeClipboard(buildShareText(item));
+      button.classList.add("copied");
+      button.textContent = t("已复制", "Copied");
+      setTimeout(function () {
+        button.classList.remove("copied");
+        button.textContent = t("复制摘要", "Copy summary");
+      }, 1600);
+    } catch (error) {
+      button.textContent = t("复制失败", "Copy failed");
+      setTimeout(function () { button.textContent = t("复制摘要", "Copy summary"); }, 1600);
+    }
+  });
+  document.getElementById("shareImgBtn").addEventListener("click", function () {
+    var item = findSeries(selectedId);
+    if (item) renderShareImage(item);
+  });
+
+  if (lang === "en") applyLang("en");
+  loadLibrary();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

@@ -1,5 +1,15 @@
 {
-  "dependencies": {
-    "playwright-core": "^1.61.1"
+  "name": "build-100",
+  "private": true,
+  "type": "module",
+  "description": "BUILD-100 — one person + AI, 100 static websites in public",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "test": "node scripts/run-tests.mjs",
+    "check": "node scripts/check-catalog.mjs && node scripts/check-syntax.mjs",
+    "ci": "npm run check && npm test"
   }
 }

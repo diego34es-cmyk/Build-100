@@ -1,0 +1,51 @@
+{
+  "politics": {
+    "story_zh": "（本地 fixture，不是实盘。）赔率已经站在门槛之上的几件事，被写成「下周会发生」。连锁反应只是叙事，不是下单建议。",
+    "story_en": "(Local fixture, not live markets.) Outcomes already priced above the threshold are written as next week. Narrative only — not an order.",
+    "facts": [
+      {
+        "confidence": 0.72,
+        "outcome": "Yes",
+        "question": "Fixture: a scheduled vote is priced as likely"
+      },
+      {
+        "confidence": 0.61,
+        "outcome": "Yes",
+        "question": "Fixture: a confirmation hearing stays on the calendar"
+      }
+    ]
+  },
+  "economy": {
+    "story_zh": "（本地 fixture。）利率与通胀相关合约在门槛之上，写成下周的宏观天气，不是交易信号。",
+    "story_en": "(Local fixture.) Rate and inflation contracts above the threshold become next week's weather — not a trade.",
+    "facts": [
+      {
+        "confidence": 0.68,
+        "outcome": "Hold",
+        "question": "Fixture: no emergency meeting is priced as the base case"
+      }
+    ]
+  },
+  "tech": {
+    "story_zh": "（本地 fixture。）产品发布与监管节点被写成下周行程。",
+    "story_en": "(Local fixture.) Ship dates and regulatory nodes written as next week's itinerary.",
+    "facts": [
+      {
+        "confidence": 0.64,
+        "outcome": "Ships",
+        "question": "Fixture: a widely flagged software release stays on the week"
+      }
+    ]
+  },
+  "humanities": {
+    "story_zh": "（本地 fixture。）人文主题的高赔率事件。页面会显示彩蛋。",
+    "story_en": "(Local fixture.) High-odds humanities events. The page shows an easter egg.",
+    "facts": [
+      {
+        "confidence": 0.8,
+        "outcome": "Opens",
+        "question": "Fixture: a announced exhibition still opens this week"
+      }
+    ]
+  }
+}

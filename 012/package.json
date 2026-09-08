@@ -1,0 +1,8 @@
+{
+  "name": "play-012",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}

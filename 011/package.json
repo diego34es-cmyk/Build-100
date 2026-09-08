@@ -1,0 +1,8 @@
+{
+  "name": "paper-011",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test engine.test.js"
+  }
+}

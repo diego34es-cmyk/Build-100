@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REGRET-008 · 订阅后悔计算器</title>
+<meta name="description" content="已经买了的月费。记下名称、月费、订了几个月、真正用了几天，算出实际日成本、天天用的日成本，以及浪费额。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/008/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E008%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="REGRET-008 · 订阅后悔计算器">
+<meta property="og:description" content="已经买了的月费。实际日成本、天天用的日成本、未使用天数 × 日费。">
+<meta property="og:url" content="https://build-100.com/008/">
+<meta property="og:image" content="https://build-100.com/008/og-008.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="REGRET-008 · 订阅后悔计算器">
+<meta name="twitter:description" content="001 帮你选还没买的套餐。008 只算已经在扣的那些。">
+<meta name="twitter:image" content="https://build-100.com/008/og-008.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --neon: #84cc16;
+    --neon-glow: rgba(132, 204, 22, 0.35);
+    --delta: #fbbf24;
+    --warn: #f87171;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--neon); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--neon); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(36px, 6vh, 56px); }
+  .hero .eyebrow { color: var(--neon); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--neon); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p { color: var(--muted); max-width: 38em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p strong { color: var(--ink); font-weight: 500; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr 0.8fr 0.9fr;
+    gap: 10px;
+    align-items: end;
+  }
+  @media (max-width: 720px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .form-grid { grid-template-columns: 1fr; } }
+  label.lbl {
+    display: flex; flex-direction: column; gap: 6px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint);
+  }
+  input.txt {
+    background: var(--bg-raise); border: 1px solid var(--line-strong); color: var(--ink);
+    font-family: var(--sans); font-size: 1rem; padding: 10px 12px; border-radius: 4px; width: 100%;
+  }
+  input.num {
+    background: var(--bg-raise); border: 1px solid var(--line-strong); color: var(--ink);
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.15rem; font-weight: 500;
+    padding: 10px 12px; border-radius: 4px; width: 100%;
+  }
+  input.num::-webkit-outer-spin-button, input.num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type=number] { -moz-appearance: textfield; }
+  input.txt::placeholder, input.num::placeholder { color: var(--faint); opacity: 1; }
+  .add-btn {
+    width: 100%; font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 12px 16px; border: 1px solid var(--neon); background: rgba(132, 204, 22, 0.1); color: var(--ink);
+    cursor: pointer; transition: all .2s; border-radius: 4px; height: 44px;
+  }
+  .add-btn:hover { background: var(--neon); color: var(--bg); box-shadow: 0 0 20px var(--neon-glow); }
+  .form-err { color: #f87171; font-size: 0.85rem; margin-top: 10px; min-height: 1.2em; font-family: var(--mono); }
+
+  .formula {
+    margin-top: 16px; color: var(--muted); font-size: 0.86rem;
+    border: 1px dashed var(--line); border-radius: 6px; padding: 12px 14px;
+  }
+  .formula code { font-family: var(--mono); color: var(--ink); font-size: 0.82rem; letter-spacing: 0.02em; }
+
+  .delta-banner {
+    margin: 0 0 22px; padding: clamp(24px, 4vh, 34px); border: 1px solid var(--neon); border-radius: 8px;
+    background: linear-gradient(135deg, rgba(132,204,22,0.12), rgba(132,204,22,0.02));
+    text-align: center;
+  }
+  .delta-banner.bad { border-color: var(--warn); background: linear-gradient(135deg, rgba(248,113,113,0.12), rgba(248,113,113,0.02)); }
+  .delta-banner.ok { border-color: var(--live); background: linear-gradient(135deg, rgba(74,222,128,0.1), rgba(74,222,128,0.02)); }
+  .delta-banner .label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
+  .delta-banner .big {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 500;
+    font-size: clamp(2.2rem, 7vw, 3.6rem); line-height: 1; margin: 10px 0; color: var(--neon);
+  }
+  .delta-banner.bad .big { color: var(--warn); }
+  .delta-banner.ok .big { color: var(--live); }
+  .delta-banner .sub { color: var(--muted); font-size: 0.92rem; }
+  .delta-banner .verdict { margin-top: 14px; color: var(--ink); font-size: clamp(1.05rem, 2.2vw, 1.25rem); font-weight: 700; text-wrap: balance; }
+
+  .stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 22px;
+  }
+  @media (max-width: 560px) { .stats { grid-template-columns: 1fr; } }
+  .stat {
+    border: 1px solid var(--line-strong); border-radius: 8px; padding: 16px 18px; background: var(--bg-raise);
+  }
+  .stat .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
+  .stat .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.25rem; margin-top: 6px; }
+
+  .empty {
+    border: 1px dashed var(--line-strong); border-radius: 8px; padding: 36px 20px;
+    color: var(--muted); text-align: center;
+  }
+
+  .card {
+    border: 1px solid var(--line-strong); border-radius: 8px; padding: clamp(18px, 3vw, 24px);
+    background: var(--bg-raise); margin-bottom: 12px;
+  }
+  .card-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+  .card-name { font-weight: 700; font-size: 1.05rem; }
+  .card-meta { color: var(--muted); font-size: 0.86rem; margin-top: 4px; }
+  .kill {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line); color: var(--faint); padding: 6px 10px;
+    border-radius: 4px; cursor: pointer;
+  }
+  .kill:hover { color: var(--warn); border-color: var(--warn); }
+  .metrics {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px;
+  }
+  @media (max-width: 560px) { .metrics { grid-template-columns: 1fr; } }
+  .metric .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
+  .metric .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.05rem; margin-top: 2px; }
+  .metric .v.waste { color: var(--warn); }
+  .bar { height: 4px; background: var(--line); border-radius: 2px; margin-top: 14px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--neon); width: 0; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .origin-card {
+    margin-top: 48px; padding: clamp(24px, 4vw, 32px);
+    border: 1px solid var(--line); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(132,204,22,0.06), transparent 55%);
+  }
+  .origin-eyebrow { color: var(--neon); margin-bottom: 12px; }
+  .origin-text { color: var(--muted); font-size: 0.95rem; max-width: 34em; }
+  .origin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .origin-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); border-radius: 4px;
+    color: var(--muted); cursor: pointer; transition: all .2s;
+  }
+  .origin-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .origin-btn.primary { border-color: var(--neon); color: var(--ink); background: rgba(132,204,22,0.1); }
+  .origin-btn.primary:hover { background: var(--neon); color: var(--bg); }
+
+  footer { border-top: 1px solid var(--line); padding: 24px var(--pad); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">REGRET<span>·008</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; REGRET-008 · ALREADY PAYING</p>
+    <h1 data-en="You already bought it. How much did idle days cost?">已经买了。<br>闲置的那些天值多少钱。</h1>
+    <p data-en="The opposite of COMBO-001: that one picks a plan you <strong>haven’t</strong> bought. This one only looks at monthly fees already charging — name, monthly price, months kept, days you actually used.">
+      001 的反面：那边是还没买、帮你选套餐。这边只算<strong>已经在扣的月费</strong>。记下名称、月费、订了几个月、这几个月里真正用过的天数。
+    </p>
+  </header>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <span class="field-title" data-en="Add a subscription you already pay">加一条已经在订的</span>
+      <span class="field-hint" data-en="Used days = days you actually opened it during those months, not calendar days. One month = 30 days.">使用天数 = 这几个月里真正打开过的天数，不是自然日。一个月按 30 天计。</span>
+    </div>
+    <form id="addForm" class="form-grid" autocomplete="off">
+      <label class="lbl"><span data-en="Name">名称</span>
+        <input class="txt" id="nameInput" type="text" maxlength="40" required placeholder="例：Netflix" aria-label="Name">
+      </label>
+      <label class="lbl"><span data-en="Monthly fee">月费</span>
+        <input class="num" id="feeInput" type="number" inputmode="decimal" min="0" step="0.01" required placeholder="18" aria-label="Monthly fee">
+      </label>
+      <label class="lbl"><span data-en="Months kept">已订月数</span>
+        <input class="num" id="monthsInput" type="number" inputmode="numeric" min="1" step="1" required placeholder="6" aria-label="Months">
+      </label>
+      <label class="lbl"><span data-en="Days actually used">真实使用天数</span>
+        <input class="num" id="usedInput" type="number" inputmode="numeric" min="0" step="1" required placeholder="20" aria-label="Used days">
+      </label>
+    </form>
+    <div style="margin-top:12px">
+      <button class="add-btn" type="submit" form="addForm" data-en="Add">加入清单</button>
+    </div>
+    <div class="form-err" id="formErr"></div>
+    <p class="formula">
+      <span data-en="Actual daily cost = fee × months ÷ used days. Every-day cost = fee ÷ 30. Waste = unused days × (fee ÷ 30).">
+        实际日成本 = 月费 × 月数 ÷ 使用天数。天天用的日成本 = 月费 ÷ 30。浪费额 = 未使用天数 ×（月费 ÷ 30）。
+      </span>
+    </p>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <span class="field-title" data-en="The bill">账单</span>
+      <span class="field-hint" data-en="Stored in this browser only (localStorage).">只存在这台浏览器里（localStorage）。</span>
+    </div>
+    <div id="summary"></div>
+    <div id="list"></div>
+  </div>
+
+  <div class="share-row">
+    <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+    <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    <button class="share-btn" id="clearBtn" type="button" data-en="Clear all">清空全部</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareCanvasWrap">
+    <canvas id="shareCanvas" width="800" height="450"></canvas>
+    <p class="share-save-hint" data-en="Long-press or right-click to save the image.">长按或右键保存图片。</p>
+  </div>
+
+  <aside class="origin-card">
+    <p class="mono origin-eyebrow">BUILD-100 · 008/100</p>
+    <p class="origin-text" data-en="This tool is No.008 of BUILD-100 — one person building 100 websites with AI, in public.">
+      这个工具是 BUILD-100 的第 008 号作品——一个人用 AI 公开做 100 个网站。
+    </p>
+    <div class="origin-actions">
+      <a class="origin-btn primary" href="https://build-100.com/" data-en="See the project →">看看这个计划 →</a>
+      <a class="origin-btn" href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="Follow along on X">在 X 上看过程</a>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono">REGRET-008 · 已经买了才算</span>
+</footer>
+
+<script type="module">
+  import { computeRegret, aggregate } from "./engine.js?v=1";
+
+  const KEY = "regret-008";
+  let items = [];
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+
+  const t = (zh, en) => (lang === "en" ? en : zh);
+  const $ = (id) => document.getElementById(id);
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+    }[c]));
+  }
+  function fmt(n, digits = 2) {
+    if (n === null || !Number.isFinite(n)) return "—";
+    return new Intl.NumberFormat(lang === "en" ? "en-US" : "zh-CN", {
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    }).format(n);
+  }
+  function money(n) {
+    if (n === null || !Number.isFinite(n)) return "—";
+    return t("¥", "¥") + fmt(n, 2);
+  }
+
+  function loadItems() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      items = Array.isArray(parsed) ? parsed.filter((x) => x && x.name) : [];
+    } catch (e) {
+      items = [];
+    }
+  }
+  function saveItems() {
+    try { localStorage.setItem(KEY, JSON.stringify(items)); } catch (e) {}
+  }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.title = l === "en"
+      ? "REGRET-008 · Subscription regret calculator"
+      : "REGRET-008 · 订阅后悔计算器";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    render();
+  }
+
+  function uid() {
+    return "r" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  }
+
+  $("addForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = $("nameInput").value.trim();
+    const monthlyFee = Number($("feeInput").value);
+    const months = Number($("monthsInput").value);
+    const usedDays = Number($("usedInput").value);
+    const err = $("formErr");
+    if (!name) { err.textContent = t("先写名称。", "Name required."); return; }
+    const r = computeRegret({ monthlyFee, months, usedDays });
+    if (!r.ok) {
+      err.textContent = t("月费 ≥ 0，月数 ≥ 1，使用天数 ≥ 0。", "Fee ≥ 0, months ≥ 1, used days ≥ 0.");
+      return;
+    }
+    err.textContent = "";
+    items.push({ id: uid(), name, monthlyFee, months, usedDays });
+    saveItems();
+    $("nameInput").value = "";
+    $("feeInput").value = "";
+    $("monthsInput").value = "";
+    $("usedInput").value = "";
+    $("nameInput").focus();
+    render();
+  });
+
+  $("list").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-del]");
+    if (!btn) return;
+    items = items.filter((x) => x.id !== btn.dataset.del);
+    saveItems();
+    render();
+  });
+
+  $("clearBtn").addEventListener("click", () => {
+    if (!items.length) return;
+    if (!confirm(t("清空全部订阅？", "Clear all subscriptions?"))) return;
+    items = [];
+    saveItems();
+    render();
+  });
+
+  function render() {
+    const sum = aggregate(items);
+    const box = $("summary");
+    const list = $("list");
+
+    if (!sum.count) {
+      box.innerHTML = "";
+      list.innerHTML = `<div class="empty" data-keep>${t("还没有记过订阅。把已经在扣的月费加进来。", "Nothing yet. Add a monthly fee you already pay.")}</div>`;
+      return;
+    }
+
+    const wastedHard = sum.waste >= sum.totalPaid * 0.5;
+    const wastedLittle = sum.waste <= 0.0001;
+    const tone = wastedLittle ? "ok" : wastedHard ? "bad" : "";
+    const verdict = wastedLittle
+      ? t("几乎没浪费。这些天你都在用。", "Almost no waste. You used the days you paid for.")
+      : t(`这几条一共浪费了 ${money(sum.waste)}——未使用天数 × 日费。`, `Waste across these is ${money(sum.waste)} — unused days × daily fee.`);
+
+    box.innerHTML = `
+      <div class="delta-banner ${tone}">
+        <div class="label">${t("浪费额", "WASTE")}</div>
+        <div class="big">${money(sum.waste)}</div>
+        <div class="sub">${t("已付", "Paid")} ${money(sum.totalPaid)} · ${sum.count} ${t("条", "items")} · ${t("用了", "used")} ${fmt(sum.usedDays, 0)} / ${fmt(sum.totalDays, 0)} ${t("天", "days")}</div>
+        <p class="verdict">${verdict}</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="k">${t("实际日成本", "Actual daily cost")}</div><div class="v">${money(sum.actualDaily)}</div></div>
+        <div class="stat"><div class="k">${t("若每天都用", "If used every day")}</div><div class="v">${money(sum.dailyIfFull)}</div></div>
+        <div class="stat"><div class="k">${t("未使用天数", "Unused days")}</div><div class="v">${fmt(sum.unusedDays, 0)}</div></div>
+      </div>
+    `;
+
+    list.innerHTML = sum.rows.map((r) => {
+      const pct = Math.max(0, Math.min(100, r.usageRate * 100));
+      const over = r.overUsed ? t("（使用天数超过日历，浪费按 0）", " (used more than calendar days; waste = 0)") : "";
+      return `<article class="card">
+        <div class="card-top">
+          <div>
+            <div class="card-name">${esc(r.name)}</div>
+            <div class="card-meta">${money(r.monthlyFee)}${t("/月", "/mo")} × ${fmt(r.months, 0)} ${t("月", "mo")} · ${t("用了", "used")} ${fmt(r.usedDays, 0)} / ${fmt(r.totalDays, 0)} ${t("天", "days")}${over}</div>
+          </div>
+          <button class="kill" type="button" data-del="${esc(r.id)}">${t("删除", "Delete")}</button>
+        </div>
+        <div class="metrics">
+          <div class="metric"><div class="k">${t("实际日成本", "Actual / day")}</div><div class="v">${money(r.actualDaily)}</div></div>
+          <div class="metric"><div class="k">${t("天天用日成本", "Every-day / day")}</div><div class="v">${money(r.dailyIfFull)}</div></div>
+          <div class="metric"><div class="k">${t("浪费额", "Waste")}</div><div class="v waste">${money(r.waste)}</div></div>
+        </div>
+        <div class="bar" aria-hidden="true"><i style="width:${pct}%"></i></div>
+      </article>`;
+    }).join("");
+  }
+
+  function shareText() {
+    const sum = aggregate(items);
+    if (!sum.count) return t("REGRET-008 · 还没记订阅。\nhttps://build-100.com/008/", "REGRET-008 · no subscriptions yet.\nhttps://build-100.com/008/");
+    const lines = sum.rows.map((r) => `· ${r.name}: ${t("浪费", "waste")} ${money(r.waste)} · ${t("实际日成本", "actual/day")} ${money(r.actualDaily)}`);
+    if (lang === "en") {
+      return `REGRET-008 · already paying\nWaste ${money(sum.waste)} of ${money(sum.totalPaid)} paid\nActual / day ${money(sum.actualDaily)} · if every day ${money(sum.dailyIfFull)}\n${lines.join("\n")}\nhttps://build-100.com/008/`;
+    }
+    return `REGRET-008 · 订阅后悔计算器\n浪费 ${money(sum.waste)} / 已付 ${money(sum.totalPaid)}\n实际日成本 ${money(sum.actualDaily)} · 天天用 ${money(sum.dailyIfFull)}\n${lines.join("\n")}\nhttps://build-100.com/008/`;
+  }
+
+  $("copyBtn").addEventListener("click", async () => {
+    const text = shareText();
+    try { await navigator.clipboard.writeText(text); } catch (e) {
+      const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch (_) {} ta.remove();
+    }
+    const btn = $("copyBtn");
+    btn.classList.add("copied");
+    const orig = btn.textContent;
+    btn.textContent = t("已复制 ✓", "Copied ✓");
+    setTimeout(() => { btn.classList.remove("copied"); btn.textContent = orig; }, 1800);
+  });
+
+  $("shareImgBtn").addEventListener("click", () => {
+    const sum = aggregate(items);
+    const ctx = $("shareCanvas").getContext("2d");
+    const w = 800, h = 450;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "rgba(237,239,241,0.06)";
+    for (let x = 0; x < w; x += 36) for (let y = 0; y < h; y += 36) ctx.fillRect(x, y, 1, 1);
+    ctx.fillStyle = "#84cc16";
+    ctx.fillRect(0, 0, 8, h);
+    ctx.font = "600 14px ui-monospace, Menlo, monospace";
+    ctx.fillStyle = "#84cc16";
+    ctx.fillText("REGRET-008  ·  BUILD-100", 40, 48);
+    ctx.font = "700 28px Helvetica Neue, PingFang SC, sans-serif";
+    ctx.fillStyle = "#edeff1";
+    ctx.fillText(t("已经买了，闲置的天在烧钱。", "Already paying. Idle days still bill."), 40, 110);
+    ctx.font = "500 42px ui-monospace, Menlo, monospace";
+    ctx.fillStyle = sum.waste > 0 ? "#f87171" : "#4ade80";
+    ctx.fillText(t("浪费 ", "WASTE ") + money(sum.waste), 40, 190);
+    ctx.font = "16px Helvetica Neue, PingFang SC, sans-serif";
+    ctx.fillStyle = "#7d848c";
+    ctx.fillText(t(`已付 ${money(sum.totalPaid)}  ·  ${sum.count} 条  ·  日成本 ${money(sum.actualDaily)}`, `Paid ${money(sum.totalPaid)}  ·  ${sum.count} items  ·  /day ${money(sum.actualDaily)}`), 40, 250);
+    ctx.font = "14px ui-monospace, Menlo, monospace";
+    ctx.fillStyle = "#4a5057";
+    ctx.fillText("build-100.com/008", 40, 410);
+    $("shareCanvasWrap").classList.add("show");
+  });
+
+  $("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+  loadItems();
+  if (lang === "en") applyLang("en");
+  else render();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

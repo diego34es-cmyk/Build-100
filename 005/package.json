@@ -1,0 +1,10 @@
+{
+  "name": "lock-005",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LOCK-005 · lock library schema + offline research math",
+  "type": "module",
+  "scripts": {
+    "test": "node --test library.test.js"
+  }
+}

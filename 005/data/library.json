@@ -1,0 +1,968 @@
+{
+  "edition": 2,
+  "as_of": "2026-08-18",
+  "method": {
+    "lock": "dwell",
+    "price_grid": [
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      0.97,
+      0.99
+    ],
+    "dwell": "scaled_by_lifetime",
+    "exclude": [
+      "crypto_15m_or_shorter"
+    ]
+  },
+  "series": [
+    {
+      "id": "sports-cricket-hundred-match",
+      "name_zh": "The Hundred · 单场胜负",
+      "name_en": "The Hundred · match winner",
+      "category": "sports",
+      "status": "ready",
+      "n": 65,
+      "dwell_seconds": 600,
+      "lock_price": 0.8,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.0,
+          "n": 65
+        },
+        {
+          "price": 0.85,
+          "flip": 0.0,
+          "n": 65
+        },
+        {
+          "price": 0.9,
+          "flip": 0.0,
+          "n": 65
+        },
+        {
+          "price": 0.95,
+          "flip": 0.0,
+          "n": 62
+        },
+        {
+          "price": 0.97,
+          "flip": 0.0,
+          "n": 61
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 61
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "crypto-btc-updown-4h",
+      "name_zh": "比特币 · 4 小时涨跌",
+      "name_en": "Bitcoin · 4h up or down",
+      "category": "crypto",
+      "status": "thin",
+      "n": 34,
+      "dwell_seconds": 600,
+      "lock_price": 0.9,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.024390243902439025,
+          "n": 41
+        },
+        {
+          "price": 0.85,
+          "flip": 0.02564102564102564,
+          "n": 39
+        },
+        {
+          "price": 0.9,
+          "flip": 0.0,
+          "n": 34
+        },
+        {
+          "price": 0.95,
+          "flip": 0.0,
+          "n": 31
+        },
+        {
+          "price": 0.97,
+          "flip": 0.0,
+          "n": 25
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 17
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "macro-spy-up-or-down-on-date",
+      "name_zh": "标普 500 · 日涨跌",
+      "name_en": "SPY · daily up or down",
+      "category": "macro",
+      "status": "thin",
+      "n": 42,
+      "dwell_seconds": 1800,
+      "lock_price": 0.9,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.022727272727272728,
+          "n": 44
+        },
+        {
+          "price": 0.85,
+          "flip": 0.022727272727272728,
+          "n": 44
+        },
+        {
+          "price": 0.9,
+          "flip": 0.0,
+          "n": 42
+        },
+        {
+          "price": 0.95,
+          "flip": 0.0,
+          "n": 40
+        },
+        {
+          "price": 0.97,
+          "flip": 0.0,
+          "n": 38
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 30
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "macro-market-up-or-down-on-date",
+      "name_zh": "市场 · 每日涨跌",
+      "name_en": "Market · daily up or down",
+      "category": "macro",
+      "status": "ready",
+      "n": 163,
+      "dwell_seconds": 1800,
+      "lock_price": 0.97,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.06153846153846154,
+          "n": 260
+        },
+        {
+          "price": 0.85,
+          "flip": 0.048582995951417005,
+          "n": 247
+        },
+        {
+          "price": 0.9,
+          "flip": 0.017391304347826087,
+          "n": 230
+        },
+        {
+          "price": 0.95,
+          "flip": 0.005154639175257732,
+          "n": 194
+        },
+        {
+          "price": 0.97,
+          "flip": 0.0,
+          "n": 163
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 106
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "crypto-doge-up-or-down-on-date",
+      "name_zh": "crypto · doge up or down on date",
+      "name_en": "crypto · doge up or down on date",
+      "category": "crypto",
+      "status": "thin",
+      "n": 29,
+      "dwell_seconds": 1800,
+      "lock_price": 0.95,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.024390243902439025,
+          "n": 41
+        },
+        {
+          "price": 0.85,
+          "flip": 0.02631578947368421,
+          "n": 38
+        },
+        {
+          "price": 0.9,
+          "flip": 0.027777777777777776,
+          "n": 36
+        },
+        {
+          "price": 0.95,
+          "flip": 0.0,
+          "n": 29
+        },
+        {
+          "price": 0.97,
+          "flip": 0.0,
+          "n": 26
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 10
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "crypto-xrp-up-or-down-on-date",
+      "name_zh": "crypto · xrp up or down on date",
+      "name_en": "crypto · xrp up or down on date",
+      "category": "crypto",
+      "status": "ready",
+      "n": 117,
+      "dwell_seconds": 1800,
+      "lock_price": 0.95,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.03773584905660377,
+          "n": 159
+        },
+        {
+          "price": 0.85,
+          "flip": 0.0273972602739726,
+          "n": 146
+        },
+        {
+          "price": 0.9,
+          "flip": 0.029850746268656716,
+          "n": 134
+        },
+        {
+          "price": 0.95,
+          "flip": 0.0,
+          "n": 117
+        },
+        {
+          "price": 0.97,
+          "flip": 0.0,
+          "n": 109
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 65
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "crypto-eth-up-or-down-on-date",
+      "name_zh": "以太坊 · 日涨跌",
+      "name_en": "Ethereum · daily up or down",
+      "category": "crypto",
+      "status": "ready",
+      "n": 99,
+      "dwell_seconds": 1800,
+      "lock_price": 0.99,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.08588957055214724,
+          "n": 163
+        },
+        {
+          "price": 0.85,
+          "flip": 0.07947019867549669,
+          "n": 151
+        },
+        {
+          "price": 0.9,
+          "flip": 0.014492753623188406,
+          "n": 138
+        },
+        {
+          "price": 0.95,
+          "flip": 0.007751937984496124,
+          "n": 129
+        },
+        {
+          "price": 0.97,
+          "flip": 0.008403361344537815,
+          "n": 119
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 99
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "crypto-sol-up-or-down-on-date",
+      "name_zh": "Solana · 日涨跌",
+      "name_en": "Solana · daily up or down",
+      "category": "crypto",
+      "status": "ready",
+      "n": 64,
+      "dwell_seconds": 1800,
+      "lock_price": 0.99,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.10526315789473684,
+          "n": 171
+        },
+        {
+          "price": 0.85,
+          "flip": 0.0875,
+          "n": 160
+        },
+        {
+          "price": 0.9,
+          "flip": 0.07947019867549669,
+          "n": 151
+        },
+        {
+          "price": 0.95,
+          "flip": 0.016260162601626018,
+          "n": 123
+        },
+        {
+          "price": 0.97,
+          "flip": 0.009009009009009009,
+          "n": 111
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 64
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "crypto-bitcoin-up-or-down-on-date",
+      "name_zh": "比特币 · 日涨跌",
+      "name_en": "Bitcoin · daily up or down",
+      "category": "crypto",
+      "status": "ready",
+      "n": 85,
+      "dwell_seconds": 1800,
+      "lock_price": 0.99,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.02564102564102564,
+          "n": 195
+        },
+        {
+          "price": 0.85,
+          "flip": 0.021505376344086023,
+          "n": 186
+        },
+        {
+          "price": 0.9,
+          "flip": 0.017543859649122806,
+          "n": 171
+        },
+        {
+          "price": 0.95,
+          "flip": 0.006896551724137931,
+          "n": 145
+        },
+        {
+          "price": 0.97,
+          "flip": 0.007751937984496124,
+          "n": 129
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 85
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "macro-xauusd-up-or-down-on-date",
+      "name_zh": "黄金 · 日涨跌",
+      "name_en": "Gold · daily up or down",
+      "category": "macro",
+      "status": "thin",
+      "n": 30,
+      "dwell_seconds": 1800,
+      "lock_price": 0.8,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.0,
+          "n": 30
+        },
+        {
+          "price": 0.85,
+          "flip": 0.0,
+          "n": 28
+        },
+        {
+          "price": 0.9,
+          "flip": 0.0,
+          "n": 27
+        },
+        {
+          "price": 0.95,
+          "flip": 0.0,
+          "n": 26
+        },
+        {
+          "price": 0.97,
+          "flip": 0.0,
+          "n": 26
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 17
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "macro-xagusd-up-or-down-on-date",
+      "name_zh": "macro · xagusd up or down on date",
+      "name_en": "macro · xagusd up or down on date",
+      "category": "macro",
+      "status": "thin",
+      "n": 31,
+      "dwell_seconds": 1800,
+      "lock_price": 0.8,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.0,
+          "n": 31
+        },
+        {
+          "price": 0.85,
+          "flip": 0.0,
+          "n": 31
+        },
+        {
+          "price": 0.9,
+          "flip": 0.0,
+          "n": 30
+        },
+        {
+          "price": 0.95,
+          "flip": 0.0,
+          "n": 27
+        },
+        {
+          "price": 0.97,
+          "flip": 0.0,
+          "n": 25
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 17
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "macro-wti-up-or-down-on-date",
+      "name_zh": "WTI 原油 · 日涨跌",
+      "name_en": "WTI crude · daily up or down",
+      "category": "macro",
+      "status": "thin",
+      "n": 30,
+      "dwell_seconds": 1800,
+      "lock_price": 0.8,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.0,
+          "n": 30
+        },
+        {
+          "price": 0.85,
+          "flip": 0.0,
+          "n": 29
+        },
+        {
+          "price": 0.9,
+          "flip": 0.0,
+          "n": 28
+        },
+        {
+          "price": 0.95,
+          "flip": 0.0,
+          "n": 26
+        },
+        {
+          "price": 0.97,
+          "flip": 0.0,
+          "n": 25
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 18
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "macro-ng-up-or-down-on-date",
+      "name_zh": "天然气 · 日涨跌",
+      "name_en": "Natural gas · daily up or down",
+      "category": "macro",
+      "status": "thin",
+      "n": 29,
+      "dwell_seconds": 1800,
+      "lock_price": 0.9,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.03225806451612903,
+          "n": 31
+        },
+        {
+          "price": 0.85,
+          "flip": 0.03333333333333333,
+          "n": 30
+        },
+        {
+          "price": 0.9,
+          "flip": 0.0,
+          "n": 29
+        },
+        {
+          "price": 0.95,
+          "flip": 0.0,
+          "n": 23
+        },
+        {
+          "price": 0.97,
+          "flip": 0.0,
+          "n": 20
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 7
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "macro-eurusd-up-or-down-on-date",
+      "name_zh": "macro · eurusd up or down on date",
+      "name_en": "macro · eurusd up or down on date",
+      "category": "macro",
+      "status": "insufficient",
+      "n": 2,
+      "dwell_seconds": 1800,
+      "lock_price": null,
+      "flip_at_lock": null,
+      "curve": [],
+      "notes_zh": "已分析 2 个真实 dwell 事件，未达 15 个样本下限；入窗市场 27 个，其中无完整历史 25 个。",
+      "notes_en": "2 real dwell events analysed this edition but below the 15-sample floor; 27 markets in window, 25 without recoverable history."
+    },
+    {
+      "id": "macro-usdjpy-up-or-down-on-date",
+      "name_zh": "macro · usdjpy up or down on date",
+      "name_en": "macro · usdjpy up or down on date",
+      "category": "macro",
+      "status": "insufficient",
+      "n": 8,
+      "dwell_seconds": 1800,
+      "lock_price": null,
+      "flip_at_lock": null,
+      "curve": [],
+      "notes_zh": "已分析 8 个真实 dwell 事件，未达 15 个样本下限；入窗市场 27 个，其中无完整历史 19 个。",
+      "notes_en": "8 real dwell events analysed this edition but below the 15-sample floor; 27 markets in window, 19 without recoverable history."
+    },
+    {
+      "id": "macro-usdnok-up-or-down-on-date",
+      "name_zh": "macro · usdnok up or down on date",
+      "name_en": "macro · usdnok up or down on date",
+      "category": "macro",
+      "status": "insufficient",
+      "n": 2,
+      "dwell_seconds": 1800,
+      "lock_price": null,
+      "flip_at_lock": null,
+      "curve": [],
+      "notes_zh": "已分析 2 个真实 dwell 事件，未达 15 个样本下限；入窗市场 27 个，其中无完整历史 25 个。",
+      "notes_en": "2 real dwell events analysed this edition but below the 15-sample floor; 27 markets in window, 25 without recoverable history."
+    },
+    {
+      "id": "macro-usdsek-up-or-down-on-date",
+      "name_zh": "macro · usdsek up or down on date",
+      "name_en": "macro · usdsek up or down on date",
+      "category": "macro",
+      "status": "insufficient",
+      "n": 4,
+      "dwell_seconds": 1800,
+      "lock_price": null,
+      "flip_at_lock": null,
+      "curve": [],
+      "notes_zh": "已分析 4 个真实 dwell 事件，未达 15 个样本下限；入窗市场 27 个，其中无完整历史 23 个。",
+      "notes_en": "4 real dwell events analysed this edition but below the 15-sample floor; 27 markets in window, 23 without recoverable history."
+    },
+    {
+      "id": "weather-weather-rain",
+      "name_zh": "纽约中央公园 · 当日降雨",
+      "name_en": "NY Central Park · rain today",
+      "category": "weather",
+      "status": "insufficient",
+      "n": 33,
+      "dwell_seconds": 7200,
+      "lock_price": null,
+      "flip_at_lock": null,
+      "curve": [],
+      "notes_zh": "已分析 33 个真实 dwell 事件，未达 15 个样本下限；入窗市场 33 个，其中无完整历史 0 个。",
+      "notes_en": "33 real dwell events analysed this edition but below the 15-sample floor; 33 markets in window, 0 without recoverable history."
+    },
+    {
+      "id": "weather-climate-temp-increase-monthly",
+      "name_zh": "全球气温 · 月度升温区间",
+      "name_en": "Global Temp · monthly increase band",
+      "category": "weather",
+      "status": "insufficient",
+      "n": 13,
+      "dwell_seconds": 7200,
+      "lock_price": null,
+      "flip_at_lock": null,
+      "curve": [],
+      "notes_zh": "已分析 13 个真实 dwell 事件，未达 15 个样本下限；入窗市场 13 个，其中无完整历史 0 个。",
+      "notes_en": "13 real dwell events analysed this edition but below the 15-sample floor; 13 markets in window, 0 without recoverable history."
+    },
+    {
+      "id": "crypto-bitcoin-up-or-down-august-#-#pm-et-#",
+      "name_zh": "crypto · bitcoin up or down august # #pm et #",
+      "name_en": "crypto · bitcoin up or down august # #pm et #",
+      "category": "crypto",
+      "status": "insufficient",
+      "n": 3,
+      "dwell_seconds": 1800,
+      "lock_price": null,
+      "flip_at_lock": null,
+      "curve": [],
+      "notes_zh": "有效 dwell 事件少于最低门槛，暂不显示锁价或曲线。",
+      "notes_en": "Too few valid dwell events; no lock or curve shown."
+    },
+    {
+      "id": "sports-criclcl-kon-sou-#-#-#-toss-match-double-kon",
+      "name_zh": "sports · criclcl kon sou # # # toss match double ",
+      "name_en": "sports · criclcl kon sou # # # toss match double ",
+      "category": "sports",
+      "status": "insufficient",
+      "n": 1,
+      "dwell_seconds": 7200,
+      "lock_price": null,
+      "flip_at_lock": null,
+      "curve": [],
+      "notes_zh": "已分析 1 个真实 dwell 事件，未达 15 个样本下限；入窗市场 3 个，其中无完整历史 2 个。",
+      "notes_en": "1 real dwell events analysed this edition but below the 15-sample floor; 3 markets in window, 2 without recoverable history."
+    },
+    {
+      "id": "sports-criclcl-kon-sou-#-#-#-most-sixes-kon",
+      "name_zh": "sports · criclcl kon sou # # # most sixes kon",
+      "name_en": "sports · criclcl kon sou # # # most sixes kon",
+      "category": "sports",
+      "status": "insufficient",
+      "n": 3,
+      "dwell_seconds": 7200,
+      "lock_price": null,
+      "flip_at_lock": null,
+      "curve": [],
+      "notes_zh": "有效 dwell 事件少于最低门槛，暂不显示锁价或曲线。",
+      "notes_en": "Too few valid dwell events; no lock or curve shown."
+    },
+    {
+      "id": "sports-criclcl-kon-sou-#-#-#-team-top-batter-kon",
+      "name_zh": "sports · criclcl kon sou # # # team top batter ko",
+      "name_en": "sports · criclcl kon sou # # # team top batter ko",
+      "category": "sports",
+      "status": "insufficient",
+      "n": 2,
+      "dwell_seconds": 7200,
+      "lock_price": null,
+      "flip_at_lock": null,
+      "curve": [],
+      "notes_zh": "已分析 2 个真实 dwell 事件，未达 15 个样本下限；入窗市场 3 个，其中无完整历史 1 个。",
+      "notes_en": "2 real dwell events analysed this edition but below the 15-sample floor; 3 markets in window, 1 without recoverable history."
+    },
+    {
+      "id": "sports-qbgami-in-week-#-of-nfl-playoffs",
+      "name_zh": "sports · qbgami in week # of nfl playoffs",
+      "name_en": "sports · qbgami in week # of nfl playoffs",
+      "category": "sports",
+      "status": "insufficient",
+      "n": 3,
+      "dwell_seconds": 1800,
+      "lock_price": null,
+      "flip_at_lock": null,
+      "curve": [],
+      "notes_zh": "已分析 3 个真实 dwell 事件，未达 15 个样本下限；入窗市场 3 个，其中无完整历史 0 个。",
+      "notes_en": "3 real dwell events analysed this edition but below the 15-sample floor; 3 markets in window, 0 without recoverable history."
+    },
+    {
+      "id": "sports-scorigami-in-week-#-of-nfl-playoffs",
+      "name_zh": "sports · scorigami in week # of nfl playoffs",
+      "name_en": "sports · scorigami in week # of nfl playoffs",
+      "category": "sports",
+      "status": "insufficient",
+      "n": 3,
+      "dwell_seconds": 1800,
+      "lock_price": null,
+      "flip_at_lock": null,
+      "curve": [],
+      "notes_zh": "已分析 3 个真实 dwell 事件，未达 15 个样本下限；入窗市场 3 个，其中无完整历史 0 个。",
+      "notes_en": "3 real dwell events analysed this edition but below the 15-sample floor; 3 markets in window, 0 without recoverable history."
+    },
+    {
+      "id": "sports-qbgami-in-nfl-week-#",
+      "name_zh": "sports · qbgami in nfl week #",
+      "name_en": "sports · qbgami in nfl week #",
+      "category": "sports",
+      "status": "insufficient",
+      "n": 4,
+      "dwell_seconds": 1800,
+      "lock_price": null,
+      "flip_at_lock": null,
+      "curve": [],
+      "notes_zh": "已分析 4 个真实 dwell 事件，未达 15 个样本下限；入窗市场 4 个，其中无完整历史 0 个。",
+      "notes_en": "4 real dwell events analysed this edition but below the 15-sample floor; 4 markets in window, 0 without recoverable history."
+    },
+    {
+      "id": "sports-scorigami-in-nfl-week-#-#",
+      "name_zh": "sports · scorigami in nfl week # #",
+      "name_en": "sports · scorigami in nfl week # #",
+      "category": "sports",
+      "status": "thin",
+      "n": 16,
+      "dwell_seconds": 1800,
+      "lock_price": 0.8,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.0,
+          "n": 16
+        },
+        {
+          "price": 0.85,
+          "flip": 0.0,
+          "n": 15
+        },
+        {
+          "price": 0.9,
+          "flip": 0.0,
+          "n": 15
+        },
+        {
+          "price": 0.95,
+          "flip": 0.0,
+          "n": 11
+        },
+        {
+          "price": 0.97,
+          "flip": 0.0,
+          "n": 8
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 5
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "sports-cricket-international-match",
+      "name_zh": "板球 · 单场胜负",
+      "name_en": "Cricket · match winner",
+      "category": "sports",
+      "status": "thin",
+      "n": 39,
+      "dwell_seconds": 600,
+      "lock_price": 0.8,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.0,
+          "n": 39
+        },
+        {
+          "price": 0.85,
+          "flip": 0.0,
+          "n": 39
+        },
+        {
+          "price": 0.9,
+          "flip": 0.0,
+          "n": 39
+        },
+        {
+          "price": 0.95,
+          "flip": 0.0,
+          "n": 39
+        },
+        {
+          "price": 0.97,
+          "flip": 0.0,
+          "n": 39
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 39
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "crypto-bitcoin-hourly-et",
+      "name_zh": "比特币 · 小时涨跌",
+      "name_en": "Bitcoin · hourly up or down",
+      "category": "crypto",
+      "status": "thin",
+      "n": 38,
+      "dwell_seconds": 120,
+      "lock_price": 0.95,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.05521472392638037,
+          "n": 163
+        },
+        {
+          "price": 0.85,
+          "flip": 0.028985507246376812,
+          "n": 138
+        },
+        {
+          "price": 0.9,
+          "flip": 0.010101010101010102,
+          "n": 99
+        },
+        {
+          "price": 0.95,
+          "flip": 0.0,
+          "n": 38
+        },
+        {
+          "price": 0.97,
+          "flip": 0.0,
+          "n": 15
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 2
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    },
+    {
+      "id": "sports-ufc-fight",
+      "name_zh": "UFC · 单场胜负",
+      "name_en": "UFC · fight winner",
+      "category": "sports",
+      "status": "ready",
+      "n": 243,
+      "dwell_seconds": 600,
+      "lock_price": 0.85,
+      "flip_at_lock": 0.0,
+      "curve": [
+        {
+          "price": 0.8,
+          "flip": 0.004032258064516129,
+          "n": 248
+        },
+        {
+          "price": 0.85,
+          "flip": 0.0,
+          "n": 243
+        },
+        {
+          "price": 0.9,
+          "flip": 0.0,
+          "n": 240
+        },
+        {
+          "price": 0.95,
+          "flip": 0.0,
+          "n": 236
+        },
+        {
+          "price": 0.97,
+          "flip": 0.0,
+          "n": 231
+        },
+        {
+          "price": 0.99,
+          "flip": 0.0,
+          "n": 228
+        }
+      ],
+      "notes_zh": "",
+      "notes_en": ""
+    }
+  ]
+}
