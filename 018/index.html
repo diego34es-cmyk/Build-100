@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UNHIDE-018 · 粘贴前揭隐形字</title>
+<meta name="description" content="复制的提示词 / 技能 / MCP 描述里藏着零宽、双向控制、Unicode Tag，肉眼看不见，模型全读得到。本页粘贴后标出隐形字、解码 Tag、一键净化复制。全程本机，无上传、无 API。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/018/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E018%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="UNHIDE-018 · 粘贴前揭隐形字">
+<meta property="og:description" content="喂模型前，先揭开隐形字。本地扫描，一键净化。零宽 / Bidi / Unicode Tag，肉眼看不见，模型全读得到。">
+<meta property="og:url" content="https://build-100.com/018/">
+<meta property="og:image" content="https://build-100.com/018/og-018.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="UNHIDE-018 · 粘贴前揭隐形字">
+<meta name="twitter:description" content="Reveal invisible Unicode before you paste into a model. Local scan, one-click clean.">
+<meta name="twitter:image" content="https://build-100.com/018/og-018.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #22d3ee;
+    --accent-glow: rgba(34, 211, 238, 0.35);
+    --danger: #f87171;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, textarea:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(24px, 4vh, 36px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--accent); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p.sub { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  .privacy {
+    display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap;
+    margin-bottom: clamp(28px, 5vh, 40px);
+    padding: 14px 16px; border: 1px solid var(--line-strong); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(34, 211, 238, 0.12), transparent 60%);
+  }
+  .privacy .dot { color: var(--live); letter-spacing: 0.18em; }
+  .privacy p { color: var(--muted); font-size: 0.9rem; max-width: 42em; }
+  .privacy p strong { color: var(--ink); font-weight: 500; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  textarea.raw {
+    width: 100%; min-height: 220px; resize: vertical;
+    background: var(--bg-raise); border: 1px solid var(--line-strong); border-radius: 8px;
+    color: var(--ink); font-family: var(--mono); font-size: 0.88rem; line-height: 1.55;
+    padding: 14px; outline: none; transition: border-color .18s, box-shadow .18s;
+    unicode-bidi: isolate-override; direction: ltr;
+  }
+  textarea.raw:focus { border-color: var(--accent); box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.25); }
+  textarea.raw::placeholder { color: var(--faint); }
+
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+  .add-btn, .ghost-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 12px 16px; border-radius: 4px; cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .add-btn {
+    border: 1px solid var(--accent); background: rgba(34, 211, 238, 0.12); color: var(--ink);
+  }
+  .add-btn:hover:not(:disabled) { background: var(--accent); color: var(--bg); box-shadow: 0 0 20px var(--accent-glow); }
+  .ghost-btn { border: 1px solid var(--line-strong); background: none; color: var(--muted); }
+  .ghost-btn:hover:not(:disabled) { color: var(--ink); border-color: var(--ink); }
+  .add-btn:disabled, .ghost-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .opt-row {
+    display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center;
+    margin-top: 14px;
+  }
+  .check {
+    display: flex; align-items: flex-start; gap: 10px; cursor: pointer;
+    color: var(--muted); font-size: 0.9rem; max-width: 42em;
+  }
+  .check input {
+    margin-top: 4px; accent-color: var(--accent); width: 16px; height: 16px; flex: none;
+  }
+  .check strong { color: var(--ink); font-weight: 500; }
+
+  .status { min-height: 1.3em; font-size: 0.86rem; color: var(--muted); margin-top: 10px; font-family: var(--mono); letter-spacing: 0.02em; }
+  .status.err { color: var(--danger); }
+  .status.ok { color: var(--live); }
+
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px;
+  }
+  @media (max-width: 560px) { .stats { grid-template-columns: 1fr 1fr; } }
+  .stat {
+    border: 1px solid var(--line-strong); border-radius: 8px; background: var(--bg-raise);
+    padding: 12px 14px;
+  }
+  .stat.on { border-color: var(--accent); box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.2) inset; }
+  .stat.warn { border-color: var(--delta); }
+  .stat.hot { border-color: var(--danger); }
+  .stat-n {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: 1.45rem; font-weight: 500; color: var(--ink); line-height: 1.1;
+  }
+  .stat.on .stat-n { color: var(--accent); }
+  .stat.warn .stat-n { color: var(--delta); }
+  .stat.hot .stat-n { color: var(--danger); }
+  .stat-l { display: block; margin-top: 4px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
+
+  .preview-wrap {
+    border: 1px solid var(--line-strong); border-radius: 8px; background: var(--bg-raise);
+    padding: 14px; min-height: 140px;
+  }
+  .preview {
+    unicode-bidi: isolate;
+    direction: ltr;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    font-family: var(--mono); font-size: 0.84rem; line-height: 1.7;
+    color: var(--ink);
+  }
+  .preview.is-empty { color: var(--faint); }
+  .pill {
+    unicode-bidi: isolate;
+    display: inline-flex; align-items: center;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em;
+    padding: 1px 7px; margin: 0 2px; border-radius: 999px;
+    vertical-align: 1px; cursor: help; line-height: 1.5;
+  }
+  .pill-zeroWidth { background: rgba(34, 211, 238, 0.16); color: var(--accent); border: 1px solid rgba(34, 211, 238, 0.35); }
+  .pill-bidi { background: rgba(248, 113, 113, 0.16); color: var(--danger); border: 1px solid rgba(248, 113, 113, 0.4); }
+  .pill-tag { background: rgba(251, 191, 36, 0.16); color: var(--delta); border: 1px solid rgba(251, 191, 36, 0.4); }
+  .pill-confusable {
+    background: rgba(251, 191, 36, 0.12); color: #fde68a;
+    border: 1px dashed rgba(251, 191, 36, 0.55); border-radius: 4px; padding: 0 4px;
+  }
+
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 10px;
+    color: var(--faint); font-size: 0.78rem; font-family: var(--mono); letter-spacing: 0.04em;
+  }
+  .legend i {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 0;
+  }
+  .legend .zw { background: var(--accent); }
+  .legend .bd { background: var(--danger); }
+  .legend .tg { background: var(--delta); }
+  .legend .cf { background: #fde68a; }
+
+  .tag-card {
+    margin-top: 14px; border: 1px solid var(--line-strong); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(251, 191, 36, 0.08), transparent 55%);
+    padding: 14px 16px;
+  }
+  .tag-card.is-empty { background: var(--bg-raise); }
+  .tag-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); margin-bottom: 8px; }
+  .tag-out {
+    font-family: var(--mono); font-size: 0.92rem; color: var(--delta);
+    white-space: pre-wrap; overflow-wrap: anywhere; min-height: 1.2em;
+  }
+  .tag-out.is-empty { color: var(--faint); }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .origin-card {
+    margin-top: 48px; padding: clamp(24px, 4vw, 32px);
+    border: 1px solid var(--line); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(34, 211, 238, 0.1), transparent 55%);
+  }
+  .origin-eyebrow { color: var(--accent); margin-bottom: 12px; }
+  .origin-text { color: var(--muted); font-size: 0.95rem; max-width: 34em; }
+  .origin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .origin-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); border-radius: 4px;
+    color: var(--muted); cursor: pointer; transition: all .2s;
+  }
+  .origin-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .origin-btn.primary { border-color: var(--accent); color: var(--ink); background: rgba(34, 211, 238, 0.1); }
+  .origin-btn.primary:hover { background: var(--accent); color: var(--bg); }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">UNHIDE<span>·018</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; UNHIDE-018 · LOCAL SCAN</p>
+    <h1 data-en="Reveal invisible Unicode before you paste into a model. Local scan, one-click clean.">喂模型前，先揭开隐形字。本地扫描，一键净化。</h1>
+    <p class="sub" data-en="Copied prompts / skills / MCP descriptions can hide <strong>zero-width, bidi controls, Unicode Tags</strong> (AI watermarks / injection). You cannot see them; the model reads them all. This page: paste → mark invisibles → decode Tags → one-click clean copy. All on-device, no upload, no API. No semantic “is this injection?” call.">
+      复制的提示词 / 技能 / MCP 描述里藏着<strong>零宽、双向控制、Unicode Tag</strong>（AI 水印 / 注入），肉眼看不见，模型全读得到。本页：粘贴 → 标出隐形字 → Tag 解码 → 一键净化复制。全程本机，无上传、无 API。不做语义「是不是注入」判定。
+    </p>
+  </header>
+
+  <aside class="privacy">
+    <span class="mono dot">● LOCAL</span>
+    <p data-en="<strong>Text stays on this device · no upload · no API · no CDN libraries.</strong> Refresh and it is gone — the paste is never persisted. The page itself may still load beacon.js.">
+      <strong>文本不离开本机 · 无上传 · 无 API · 无 CDN 库。</strong>刷新即丢，文本不持久化。页面本身仍可能加载 beacon.js。
+    </p>
+  </aside>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <span class="field-title" data-en="Paste the text">粘贴文本</span>
+      <span class="field-hint" data-en="Scans on input / paste (debounced). Samples are built from code-point escapes — this HTML file does not contain raw invisible characters.">
+        输入或粘贴即扫（防抖）。样例由码点转义拼出，本页 HTML 源码里不肉眼贴隐形字。
+      </span>
+    </div>
+    <textarea class="raw" id="src" dir="ltr" spellcheck="false" autocomplete="off" autocapitalize="off"
+      placeholder="粘贴提示词、技能或 MCP 描述…"
+      data-ph-zh="粘贴提示词、技能或 MCP 描述…"
+      data-ph-en="Paste a prompt, skill, or MCP description…"></textarea>
+    <div class="tools">
+      <button class="add-btn" type="button" id="cleanBtn" data-en="Clean &amp; copy">净化复制</button>
+      <button class="ghost-btn" type="button" id="clearBtn" data-en="Clear">一键清空</button>
+      <button class="ghost-btn" type="button" id="sampleTrojan" data-en="Trojan-Source sample">Trojan-Source 示意</button>
+      <button class="ghost-btn" type="button" id="sampleTag" data-en="AI watermark Tag sample">AI watermark Tag 示意</button>
+    </div>
+    <div class="opt-row">
+      <label class="check">
+        <input type="checkbox" id="stripConfusables">
+        <span data-en="Also replace confusables with ASCII (only when Latin / Cyrillic are mixed). Default keeps ZWJ / ZWNJ so emoji sequences stay intact.">
+          也替换同形为 ASCII（仅拉丁 / 西里尔混用时）。默认保留 ZWJ / ZWNJ，以免拆开 emoji。
+        </span>
+      </label>
+    </div>
+    <p class="status" id="status" role="status"></p>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <span class="field-title" data-en="Reveal">揭开</span>
+      <span class="field-hint" data-en="Zero-width / Tag / Bidi have no width, so they become visible pills. Hover a pill for U+XXXX and category. Preview is bidi-isolated; only findings are wrapped.">
+        零宽 / Tag / Bidi 没有宽度，换成可见药丸。悬停显示 U+XXXX 与类别。预览隔离双向排版；只包 findings。
+      </span>
+    </div>
+    <div class="stats" id="stats">
+      <div class="stat" id="statZero">
+        <span class="stat-n" id="nZero">0</span>
+        <span class="stat-l" data-en="Zero-width">隐形</span>
+      </div>
+      <div class="stat" id="statTag">
+        <span class="stat-n" id="nTag">0</span>
+        <span class="stat-l">Tag</span>
+      </div>
+      <div class="stat" id="statBidi">
+        <span class="stat-n" id="nBidi">0</span>
+        <span class="stat-l">Bidi</span>
+      </div>
+      <div class="stat" id="statConf">
+        <span class="stat-n" id="nConf">0</span>
+        <span class="stat-l" data-en="Confusable">同形</span>
+      </div>
+    </div>
+    <div class="preview-wrap">
+      <div class="preview is-empty" id="preview"></div>
+    </div>
+    <p class="legend">
+      <span><i class="zw"></i><span data-en="zero-width">零宽</span></span>
+      <span><i class="tg"></i>Tag</span>
+      <span><i class="bd"></i>Bidi</span>
+      <span><i class="cf"></i><span data-en="confusable (kept by default)">同形（默认保留）</span></span>
+    </p>
+    <div class="tag-card is-empty" id="tagCard">
+      <div class="tag-label" data-en="Tag decoded">Tag 解码</div>
+      <pre class="tag-out is-empty" id="tagOut"></pre>
+    </div>
+  </div>
+
+  <div class="share-row">
+    <button class="share-btn" id="copyBtn" type="button" data-en="Copy blurb">复制文案摘要</button>
+    <button class="share-btn" id="shareImgBtn" type="button" data-en="Share image">生成分享图</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareCanvasWrap">
+    <canvas id="shareCanvas" width="800" height="450"></canvas>
+    <p class="share-save-hint" data-en="Long-press or right-click to save. The share image is branding only — your paste is never drawn here.">长按或右键保存。分享图只有文案，不含你粘贴的文本。</p>
+  </div>
+
+  <aside class="origin-card">
+    <p class="mono origin-eyebrow">BUILD-100 · 018/100</p>
+    <p class="origin-text" data-en="No.018 of BUILD-100 — one person building 100 websites with AI, in public. Reveal hidden Unicode in the tab, clean-copy, keep the paste off the wire.">
+      BUILD-100 的第 018 号：一个人用 AI 公开做 100 个网站。在标签页里揭开隐形字，净化复制，文本不必上线。
+    </p>
+    <div class="origin-actions">
+      <a class="origin-btn primary" href="https://build-100.com/" data-en="See the project →">看看这个计划 →</a>
+      <a class="origin-btn" href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="Follow along on X">在 X 上看过程</a>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="UNHIDE-018 · Reveal invisible Unicode">UNHIDE-018 · 粘贴前揭隐形字</span>
+</footer>
+
+<script type="module">
+  import {
+    DEBOUNCE_MS,
+    scanText,
+    cleanText,
+    previewSegments,
+    sampleTrojanSource,
+    sampleTagWatermark,
+    buildShareText,
+    loadPrefs,
+    savePrefs,
+  } from "./engine.js";
+
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  if (lang !== "en") lang = "zh";
+
+  const $ = (id) => document.getElementById(id);
+  const t = (zh, en) => (lang === "en" ? en : zh);
+
+  const CAT = {
+    zeroWidth: { zh: "零宽", en: "zero-width" },
+    bidi: { zh: "Bidi", en: "Bidi" },
+    tag: { zh: "Tag", en: "Tag" },
+    confusable: { zh: "同形", en: "confusable" },
+  };
+
+  let lastScan = scanText("");
+  let debounceTimer = 0;
+  let statusTimer = 0;
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.title = l === "en"
+      ? "UNHIDE-018 · Reveal invisible Unicode"
+      : "UNHIDE-018 · 粘贴前揭隐形字";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    $("src").placeholder = l === "en" ? $("src").dataset.phEn : $("src").dataset.phZh;
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    render();
+    if ($("shareCanvasWrap").classList.contains("show")) renderShare();
+  }
+
+  function setStatus(msg, kind) {
+    const el = $("status");
+    el.textContent = msg || "";
+    el.className = "status" + (kind ? " " + kind : "");
+    if (statusTimer) clearTimeout(statusTimer);
+    if (msg && kind === "ok") {
+      statusTimer = setTimeout(() => {
+        el.textContent = "";
+        el.className = "status";
+      }, 2200);
+    }
+  }
+
+  function flashCopied(btn) {
+    btn.classList.add("copied");
+    const orig = btn.textContent;
+    btn.textContent = t("已复制 ✓", "Copied ✓");
+    setTimeout(() => {
+      btn.classList.remove("copied");
+      btn.textContent = orig;
+    }, 1800);
+  }
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand("copy"); } catch (_) {}
+      ta.remove();
+      return ok;
+    }
+  }
+
+  function renderPreview(text, findings) {
+    const el = $("preview");
+    el.replaceChildren();
+    if (!text) {
+      el.classList.add("is-empty");
+      el.appendChild(document.createTextNode(
+        t("粘贴后，隐形字会变成可见药丸。", "After you paste, invisibles become visible pills.")
+      ));
+      return;
+    }
+    el.classList.remove("is-empty");
+    const segs = previewSegments(text, findings);
+    const frag = document.createDocumentFragment();
+    for (const seg of segs) {
+      if (seg.type === "text") {
+        frag.appendChild(document.createTextNode(seg.text));
+        continue;
+      }
+      const span = document.createElement("span");
+      span.className = "pill pill-" + seg.category;
+      span.textContent = seg.text;
+      const cat = CAT[seg.category] || { zh: seg.category, en: seg.category };
+      span.title = seg.title + " · " + t(cat.zh, cat.en);
+      span.setAttribute("aria-label", span.title);
+      frag.appendChild(span);
+    }
+    el.appendChild(frag);
+  }
+
+  function render() {
+    const text = $("src").value;
+    lastScan = scanText(text);
+    const c = lastScan.counts;
+    $("nZero").textContent = String(c.zeroWidth);
+    $("nTag").textContent = String(c.tag);
+    $("nBidi").textContent = String(c.bidi);
+    $("nConf").textContent = String(c.confusable);
+    $("statZero").className = "stat" + (c.zeroWidth ? " on" : "");
+    $("statTag").className = "stat" + (c.tag ? " warn" : "");
+    $("statBidi").className = "stat" + (c.bidi ? " hot" : "");
+    $("statConf").className = "stat" + (c.confusable ? " warn" : "");
+    renderPreview(text, lastScan.findings);
+    const decoded = lastScan.tagDecoded;
+    const out = $("tagOut");
+    $("tagCard").classList.toggle("is-empty", !decoded);
+    if (decoded) {
+      out.classList.remove("is-empty");
+      out.textContent = decoded;
+    } else {
+      out.classList.add("is-empty");
+      out.textContent = text && c.tag
+        ? t("Tag 在，但拼不出明文。", "Tags present, but nothing decodes to ASCII.")
+        : t("没有可拼出的 Tag 明文。", "No Tag payload to decode.");
+    }
+  }
+
+  function scheduleScan() {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      debounceTimer = 0;
+      render();
+    }, DEBOUNCE_MS);
+  }
+
+  function wrapText(ctx, text, x, y, maxW, lineH) {
+    const words = String(text).split("");
+    let line = "";
+    let yy = y;
+    for (const ch of words) {
+      const test = line + ch;
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line, x, yy);
+        line = ch;
+        yy += lineH;
+      } else line = test;
+    }
+    if (line) ctx.fillText(line, x, yy);
+    return yy;
+  }
+
+  function renderShare() {
+    const canvas = $("shareCanvas");
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    const c = lastScan.counts;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "rgba(237,239,241,0.05)";
+    for (let x = 16; x < w; x += 36) {
+      for (let y = 16; y < h; y += 36) ctx.fillRect(x, y, 2, 2);
+    }
+    ctx.fillStyle = "#22d3ee";
+    ctx.font = "600 13px ui-monospace, SF Mono, monospace";
+    ctx.fillText("UNHIDE-018", 48, 56);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 28px Helvetica Neue, PingFang SC, sans-serif";
+    const headline = t("喂模型前，先揭开隐形字。", "Reveal invisible Unicode before you paste.");
+    wrapText(ctx, headline, 48, 110, w - 96, 36);
+    ctx.fillStyle = "#22d3ee";
+    ctx.font = "600 16px ui-monospace, SF Mono, monospace";
+    ctx.fillText(
+      t("文本不离开本机 · 无上传 · 无 API", "Text stays on device · no upload · no API"),
+      48, 250
+    );
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "500 14px ui-monospace, SF Mono, monospace";
+    ctx.fillText(
+      t(
+        "零宽 " + c.zeroWidth + " · Tag " + c.tag + " · Bidi " + c.bidi + " · 同形 " + c.confusable,
+        "zero-width " + c.zeroWidth + " · Tag " + c.tag + " · Bidi " + c.bidi + " · confusable " + c.confusable
+      ),
+      48, 292
+    );
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "500 12px ui-monospace, SF Mono, monospace";
+    ctx.fillText("build-100.com/018", 48, 400);
+  }
+
+  $("src").addEventListener("input", scheduleScan);
+  $("src").addEventListener("paste", scheduleScan);
+
+  $("cleanBtn").addEventListener("click", async () => {
+    const cleaned = cleanText($("src").value, {
+      stripConfusables: $("stripConfusables").checked,
+    });
+    const ok = await copyText(cleaned);
+    if (ok) {
+      setStatus(
+        t("已复制净化文本（" + cleaned.length + " 字）", "Cleaned text copied (" + cleaned.length + " chars)"),
+        "ok"
+      );
+      flashCopied($("cleanBtn"));
+    } else {
+      setStatus(t("无法写入剪贴板", "Could not write clipboard"), "err");
+    }
+  });
+
+  $("clearBtn").addEventListener("click", () => {
+    $("src").value = "";
+    if (debounceTimer) clearTimeout(debounceTimer);
+    render();
+    setStatus(t("已清空", "Cleared"), "ok");
+    $("src").focus();
+  });
+
+  $("sampleTrojan").addEventListener("click", () => {
+    $("src").value = sampleTrojanSource();
+    if (debounceTimer) clearTimeout(debounceTimer);
+    render();
+    setStatus(t("已填入 Trojan-Source 示意", "Loaded Trojan-Source sample"), "ok");
+  });
+
+  $("sampleTag").addEventListener("click", () => {
+    $("src").value = sampleTagWatermark();
+    if (debounceTimer) clearTimeout(debounceTimer);
+    render();
+    setStatus(t("已填入 Tag 水印示意", "Loaded Tag watermark sample"), "ok");
+  });
+
+  $("stripConfusables").addEventListener("change", () => {
+    savePrefs(localStorage, { stripConfusables: $("stripConfusables").checked });
+  });
+
+  $("copyBtn").addEventListener("click", async () => {
+    const text = buildShareText(lastScan.counts, lang);
+    const ok = await copyText(text);
+    if (ok) flashCopied($("copyBtn"));
+  });
+
+  $("shareImgBtn").addEventListener("click", () => {
+    renderShare();
+    $("shareCanvasWrap").classList.add("show");
+  });
+
+  $("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+
+  const prefs = loadPrefs(typeof localStorage !== "undefined" ? localStorage : null);
+  $("stripConfusables").checked = !!prefs.stripConfusables;
+
+  if (lang === "en") applyLang("en");
+  else {
+    $("src").placeholder = $("src").dataset.phZh;
+    render();
+  }
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

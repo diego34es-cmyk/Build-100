@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DECIDE-010 · 决策一页纸</title>
+<meta name="description" content="把选项和标准摊开，加权打分，导出一页 Markdown。断网也能用。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/010/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E010%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="DECIDE-010 · 决策一页纸">
+<meta property="og:description" content="把选项和标准摊开，加权打分，导出一页 Markdown。断网也能用。">
+<meta property="og:url" content="https://build-100.com/010/">
+<meta property="og:image" content="https://build-100.com/010/og-010.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DECIDE-010 · 决策一页纸">
+<meta name="twitter:description" content="Lay out options and criteria, score with weights, export one Markdown page.">
+<meta name="twitter:image" content="https://build-100.com/010/og-010.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #94a3b8;
+    --accent-glow: rgba(148, 163, 184, 0.35);
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    color: var(--muted); transition: color .2s; white-space: nowrap;
+  }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 44px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--accent); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p.sub { color: var(--muted); max-width: 36em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  .paper {
+    border: 1px solid var(--line-strong); border-radius: 8px;
+    background: var(--bg-raise); padding: clamp(16px, 3vw, 24px);
+  }
+  .title-row { display: grid; gap: 10px; margin-bottom: 18px; }
+  .title-row label, .opt-card label, .crit-meta {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--faint); display: block; margin-bottom: 6px;
+  }
+  .title-in, .note-in, .cell-in {
+    width: 100%; background: var(--bg); border: 1px solid var(--line); border-radius: 4px;
+    color: var(--ink); font-family: var(--sans); padding: 10px 12px; outline: none;
+    transition: border-color .18s, box-shadow .18s;
+  }
+  .title-in { font-size: 1.25rem; font-weight: 700; }
+  .note-in { font-size: 0.92rem; color: var(--muted); resize: vertical; min-height: 64px; }
+  .title-in:focus, .note-in:focus, .cell-in:focus {
+    border-color: var(--accent); box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.25);
+  }
+
+  .sec-label {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    margin: 8px 0 12px;
+  }
+  .sec-label h2 { font-size: 0.95rem; font-weight: 700; }
+  .ghost {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 7px 12px; border-radius: 4px; cursor: pointer; transition: all .18s; white-space: nowrap;
+  }
+  .ghost:hover:not(:disabled) { color: var(--ink); border-color: var(--ink); }
+  .ghost:disabled { opacity: 0.35; cursor: not-allowed; }
+  .ghost.danger:hover:not(:disabled) { color: #fca5a5; border-color: #f87171; }
+
+  .opt-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px; margin-bottom: 8px;
+  }
+  .opt-card {
+    border: 1px solid var(--line); border-radius: 6px; padding: 12px;
+    background: var(--bg); min-width: 0;
+  }
+  .opt-card.is-lead { border-color: var(--accent); box-shadow: 0 0 0 1px rgba(148,163,184,0.22); }
+  .opt-card .cell-in { margin-bottom: 8px; }
+  .opt-card .name-in { font-weight: 700; }
+  .opt-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 4px; }
+  .lead-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+
+  .sheet-wrap { overflow-x: auto; margin-top: 8px; border: 1px solid var(--line); border-radius: 6px; }
+  table.sheet {
+    width: 100%; border-collapse: collapse; min-width: 520px;
+    font-variant-numeric: tabular-nums;
+  }
+  .sheet th, .sheet td {
+    border-bottom: 1px solid var(--line); padding: 8px 8px; text-align: center; vertical-align: middle;
+  }
+  .sheet thead th {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    color: var(--muted); font-weight: 500; background: rgba(237,239,241,0.03);
+  }
+  .sheet tbody th {
+    text-align: left; font-weight: 500; min-width: 132px;
+  }
+  .sheet .w-col { width: 72px; }
+  .sheet input[type=number] {
+    width: 64px; text-align: center; font-family: var(--mono); font-size: 1rem;
+    background: transparent; border: 1px solid transparent; border-radius: 4px;
+    color: var(--ink); padding: 6px 4px;
+  }
+  .sheet input[type=number]:hover { border-color: var(--line-strong); }
+  .sheet input[type=number]:focus { border-color: var(--accent); outline: none; background: var(--bg); }
+  .sheet input.crit-name {
+    width: 100%; min-width: 96px; text-align: left; font-family: var(--sans); font-size: 0.92rem;
+    background: transparent; border: 1px solid transparent; color: var(--ink); padding: 6px 4px; border-radius: 4px;
+  }
+  .sheet input.crit-name:focus { border-color: var(--accent); outline: none; background: var(--bg); }
+  .sheet col.is-lead { background: rgba(148, 163, 184, 0.08); }
+  .sheet tfoot td { font-family: var(--mono); font-size: 1.05rem; color: var(--ink); border-bottom: none; padding-top: 12px; padding-bottom: 12px; }
+  .sheet tfoot .avg { color: var(--accent); font-weight: 700; }
+  .sheet tfoot .avg.is-lead { color: var(--live); }
+  .row-del {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+    background: none; border: none; color: var(--faint); cursor: pointer; padding: 4px 6px;
+  }
+  .row-del:hover:not(:disabled) { color: #fca5a5; }
+  .row-del:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .verdict {
+    margin-top: 18px; padding: 16px 18px; border-radius: 6px;
+    border: 1px solid var(--accent); background: linear-gradient(135deg, rgba(148,163,184,0.12), rgba(148,163,184,0.02));
+  }
+  .verdict .k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .verdict .v { font-size: 1.15rem; font-weight: 700; }
+  .verdict .s { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+  .formula { margin-top: 12px; color: var(--faint); }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.primary { border-color: var(--accent); background: rgba(148,163,184,0.1); }
+  .share-btn.primary:hover { background: var(--accent); color: var(--bg); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .saved {
+    margin-top: 14px; min-height: 1.2em;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--faint);
+  }
+
+  footer {
+    border-top: 1px solid var(--line); padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+  @media print {
+    body { background: #fff; color: #111; }
+    .nav, .share-row, .share-canvas-wrap, footer, .ghost, .row-del { display: none !important; }
+    main { padding: 0; max-width: none; }
+    .paper { border: none; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">DECIDE<span>·010</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; DECIDE-010 · ONE-PAGE DECISION</p>
+    <h1 data-en="Lay the options out. Score them. Then pick.">把选项摊开，打完分再选。</h1>
+    <p class="sub" data-en="Two to four options, two to six criteria, optional weights. The page totals a weighted score and exports Markdown — works offline.">
+      2–4 个选项，2–6 条标准，权重可调。<strong>加权分自动汇总</strong>，一键导出 Markdown。断网也能用，这一页会记在本机。
+    </p>
+  </header>
+
+  <div class="paper" id="paper">
+    <div class="title-row">
+      <div>
+        <label for="titleIn" data-en="Decision">决策</label>
+        <input class="title-in" id="titleIn" maxlength="80" autocomplete="off" aria-label="决策标题">
+      </div>
+      <div>
+        <label for="noteIn" data-en="Note">备注</label>
+        <textarea class="note-in" id="noteIn" maxlength="200" autocomplete="off" aria-label="备注"></textarea>
+      </div>
+    </div>
+
+    <div class="sec-label">
+      <h2 data-en="Options">选项</h2>
+      <button class="ghost" type="button" id="addOpt" data-en="+ Option">＋ 选项</button>
+    </div>
+    <div class="opt-grid" id="optGrid"></div>
+
+    <div class="sec-label">
+      <h2 data-en="Criteria × scores">标准 × 打分</h2>
+      <button class="ghost" type="button" id="addCrit" data-en="+ Criterion">＋ 标准</button>
+    </div>
+    <div class="sheet-wrap">
+      <table class="sheet" id="sheet"></table>
+    </div>
+
+    <aside class="verdict" id="verdict" aria-live="polite">
+      <div class="k" data-en="Leading">当前领先</div>
+      <div class="v" id="verdictName">—</div>
+      <div class="s" id="verdictSub"></div>
+    </aside>
+    <p class="mono formula" data-en="Weighted avg = Σ(score × weight) / Σ(weight). Weights 0–5; if all weights are 0, each criterion counts as 1.">加权均分 = Σ(分数 × 权重) / Σ(权重)。权重 0–5；若全为 0，则每条标准按 1 计。</p>
+  </div>
+
+  <div class="share-row">
+    <button class="share-btn primary" type="button" id="exportBtn" data-en="Export Markdown">导出 Markdown</button>
+    <button class="share-btn" type="button" id="copyBtn" data-en="Copy Markdown">复制 Markdown</button>
+    <button class="share-btn" type="button" id="cardBtn" data-en="Score card">生成卡片</button>
+    <button class="share-btn" type="button" id="resetBtn" data-en="Reset example">恢复示例</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareCanvasWrap">
+    <canvas id="shareCanvas" width="1200" height="628" aria-label="决策卡片"></canvas>
+    <p class="share-save-hint" data-en="Right-click or long-press to save the image.">右键或长按图片即可保存。</p>
+  </div>
+  <p class="saved" id="savedHint"></p>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono">DECIDE-010 · 决策一页纸</span>
+</footer>
+
+<script type="module">
+  import {
+    LIMITS, addCriterion, addOption, clampScore, clampWeight, defaultPaper,
+    fileSlug, getScore, leaders, ranked, removeCriterion, removeOption,
+    sanitizePaper, setScore, toMarkdown, totals, updateCriterion, updateOption,
+  } from "./engine.js";
+
+  const STORE = "decide-010";
+  let paper = defaultPaper();
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  let saveTimer = 0;
+  let savedAt = 0;
+
+  const $ = (id) => document.getElementById(id);
+  const titleIn = $("titleIn");
+  const noteIn = $("noteIn");
+  const optGrid = $("optGrid");
+  const sheet = $("sheet");
+  const addOpt = $("addOpt");
+  const addCrit = $("addCrit");
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    render({ keepFocus: false });
+  }
+  $("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORE);
+      if (raw) paper = sanitizePaper(JSON.parse(raw));
+    } catch (e) { paper = defaultPaper(); }
+  }
+
+  function persist() {
+    try { localStorage.setItem(STORE, JSON.stringify(paper)); savedAt = Date.now(); } catch (e) {}
+    scheduleSavedHint();
+  }
+
+  function scheduleSavedHint() {
+    const el = $("savedHint");
+    el.textContent = t("已保存在本机", "Saved on this device");
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => { el.textContent = ""; }, 1600);
+  }
+
+  function leadIds() {
+    return new Set(leaders(paper).map((x) => x.id));
+  }
+
+  function render() {
+    titleIn.value = paper.title;
+    noteIn.value = paper.note;
+    addOpt.disabled = paper.options.length >= LIMITS.maxOptions;
+    addCrit.disabled = paper.criteria.length >= LIMITS.maxCriteria;
+    renderOptions();
+    renderSheet();
+    renderVerdict();
+  }
+
+  function renderOptions() {
+    const leads = leadIds();
+    optGrid.innerHTML = paper.options.map((o) => {
+      const lead = leads.has(o.id);
+      return `<article class="opt-card${lead ? " is-lead" : ""}" data-oid="${o.id}">
+        <label>${t("名称", "Name")}</label>
+        <input class="cell-in name-in" data-f="name" maxlength="24" value="${esc(o.name)}" aria-label="${t("选项名称", "Option name")}">
+        <label>${t("备注", "Note")}</label>
+        <input class="cell-in" data-f="note" maxlength="80" value="${esc(o.note)}" aria-label="${t("选项备注", "Option note")}">
+        <div class="opt-foot">
+          <span class="lead-tag">${lead ? t("领先", "Lead") : ""}</span>
+          <button class="ghost danger" type="button" data-del-opt="${o.id}" ${paper.options.length <= LIMITS.minOptions ? "disabled" : ""}>${t("删除", "Remove")}</button>
+        </div>
+      </article>`;
+    }).join("");
+  }
+
+  function renderSheet() {
+    const leads = leadIds();
+    const tot = totals(paper);
+    const byId = Object.fromEntries(tot.map((x) => [x.id, x]));
+    const cols = paper.options.map((o) =>
+      `<col class="${leads.has(o.id) ? "is-lead" : ""}">`
+    ).join("");
+    const head = `<thead><tr>
+      <th scope="col">${t("标准", "Criterion")}</th>
+      <th class="w-col" scope="col">${t("权重", "Weight")}</th>
+      ${paper.options.map((o) => `<th scope="col">${esc(o.name)}</th>`).join("")}
+      <th></th>
+    </tr></thead>`;
+    const body = `<tbody>${paper.criteria.map((c) => `<tr data-cid="${c.id}">
+      <th scope="row"><input class="crit-name" data-f="cname" maxlength="24" value="${esc(c.name)}" aria-label="${t("标准名称", "Criterion name")}"></th>
+      <td class="w-col"><input type="number" inputmode="numeric" min="0" max="5" step="1" value="${clampWeight(c.weight)}" data-f="weight" aria-label="${t("权重", "Weight")}"></td>
+      ${paper.options.map((o) => `<td><input type="number" inputmode="numeric" min="0" max="10" step="1" value="${getScore(paper, o.id, c.id)}" data-score data-oid="${o.id}" data-cid="${c.id}" aria-label="${esc(o.name)} / ${esc(c.name)}"></td>`).join("")}
+      <td><button class="row-del" type="button" data-del-crit="${c.id}" ${paper.criteria.length <= LIMITS.minCriteria ? "disabled" : ""} aria-label="${t("删除标准", "Remove criterion")}">✕</button></td>
+    </tr>`).join("")}</tbody>`;
+    const foot = `<tfoot><tr>
+      <th scope="row">${t("加权均分", "Weighted avg")}</th>
+      <td></td>
+      ${paper.options.map((o) => {
+        const avg = byId[o.id]?.avg ?? 0;
+        return `<td class="avg${leads.has(o.id) ? " is-lead" : ""}" data-avg="${o.id}">${avg.toFixed(2)}</td>`;
+      }).join("")}
+      <td></td>
+    </tr></tfoot>`;
+    sheet.innerHTML = `<colgroup><col><col class="w-col">${cols}<col></colgroup>${head}${body}${foot}`;
+  }
+
+  function renderVerdict() {
+    const lead = leaders(paper);
+    const sorted = ranked(paper);
+    const nameEl = $("verdictName");
+    const subEl = $("verdictSub");
+    if (!lead.length) {
+      nameEl.textContent = "—";
+      subEl.textContent = "";
+      return;
+    }
+    if (lead.length === 1) {
+      const w = lead[0];
+      const rest = sorted.filter((x) => x.id !== w.id);
+      const gap = rest.length ? (w.avg - rest[0].avg) : 0;
+      nameEl.textContent = w.name + "  ·  " + w.avg.toFixed(2);
+      subEl.textContent = rest.length
+        ? t(`比第二名「${rest[0].name}」高 ${gap.toFixed(2)}`, `${gap.toFixed(2)} above “${rest[0].name}”`)
+        : t("加权均分领先", "Highest weighted average");
+    } else {
+      nameEl.textContent = t("并列 ", "Tie: ") + lead.map((x) => x.name).join(" / ");
+      subEl.textContent = t("加权均分同为 ", "Same weighted avg: ") + lead[0].avg.toFixed(2);
+    }
+  }
+
+  function paintTotals() {
+    const leads = leadIds();
+    const tot = totals(paper);
+    tot.forEach((x) => {
+      const cell = sheet.querySelector(`[data-avg="${x.id}"]`);
+      if (cell) {
+        cell.textContent = x.avg.toFixed(2);
+        cell.classList.toggle("is-lead", leads.has(x.id));
+      }
+    });
+    sheet.querySelectorAll("colgroup col").forEach((col, i) => {
+      if (i < 2) return;
+      const opt = paper.options[i - 2];
+      if (opt) col.classList.toggle("is-lead", leads.has(opt.id));
+    });
+    optGrid.querySelectorAll(".opt-card").forEach((card) => {
+      const id = card.dataset.oid;
+      const on = leads.has(id);
+      card.classList.toggle("is-lead", on);
+      const tag = card.querySelector(".lead-tag");
+      if (tag) tag.textContent = on ? t("领先", "Lead") : "";
+    });
+    renderVerdict();
+  }
+
+  function esc(s) {
+    return String(s ?? "")
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+  }
+
+  titleIn.addEventListener("input", () => { paper.title = titleIn.value.slice(0, LIMITS.maxTitle); persist(); });
+  noteIn.addEventListener("input", () => { paper.note = noteIn.value.slice(0, LIMITS.maxNote); persist(); });
+
+  addOpt.addEventListener("click", () => { paper = addOption(paper); persist(); render(); });
+  addCrit.addEventListener("click", () => { paper = addCriterion(paper); persist(); render(); });
+
+  optGrid.addEventListener("input", (e) => {
+    const card = e.target.closest(".opt-card");
+    if (!card) return;
+    const f = e.target.dataset.f;
+    if (f === "name" || f === "note") {
+      paper = updateOption(paper, card.dataset.oid, { [f]: e.target.value });
+      persist();
+      sheet.querySelectorAll("thead th").forEach((th, i) => {
+        if (i >= 2 && i < 2 + paper.options.length) th.textContent = paper.options[i - 2].name;
+      });
+      paintTotals();
+    }
+  });
+  optGrid.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-del-opt]");
+    if (!btn || btn.disabled) return;
+    paper = removeOption(paper, btn.getAttribute("data-del-opt"));
+    persist();
+    render();
+  });
+
+  sheet.addEventListener("input", (e) => {
+    const el = e.target;
+    if (el.dataset.score !== undefined) {
+      paper = setScore(paper, el.dataset.oid, el.dataset.cid, el.value);
+      persist();
+      paintTotals();
+      return;
+    }
+    const row = el.closest("tr[data-cid]");
+    if (!row) return;
+    if (el.dataset.f === "weight") {
+      paper = updateCriterion(paper, row.dataset.cid, { weight: el.value });
+      persist();
+      paintTotals();
+    } else if (el.dataset.f === "cname") {
+      paper = updateCriterion(paper, row.dataset.cid, { name: el.value });
+      persist();
+    }
+  });
+  sheet.addEventListener("blur", (e) => {
+    const el = e.target;
+    if (el.dataset.score !== undefined) el.value = getScore(paper, el.dataset.oid, el.dataset.cid);
+    if (el.dataset.f === "weight") {
+      const c = paper.criteria.find((x) => x.id === el.closest("tr")?.dataset.cid);
+      if (c) el.value = clampWeight(c.weight);
+    }
+  }, true);
+  sheet.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-del-crit]");
+    if (!btn || btn.disabled) return;
+    paper = removeCriterion(paper, btn.getAttribute("data-del-crit"));
+    persist();
+    render();
+  });
+
+  function downloadMd() {
+    const md = toMarkdown(paper);
+    const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = fileSlug(paper.title);
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 800);
+  }
+
+  function copyMd() {
+    const md = toMarkdown(paper);
+    const btn = $("copyBtn");
+    const done = () => {
+      btn.classList.add("copied");
+      const origZh = btn.dataset.zh || "复制 Markdown";
+      const origEn = btn.dataset.en || "Copy Markdown";
+      btn.textContent = t("已复制 ✓", "Copied ✓");
+      setTimeout(() => {
+        btn.classList.remove("copied");
+        btn.textContent = lang === "en" ? origEn : origZh;
+      }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(md).then(done, () => fallbackCopy(md, done));
+    } else fallbackCopy(md, done);
+  }
+  function fallbackCopy(text, cb) {
+    const ta = document.createElement("textarea");
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    ta.remove();
+    cb();
+  }
+
+  function drawCard() {
+    const canvas = $("shareCanvas");
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.06)";
+    for (let x = 0; x < W; x += 36) for (let y = 0; y < H; y += 36) ctx.fillRect(x, y, 1, 1);
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "22px ui-monospace, SF Mono, Menlo, monospace";
+    ctx.fillText("DECIDE-010", 64, 72);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 48px Helvetica Neue, PingFang SC, sans-serif";
+    const title = (paper.title || "DECIDE-010").slice(0, 22);
+    ctx.fillText(title, 64, 140);
+    const lead = leaders(paper);
+    const tot = ranked(paper);
+    ctx.fillStyle = "#4ade80";
+    ctx.font = "28px Helvetica Neue, PingFang SC, sans-serif";
+    const line = lead.length === 1
+      ? t("领先  ", "Lead  ") + lead[0].name + "  " + lead[0].avg.toFixed(2)
+      : t("并列  ", "Tie  ") + lead.map((x) => x.name).join(" / ");
+    ctx.fillText(line, 64, 200);
+    ctx.font = "22px ui-monospace, SF Mono, Menlo, monospace";
+    tot.forEach((x, i) => {
+      ctx.fillStyle = i === 0 ? "#edeff1" : "#7d848c";
+      ctx.fillText((x.name + "                    ").slice(0, 12) + "  " + x.avg.toFixed(2), 64, 270 + i * 44);
+    });
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "20px ui-monospace, SF Mono, Menlo, monospace";
+    ctx.fillText("build-100.com/010", 64, H - 56);
+    $("shareCanvasWrap").classList.add("show");
+  }
+
+  $("exportBtn").addEventListener("click", downloadMd);
+  $("copyBtn").addEventListener("click", copyMd);
+  $("cardBtn").addEventListener("click", drawCard);
+  $("resetBtn").addEventListener("click", () => {
+    paper = defaultPaper();
+    persist();
+    $("shareCanvasWrap").classList.remove("show");
+    render();
+  });
+
+  load();
+  if (lang === "en") applyLang("en");
+  else render();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

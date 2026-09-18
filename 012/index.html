@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PLAY-012 · 3 分钟金融小游戏</title>
+<meta name="description" content="三关可选：复利、赔率、杠杆。每关一个情境、两到三个选择、立刻反馈，限时三分钟。纯前端，可复玩。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/012/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E012%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PLAY-012 · 3 分钟金融小游戏">
+<meta property="og:description" content="复利、赔率、杠杆。每关一个情境，限时三分钟，立刻知道差在哪。">
+<meta property="og:url" content="https://build-100.com/012/">
+<meta property="og:image" content="https://build-100.com/012/og-012.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PLAY-012 · 3 分钟金融小游戏">
+<meta name="twitter:description" content="Three timed drills: compound, odds, leverage. No RPG.">
+<meta name="twitter:image" content="https://build-100.com/012/og-012.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --accent: #f97316;
+    --accent-glow: rgba(249, 115, 22, 0.35);
+    --delta: #fbbf24;
+    --loss: #f87171;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 44px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p.sub { color: var(--muted); max-width: 36em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  .view { display: none; }
+  .view.show { display: block; }
+
+  .levels {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+    border-top: 1px solid var(--line); padding-top: 28px;
+  }
+  @media (min-width: 720px) {
+    .levels { grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  }
+  .level-card {
+    text-align: left; cursor: pointer; color: inherit; font: inherit;
+    background: var(--bg-raise); border: 1px solid var(--line-strong); border-radius: 8px;
+    padding: 20px 18px; transition: border-color .18s, box-shadow .18s;
+  }
+  .level-card:hover { border-color: var(--accent); box-shadow: 0 0 0 1px rgba(249,115,22,0.25) inset; }
+  .level-card .no { color: var(--accent); margin-bottom: 10px; }
+  .level-card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; }
+  .level-card p { color: var(--muted); font-size: 0.88rem; min-height: 3.2em; }
+  .level-card .meta { margin-top: 16px; color: var(--faint); }
+
+  .play-top {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 22px;
+  }
+  .timer {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 600; color: var(--accent); letter-spacing: 0.04em;
+  }
+  .timer.warn { color: var(--loss); }
+  .timer-bar {
+    height: 3px; background: var(--line-strong); margin: 10px 0 28px; border-radius: 2px; overflow: hidden;
+  }
+  .timer-bar > i {
+    display: block; height: 100%; width: 100%; background: var(--accent);
+    transform-origin: left center;
+  }
+  .scenario {
+    font-size: 1.05rem; max-width: 38em; margin-bottom: 10px; text-wrap: pretty;
+  }
+  .prompt { color: var(--muted); margin-bottom: 18px; }
+
+  .choices { display: flex; flex-direction: column; gap: 10px; }
+  .choice {
+    text-align: left; cursor: pointer; color: inherit; font: inherit;
+    background: var(--bg-raise); border: 1px solid var(--line-strong); border-radius: 6px;
+    padding: 16px 18px; transition: border-color .18s, background .18s;
+  }
+  .choice:hover:not(:disabled) { border-color: var(--accent); }
+  .choice:disabled { cursor: default; }
+  .choice .cid {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--faint);
+    display: block; margin-bottom: 6px;
+  }
+  .choice.is-picked { border-color: var(--ink); }
+  .choice.is-right { border-color: var(--live); background: rgba(74,222,128,0.08); }
+  .choice.is-wrong { border-color: var(--loss); background: rgba(248,113,113,0.08); }
+
+  .abort {
+    margin-top: 22px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    background: none; border: 0; color: var(--muted); cursor: pointer;
+  }
+  .abort:hover { color: var(--ink); }
+
+  .verdict {
+    border: 1px solid var(--line-strong); border-radius: 8px;
+    padding: clamp(22px, 4vw, 32px); background: var(--bg-raise); margin-bottom: 22px;
+  }
+  .verdict.ok { border-color: var(--live); }
+  .verdict.wrong, .verdict.timeout { border-color: var(--loss); }
+  .verdict .tag { margin-bottom: 10px; }
+  .verdict.ok .tag { color: var(--live); }
+  .verdict.wrong .tag, .verdict.timeout .tag { color: var(--loss); }
+  .verdict h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; margin-bottom: 10px; }
+  .verdict .num {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: clamp(1.6rem, 4vw, 2.2rem); color: var(--delta); margin: 12px 0 8px;
+  }
+  .verdict p { color: var(--muted); max-width: 36em; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-btn.primary {
+    border-color: var(--accent); background: rgba(249, 115, 22, 0.12);
+  }
+  .share-btn.primary:hover { background: var(--accent); color: var(--bg); box-shadow: 0 0 20px var(--accent-glow); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .err-banner {
+    display: none; margin-bottom: 20px; padding: 14px 18px;
+    border: 1px solid #f87171; border-radius: 6px; color: #fca5a5;
+    font-size: 0.9rem; background: rgba(248,113,113,0.08);
+  }
+  .err-banner.show { display: block; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+    .timer-bar > i { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">PLAY<span>·012</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <div class="err-banner" id="errBanner"></div>
+
+  <div id="hubView" class="view show">
+    <header class="hero">
+      <p class="mono eyebrow"><span class="tick">●</span>&nbsp; PLAY-012 · THREE-MINUTE DRILLS</p>
+      <h1 data-en="Three minutes.<br>One call.">三分钟。<br>做一个判断。</h1>
+      <p class="sub" data-en="Three optional drills — <strong>compound</strong>, <strong>odds</strong>, <strong>leverage</strong>. One situation, two or three choices, instant feedback on what broke. Timer per level. Replay anytime. No XP, no skin.">
+        三关可选：<strong>复利</strong>、<strong>赔率</strong>、<strong>杠杆</strong>。每关一个情境、两到三个选择，立刻告诉你对不对、差在哪。一关三分钟。可复玩。没有升级，没有皮肤。
+      </p>
+    </header>
+    <div class="levels" id="levels"></div>
+  </div>
+
+  <div id="playView" class="view">
+    <div class="play-top">
+      <p class="mono" id="playKicker"></p>
+      <div class="timer" id="timer" aria-live="polite">3:00</div>
+    </div>
+    <div class="timer-bar" aria-hidden="true"><i id="timerBar"></i></div>
+    <p class="scenario" id="scenario"></p>
+    <p class="prompt" id="prompt"></p>
+    <div class="choices" id="choices"></div>
+    <button class="abort" id="abortBtn" type="button" data-en="← Back to levels">← 返回选关</button>
+  </div>
+
+  <div id="resultView" class="view">
+    <div class="verdict" id="verdict">
+      <p class="mono tag" id="verdictTag"></p>
+      <h2 id="verdictTitle"></h2>
+      <div class="num" id="verdictNum"></div>
+      <p id="verdictBody"></p>
+    </div>
+    <div class="share-row">
+      <button class="share-btn primary" id="replayBtn" type="button" data-en="Replay this level">再来一局</button>
+      <button class="share-btn" id="hubBtn" type="button" data-en="Other levels">其他关卡</button>
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareCanvasWrap">
+      <canvas id="shareCanvas" width="800" height="450"></canvas>
+      <p class="share-save-hint" data-en="Long-press or right-click to save the image.">长按或右键保存图片。</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="PLAY-012 · three timed drills">PLAY-012 · 三关限时直觉</span>
+</footer>
+
+<script type="module">
+  import {
+    compoundGap,
+    oddsResidual,
+    leveredEquity,
+    liquidateMove,
+    grade,
+    remainingMs,
+    shuffleInPlace,
+  } from "./engine.js?v=1";
+
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  let games = null;
+  let current = null;
+  let startedAt = 0;
+  let timerId = null;
+  let lastGrade = null;
+  let lastExplain = null;
+  let copyTimer = null;
+  let ignoreHash = false;
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const $ = (id) => document.getElementById(id);
+  const t = (zh, en) => (lang === "en" ? en : zh);
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    document.title = l === "en" ? "PLAY-012 · 3-minute finance drills" : "PLAY-012 · 3 分钟金融小游戏";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    if (games) {
+      renderHub();
+      if ($("playView").classList.contains("show") && current) {
+        txt($("playKicker"), current.kicker_zh, current.kicker_en);
+        txt($("scenario"), current.scenario_zh, current.scenario_en);
+        txt($("prompt"), current.prompt_zh, current.prompt_en);
+        $("choices").querySelectorAll(".choice").forEach((b) => {
+          const c = current.choices.find((x) => x.id === b.dataset.id);
+          if (c) txt(b.querySelector(".lab"), c.zh, c.en);
+        });
+      }
+      if ($("resultView").classList.contains("show") && lastGrade && current) {
+        lastExplain = explain(current, lastGrade);
+        renderResult(lastGrade, lastExplain);
+      }
+    }
+  }
+  $("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+
+  function txt(el, zh, en) {
+    if (!el) return;
+    el.dataset.zh = zh;
+    el.dataset.en = en;
+    el.innerHTML = lang === "en" ? en : zh;
+  }
+
+  function money(n) {
+    if (!Number.isFinite(n)) return "—";
+    if (lang === "zh" && Math.abs(n) >= 10000) {
+      const w = n / 10000;
+      const s = Math.abs(w) >= 100 ? w.toFixed(0) : w.toFixed(1);
+      return s.replace(/\.0$/, "") + " 万";
+    }
+    return Math.round(n).toLocaleString(lang === "en" ? "en-US" : "zh-CN");
+  }
+
+  function show(id) {
+    ["hubView", "playView", "resultView"].forEach((k) => {
+      $(k).classList.toggle("show", k === id);
+    });
+    $("shareCanvasWrap").classList.remove("show");
+  }
+
+  function stopTimer() {
+    if (timerId) { clearTimeout(timerId); timerId = null; }
+  }
+
+  function fmtTime(ms) {
+    const s = Math.ceil(ms / 1000);
+    const m = Math.floor(s / 60);
+    const r = s % 60;
+    return m + ":" + String(r).padStart(2, "0");
+  }
+
+  function tick() {
+    if (!startedAt) return;
+    const left = remainingMs(startedAt, Date.now(), games.timeLimitSec);
+    $("timer").textContent = fmtTime(left);
+    $("timer").classList.toggle("warn", left <= 30000);
+    const pct = left / (games.timeLimitSec * 1000);
+    $("timerBar").style.transform = "scaleX(" + pct + ")";
+    if (left <= 0) {
+      lockIn(null);
+      return;
+    }
+    timerId = setTimeout(tick, reduced ? 250 : 100);
+  }
+
+  function renderHub() {
+    const root = $("levels");
+    root.innerHTML = "";
+    games.levels.forEach((lv) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "level-card";
+      b.innerHTML = `<p class="mono no"></p><h2></h2><p></p><p class="mono meta"></p>`;
+      txt(b.querySelector(".no"), "关卡 " + lv.no, "LEVEL " + lv.no);
+      txt(b.querySelector("h2"), lv.title_zh, lv.title_en);
+      txt(b.querySelector("p"), lv.blurb_zh, lv.blurb_en);
+      txt(b.querySelector(".meta"), "3:00 · 2–3 个选择", "3:00 · 2–3 choices");
+      b.addEventListener("click", () => startLevel(lv.id));
+      root.appendChild(b);
+    });
+  }
+
+  function startLevel(id) {
+    const lv = games.levels.find((x) => x.id === id);
+    if (!lv) return;
+    current = lv;
+    lastGrade = null;
+    lastExplain = null;
+    if (location.hash.replace(/^#/, "") !== id) {
+      ignoreHash = true;
+      location.hash = id;
+    }
+    show("playView");
+    fillPlayCopy();
+    startedAt = Date.now();
+    stopTimer();
+    tick();
+  }
+
+  function fillPlayCopy() {
+    const lv = current;
+    txt($("playKicker"), lv.kicker_zh, lv.kicker_en);
+    txt($("scenario"), lv.scenario_zh, lv.scenario_en);
+    txt($("prompt"), lv.prompt_zh, lv.prompt_en);
+    const box = $("choices");
+    box.innerHTML = "";
+    const order = shuffleInPlace(lv.choices.map((c) => c.id));
+    order.forEach((cid, i) => {
+      const c = lv.choices.find((x) => x.id === cid);
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "choice";
+      b.dataset.id = c.id;
+      b.innerHTML = `<span class="cid">${String.fromCharCode(65 + i)}</span><span class="lab"></span>`;
+      txt(b.querySelector(".lab"), c.zh, c.en);
+      b.addEventListener("click", () => lockIn(c.id));
+      box.appendChild(b);
+    });
+  }
+
+  function explain(lv, g) {
+    if (lv.id === "compound") {
+      const n = compoundGap(lv.params);
+      const num = t(
+        `现在开始约 ${money(n.full)}，晚 10 年约 ${money(n.late)}，少 ${money(n.gap)}`,
+        `Start now ≈ ${money(n.full)}; 10y late ≈ ${money(n.late)}; miss ${money(n.gap)}`
+      );
+      let body;
+      if (g.outcome === "timeout") {
+        body = t("3 分钟到了。复利差的不是少存的那 24 万本金，是那笔钱本该滚到终点的整段利息。", "Time. The gap is not the skipped 240k principal — it is the interest that principal would have earned to the finish.");
+      } else if (g.picked === "a") {
+        body = t("后面 20 年补不上。少掉的那截大于跳过的本金。同事把「还有时间」当成了「终点差不多」。", "Twenty years do not replace the skipped decade. The missing stretch is larger than the skipped principal.");
+      } else if (g.picked === "c") {
+        body = t("本金总数一样、终点一样，只在 0% 收益时成立。这里年化 6%，晚到的本金少滚了很多年。", "Equal principal, equal finish — only at 0% return. At 6%, late principal compounds for fewer years.");
+      } else {
+        body = t("对。晚十年既少本金，也少了这 10 年本金在后面 20 年里的利滚利。", "Yes. You skip deposits and the compounding those deposits would have done for the remaining 20 years.");
+      }
+      return { num, body };
+    }
+    if (lv.id === "odds") {
+      const o = oddsResidual(lv.params.price);
+      const num = t(`隐含 ${Math.round(o.implied * 100)}% · 不发生仍约 ${Math.round(o.residual * 100)}%`, `Implied ${Math.round(o.implied * 100)}% · still ~${Math.round(o.residual * 100)}% it doesn’t`);
+      let body;
+      if (g.outcome === "timeout") {
+        body = t("3 分钟到了。004 把 ≥60% 写成「会发生」，是主线写法，不是把 38% 删掉。", "Time. WEEK-004’s ≥60% as will-happen is a main-line rule, not a license to delete 38%.");
+      } else if (g.picked === "a") {
+        body = t("把编辑规则当成确定性。≥60% 可以当本周主线，日程按 100% 排会在那 38% 里翻车。", "You treated an editorial rule as certainty. Fine as the main line; 100% scheduling blows up in the other 38%.");
+      } else if (g.picked === "c") {
+        body = t("62% 已经过 004 的 60% 线，主线就是「会发生」。错的是把主线当成不会发生，不是保留预案。", "62% already clears WEEK-004’s 60% line. The main line is will-happen. The miss is flipping it to won’t — not keeping a backup.");
+      } else {
+        body = t("对。主线按会发生写；约 38% 不发生的世界还在，预案不能删。", "Yes. Write the main line as will-happen; about 38% of worlds it doesn’t. Keep the other plan.");
+      }
+      return { num, body };
+    }
+    const eq = leveredEquity(lv.params.equity, lv.params.leverage, lv.params.spotMove);
+    const liq = liquidateMove(lv.params.leverage);
+    const num = t(
+      `权益 ${money(eq)} · 爆仓线约跌 ${Math.round(Math.abs(liq) * 100)}%`,
+      `Equity ${money(eq)} · liq ≈ −${Math.round(Math.abs(liq) * 100)}% spot`
+    );
+    let body;
+    if (g.outcome === "timeout") {
+      body = t("3 分钟到了。杠杆把现货涨跌乘上倍数；没到 1/杠杆 的反向波动，就不会归零。", "Time. Leverage scales the spot move. You don’t go to zero until the adverse move hits 1/leverage.");
+    } else if (g.picked === "a") {
+      body = t("那是现货。5 倍把 −12% 放大成 −60%，10 万变成 4 万，不是 8.8 万。", "That’s spot. 5× turns −12% into −60%. 100k becomes 40k, not 88k.");
+    } else if (g.picked === "c") {
+      body = t("两位数跌幅不等于爆仓。5 倍要现货反向 20% 才归零。这次只跌 12%，还剩 40%。", "A double-digit drop is not auto-liquidation. 5× zeros at −20% spot. This was −12%, 40% left.");
+    } else {
+      body = t("对。5 × 12% = 60%。权益 10 万 × 0.4 = 4 万。爆仓要现货再跌到 −20%。", "Yes. 5 × 12% = 60%. 100k × 0.4 = 40k. Liquidation waits for −20% spot.");
+    }
+    return { num, body };
+  }
+
+  function lockIn(pickedId) {
+    if (!current || !startedAt) return;
+    stopTimer();
+    const elapsed = (Date.now() - startedAt) / 1000;
+    const g = grade(current.correct, pickedId, elapsed, games.timeLimitSec);
+    lastGrade = g;
+    lastExplain = explain(current, g);
+    startedAt = 0;
+    renderResult(g, lastExplain);
+  }
+
+  function renderResult(g, ex) {
+    show("resultView");
+    const box = $("verdict");
+    box.className = "verdict " + g.outcome;
+    const lv = current;
+    let tag, title;
+    if (g.outcome === "timeout") {
+      tag = t("时间到", "TIME");
+      title = t("3 分钟内没锁选择。", "No lock-in inside 3 minutes.");
+    } else if (g.outcome === "ok") {
+      tag = t("判断成立", "HOLD");
+      title = lv.id === "compound"
+        ? t("对。晚十年少的是一整段复利。", "Right. Ten years late is a missing compounding stretch.")
+        : lv.id === "odds"
+          ? t("对。主线可以写会发生，38% 不能删。", "Right. Main line can read will-happen; 38% stays.")
+          : t("对。杠杆乘的是涨跌，不是心情。", "Right. Leverage scales the move, not the mood.");
+    } else {
+      tag = t("差在这", "MISS");
+      title = t("判断里能成立的部分，和不能成立的部分。", "What part of the call holds — and what does not.");
+    }
+    txt($("verdictTag"), tag, tag);
+    txt($("verdictTitle"), title, title);
+    $("verdictNum").textContent = ex.num;
+    txt($("verdictBody"), ex.body, ex.body);
+
+    window.scrollTo(0, 0);
+  }
+
+  $("abortBtn").addEventListener("click", () => {
+    stopTimer();
+    startedAt = 0;
+    current = null;
+    location.hash = "";
+    show("hubView");
+  });
+  $("hubBtn").addEventListener("click", () => {
+    current = null;
+    location.hash = "";
+    show("hubView");
+  });
+  $("replayBtn").addEventListener("click", () => {
+    if (current) startLevel(current.id);
+  });
+
+  function shareText() {
+    const lv = current;
+    if (!lv || !lastGrade) return "PLAY-012 https://build-100.com/012/";
+    const mark = lastGrade.outcome === "ok" ? t("成立", "HOLD") : lastGrade.outcome === "timeout" ? t("超时", "TIME") : t("未中", "MISS");
+    return t(
+      `PLAY-012 ${lv.title_zh} · ${mark} · ${lastExplain.num} https://build-100.com/012/`,
+      `PLAY-012 ${lv.title_en} · ${mark} · ${lastExplain.num} https://build-100.com/012/`
+    );
+  }
+
+  $("copyBtn").addEventListener("click", () => {
+    const text = shareText();
+    const done = () => {
+      $("copyBtn").classList.add("copied");
+      txt($("copyBtn"), "✓ 已复制", "✓ Copied");
+      clearTimeout(copyTimer);
+      copyTimer = setTimeout(() => {
+        $("copyBtn").classList.remove("copied");
+        txt($("copyBtn"), "复制文案", "Copy summary");
+      }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, done);
+    } else done();
+  });
+
+  $("shareImgBtn").addEventListener("click", () => {
+    const c = $("shareCanvas");
+    const ctx = c.getContext("2d");
+    const W = c.width, H = c.height;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.06)";
+    for (let x = 0; x < W; x += 36) for (let y = 0; y < H; y += 36) ctx.fillRect(x, y, 1, 1);
+    ctx.fillStyle = "#f97316";
+    ctx.font = "12px ui-monospace, Menlo, Consolas, monospace";
+    ctx.fillText("PLAY-012  ·  3 MIN", 48, 56);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 36px Helvetica Neue, Helvetica, Arial, sans-serif";
+    const title = current ? t(current.title_zh, current.title_en) : "";
+    ctx.fillText(title, 48, 120);
+    ctx.fillStyle = lastGrade && lastGrade.ok ? "#4ade80" : "#f87171";
+    ctx.font = "700 28px ui-monospace, Menlo, Consolas, monospace";
+    const mark = !lastGrade ? "—" : lastGrade.outcome === "ok" ? t("成立", "HOLD") : lastGrade.outcome === "timeout" ? t("TIME", "TIME") : t("未中", "MISS");
+    ctx.fillText(mark, 48, 180);
+    ctx.fillStyle = "#fbbf24";
+    ctx.font = "18px ui-monospace, Menlo, Consolas, monospace";
+    ctx.fillText((lastExplain && lastExplain.num) || "", 48, 230);
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "13px ui-monospace, Menlo, Consolas, monospace";
+    ctx.fillText("build-100.com/012", 48, 400);
+    $("shareCanvasWrap").classList.add("show");
+  });
+
+  function syncHash() {
+    const id = (location.hash || "").replace(/^#/, "");
+    if (!games) return;
+    if (games.levels.some((l) => l.id === id)) {
+      if ($("resultView").classList.contains("show") && current && current.id === id) return;
+      if ($("playView").classList.contains("show") && current && current.id === id && startedAt) return;
+      startLevel(id);
+    } else {
+      stopTimer();
+      startedAt = 0;
+      current = null;
+      show("hubView");
+    }
+  }
+  window.addEventListener("hashchange", () => {
+    if (ignoreHash) { ignoreHash = false; return; }
+    syncHash();
+  });
+
+  async function boot() {
+    try {
+      const res = await fetch("./games.json?v=1");
+      if (!res.ok) throw new Error("http " + res.status);
+      games = await res.json();
+    } catch (e) {
+      $("errBanner").textContent = t("关卡加载失败。", "Failed to load levels.");
+      $("errBanner").classList.add("show");
+      return;
+    }
+    applyLang(lang);
+    syncHash();
+  }
+  boot();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

@@ -1,0 +1,958 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REDACT-017 · 截图脱敏打码</title>
+<meta name="description" content="要分享聊天 / 后台 / 工单截图时，姓名、手机、token、邮箱还在画面上；在线打码站还要你先上传。本页浏览器选图，框选矩形 / 画笔马赛克，本地下载 PNG。全程内存，图片不离开本机。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/017/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E017%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="REDACT-017 · 截图脱敏打码">
+<meta property="og:description" content="外发截图前先把敏感处打码。浏览器选图，矩形 / 画笔马赛克，本地下载 PNG。图片不离开本机。">
+<meta property="og:url" content="https://build-100.com/017/">
+<meta property="og:image" content="https://build-100.com/017/og-017.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="REDACT-017 · 截图脱敏打码">
+<meta name="twitter:description" content="Redact names, phones, tokens and emails before you share a screenshot. Pick a local image, mosaic, download PNG — the file never leaves this device.">
+<meta name="twitter:image" content="https://build-100.com/017/og-017.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #f43f5e;
+    --accent-glow: rgba(244, 63, 94, 0.35);
+    --danger: #f87171;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(24px, 4vh, 36px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--accent); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p.sub { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  .privacy {
+    display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap;
+    margin-bottom: clamp(28px, 5vh, 40px);
+    padding: 14px 16px; border: 1px solid var(--line-strong); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(244, 63, 94, 0.12), transparent 60%);
+  }
+  .privacy .dot { color: var(--live); letter-spacing: 0.18em; }
+  .privacy p { color: var(--muted); font-size: 0.9rem; max-width: 42em; }
+  .privacy p strong { color: var(--ink); font-weight: 500; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .drop {
+    border: 1px dashed var(--line-strong); border-radius: 8px;
+    background: var(--bg-raise); padding: clamp(28px, 5vw, 44px) 20px;
+    text-align: center; cursor: pointer; transition: border-color .18s, background .18s, box-shadow .18s;
+  }
+  .drop:hover, .drop.drag {
+    border-color: var(--accent);
+    background: rgba(244, 63, 94, 0.08);
+    box-shadow: 0 0 0 1px rgba(244, 63, 94, 0.25) inset;
+  }
+  .drop.compact { padding: 16px 18px; }
+  .drop .ttl { font-weight: 700; margin-bottom: 6px; }
+  .drop .sub { color: var(--muted); font-size: 0.9rem; }
+
+  .status { min-height: 1.3em; font-size: 0.86rem; color: var(--muted); margin-top: 10px; font-family: var(--mono); letter-spacing: 0.02em; }
+  .status.err { color: var(--danger); }
+  .status.ok { color: var(--live); }
+
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+  .count { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: 0.08em; margin-left: auto; }
+
+  .add-btn, .ghost-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 12px 16px; border-radius: 4px; cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .add-btn {
+    border: 1px solid var(--accent); background: rgba(244, 63, 94, 0.12); color: var(--ink);
+  }
+  .add-btn:hover:not(:disabled) { background: var(--accent); color: var(--bg); box-shadow: 0 0 20px var(--accent-glow); }
+  .ghost-btn { border: 1px solid var(--line-strong); background: none; color: var(--muted); }
+  .ghost-btn:hover:not(:disabled) { color: var(--ink); border-color: var(--ink); }
+  .ghost-btn.active {
+    border-color: var(--accent); color: var(--ink); background: rgba(244, 63, 94, 0.12);
+  }
+  .add-btn:disabled, .ghost-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .sliders {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; margin-bottom: 16px;
+  }
+  @media (max-width: 560px) { .sliders { grid-template-columns: 1fr; } }
+  .slider-row { display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; align-items: center; }
+  .slider-row .name { font-size: 0.9rem; }
+  .slider-row .name small { display: block; color: var(--faint); font-size: 0.75rem; }
+  .slider-val { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.05rem; color: var(--accent); min-width: 2.5ch; text-align: right; }
+  input[type=range] {
+    grid-column: 1 / -1; -webkit-appearance: none; appearance: none; width: 100%; height: 4px;
+    background: var(--line-strong); border-radius: 2px; outline: none; margin-top: 4px;
+  }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; box-shadow: 0 0 8px var(--accent-glow); }
+  input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border: none; border-radius: 50%; background: var(--accent); cursor: pointer; }
+
+  .stage-scroll {
+    max-height: min(70vh, 740px); overflow: auto;
+    border: 1px solid var(--line-strong); border-radius: 8px; background: #000;
+  }
+  .stage {
+    position: relative; line-height: 0; touch-action: none; user-select: none;
+  }
+  #view { display: block; width: 100%; height: auto; vertical-align: top; }
+  #overlay {
+    position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+    cursor: crosshair; touch-action: none;
+  }
+  .board[hidden] { display: none !important; }
+
+  .meta-line {
+    margin-top: 10px; font-family: var(--mono); font-size: 11px; color: var(--faint);
+    letter-spacing: 0.06em; text-transform: none; word-break: break-all;
+  }
+
+  .empty {
+    border: 1px dashed var(--line-strong); border-radius: 8px;
+    padding: 28px 18px; color: var(--muted); text-align: center;
+  }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .origin-card {
+    margin-top: 48px; padding: clamp(24px, 4vw, 32px);
+    border: 1px solid var(--line); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(244, 63, 94, 0.1), transparent 55%);
+  }
+  .origin-eyebrow { color: var(--accent); margin-bottom: 12px; }
+  .origin-text { color: var(--muted); font-size: 0.95rem; max-width: 34em; }
+  .origin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .origin-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); border-radius: 4px;
+    color: var(--muted); cursor: pointer; transition: all .2s;
+  }
+  .origin-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .origin-btn.primary { border-color: var(--accent); color: var(--ink); background: rgba(244, 63, 94, 0.1); }
+  .origin-btn.primary:hover { background: var(--accent); color: var(--bg); }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">REDACT<span>·017</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; REDACT-017 · LOCAL MOSAIC</p>
+    <h1 data-en="Redact the sensitive bits before you send the screenshot.">外发截图前，先把敏感处打码。</h1>
+    <p class="sub" data-en="When you share a chat / admin / ticket screenshot, <strong>names, phones, tokens and emails</strong> are still on screen; online redaction sites make you upload first. This page: <strong>pick a local image</strong> → rectangle / brush mosaic → download PNG. All in memory — the image never leaves this device. No OCR, no cloud, no batch.">
+      要分享聊天 / 后台 / 工单截图时，<strong>姓名、手机、token、邮箱</strong>还在画面上；在线打码站还要你先上传。本页：浏览器<strong>选图</strong> → 框选矩形 / 画笔马赛克 → 本地下载 PNG。全程内存，图片不离开本机。不做 OCR、云同步、批处理。
+    </p>
+  </header>
+
+  <aside class="privacy">
+    <span class="mono dot">● LOCAL</span>
+    <p data-en="Image stays on this device · no upload · no API · no CDN libraries. Refresh and it is gone. The page itself may still load beacon.js.">
+      <strong>图片不离开本机 · 无上传 · 无 API · 无 CDN 库。</strong>刷新即丢。页面本身仍可能加载 beacon.js。
+    </p>
+  </aside>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <span class="field-title" data-en="Pick a local image">选一张本地图片</span>
+      <span class="field-hint" data-en="PNG / JPEG / WebP / GIF stills, ≤20MB. Magic bytes decide the type — SVG / HEIC rejected. FileReader + createImageBitmap keep it in memory. Nothing is POSTed.">
+        PNG / JPEG / WebP / GIF 静帧，≤20MB。以文件头 magic bytes 为准，拒绝 SVG / HEIC。FileReader + createImageBitmap 读入内存，<strong>不发任何上传请求</strong>。
+      </span>
+    </div>
+    <div class="drop" id="drop" tabindex="0" role="button" aria-controls="fileInput">
+      <div class="ttl" data-en="Drop an image here, or click to choose">拖到这里，或点击选择</div>
+      <div class="sub" data-en="One image at a time. iPhone HEIC is not accepted — export JPEG first.">一次一张。iPhone HEIC 不收，请先导出 JPEG。</div>
+    </div>
+    <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif,.png,.jpg,.jpeg,.webp,.gif" hidden>
+    <p class="status" id="fileStatus" role="status"></p>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <span class="field-title" data-en="Mosaic on the source pixels">在原图像素上打码</span>
+      <span class="field-hint" data-en="Rectangle or brush. Blocks snap to a global grid from the image origin (default 24px, slider 16–48). Each pointerdown→up is one undo step. Clear restores the original. Preview is scaled; sampling is never from the CSS-sized canvas.">
+        矩形框选或画笔。马赛克对齐原图原点的全局网格（默认 24px，滑条 16–48）。一次按下到松开 = 一步撤销。清除恢复原图。屏幕只做缩放预览，取样不在 CSS 缩放画布上。
+      </span>
+    </div>
+    <div class="tools" id="toolRow">
+      <button class="ghost-btn active" type="button" data-tool="rect" id="toolRect" data-en="Rectangle">矩形</button>
+      <button class="ghost-btn" type="button" data-tool="brush" id="toolBrush" data-en="Brush">画笔</button>
+      <button class="ghost-btn" type="button" id="undoBtn" data-en="Undo" disabled>撤销</button>
+      <button class="ghost-btn" type="button" id="clearBtn" data-en="Clear" disabled>清除</button>
+      <button class="add-btn" type="button" id="exportBtn" data-en="Export PNG" disabled>导出 PNG</button>
+      <span class="count" id="strokeCount"></span>
+    </div>
+    <div class="sliders">
+      <label class="slider-row">
+        <span class="name">
+          <span data-en="Block size">块大小</span>
+          <small data-en="Whole cells on the origin grid">对齐原点的整块</small>
+        </span>
+        <span class="slider-val" id="blockVal">24</span>
+        <input id="blockSize" type="range" min="16" max="48" value="24" step="1">
+      </label>
+      <label class="slider-row">
+        <span class="name">
+          <span data-en="Brush radius">笔刷半径</span>
+          <small data-en="Source pixels">原图像素</small>
+        </span>
+        <span class="slider-val" id="brushVal">16</span>
+        <input id="brushSize" type="range" min="4" max="80" value="16" step="1">
+      </label>
+    </div>
+    <div class="board" id="board" hidden>
+      <div class="stage-scroll">
+        <div class="stage" id="stage">
+          <canvas id="view"></canvas>
+          <canvas id="overlay"></canvas>
+        </div>
+      </div>
+      <p class="meta-line" id="metaLine"></p>
+    </div>
+    <div class="empty" id="emptyBoard" data-en="Open a local image first, then drag a rectangle or paint with the brush.">先打开一张本地图片，再用矩形框选或画笔打码。</div>
+  </div>
+
+  <div class="share-row">
+    <button class="share-btn" id="copyBtn" type="button" data-en="Copy blurb">复制文案摘要</button>
+    <button class="share-btn" id="shareImgBtn" type="button" data-en="Share image">生成分享图</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareCanvasWrap">
+    <canvas id="shareCanvas" width="800" height="450"></canvas>
+    <p class="share-save-hint" data-en="Long-press or right-click to save. The share image is branding only — your screenshot is never drawn here.">长按或右键保存。分享图只有文案，不含你的截图。</p>
+  </div>
+
+  <aside class="origin-card">
+    <p class="mono origin-eyebrow">BUILD-100 · 017/100</p>
+    <p class="origin-text" data-en="No.017 of BUILD-100 — one person building 100 websites with AI, in public. Redact a screenshot in the tab, download a PNG, keep names and tokens off the wire.">
+      BUILD-100 的第 017 号：一个人用 AI 公开做 100 个网站。在标签页里给截图打码，下载 PNG，姓名和 token 不必上线。
+    </p>
+    <div class="origin-actions">
+      <a class="origin-btn primary" href="https://build-100.com/" data-en="See the project →">看看这个计划 →</a>
+      <a class="origin-btn" href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="Follow along on X">在 X 上看过程</a>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="REDACT-017 · Screenshot redaction">REDACT-017 · 截图脱敏打码</span>
+</footer>
+
+<script type="module">
+  import {
+    DEFAULT_BLOCK_SIZE,
+    DEFAULT_BRUSH_RADIUS,
+    MAX_FILE_BYTES,
+    DOWNLOAD_NAME,
+    validateImageFile,
+    clampBlockSize,
+    clampBrushRadius,
+    clampRect,
+    blocksForRect,
+    blocksForBrush,
+    mosaicRegion,
+    mapPointerToSource,
+    cloneBuffer,
+    buildShareText,
+  } from "./engine.js";
+
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  if (lang !== "en") lang = "zh";
+
+  const $ = (id) => document.getElementById(id);
+  const t = (zh, en) => (lang === "en" ? en : zh);
+
+  const work = document.createElement("canvas");
+  const workCtx = work.getContext("2d", { willReadFrequently: true });
+
+  let original = null;
+  let current = null;
+  let undoStack = [];
+  let tool = "rect";
+  let blockSize = DEFAULT_BLOCK_SIZE;
+  let brushRadius = DEFAULT_BRUSH_RADIUS;
+  let fileMeta = null;
+  let stroke = null;
+  let hover = null;
+  let activePointer = null;
+  let raf = 0;
+  const UNDO_CAP = 20;
+
+  function esc(s) {
+    return String(s ?? "").replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+    }[c]));
+  }
+
+  function setStatus(msg, kind) {
+    const el = $("fileStatus");
+    el.textContent = msg || "";
+    el.className = "status" + (kind ? " " + kind : "");
+  }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.title = l === "en"
+      ? "REDACT-017 · Screenshot redaction"
+      : "REDACT-017 · 截图脱敏打码";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    renderChrome();
+    if ($("shareCanvasWrap").classList.contains("show")) renderShare();
+  }
+
+  function mimeLabel(m) {
+    if (m === "image/jpeg") return "JPEG";
+    if (m === "image/png") return "PNG";
+    if (m === "image/webp") return "WebP";
+    if (m === "image/gif") return "GIF";
+    return m || "";
+  }
+
+  function fmtSize(n) {
+    if (n < 1024) return n + " B";
+    if (n < 1024 * 1024) return (n / 1024).toFixed(1) + " KB";
+    return (n / (1024 * 1024)).toFixed(1) + " MB";
+  }
+
+  function readBytes(file) {
+    return new Promise((resolve, reject) => {
+      const fr = new FileReader();
+      fr.onload = () => resolve(new Uint8Array(fr.result));
+      fr.onerror = () => reject(fr.error || new Error("read"));
+      fr.readAsArrayBuffer(file);
+    });
+  }
+
+  function decodeViaImg(blob) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("decode")); };
+      img.src = url;
+    });
+  }
+
+  async function decodeImage(bytes, mime) {
+    const blob = new Blob([bytes], { type: mime || "application/octet-stream" });
+    if (typeof createImageBitmap === "function") {
+      try {
+        return await createImageBitmap(blob, { imageOrientation: "from-image" });
+      } catch {
+        return await createImageBitmap(blob);
+      }
+    }
+    return decodeViaImg(blob);
+  }
+
+  function putWork(buf) {
+    if (!buf) return;
+    if (work.width !== buf.width || work.height !== buf.height) {
+      work.width = buf.width;
+      work.height = buf.height;
+    }
+    const id = workCtx.createImageData(buf.width, buf.height);
+    id.data.set(buf.data);
+    workCtx.putImageData(id, 0, 0);
+  }
+
+  function viewRect() {
+    return $("view").getBoundingClientRect();
+  }
+
+  function pointerSource(e) {
+    return mapPointerToSource(e.clientX, e.clientY, viewRect(), current.width, current.height);
+  }
+
+  function paintView(buf) {
+    if (!buf) return;
+    putWork(buf);
+    const view = $("view");
+    const overlay = $("overlay");
+    const stage = $("stage");
+    const cssW = Math.max(1, stage.clientWidth || view.parentElement.clientWidth || 1);
+    const cssH = Math.max(1, Math.round((cssW * buf.height) / buf.width));
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    view.style.width = "100%";
+    view.style.height = cssH + "px";
+    view.width = Math.max(1, Math.round(cssW * dpr));
+    view.height = Math.max(1, Math.round(cssH * dpr));
+    const vctx = view.getContext("2d");
+    vctx.setTransform(1, 0, 0, 1, 0, 0);
+    vctx.imageSmoothingEnabled = false;
+    vctx.clearRect(0, 0, view.width, view.height);
+    vctx.drawImage(work, 0, 0, view.width, view.height);
+    overlay.width = Math.max(1, Math.round(cssW));
+    overlay.height = Math.max(1, Math.round(cssH));
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    drawOverlay();
+  }
+
+  function drawOverlay() {
+    const c = $("overlay");
+    const ctx = c.getContext("2d");
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, c.width, c.height);
+    if (!current) return;
+    const sx = c.width / current.width;
+    const sy = c.height / current.height;
+    const pt = stroke ? stroke.cur : hover;
+    if (stroke && stroke.tool === "rect" && stroke.start && stroke.cur) {
+      const x = Math.min(stroke.start.x, stroke.cur.x) * sx;
+      const y = Math.min(stroke.start.y, stroke.cur.y) * sy;
+      const w = Math.abs(stroke.cur.x - stroke.start.x) * sx;
+      const h = Math.abs(stroke.cur.y - stroke.start.y) * sy;
+      ctx.strokeStyle = "rgba(244, 63, 94, 0.95)";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([5, 4]);
+      ctx.strokeRect(x + 0.5, y + 0.5, w, h);
+      ctx.setLineDash([]);
+    }
+    if (pt && (tool === "brush" || (stroke && stroke.tool === "brush"))) {
+      ctx.beginPath();
+      ctx.arc(pt.x * sx, pt.y * sy, brushRadius * sx, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(244, 63, 94, 0.9)";
+      ctx.lineWidth = 1.25;
+      ctx.setLineDash([]);
+      ctx.stroke();
+    }
+  }
+
+  function strokeBlocks() {
+    if (!stroke || !current) return [];
+    if (stroke.tool === "rect") {
+      const r = clampRect(
+        stroke.start.x,
+        stroke.start.y,
+        stroke.cur.x - stroke.start.x,
+        stroke.cur.y - stroke.start.y,
+        current.width,
+        current.height
+      );
+      return blocksForRect(r, blockSize, current.width, current.height);
+    }
+    return blocksForBrush(stroke.points, brushRadius, blockSize, current.width, current.height);
+  }
+
+  function previewNow() {
+    raf = 0;
+    if (!current) return;
+    if (!stroke) {
+      paintView(current);
+      return;
+    }
+    const blocks = strokeBlocks();
+    const preview = mosaicRegion(stroke.snapshot, blocks);
+    paintView(preview);
+  }
+
+  function schedulePreview() {
+    if (raf) return;
+    raf = requestAnimationFrame(previewNow);
+  }
+
+  function renderChrome() {
+    $("drop").classList.toggle("compact", !!current);
+    $("drop").setAttribute("aria-label", t("选择本地图片", "Choose a local image"));
+    $("board").hidden = !current;
+    $("emptyBoard").hidden = !!current;
+    $("undoBtn").disabled = !current || undoStack.length === 0;
+    $("clearBtn").disabled = !current || undoStack.length === 0;
+    $("exportBtn").disabled = !current;
+    $("toolRect").classList.toggle("active", tool === "rect");
+    $("toolBrush").classList.toggle("active", tool === "brush");
+    $("blockVal").textContent = String(blockSize);
+    $("brushVal").textContent = String(brushRadius);
+    $("overlay").style.cursor = tool === "brush" ? "none" : "crosshair";
+    if (!current) {
+      $("strokeCount").textContent = "";
+      $("metaLine").textContent = "";
+      return;
+    }
+    $("strokeCount").textContent = undoStack.length
+      ? t(`${undoStack.length} 笔`, `${undoStack.length} stroke${undoStack.length === 1 ? "" : "s"}`)
+      : t("原图", "Original");
+    const bits = [];
+    bits.push(current.width + " × " + current.height);
+    if (fileMeta) {
+      bits.push(mimeLabel(fileMeta.mime));
+      bits.push(fmtSize(fileMeta.size));
+      if (fileMeta.name) bits.push(fileMeta.name);
+    }
+    bits.push(t("内存 · 不上传", "in memory · not uploaded"));
+    $("metaLine").textContent = bits.join(" · ");
+  }
+
+  function resetImage(buf, meta) {
+    original = cloneBuffer(buf);
+    current = cloneBuffer(buf);
+    undoStack = [];
+    stroke = null;
+    hover = null;
+    fileMeta = meta;
+    $("board").hidden = false;
+    $("emptyBoard").hidden = true;
+    void $("board").offsetWidth;
+    paintView(current);
+    renderChrome();
+  }
+
+  async function ingest(file) {
+    if (!file) return;
+    setStatus(t("正在读入内存…", "Reading into memory…"));
+    if (file.size > MAX_FILE_BYTES) {
+      const v = validateImageFile({ name: file.name, type: file.type, size: file.size });
+      setStatus(lang === "en" ? v.messageEn : v.messageZh, "err");
+      return;
+    }
+    let bytes;
+    try {
+      bytes = await readBytes(file);
+    } catch {
+      setStatus(t("无法读取文件", "Could not read file"), "err");
+      return;
+    }
+    const v = validateImageFile({
+      name: file.name,
+      type: file.type,
+      size: file.size,
+      bytes,
+    });
+    if (!v.ok) {
+      setStatus(lang === "en" ? v.messageEn : v.messageZh, "err");
+      return;
+    }
+    let bmp;
+    try {
+      bmp = await decodeImage(bytes, v.mime);
+    } catch {
+      setStatus(t("无法解码图片", "Could not decode image"), "err");
+      return;
+    }
+    const w = bmp.width | 0;
+    const h = bmp.height | 0;
+    if (w < 1 || h < 1) {
+      setStatus(t("图片尺寸无效", "Invalid image size"), "err");
+      if (typeof bmp.close === "function") bmp.close();
+      return;
+    }
+    try {
+      work.width = w;
+      work.height = h;
+      workCtx.setTransform(1, 0, 0, 1, 0, 0);
+      workCtx.clearRect(0, 0, w, h);
+      workCtx.drawImage(bmp, 0, 0);
+      const id = workCtx.getImageData(0, 0, w, h);
+      const buf = { data: new Uint8ClampedArray(id.data), width: w, height: h };
+      resetImage(buf, { name: file.name, mime: v.mime, size: bytes.byteLength });
+      setStatus(t("已打开本地图片 · 未上传", "Local image opened · nothing uploaded"), "ok");
+    } catch {
+      setStatus(t("无法放入画布", "Could not draw to canvas"), "err");
+    }
+    if (typeof bmp.close === "function") bmp.close();
+  }
+
+  function commitStroke() {
+    if (!stroke || !current) {
+      stroke = null;
+      return;
+    }
+    const blocks = strokeBlocks();
+    if (blocks.length === 0) {
+      stroke = null;
+      paintView(current);
+      return;
+    }
+    const next = mosaicRegion(stroke.snapshot, blocks);
+    undoStack.push(stroke.snapshot);
+    if (undoStack.length > UNDO_CAP) undoStack.shift();
+    current = { data: new Uint8ClampedArray(next.data), width: next.width, height: next.height };
+    stroke = null;
+    paintView(current);
+    renderChrome();
+  }
+
+  function undo() {
+    if (!undoStack.length) return;
+    current = undoStack.pop();
+    stroke = null;
+    paintView(current);
+    renderChrome();
+  }
+
+  function clearAll() {
+    if (!original) return;
+    current = cloneBuffer(original);
+    undoStack = [];
+    stroke = null;
+    paintView(current);
+    renderChrome();
+    setStatus(t("已恢复原图", "Restored original"), "ok");
+  }
+
+  function downloadBlob(blob, name) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+  }
+
+  function exportPng() {
+    if (!current) return;
+    putWork(current);
+    work.toBlob((blob) => {
+      if (!blob) {
+        setStatus(t("导出失败", "Export failed"), "err");
+        return;
+      }
+      downloadBlob(blob, DOWNLOAD_NAME);
+      setStatus(t("已下载 redact-017.png", "Downloaded redact-017.png"), "ok");
+    }, "image/png");
+  }
+
+  const drop = $("drop");
+  const fileInput = $("fileInput");
+
+  drop.addEventListener("click", () => fileInput.click());
+  drop.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      fileInput.click();
+    }
+  });
+  drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("drag"); });
+  drop.addEventListener("dragleave", () => drop.classList.remove("drag"));
+  drop.addEventListener("drop", (e) => {
+    e.preventDefault();
+    drop.classList.remove("drag");
+    const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f) ingest(f);
+  });
+  fileInput.addEventListener("change", () => {
+    const f = fileInput.files && fileInput.files[0];
+    fileInput.value = "";
+    if (f) ingest(f);
+  });
+
+  $("stage").addEventListener("dragover", (e) => { e.preventDefault(); });
+  $("stage").addEventListener("drop", (e) => {
+    e.preventDefault();
+    const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f) ingest(f);
+  });
+
+  $("toolRect").addEventListener("click", () => {
+    tool = "rect";
+    hover = null;
+    renderChrome();
+    drawOverlay();
+  });
+  $("toolBrush").addEventListener("click", () => {
+    tool = "brush";
+    renderChrome();
+    drawOverlay();
+  });
+  $("undoBtn").addEventListener("click", undo);
+  $("clearBtn").addEventListener("click", clearAll);
+  $("exportBtn").addEventListener("click", exportPng);
+
+  $("blockSize").addEventListener("input", (e) => {
+    blockSize = clampBlockSize(e.target.value);
+    $("blockVal").textContent = String(blockSize);
+    if (stroke) schedulePreview();
+  });
+  $("brushSize").addEventListener("input", (e) => {
+    brushRadius = clampBrushRadius(e.target.value);
+    $("brushVal").textContent = String(brushRadius);
+    if (stroke || hover) {
+      if (stroke) schedulePreview();
+      else drawOverlay();
+    }
+  });
+
+  const overlay = $("overlay");
+
+  overlay.addEventListener("pointerdown", (e) => {
+    if (!current) return;
+    if (e.pointerType !== "touch" && e.button !== 0) return;
+    e.preventDefault();
+    try { overlay.setPointerCapture(e.pointerId); } catch (_) {}
+    activePointer = e.pointerId;
+    const p = pointerSource(e);
+    stroke = {
+      tool,
+      snapshot: cloneBuffer(current),
+      start: p,
+      cur: p,
+      points: [{ x: p.x, y: p.y }],
+    };
+    hover = p;
+    schedulePreview();
+  });
+
+  overlay.addEventListener("pointermove", (e) => {
+    if (!current) return;
+    const p = pointerSource(e);
+    hover = p;
+    if (!stroke || activePointer !== e.pointerId) {
+      if (tool === "brush") drawOverlay();
+      return;
+    }
+    e.preventDefault();
+    stroke.cur = p;
+    stroke.points.push({ x: p.x, y: p.y });
+    schedulePreview();
+  });
+
+  function endPointer(e) {
+    if (stroke && (activePointer == null || e.pointerId === activePointer)) {
+      if (e && e.clientX != null) {
+        const p = pointerSource(e);
+        stroke.cur = p;
+        stroke.points.push({ x: p.x, y: p.y });
+      }
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+      commitStroke();
+    }
+    activePointer = null;
+    try { if (overlay.hasPointerCapture && overlay.hasPointerCapture(e.pointerId)) overlay.releasePointerCapture(e.pointerId); } catch (_) {}
+  }
+
+  overlay.addEventListener("pointerup", endPointer);
+  overlay.addEventListener("pointercancel", (e) => {
+    if (stroke && (activePointer == null || e.pointerId === activePointer)) {
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+      stroke = null;
+      paintView(current);
+    }
+    activePointer = null;
+  });
+  overlay.addEventListener("pointerleave", () => {
+    if (!stroke) {
+      hover = null;
+      drawOverlay();
+    }
+  });
+
+  window.addEventListener("keydown", (e) => {
+    const key = e.key.toLowerCase();
+    if ((e.metaKey || e.ctrlKey) && key === "z") {
+      e.preventDefault();
+      undo();
+    }
+    if (key === "escape" && stroke) {
+      stroke = null;
+      activePointer = null;
+      paintView(current);
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    if (current) paintView(stroke ? mosaicRegion(stroke.snapshot, strokeBlocks()) : current);
+  });
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand("copy"); } catch (_) {}
+      ta.remove();
+      return ok;
+    }
+  }
+
+  $("copyBtn").addEventListener("click", async () => {
+    const text = buildShareText(lang);
+    await copyText(text);
+    const btn = $("copyBtn");
+    btn.classList.add("copied");
+    const orig = btn.textContent;
+    btn.textContent = t("已复制 ✓", "Copied ✓");
+    setTimeout(() => {
+      btn.classList.remove("copied");
+      btn.textContent = orig;
+    }, 1800);
+  });
+
+  function wrapText(ctx, text, x, y, maxW, lineH) {
+    const words = String(text).split("");
+    let line = "";
+    let yy = y;
+    for (const ch of words) {
+      const test = line + ch;
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line, x, yy);
+        line = ch;
+        yy += lineH;
+      } else line = test;
+    }
+    if (line) ctx.fillText(line, x, yy);
+    return yy;
+  }
+
+  function renderShare() {
+    const canvas = $("shareCanvas");
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "rgba(237,239,241,0.05)";
+    for (let x = 16; x < w; x += 36) {
+      for (let y = 16; y < h; y += 36) ctx.fillRect(x, y, 2, 2);
+    }
+    ctx.fillStyle = "#f43f5e";
+    ctx.font = "600 13px ui-monospace, SF Mono, monospace";
+    ctx.fillText("REDACT-017", 48, 56);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 28px Helvetica Neue, PingFang SC, sans-serif";
+    const headline = t("外发截图前，先把敏感处打码。", "Redact the sensitive bits before you send the screenshot.");
+    wrapText(ctx, headline, 48, 110, w - 96, 36);
+    ctx.fillStyle = "#f43f5e";
+    ctx.font = "600 16px ui-monospace, SF Mono, monospace";
+    ctx.fillText(t("图片不离开本机 · 无上传 · 无 API", "Stays on device · no upload · no API"), 48, 280);
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "500 14px Helvetica Neue, PingFang SC, sans-serif";
+    ctx.fillText(t("选图 → 矩形 / 画笔马赛克 → 下载 PNG", "Pick a local image → rectangle / brush → PNG"), 48, 318);
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "500 12px ui-monospace, SF Mono, monospace";
+    ctx.fillText("build-100.com/017", 48, 400);
+  }
+
+  $("shareImgBtn").addEventListener("click", () => {
+    renderShare();
+    $("shareCanvasWrap").classList.add("show");
+  });
+
+  $("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+
+  if (lang === "en") applyLang("en");
+  else renderChrome();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

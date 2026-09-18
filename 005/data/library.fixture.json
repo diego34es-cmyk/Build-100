@@ -1,0 +1,166 @@
+{
+  "edition": 1,
+  "as_of": "2026-08-17",
+  "method": {
+    "lock": "dwell",
+    "price_grid": [0.8, 0.85, 0.9, 0.95, 0.97, 0.99],
+    "dwell": "scaled_by_lifetime",
+    "exclude": ["crypto_15m_or_shorter"]
+  },
+  "series": [
+    {
+      "id": "weather-madrid-tmax",
+      "name_zh": "马德里 · 日最高温",
+      "name_en": "Madrid · daily high temp",
+      "category": "weather",
+      "status": "ready",
+      "n": 120,
+      "dwell_seconds": 1800,
+      "lock_price": 0.97,
+      "flip_at_lock": 0.0,
+      "curve": [
+        { "price": 0.8, "flip": 0.16, "n": 120 },
+        { "price": 0.85, "flip": 0.09, "n": 118 },
+        { "price": 0.9, "flip": 0.045, "n": 110 },
+        { "price": 0.95, "flip": 0.012, "n": 101 },
+        { "price": 0.97, "flip": 0.0, "n": 94 },
+        { "price": 0.99, "flip": 0.0, "n": 76 }
+      ],
+      "notes_zh": "日高温模板；97¢ 是满足 ready 样本门槛后的第一个零翻点。",
+      "notes_en": "Daily-high template; 97¢ is the first zero-flip point with a ready sample."
+    },
+    {
+      "id": "weather-london-rain",
+      "name_zh": "伦敦 · 当日降雨",
+      "name_en": "London · rain today",
+      "category": "weather",
+      "status": "thin",
+      "n": 28,
+      "dwell_seconds": 1800,
+      "lock_price": 0.97,
+      "flip_at_lock": 0.014,
+      "curve": [
+        { "price": 0.8, "flip": 0.18, "n": 28 },
+        { "price": 0.85, "flip": 0.11, "n": 26 },
+        { "price": 0.9, "flip": 0.045, "n": 24 },
+        { "price": 0.95, "flip": 0.018, "n": 21 },
+        { "price": 0.97, "flip": 0.014, "n": 19 },
+        { "price": 0.99, "flip": 0.0, "n": 15 }
+      ],
+      "notes_zh": "样本偏薄；曲线可看，但锁价只作临时参考。",
+      "notes_en": "The sample is thin; read the curve, but treat the lock as provisional."
+    },
+    {
+      "id": "crypto-btc-hourly",
+      "name_zh": "比特币 · 小时涨跌",
+      "name_en": "Bitcoin · hourly up or down",
+      "category": "crypto",
+      "status": "ready",
+      "n": 84,
+      "dwell_seconds": 600,
+      "lock_price": 0.99,
+      "flip_at_lock": 0.0,
+      "curve": [
+        { "price": 0.8, "flip": 0.19, "n": 84 },
+        { "price": 0.85, "flip": 0.12, "n": 81 },
+        { "price": 0.9, "flip": 0.07, "n": 77 },
+        { "price": 0.95, "flip": 0.022, "n": 70 },
+        { "price": 0.97, "flip": 0.006, "n": 62 },
+        { "price": 0.99, "flip": 0.0, "n": 54 }
+      ],
+      "notes_zh": "仅纳入一小时及以上的加密市场；15 分钟及以下不在本馆范围内。",
+      "notes_en": "Only hourly-and-longer crypto markets are included; 15-minute and shorter markets are out of scope."
+    },
+    {
+      "id": "crypto-eth-daily-range",
+      "name_zh": "以太坊 · 日内区间",
+      "name_en": "Ethereum · daily range",
+      "category": "crypto",
+      "status": "thin",
+      "n": 33,
+      "dwell_seconds": 1800,
+      "lock_price": 0.97,
+      "flip_at_lock": 0.015,
+      "curve": [
+        { "price": 0.8, "flip": 0.21, "n": 33 },
+        { "price": 0.85, "flip": 0.14, "n": 31 },
+        { "price": 0.9, "flip": 0.075, "n": 29 },
+        { "price": 0.95, "flip": 0.029, "n": 27 },
+        { "price": 0.97, "flip": 0.015, "n": 24 },
+        { "price": 0.99, "flip": 0.0, "n": 18 }
+      ],
+      "notes_zh": "日级别样本仍少；15 分钟以下的快盘已排除。",
+      "notes_en": "The daily sample is still small; fast markets below 15 minutes are excluded."
+    },
+    {
+      "id": "sports-nba-moneyline",
+      "name_zh": "NBA · 比赛胜负",
+      "name_en": "NBA · game winner",
+      "category": "sports",
+      "status": "ready",
+      "n": 74,
+      "dwell_seconds": 600,
+      "lock_price": 0.95,
+      "flip_at_lock": 0.0,
+      "curve": [
+        { "price": 0.8, "flip": 0.11, "n": 74 },
+        { "price": 0.85, "flip": 0.052, "n": 70 },
+        { "price": 0.9, "flip": 0.014, "n": 65 },
+        { "price": 0.95, "flip": 0.0, "n": 58 },
+        { "price": 0.97, "flip": 0.0, "n": 44 },
+        { "price": 0.99, "flip": 0.0, "n": 31 }
+      ],
+      "notes_zh": "比赛结束前的赔率会受阵容和临场信息影响；这里记录的是历史曲线。",
+      "notes_en": "Lineups and late information can move prices; this is a historical curve, not a live read."
+    },
+    {
+      "id": "sports-tennis-set-winner",
+      "name_zh": "网球 · 单盘胜者",
+      "name_en": "Tennis · set winner",
+      "category": "sports",
+      "status": "insufficient",
+      "n": 9,
+      "dwell_seconds": 120,
+      "lock_price": null,
+      "flip_at_lock": null,
+      "curve": [],
+      "notes_zh": "有效 dwell 事件少于最低门槛，暂不显示锁价或曲线。",
+      "notes_en": "Too few valid dwell events; no lock or curve is shown yet."
+    },
+    {
+      "id": "macro-fed-cut",
+      "name_zh": "美联储 · 下次会议降息",
+      "name_en": "Fed · cut at next meeting",
+      "category": "macro",
+      "status": "thin",
+      "n": 24,
+      "dwell_seconds": 1800,
+      "lock_price": 0.95,
+      "flip_at_lock": 0.0125,
+      "curve": [
+        { "price": 0.8, "flip": 0.2, "n": 24 },
+        { "price": 0.85, "flip": 0.125, "n": 23 },
+        { "price": 0.9, "flip": 0.05, "n": 22 },
+        { "price": 0.95, "flip": 0.0125, "n": 20 },
+        { "price": 0.97, "flip": 0.0, "n": 16 },
+        { "price": 0.99, "flip": 0.0, "n": 12 }
+      ],
+      "notes_zh": "宏观事件样本跨期较长；锁价是薄样本下的 provisional 读法。",
+      "notes_en": "Macro events span longer windows; this is a provisional read from a thin sample."
+    },
+    {
+      "id": "other-oscars-best-picture",
+      "name_zh": "奥斯卡 · 最佳影片",
+      "name_en": "Oscars · best picture",
+      "category": "other",
+      "status": "insufficient",
+      "n": 11,
+      "dwell_seconds": 7200,
+      "lock_price": null,
+      "flip_at_lock": null,
+      "curve": [],
+      "notes_zh": "重复周期存在，但目前没有足够的完整样本支持锁价。",
+      "notes_en": "The recurring shape exists, but there are not enough complete samples for a lock."
+    }
+  ]
+}

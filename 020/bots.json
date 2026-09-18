@@ -1,0 +1,117 @@
+{
+  "updated": "2026-09-17",
+  "bots": [
+    {
+      "ua": "GPTBot",
+      "vendor": "OpenAI",
+      "zh": "OpenAI 训练爬虫。拦它不等于拦用户让 ChatGPT 打开网页。",
+      "en": "OpenAI training crawler. Blocking it does not block user-initiated ChatGPT browsing.",
+      "default": "disallow"
+    },
+    {
+      "ua": "ChatGPT-User",
+      "vendor": "OpenAI",
+      "zh": "用户在 ChatGPT 里点开网页时的抓取。不是训练爬虫。",
+      "en": "User-initiated fetch when ChatGPT opens a page. Not the training crawler.",
+      "default": "allow"
+    },
+    {
+      "ua": "OAI-SearchBot",
+      "vendor": "OpenAI",
+      "zh": "ChatGPT 搜索索引爬虫。拦它会影响 ChatGPT 搜索收录，不是 GPTBot。",
+      "en": "ChatGPT search indexer. Blocking it affects ChatGPT search, not GPTBot training.",
+      "default": "allow"
+    },
+    {
+      "ua": "Google-Extended",
+      "vendor": "Google",
+      "zh": "Gemini / Vertex AI 训练与产品用。不挡 Googlebot 搜索收录。",
+      "en": "Gemini / Vertex AI training and products. Does not block Googlebot search.",
+      "default": "disallow"
+    },
+    {
+      "ua": "ClaudeBot",
+      "vendor": "Anthropic",
+      "zh": "Anthropic 训练爬虫。",
+      "en": "Anthropic training crawler.",
+      "default": "disallow"
+    },
+    {
+      "ua": "anthropic-ai",
+      "vendor": "Anthropic",
+      "zh": "Anthropic 旧训练 token，建议与 ClaudeBot 一并处理。",
+      "en": "Legacy Anthropic training token. Treat alongside ClaudeBot.",
+      "default": "disallow"
+    },
+    {
+      "ua": "Claude-User",
+      "vendor": "Anthropic",
+      "zh": "用户在 Claude 里点开网页时的抓取。不是训练爬虫。",
+      "en": "User-initiated fetch when Claude opens a page. Not the training crawler.",
+      "default": "allow"
+    },
+    {
+      "ua": "Claude-SearchBot",
+      "vendor": "Anthropic",
+      "zh": "Claude 搜索索引爬虫。拦它会影响 Claude 搜索收录。",
+      "en": "Claude search indexer. Blocking it affects Claude search.",
+      "default": "allow"
+    },
+    {
+      "ua": "Bytespider",
+      "vendor": "ByteDance",
+      "zh": "字节跳动爬虫，常用于训练与产品抓取。",
+      "en": "ByteDance crawler, often used for training and product fetches.",
+      "default": "disallow"
+    },
+    {
+      "ua": "CCBot",
+      "vendor": "Common Crawl",
+      "zh": "Common Crawl 公共语料爬虫，很多模型会用这份数据。",
+      "en": "Common Crawl corpus crawler. Many models train on this data.",
+      "default": "disallow"
+    },
+    {
+      "ua": "PerplexityBot",
+      "vendor": "Perplexity",
+      "zh": "Perplexity 爬虫（索引 / 产品）。用户点开另见 Perplexity-User。",
+      "en": "Perplexity crawler (index / product). User-initiated fetches use Perplexity-User.",
+      "default": "disallow"
+    },
+    {
+      "ua": "Applebot-Extended",
+      "vendor": "Apple",
+      "zh": "Apple Intelligence 训练与产品用。不挡 Applebot 搜索。",
+      "en": "Apple Intelligence training and products. Does not block Applebot search.",
+      "default": "disallow"
+    },
+    {
+      "ua": "Amazonbot",
+      "vendor": "Amazon",
+      "zh": "Amazon 全站爬虫，用于搜索与 Alexa 等产品。",
+      "en": "Amazon site crawler for search and Alexa-class products.",
+      "default": "disallow"
+    },
+    {
+      "ua": "cohere-ai",
+      "vendor": "Cohere",
+      "zh": "Cohere 训练爬虫。",
+      "en": "Cohere training crawler.",
+      "default": "disallow"
+    },
+    {
+      "ua": "FacebookBot",
+      "vendor": "Meta",
+      "zh": "Meta 分享预览爬虫。拦它可能让 Facebook / Instagram 卡片失效；训练另见 meta-externalagent。",
+      "en": "Meta sharing-preview crawler. Blocking it can break Facebook / Instagram cards. Training uses meta-externalagent.",
+      "default": "allow"
+    },
+    {
+      "ua": "meta-externalagent",
+      "vendor": "Meta",
+      "zh": "Meta AI 训练爬虫。不挡 Facebook 分享预览（那是 FacebookBot）。",
+      "en": "Meta AI training crawler. Does not block Facebook sharing previews (that is FacebookBot).",
+      "default": "disallow"
+    }
+  ]
+}

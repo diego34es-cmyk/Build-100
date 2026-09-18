@@ -9,3 +9,9 @@ sessions.jsonl
 .agents/
 .cursor/
 skills-lock.json
+005/research/cache/
+005/research/__pycache__/
+**/__pycache__/
+*.pyc
+*.tmp
+library.json.tmp

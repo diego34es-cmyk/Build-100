@@ -1,0 +1,1028 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLMSTXT-021 · 一键出 llms.txt</title>
+<meta name="description" content="想给站加 llms.txt，记不住分区写法、怕 Markdown 链写错。填标题、摘要、分区链接，本机预览并下载。接 BOTRULES-020。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/021/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E021%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="LLMSTXT-021 · 一键出 llms.txt">
+<meta property="og:description" content="别再手抄 llms.txt 了。填分区，一键出给 LLM 的导读。">
+<meta property="og:url" content="https://build-100.com/021/">
+<meta property="og:image" content="https://build-100.com/021/og-021.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="LLMSTXT-021 · 一键出 llms.txt">
+<meta name="twitter:description" content="Stop hand-writing llms.txt. Fill sections, download a guide for LLMs.">
+<meta name="twitter:image" content="https://build-100.com/021/og-021.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #fb7185;
+    --accent-glow: rgba(251, 113, 133, 0.35);
+    --danger: #f87171;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(24px, 4vh, 36px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--accent); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p.sub { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+  .hero p.sub a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+
+  .privacy {
+    display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap;
+    margin-bottom: clamp(28px, 5vh, 40px);
+    padding: 14px 16px; border: 1px solid var(--line-strong); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(251, 113, 133, 0.12), transparent 60%);
+  }
+  .privacy .dot { color: var(--live); letter-spacing: 0.18em; }
+  .privacy p { color: var(--muted); font-size: 0.9rem; max-width: 42em; }
+  .privacy p strong { color: var(--ink); font-weight: 500; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+  .field-hint code {
+    font-family: var(--mono); font-size: 0.78em; letter-spacing: 0;
+    color: var(--accent); background: rgba(251, 113, 133, 0.08);
+    padding: 1px 6px; border-radius: 4px;
+  }
+
+  .presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .chip {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 9px 14px; border-radius: 999px; cursor: pointer; transition: all .18s;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--ink); }
+  .chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .chip.danger { border-color: rgba(248, 113, 113, 0.55); color: var(--danger); }
+  .chip.danger:hover { background: rgba(248, 113, 113, 0.1); }
+  .chip.danger.active { background: var(--danger); color: var(--bg); border-color: var(--danger); }
+
+  .tally {
+    display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 14px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tally b { font-weight: 600; color: var(--accent); }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .span2 { grid-column: 1 / -1; }
+  @media (max-width: 640px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .span2 { grid-column: auto; }
+  }
+  .fld { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .fld > span {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--faint);
+  }
+  .fld input, .fld textarea {
+    width: 100%; background: var(--bg-raise); border: 1px solid var(--line-strong);
+    color: var(--ink); padding: 10px 12px; border-radius: 4px; font-size: 0.95rem;
+    font-family: var(--sans); outline: none; transition: border-color .18s, box-shadow .18s;
+  }
+  .fld textarea { min-height: 72px; resize: vertical; line-height: 1.5; }
+  .fld input:focus, .fld textarea:focus {
+    border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow);
+  }
+  .fld input::placeholder, .fld textarea::placeholder { color: var(--faint); }
+
+  .sec-card {
+    border: 1px solid var(--line-strong); border-radius: 8px;
+    padding: 16px 18px; background: var(--bg-raise); margin-bottom: 12px;
+  }
+  .sec-card.collide {
+    border-color: var(--delta);
+    box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.18);
+  }
+  .sec-top { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 12px; flex-wrap: wrap; }
+  .sec-top .fld { flex: 1; }
+  .collide-msg {
+    display: none; color: var(--delta); font-size: 0.82rem; margin: -4px 0 12px;
+    font-family: var(--mono); letter-spacing: 0.02em;
+  }
+  .sec-card.collide .collide-msg { display: block; }
+
+  .link-row {
+    display: grid; grid-template-columns: 1.1fr 1.4fr 1fr auto;
+    gap: 8px; align-items: end; margin-bottom: 8px;
+  }
+  @media (max-width: 720px) {
+    .link-row { grid-template-columns: 1fr; }
+    .link-row .del { justify-self: start; }
+  }
+
+  .del {
+    background: none; border: 1px solid var(--line); color: var(--faint);
+    cursor: pointer; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    padding: 10px 12px; border-radius: 4px; white-space: nowrap; transition: color .18s, border-color .18s;
+  }
+  .del:hover { color: var(--danger); border-color: var(--danger); }
+
+  textarea.raw {
+    width: 100%; min-height: 280px; resize: vertical;
+    background: var(--bg-raise); border: 1px solid var(--line-strong); border-radius: 8px;
+    color: var(--ink); font-family: var(--mono); font-size: 0.82rem; line-height: 1.55;
+    padding: 14px; outline: none; transition: border-color .18s, box-shadow .18s;
+  }
+  textarea.raw:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow); }
+  textarea.raw::placeholder { color: var(--faint); }
+  textarea.raw[readonly] { color: #d5d8dc; }
+
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+  .add-btn, .ghost-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 12px 16px; border-radius: 4px; cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .add-btn {
+    border: 1px solid var(--accent); background: rgba(251, 113, 133, 0.12); color: var(--ink);
+  }
+  .add-btn:hover { background: var(--accent); color: var(--bg); box-shadow: 0 0 20px var(--accent-glow); }
+  .ghost-btn {
+    border: 1px solid var(--line-strong); background: none; color: var(--muted);
+  }
+  .ghost-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .add-btn.copied, .ghost-btn.copied, .share-btn.copied {
+    border-color: var(--live); color: var(--live); background: rgba(74, 222, 128, 0.1);
+  }
+
+  .check {
+    display: flex; align-items: flex-start; gap: 10px; cursor: pointer;
+    color: var(--muted); font-size: 0.9rem; max-width: 48em; margin-bottom: 14px;
+  }
+  .check input {
+    margin-top: 4px; accent-color: var(--accent); width: 16px; height: 16px; flex: none;
+  }
+  .check strong { color: var(--ink); font-weight: 500; }
+
+  .status { min-height: 1.3em; margin-top: 10px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); }
+  .status.ok { color: var(--live); }
+  .status.err { color: var(--danger); }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .origin-card {
+    margin-top: 48px; padding: clamp(24px, 4vw, 32px);
+    border: 1px solid var(--line); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(251, 113, 133, 0.1), transparent 55%);
+  }
+  .origin-eyebrow { color: var(--accent); margin-bottom: 12px; }
+  .origin-text { color: var(--muted); font-size: 0.95rem; max-width: 34em; }
+  .origin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .origin-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); border-radius: 4px;
+    color: var(--muted); cursor: pointer; transition: all .2s;
+  }
+  .origin-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .origin-btn.primary { border-color: var(--accent); color: var(--ink); background: rgba(251, 113, 133, 0.1); }
+  .origin-btn.primary:hover { background: var(--accent); color: var(--bg); }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">LLMSTXT<span>·021</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; LLMSTXT-021 · LLMS.TXT</p>
+    <h1 data-en="Stop hand-writing llms.txt. Fill sections, download a guide for LLMs.">别再手抄 llms.txt 了。填分区，一键出给 LLM 的导读。</h1>
+    <p class="sub" data-en="Want to add <strong>llms.txt</strong> but you cannot remember the section grammar and you are afraid of writing Markdown links wrong. Fill title / summary / section links → preview and download. On this device. Follows <a href=&quot;https://build-100.com/020/&quot;>BOTRULES-020</a>: robots.txt for crawlers, this page for what to feed models.">
+      想给站加 <strong>llms.txt</strong>，记不住分区写法、怕 Markdown 链写错。填标题 / 摘要 / 分区链接 → 预览并下载。全程本机。接 <a href="https://build-100.com/020/">BOTRULES-020</a>：robots 管爬虫，本页管「喂什么给模型」。
+    </p>
+  </header>
+
+  <aside class="privacy">
+    <span class="mono dot">● LOCAL</span>
+    <p data-en="<strong>The draft stays on this device.</strong> The form, paste, and preview never upload. The page still loads <strong>beacon.js</strong> — this is not a zero-network page.">
+      <strong>草稿只存在本机。</strong>表单、粘贴和预览不上传。页面仍会加载 <strong>beacon.js</strong>，不声称整页零网络。
+    </p>
+  </aside>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <span class="field-title" data-en="Title, summary, details">标题、摘要、详情</span>
+      <span class="field-hint" data-en="Order is locked to llmstxt.org: <code># Title</code> → optional <code>&gt; summary</code> → optional details (no heading) → <code>##</code> sections → one final <code>## Optional</code>. Empty fields are omitted whole.">
+        顺序钉死 llmstxt.org：<code># Title</code> → 可选 <code>&gt; summary</code> → 可选 details（无标题）→ <code>##</code> 分区 → 最后一块 <code>## Optional</code>。空字段整段不出现。
+      </span>
+    </div>
+    <div class="presets">
+      <button class="chip" type="button" id="presetDocs" data-en="Docs site">文档站</button>
+      <button class="chip" type="button" id="presetPersonal" data-en="Personal site">个人站</button>
+      <button class="chip danger" type="button" id="presetEmpty" data-en="Clear">清空</button>
+    </div>
+    <div class="form-grid">
+      <label class="fld span2">
+        <span data-en="Site title (H1, required)">站点标题（H1，必填）</span>
+        <input id="titleInput" type="text" maxlength="200" autocomplete="off"
+          placeholder="Docs" data-ph-zh="Docs" data-ph-en="Docs">
+      </label>
+      <label class="fld span2">
+        <span data-en="Summary (blockquote, optional)">一句话摘要（blockquote，可空）</span>
+        <input id="summaryInput" type="text" maxlength="400" autocomplete="off"
+          placeholder="Documentation for this project."
+          data-ph-zh="Documentation for this project."
+          data-ph-en="Documentation for this project.">
+      </label>
+      <label class="fld span2">
+        <span data-en="Details (no heading, optional)">详情段落（无标题，可空）</span>
+        <textarea id="detailsInput" rows="3"
+          placeholder="给模型看的补充说明，不要再套一层标题。"
+          data-ph-zh="给模型看的补充说明，不要再套一层标题。"
+          data-ph-en="Extra notes for the model. Do not wrap this in a heading."></textarea>
+      </label>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <span class="field-title" data-en="Sections">主分区</span>
+      <span class="field-hint" data-en="Each H2 is a custom name plus <code>- [title](url)</code> or <code>- [title](url): note</code>. Empty title/url drops the line. Do not name a section Optional — that name is reserved and those links go into the Optional bucket.">
+        每个 H2 是自定义分区名 + <code>- [title](url)</code> 或 <code>- [title](url): note</code>。标题或 url 空则该行不输出。分区名不得叫 Optional（大小写不敏感）——撞名进 Optional 桶。
+      </span>
+    </div>
+    <div class="tally" id="tally"></div>
+    <div id="sectionsBox"></div>
+    <div class="tools">
+      <button class="ghost-btn" type="button" id="addSectionBtn" data-en="Add section">添加分区</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">03</span>
+      <span class="field-title" data-en="Optional block">Optional 块</span>
+      <span class="field-hint" data-en="Exactly one reserved H2 named <code>Optional</code>, last, links only — no nested section names. Off or no links → the whole block is omitted.">
+        保留名，只有一块：标题必须是 <code>Optional</code>，放在最后，下面只有链接，没有嵌套分区名。开关关或无链接 → 整块不出现。
+      </span>
+    </div>
+    <label class="check">
+      <input type="checkbox" id="optEnabled">
+      <span data-en="Write a final <strong>## Optional</strong> block. Off or no links → omitted.">
+        在最后写一块 <strong>## Optional</strong>。关掉或没有链接则整块不出现。
+      </span>
+    </label>
+    <div id="optionalEditor">
+      <div id="optionalBox"></div>
+      <div class="tools">
+        <button class="ghost-btn" type="button" id="addOptLinkBtn" data-en="Add optional link">添加 Optional 链接</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">04</span>
+      <span class="field-title" data-en="Preview llms.txt">预览 llms.txt</span>
+      <span class="field-hint" data-en="Read-only text. Download filename is locked to <code>llms.txt</code>. Title must be non-empty before download.">
+        只读文本。下载文件名锁死 <code>llms.txt</code>。下载前标题必须非空。
+      </span>
+    </div>
+    <textarea class="raw" id="preview" readonly spellcheck="false" aria-label="llms.txt preview"></textarea>
+    <div class="tools">
+      <button class="add-btn" type="button" id="copyFileBtn" data-en="Copy llms.txt">复制 llms.txt</button>
+      <button class="ghost-btn" type="button" id="downloadBtn" data-en="Download llms.txt">下载 llms.txt</button>
+    </div>
+    <p class="status" id="previewStatus" role="status"></p>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">05</span>
+      <span class="field-title" data-en="Paste &amp; parse">粘贴解析</span>
+      <span class="field-hint" data-en="Best-effort: H1, the following blockquote, details until the first H2, <code>- [t](u)</code> lists, and <code>## Optional</code>. YAML / H3 / code fences / non-list paragraphs land in “kept extras” and are appended as-is — not wrapped in HTML comments.">
+        尽力认：H1、紧随的 blockquote、到首个 H2 前的 details、H2 下 <code>- [t](u)</code> / <code>- [t](u): note</code>、<code>## Optional</code>。YAML / H3 / 代码块 / 非列表段落进「自定义保留」，原样拼在生成结果尾部，不包 HTML 注释。
+      </span>
+    </div>
+    <textarea class="raw" id="paste" spellcheck="false" autocomplete="off"
+      placeholder="粘贴已有 llms.txt…"
+      data-ph-zh="粘贴已有 llms.txt…"
+      data-ph-en="Paste an existing llms.txt…"></textarea>
+    <div class="tools">
+      <button class="add-btn" type="button" id="parseBtn" data-en="Parse into form">解析进表单</button>
+      <button class="ghost-btn" type="button" id="sampleBtn" data-en="Load sample">填入示例</button>
+    </div>
+    <p class="status" id="parseStatus" role="status"></p>
+    <div class="field-head" style="margin-top: 22px;">
+      <span class="field-title" data-en="Kept extras" style="font-size: 1rem;">自定义保留</span>
+      <span class="field-hint" data-en="Appended after the generated llms.txt. Editable. Presets clear this box.">
+        拼在生成结果后面。可编辑。套用预设会清空此框。
+      </span>
+    </div>
+    <textarea class="raw" id="extras" spellcheck="false" autocomplete="off"
+      placeholder="YAML / H3 / 代码块 / 非列表段落…"
+      data-ph-zh="YAML / H3 / 代码块 / 非列表段落…"
+      data-ph-en="YAML / H3 / code fences / non-list paragraphs…"
+      style="min-height: 160px;"></textarea>
+  </div>
+
+  <div class="share-row">
+    <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+    <button class="share-btn" id="shareImgBtn" type="button" data-en="Share image">生成分享图</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareCanvasWrap">
+    <canvas id="shareCanvas" width="800" height="450"></canvas>
+    <p class="share-save-hint" data-en="Long-press or right-click to save. The image is branding only — it does not draw your llms.txt.">长按或右键保存。分享图只有文案，不把完整 llms.txt 画进去。</p>
+  </div>
+
+  <aside class="origin-card">
+    <p class="mono origin-eyebrow">BUILD-100 · 021/100</p>
+    <p class="origin-text" data-en="No.021 of BUILD-100 — one person building 100 websites with AI, in public. Fill sections, download llms.txt, keep the draft on this device. Follows BOTRULES-020 (robots.txt).">
+      BUILD-100 的第 021 号：一个人用 AI 公开做 100 个网站。填分区，下载 llms.txt，草稿留在本机。接 020 的 robots.txt。
+    </p>
+    <div class="origin-actions">
+      <a class="origin-btn primary" href="https://build-100.com/" data-en="See the project →">看看这个计划 →</a>
+      <a class="origin-btn" href="https://build-100.com/020/" data-en="BOTRULES-020 · robots.txt">BOTRULES-020 · robots.txt</a>
+      <a class="origin-btn" href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="Follow along on X">在 X 上看过程</a>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="LLMSTXT-021 · one-click llms.txt">LLMSTXT-021 · 一键出 llms.txt</span>
+</footer>
+
+<script type="module">
+  import {
+    STORAGE_KEY,
+    DOWNLOAD_NAME,
+    emptyDoc,
+    buildLlms,
+    parseLlms,
+    applyPreset,
+    loadDraft,
+    saveDraft,
+    buildShareText,
+    normalizeDoc,
+  } from "./engine.js?v=1";
+
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  if (lang !== "en") lang = "zh";
+
+  const $ = (id) => document.getElementById(id);
+  const t = (zh, en) => (lang === "en" ? en : zh);
+
+  let state = emptyDoc();
+  let activePreset = "";
+  let saveTimer = 0;
+  let statusTimer = 0;
+
+  const SAMPLE = [
+    "---",
+    "draft: true",
+    "---",
+    "# Example Site",
+    "",
+    "> A tiny example for language models.",
+    "",
+    "Read this first. Skip the leftover bits below.",
+    "",
+    "## Docs",
+    "",
+    "- [Documentation](https://example.com/docs): Full docs",
+    "- [API](https://example.com/api)",
+    "",
+    "paragraph leftover",
+    "",
+    "### Not a section",
+    "",
+    "```",
+    "code leftover",
+    "```",
+    "",
+    "## Optional",
+    "",
+    "- [Changelog](https://example.com/changelog)",
+    "",
+  ].join("\n");
+
+  function isOptName(s) {
+    return String(s || "").trim().toLowerCase() === "optional";
+  }
+
+  function blankLink() {
+    return { title: "", url: "", note: "" };
+  }
+
+  function blankSection() {
+    return { name: "", links: [blankLink()] };
+  }
+
+  function ensureRows() {
+    if (!Array.isArray(state.sections)) state.sections = [];
+    if (!state.sections.length) state.sections.push(blankSection());
+    for (const s of state.sections) {
+      if (!Array.isArray(s.links) || !s.links.length) s.links = [blankLink()];
+    }
+    if (!Array.isArray(state.optionalLinks) || !state.optionalLinks.length) {
+      state.optionalLinks = [blankLink()];
+    }
+  }
+
+  function currentDoc() {
+    return {
+      title: $("titleInput").value,
+      summary: $("summaryInput").value,
+      details: $("detailsInput").value,
+      sections: state.sections,
+      optionalEnabled: $("optEnabled").checked,
+      optionalLinks: state.optionalLinks,
+      extras: $("extras").value,
+    };
+  }
+
+  function currentText() {
+    const d = currentDoc();
+    return buildLlms(d, d.extras);
+  }
+
+  function persist() {
+    state = normalizeDoc(currentDoc());
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      saveTimer = 0;
+      try { saveDraft(state, localStorage); } catch (e) {}
+    }, 80);
+  }
+
+  function setStatus(id, msg, kind) {
+    const el = $(id);
+    el.textContent = msg || "";
+    el.className = "status" + (kind ? " " + kind : "");
+    if (statusTimer) clearTimeout(statusTimer);
+    if (msg && kind === "ok") {
+      statusTimer = setTimeout(() => {
+        el.textContent = "";
+        el.className = "status";
+      }, 2200);
+    }
+  }
+
+  function flashCopied(btn) {
+    btn.classList.add("copied");
+    const orig = btn.textContent;
+    btn.textContent = t("已复制 ✓", "Copied ✓");
+    setTimeout(() => {
+      btn.classList.remove("copied");
+      btn.textContent = orig;
+    }, 1800);
+  }
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand("copy"); } catch (_) {}
+      ta.remove();
+      return ok;
+    }
+  }
+
+  function el(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null && text !== "") n.textContent = text;
+    return n;
+  }
+
+  function fldInput(kind, value, ph, attrs) {
+    const lab = el("label", "fld" + (attrs && attrs.fldClass ? " " + attrs.fldClass : ""));
+    lab.appendChild(el("span", "", t(attrs.zh, attrs.en)));
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = value || "";
+    input.placeholder = ph || "";
+    input.autocomplete = "off";
+    input.spellcheck = false;
+    if (attrs.s != null) input.dataset.s = String(attrs.s);
+    if (attrs.l != null) input.dataset.l = String(attrs.l);
+    if (attrs.k) input.dataset.k = attrs.k;
+    if (attrs.opt) input.dataset.opt = "1";
+    lab.appendChild(input);
+    return lab;
+  }
+
+  function countLive() {
+    const d = currentDoc();
+    let nSec = 0;
+    let nLinks = 0;
+    let nOpt = 0;
+    for (const s of d.sections || []) {
+      const name = String(s.name || "").trim();
+      const links = (s.links || []).filter((l) => String(l.title || "").trim() && String(l.url || "").trim());
+      if (!name || !links.length) continue;
+      if (isOptName(name)) {
+        nOpt += links.length;
+        continue;
+      }
+      nSec += 1;
+      nLinks += links.length;
+    }
+    if (d.optionalEnabled) {
+      nOpt += (d.optionalLinks || []).filter((l) => String(l.title || "").trim() && String(l.url || "").trim()).length;
+    }
+    return { nSec, nLinks, nOpt };
+  }
+
+  function renderTally() {
+    const c = countLive();
+    const box = $("tally");
+    box.replaceChildren();
+    const parts = [
+      t(c.nSec + " 个分区", c.nSec + " sections"),
+      t(c.nLinks + " 条主链接", c.nLinks + " section links"),
+      t("Optional " + c.nOpt, "Optional " + c.nOpt),
+    ];
+    parts.forEach((p, i) => {
+      const s = el("span");
+      s.appendChild(el("b", "", p));
+      box.appendChild(s);
+      if (i < parts.length - 1) box.appendChild(document.createTextNode(" · "));
+    });
+  }
+
+  function renderLinkRow(links, si, li, opt) {
+    const row = el("div", "link-row");
+    row.appendChild(fldInput("text", links[li].title, t("标题", "title"), {
+      zh: "标题", en: "title", s: si, l: li, k: "title", opt,
+    }));
+    row.appendChild(fldInput("text", links[li].url, "https://", {
+      zh: "url", en: "url", s: si, l: li, k: "url", opt,
+    }));
+    row.appendChild(fldInput("text", links[li].note, t("备注，可空", "note, optional"), {
+      zh: "备注", en: "note", s: si, l: li, k: "note", opt, fldClass: "note",
+    }));
+    const del = el("button", "del", t("删除", "Remove"));
+    del.type = "button";
+    del.dataset.act = opt ? "rm-opt" : "rm-link";
+    if (si != null) del.dataset.s = String(si);
+    del.dataset.l = String(li);
+    row.appendChild(del);
+    return row;
+  }
+
+  function renderSections() {
+    ensureRows();
+    const box = $("sectionsBox");
+    box.replaceChildren();
+    state.sections.forEach((sec, si) => {
+      const card = el("div", "sec-card" + (isOptName(sec.name) ? " collide" : ""));
+      const top = el("div", "sec-top");
+      const nameLab = el("label", "fld");
+      nameLab.appendChild(el("span", "", t("分区名 · H2", "Section name · H2")));
+      const nameIn = document.createElement("input");
+      nameIn.type = "text";
+      nameIn.value = sec.name || "";
+      nameIn.placeholder = t("Docs", "Docs");
+      nameIn.autocomplete = "off";
+      nameIn.dataset.s = String(si);
+      nameIn.dataset.k = "name";
+      nameLab.appendChild(nameIn);
+      top.appendChild(nameLab);
+      const rm = el("button", "del", t("删除分区", "Remove section"));
+      rm.type = "button";
+      rm.dataset.act = "rm-sec";
+      rm.dataset.s = String(si);
+      top.appendChild(rm);
+      card.appendChild(top);
+      const warn = el("p", "collide-msg", t(
+        "分区名 Optional 是保留名，这些链接会进最后的 Optional 桶。",
+        "Optional is reserved — these links go into the final Optional bucket."
+      ));
+      card.appendChild(warn);
+      sec.links.forEach((_, li) => card.appendChild(renderLinkRow(sec.links, si, li, false)));
+      const add = el("button", "ghost-btn", t("添加链接", "Add link"));
+      add.type = "button";
+      add.dataset.act = "add-link";
+      add.dataset.s = String(si);
+      add.style.marginTop = "6px";
+      card.appendChild(add);
+      box.appendChild(card);
+    });
+    renderOptional();
+    renderTally();
+  }
+
+  function renderOptional() {
+    ensureRows();
+    const box = $("optionalBox");
+    box.replaceChildren();
+    state.optionalLinks.forEach((_, li) => {
+      box.appendChild(renderLinkRow(state.optionalLinks, null, li, true));
+    });
+    $("optionalEditor").hidden = !$("optEnabled").checked;
+  }
+
+  function renderPreview() {
+    $("preview").value = currentText();
+    renderTally();
+  }
+
+  function fillForm() {
+    $("titleInput").value = state.title || "";
+    $("summaryInput").value = state.summary || "";
+    $("detailsInput").value = state.details || "";
+    $("optEnabled").checked = Boolean(state.optionalEnabled);
+    $("extras").value = state.extras || "";
+    renderSections();
+    renderPreview();
+    syncPresetChips();
+  }
+
+  function syncPresetChips() {
+    $("presetDocs").classList.toggle("active", activePreset === "docs");
+    $("presetPersonal").classList.toggle("active", activePreset === "personal");
+    $("presetEmpty").classList.toggle("active", activePreset === "empty");
+  }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach((node) => {
+      if (node.dataset.zh === undefined) node.dataset.zh = node.innerHTML;
+      node.innerHTML = l === "en" ? node.dataset.en : node.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.title = l === "en"
+      ? "LLMSTXT-021 · one-click llms.txt"
+      : "LLMSTXT-021 · 一键出 llms.txt";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    ["titleInput", "summaryInput", "detailsInput", "paste", "extras"].forEach((id) => {
+      const node = $(id);
+      node.placeholder = l === "en" ? (node.dataset.phEn || "") : (node.dataset.phZh || "");
+    });
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    $("previewStatus").textContent = "";
+    $("previewStatus").className = "status";
+    $("parseStatus").textContent = "";
+    $("parseStatus").className = "status";
+    renderSections();
+    renderPreview();
+    if ($("shareCanvasWrap").classList.contains("show")) renderShare();
+  }
+
+  function wrapText(ctx, text, x, y, maxW, lineH) {
+    const chars = String(text).split("");
+    let line = "";
+    let yy = y;
+    for (const ch of chars) {
+      const test = line + ch;
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line, x, yy);
+        line = ch;
+        yy += lineH;
+      } else line = test;
+    }
+    if (line) ctx.fillText(line, x, yy);
+    return yy;
+  }
+
+  function renderShare() {
+    const canvas = $("shareCanvas");
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    const c = countLive();
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "rgba(237,239,241,0.05)";
+    for (let x = 16; x < w; x += 36) {
+      for (let y = 16; y < h; y += 36) ctx.fillRect(x, y, 2, 2);
+    }
+    ctx.fillStyle = "#fb7185";
+    ctx.font = "600 13px ui-monospace, SF Mono, monospace";
+    ctx.fillText("LLMSTXT-021", 48, 56);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 28px Helvetica Neue, PingFang SC, sans-serif";
+    wrapText(
+      ctx,
+      t("别再手抄 llms.txt 了。", "Stop hand-writing llms.txt."),
+      48, 110, w - 96, 36
+    );
+    ctx.fillStyle = "#fb7185";
+    ctx.font = "600 16px ui-monospace, SF Mono, monospace";
+    ctx.fillText(
+      t("填分区，一键出给 LLM 的导读", "Fill sections, download a guide for LLMs"),
+      48, 210
+    );
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "500 14px ui-monospace, SF Mono, monospace";
+    const title = String($("titleInput").value || "").trim() || t("未命名", "(untitled)");
+    ctx.fillText(
+      title + " · " + t(c.nSec + " 个分区", c.nSec + " sections"),
+      48, 258
+    );
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "500 12px ui-monospace, SF Mono, monospace";
+    ctx.fillText("build-100.com/021", 48, 400);
+  }
+
+  function usePreset(name) {
+    state = applyPreset(name);
+    activePreset = name === "docs" || name === "personal" || name === "empty" ? name : "";
+    ensureRows();
+    fillForm();
+    persist();
+  }
+
+  $("presetDocs").addEventListener("click", () => usePreset("docs"));
+  $("presetPersonal").addEventListener("click", () => usePreset("personal"));
+  $("presetEmpty").addEventListener("click", () => usePreset("empty"));
+
+  $("addSectionBtn").addEventListener("click", () => {
+    ensureRows();
+    state.sections.push(blankSection());
+    activePreset = "";
+    renderSections();
+    persist();
+    renderPreview();
+  });
+
+  $("addOptLinkBtn").addEventListener("click", () => {
+    ensureRows();
+    state.optionalLinks.push(blankLink());
+    activePreset = "";
+    renderOptional();
+    persist();
+    renderPreview();
+  });
+
+  $("optEnabled").addEventListener("change", () => {
+    state.optionalEnabled = $("optEnabled").checked;
+    if (state.optionalEnabled) ensureRows();
+    activePreset = "";
+    renderOptional();
+    persist();
+    renderPreview();
+  });
+
+  ["titleInput", "summaryInput", "detailsInput", "extras"].forEach((id) => {
+    $(id).addEventListener("input", () => {
+      activePreset = "";
+      syncPresetChips();
+      persist();
+      renderPreview();
+    });
+  });
+
+  $("sectionsBox").addEventListener("input", (e) => {
+    const n = e.target;
+    if (!n.dataset || n.dataset.s == null) return;
+    const si = Number(n.dataset.s);
+    const sec = state.sections[si];
+    if (!sec) return;
+    if (n.dataset.k === "name") {
+      sec.name = n.value;
+      const card = n.closest(".sec-card");
+      if (card) card.classList.toggle("collide", isOptName(sec.name));
+    } else if (n.dataset.l != null) {
+      const li = Number(n.dataset.l);
+      if (!sec.links[li]) return;
+      if (n.dataset.k === "title" || n.dataset.k === "url" || n.dataset.k === "note") {
+        sec.links[li][n.dataset.k] = n.value;
+      }
+    }
+    activePreset = "";
+    syncPresetChips();
+    persist();
+    renderPreview();
+  });
+
+  $("sectionsBox").addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn || !btn.dataset.act) return;
+    const act = btn.dataset.act;
+    const si = Number(btn.dataset.s);
+    if (act === "add-link") {
+      if (!state.sections[si]) return;
+      state.sections[si].links.push(blankLink());
+      renderSections();
+    } else if (act === "rm-link") {
+      const li = Number(btn.dataset.l);
+      const sec = state.sections[si];
+      if (!sec) return;
+      sec.links.splice(li, 1);
+      if (!sec.links.length) sec.links.push(blankLink());
+      renderSections();
+    } else if (act === "rm-sec") {
+      state.sections.splice(si, 1);
+      if (!state.sections.length) state.sections.push(blankSection());
+      renderSections();
+    } else return;
+    activePreset = "";
+    persist();
+    renderPreview();
+  });
+
+  $("optionalBox").addEventListener("input", (e) => {
+    const n = e.target;
+    if (!n.dataset || n.dataset.opt !== "1" || n.dataset.l == null) return;
+    const li = Number(n.dataset.l);
+    if (!state.optionalLinks[li]) return;
+    if (n.dataset.k === "title" || n.dataset.k === "url" || n.dataset.k === "note") {
+      state.optionalLinks[li][n.dataset.k] = n.value;
+    }
+    activePreset = "";
+    persist();
+    renderPreview();
+  });
+
+  $("optionalBox").addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn || btn.dataset.act !== "rm-opt") return;
+    const li = Number(btn.dataset.l);
+    state.optionalLinks.splice(li, 1);
+    if (!state.optionalLinks.length) state.optionalLinks.push(blankLink());
+    activePreset = "";
+    renderOptional();
+    persist();
+    renderPreview();
+  });
+
+  $("copyFileBtn").addEventListener("click", async () => {
+    const ok = await copyText(currentText());
+    if (ok) {
+      flashCopied($("copyFileBtn"));
+      setStatus("previewStatus", t("已复制 llms.txt", "llms.txt copied"), "ok");
+    } else {
+      setStatus("previewStatus", t("无法写入剪贴板", "Could not write clipboard"), "err");
+    }
+  });
+
+  $("downloadBtn").addEventListener("click", () => {
+    if (!String($("titleInput").value || "").trim()) {
+      setStatus("previewStatus", t("下载前先填标题（H1）", "Fill the title (H1) before downloading"), "err");
+      $("titleInput").focus();
+      return;
+    }
+    const blob = new Blob([currentText()], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = DOWNLOAD_NAME;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 800);
+    setStatus("previewStatus", t("已开始下载 llms.txt", "Downloading llms.txt"), "ok");
+  });
+
+  $("parseBtn").addEventListener("click", () => {
+    const raw = $("paste").value;
+    if (!String(raw).trim()) {
+      setStatus("parseStatus", t("先粘贴一段 llms.txt", "Paste an llms.txt first"), "err");
+      return;
+    }
+    const { doc, extras } = parseLlms(raw);
+    state = normalizeDoc(doc);
+    state.extras = extras;
+    activePreset = "";
+    ensureRows();
+    fillForm();
+    persist();
+    setStatus("parseStatus", t("已填入表单；无法识别的原文进自定义保留", "Form filled; leftover markdown kept as extras"), "ok");
+  });
+
+  $("sampleBtn").addEventListener("click", () => {
+    $("paste").value = SAMPLE;
+    setStatus("parseStatus", t("已填入示例，点「解析进表单」", "Sample loaded — click Parse into form"), "ok");
+  });
+
+  $("copyBtn").addEventListener("click", async () => {
+    const text = buildShareText(currentDoc(), lang);
+    const ok = await copyText(text);
+    if (ok) flashCopied($("copyBtn"));
+  });
+
+  $("shareImgBtn").addEventListener("click", () => {
+    renderShare();
+    $("shareCanvasWrap").classList.add("show");
+  });
+
+  $("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+
+  void STORAGE_KEY;
+
+  try {
+    const draft = loadDraft(localStorage);
+    if (draft && (draft.title || draft.summary || draft.details || (draft.sections && draft.sections.length))) {
+      state = draft;
+      activePreset = "";
+    } else {
+      state = applyPreset("docs");
+      activePreset = "docs";
+    }
+  } catch (e) {
+    state = applyPreset("docs");
+    activePreset = "docs";
+  }
+  ensureRows();
+  fillForm();
+  if (lang === "en") applyLang("en");
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+{
+  "updated": "2026-09-18",
+  "fx": {
+    "base": "EUR",
+    "quote": "CNY",
+    "eur_cny": 7.7,
+    "source": "Mid-market EUR/CNY ≈ 7.7，2026-09-18 烘焙，不打实时接口"
+  },
+  "basket": {
+    "note_zh": "单身一个月的可比篮子。数量固定，方便两城对同一组日子。",
+    "note_en": "One month, one person. Quantities are fixed so both cities buy the same life.",
+    "items": [
+      {
+        "id": "rent_1br",
+        "qty": 1,
+        "qty_unit_zh": "套",
+        "qty_unit_en": "apt",
+        "label_zh": "房租（一室）",
+        "label_en": "Rent (1-bed)"
+      },
+      {
+        "id": "coffee",
+        "qty": 20,
+        "qty_unit_zh": "杯",
+        "qty_unit_en": "cups",
+        "label_zh": "咖啡",
+        "label_en": "Coffee"
+      },
+      {
+        "id": "metro_pass",
+        "qty": 1,
+        "qty_unit_zh": "张",
+        "qty_unit_en": "pass",
+        "label_zh": "地铁月票",
+        "label_en": "Metro pass"
+      },
+      {
+        "id": "takeout",
+        "qty": 12,
+        "qty_unit_zh": "餐",
+        "qty_unit_en": "meals",
+        "label_zh": "外卖一餐",
+        "label_en": "Takeout meal"
+      },
+      {
+        "id": "phone",
+        "qty": 1,
+        "qty_unit_zh": "份",
+        "qty_unit_en": "plan",
+        "label_zh": "手机套餐",
+        "label_en": "Phone plan"
+      }
+    ]
+  },
+  "europe": {
+    "id": "madrid",
+    "name_zh": "马德里",
+    "name_en": "Madrid",
+    "currency": "EUR",
+    "prices": {
+      "rent_1br": {
+        "value": 1353.33,
+        "unit_zh": "欧元/月",
+        "unit_en": "EUR/month",
+        "note_zh": "市中心一室公寓月租",
+        "note_en": "1-bed apartment, city centre, per month"
+      },
+      "coffee": {
+        "value": 2.74,
+        "unit_zh": "欧元/杯",
+        "unit_en": "EUR/cup",
+        "note_zh": "一杯常规卡布奇诺",
+        "note_en": "Regular cappuccino"
+      },
+      "metro_pass": {
+        "value": 33.0,
+        "unit_zh": "欧元/月",
+        "unit_en": "EUR/month",
+        "note_zh": "公共交通月票（常规价；A 区成人 30 日卡官方约 54.60）",
+        "note_en": "Monthly public-transport pass (crowd median; official adult Zone A ~€54.60)"
+      },
+      "takeout": {
+        "value": 16.0,
+        "unit_zh": "欧元/餐",
+        "unit_en": "EUR/meal",
+        "note_zh": "一顿便宜简餐 / 外卖",
+        "note_en": "Inexpensive restaurant / takeout meal"
+      },
+      "phone": {
+        "value": 16.18,
+        "unit_zh": "欧元/月",
+        "unit_en": "EUR/month",
+        "note_zh": "含通话 + 10GB 以上流量",
+        "note_en": "Calls + 10GB+ data"
+      }
+    }
+  },
+  "china": {
+    "beijing": {
+      "id": "beijing",
+      "name_zh": "北京",
+      "name_en": "Beijing",
+      "currency": "CNY",
+      "prices": {
+        "rent_1br": {
+          "value": 6450.0,
+          "unit_zh": "元/月",
+          "unit_en": "CNY/month",
+          "note_zh": "市中心一室公寓月租",
+          "note_en": "1-bed apartment, city centre, per month"
+        },
+        "coffee": {
+          "value": 23.24,
+          "unit_zh": "元/杯",
+          "unit_en": "CNY/cup",
+          "note_zh": "一杯常规卡布奇诺",
+          "note_en": "Regular cappuccino"
+        },
+        "metro_pass": {
+          "value": 215.0,
+          "unit_zh": "元/月",
+          "unit_en": "CNY/month",
+          "note_zh": "公共交通月票（常规价）",
+          "note_en": "Monthly public-transport pass"
+        },
+        "takeout": {
+          "value": 30.0,
+          "unit_zh": "元/餐",
+          "unit_en": "CNY/meal",
+          "note_zh": "一顿便宜简餐 / 外卖",
+          "note_en": "Inexpensive restaurant / takeout meal"
+        },
+        "phone": {
+          "value": 61.64,
+          "unit_zh": "元/月",
+          "unit_en": "CNY/month",
+          "note_zh": "含通话 + 10GB 以上流量",
+          "note_en": "Calls + 10GB+ data"
+        }
+      }
+    },
+    "shanghai": {
+      "id": "shanghai",
+      "name_zh": "上海",
+      "name_en": "Shanghai",
+      "currency": "CNY",
+      "prices": {
+        "rent_1br": {
+          "value": 6633.33,
+          "unit_zh": "元/月",
+          "unit_en": "CNY/month",
+          "note_zh": "市中心一室公寓月租",
+          "note_en": "1-bed apartment, city centre, per month"
+        },
+        "coffee": {
+          "value": 21.83,
+          "unit_zh": "元/杯",
+          "unit_en": "CNY/cup",
+          "note_zh": "一杯常规卡布奇诺",
+          "note_en": "Regular cappuccino"
+        },
+        "metro_pass": {
+          "value": 200.0,
+          "unit_zh": "元/月",
+          "unit_en": "CNY/month",
+          "note_zh": "公共交通月票（常规价）",
+          "note_en": "Monthly public-transport pass"
+        },
+        "takeout": {
+          "value": 30.0,
+          "unit_zh": "元/餐",
+          "unit_en": "CNY/meal",
+          "note_zh": "一顿便宜简餐 / 外卖",
+          "note_en": "Inexpensive restaurant / takeout meal"
+        },
+        "phone": {
+          "value": 58.38,
+          "unit_zh": "元/月",
+          "unit_en": "CNY/month",
+          "note_zh": "含通话 + 10GB 以上流量",
+          "note_en": "Calls + 10GB+ data"
+        }
+      }
+    },
+    "chengdu": {
+      "id": "chengdu",
+      "name_zh": "成都",
+      "name_en": "Chengdu",
+      "currency": "CNY",
+      "prices": {
+        "rent_1br": {
+          "value": 3258.0,
+          "unit_zh": "元/月",
+          "unit_en": "CNY/month",
+          "note_zh": "市中心一室公寓月租",
+          "note_en": "1-bed apartment, city centre, per month"
+        },
+        "coffee": {
+          "value": 19.36,
+          "unit_zh": "元/杯",
+          "unit_en": "CNY/cup",
+          "note_zh": "一杯常规卡布奇诺",
+          "note_en": "Regular cappuccino"
+        },
+        "metro_pass": {
+          "value": 165.0,
+          "unit_zh": "元/月",
+          "unit_en": "CNY/month",
+          "note_zh": "公共交通月票（常规价）",
+          "note_en": "Monthly public-transport pass"
+        },
+        "takeout": {
+          "value": 19.0,
+          "unit_zh": "元/餐",
+          "unit_en": "CNY/meal",
+          "note_zh": "一顿便宜简餐 / 外卖",
+          "note_en": "Inexpensive restaurant / takeout meal"
+        },
+        "phone": {
+          "value": 64.62,
+          "unit_zh": "元/月",
+          "unit_en": "CNY/month",
+          "note_zh": "含通话 + 10GB 以上流量",
+          "note_en": "Calls + 10GB+ data"
+        }
+      }
+    },
+    "shenzhen": {
+      "id": "shenzhen",
+      "name_zh": "深圳",
+      "name_en": "Shenzhen",
+      "currency": "CNY",
+      "prices": {
+        "rent_1br": {
+          "value": 5134.33,
+          "unit_zh": "元/月",
+          "unit_en": "CNY/month",
+          "note_zh": "市中心一室公寓月租",
+          "note_en": "1-bed apartment, city centre, per month"
+        },
+        "coffee": {
+          "value": 22.2,
+          "unit_zh": "元/杯",
+          "unit_en": "CNY/cup",
+          "note_zh": "一杯常规卡布奇诺",
+          "note_en": "Regular cappuccino"
+        },
+        "metro_pass": {
+          "value": 150.0,
+          "unit_zh": "元/月",
+          "unit_en": "CNY/month",
+          "note_zh": "公共交通月票（常规价）",
+          "note_en": "Monthly public-transport pass"
+        },
+        "takeout": {
+          "value": 27.5,
+          "unit_zh": "元/餐",
+          "unit_en": "CNY/meal",
+          "note_zh": "一顿便宜简餐 / 外卖",
+          "note_en": "Inexpensive restaurant / takeout meal"
+        },
+        "phone": {
+          "value": 66.37,
+          "unit_zh": "元/月",
+          "unit_en": "CNY/month",
+          "note_zh": "含通话 + 10GB 以上流量",
+          "note_en": "Calls + 10GB+ data"
+        }
+      }
+    }
+  },
+  "sources": [
+    "Numbeo city prices, last update 2026-08 / 2026-09 (Madrid, Beijing, Shanghai, Shenzhen, Chengdu)",
+    "EUR/CNY mid-market ≈ 7.74 on 2026-09-17"
+  ]
+}

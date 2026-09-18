@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OGCARD-019 · 粘贴 meta 预览分享卡</title>
+<meta name="description" content="发链接前不知道 X / Slack / LinkedIn 分享卡长什么样；官方 X Card Validator 已挂；fetch 调试器够不到 staging / localhost。粘贴 head/meta，本地三平台预览 + 缺字段清单。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/019/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E019%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="OGCARD-019 · 粘贴 meta 预览分享卡">
+<meta property="og:description" content="发链接前，先看分享卡长什么样。粘贴 meta，本地预览 X / Slack / LinkedIn。不远程 fetch 粘贴的 URL。">
+<meta property="og:url" content="https://build-100.com/019/">
+<meta property="og:image" content="https://build-100.com/019/og-019.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OGCARD-019 · 粘贴 meta 预览分享卡">
+<meta name="twitter:description" content="See the share card before you post. Paste meta, preview X / Slack / LinkedIn locally.">
+<meta name="twitter:image" content="https://build-100.com/019/og-019.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #60a5fa;
+    --accent-glow: rgba(96, 165, 250, 0.35);
+    --danger: #f87171;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(24px, 4vh, 36px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--accent); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p.sub { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  .privacy {
+    display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap;
+    margin-bottom: clamp(28px, 5vh, 40px);
+    padding: 14px 16px; border: 1px solid var(--line-strong); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(96, 165, 250, 0.12), transparent 60%);
+  }
+  .privacy .dot { color: var(--live); letter-spacing: 0.18em; }
+  .privacy p { color: var(--muted); font-size: 0.9rem; max-width: 42em; }
+  .privacy p strong { color: var(--ink); font-weight: 500; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  textarea.raw {
+    width: 100%; min-height: 240px; resize: vertical;
+    background: var(--bg-raise); border: 1px solid var(--line-strong); border-radius: 8px;
+    color: var(--ink); font-family: var(--mono); font-size: 0.82rem; line-height: 1.55;
+    padding: 14px; outline: none; transition: border-color .18s, box-shadow .18s;
+  }
+  textarea.raw:focus { border-color: var(--accent); box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.25); }
+  textarea.raw::placeholder { color: var(--faint); }
+
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+  .add-btn, .ghost-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 12px 16px; border-radius: 4px; cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .add-btn {
+    border: 1px solid var(--accent); background: rgba(96, 165, 250, 0.12); color: var(--ink);
+  }
+  .add-btn:hover:not(:disabled) { background: var(--accent); color: var(--bg); box-shadow: 0 0 20px var(--accent-glow); }
+  .ghost-btn { border: 1px solid var(--line-strong); background: none; color: var(--muted); }
+  .ghost-btn:hover:not(:disabled) { color: var(--ink); border-color: var(--ink); }
+  .add-btn:disabled, .ghost-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .status { min-height: 1.3em; font-size: 0.86rem; color: var(--muted); margin-top: 10px; font-family: var(--mono); letter-spacing: 0.02em; }
+  .status.err { color: var(--danger); }
+  .status.ok { color: var(--live); }
+
+  .warn {
+    display: none; margin-bottom: 16px; padding: 14px 16px;
+    border: 1px solid var(--delta); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(251, 191, 36, 0.12), transparent 70%);
+  }
+  .warn.show { display: block; }
+  .warn .ttl { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--delta); margin-bottom: 6px; }
+  .warn p { color: var(--ink); font-size: 0.92rem; }
+  .warn .urls { margin-top: 8px; font-family: var(--mono); font-size: 0.78rem; color: var(--muted); word-break: break-all; }
+
+  .tabs {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;
+  }
+  .tab {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 8px 14px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--line-strong); background: none; color: var(--muted);
+    transition: all .18s;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.on { border-color: var(--accent); color: var(--ink); background: rgba(96, 165, 250, 0.12); }
+
+  .cards {
+    display: grid; grid-template-columns: 1fr; gap: 18px;
+  }
+  .plat { min-width: 0; max-width: 520px; }
+  .plat-name {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--faint); margin-bottom: 8px;
+  }
+  .plat.hid { display: none; }
+
+  .x-card {
+    background: #16181c; border: 1px solid #2f3336; border-radius: 16px; overflow: hidden;
+    color: #e7e9ea;
+  }
+  .x-card.summary { display: grid; grid-template-columns: 1fr 92px; min-height: 92px; }
+  .x-card .media { background: #202327; position: relative; min-height: 92px; }
+  .x-card.large .media { aspect-ratio: 1.91 / 1; min-height: 0; }
+  .x-card.summary .media { border-left: 1px solid #2f3336; }
+  .x-card .body { padding: 10px 12px; min-width: 0; }
+  .x-card .c-title { font-size: 0.92rem; font-weight: 700; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+  .x-card .c-desc { font-size: 0.8rem; color: #8b98a5; margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .x-card .c-site { font-size: 0.75rem; color: #71767b; margin-top: 6px; font-family: var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
+
+  .slack-card {
+    background: #1a1d21; border: 1px solid var(--line-strong); border-radius: 8px;
+    border-left: 4px solid #2bac76; padding: 10px 12px 12px;
+  }
+  .slack-card .c-site { font-size: 0.75rem; color: #ababad; font-weight: 700; margin-bottom: 2px; }
+  .slack-card .c-title { font-size: 0.95rem; font-weight: 700; color: #1d9bd1; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .slack-card .c-desc { font-size: 0.84rem; color: #d1d2d3; margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .slack-card .media { margin-top: 10px; border-radius: 8px; overflow: hidden; aspect-ratio: 1.91 / 1; background: #222529; }
+
+  .li-card {
+    background: #1b1f23; border: 1px solid var(--line-strong); border-radius: 8px; overflow: hidden;
+  }
+  .li-card .media { aspect-ratio: 1.91 / 1; background: #2c3136; }
+  .li-card .body { padding: 12px 14px; }
+  .li-card .c-title { font-size: 0.95rem; font-weight: 700; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .li-card .c-desc { font-size: 0.8rem; color: var(--muted); margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .li-card .c-site { font-size: 0.75rem; color: #70b5f9; margin-top: 6px; letter-spacing: 0.02em; }
+
+  .ph {
+    width: 100%; height: 100%; min-height: 92px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px; text-align: center;
+    background: repeating-linear-gradient(-45deg, rgba(237,239,241,0.03) 0 8px, transparent 8px 16px);
+  }
+  .ph .dim { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--delta); }
+  .ph .url { font-family: var(--mono); font-size: 10px; color: var(--muted); word-break: break-all; line-height: 1.4; max-width: 100%; }
+  .ph .note { font-size: 10px; color: var(--faint); }
+  .media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .badge {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--delta); margin-top: 8px;
+  }
+  .empty-card {
+    border: 1px dashed var(--line-strong); border-radius: 8px; padding: 28px 16px;
+    color: var(--faint); font-size: 0.86rem; text-align: center;
+  }
+
+  .miss {
+    display: grid; grid-template-columns: 1fr; gap: 10px;
+  }
+  @media (min-width: 820px) { .miss { grid-template-columns: 1fr 1fr 1fr; } }
+  .miss-col {
+    border: 1px solid var(--line-strong); border-radius: 8px; background: var(--bg-raise);
+    padding: 12px 14px; min-height: 120px;
+  }
+  .miss-col.ok { border-color: rgba(74, 222, 128, 0.35); }
+  .miss-col.bad { border-color: rgba(251, 191, 36, 0.4); }
+  .miss-h { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); margin-bottom: 8px; }
+  .miss-col.ok .miss-h { color: var(--live); }
+  .miss-col.bad .miss-h { color: var(--delta); }
+  .miss-col ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .miss-col li { font-size: 0.84rem; color: var(--ink); }
+  .miss-col li.ok { color: var(--muted); }
+  .miss-empty { color: var(--faint); font-size: 0.86rem; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .origin-card {
+    margin-top: 48px; padding: clamp(24px, 4vw, 32px);
+    border: 1px solid var(--line); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(96, 165, 250, 0.1), transparent 55%);
+  }
+  .origin-eyebrow { color: var(--accent); margin-bottom: 12px; }
+  .origin-text { color: var(--muted); font-size: 0.95rem; max-width: 34em; }
+  .origin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .origin-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); border-radius: 4px;
+    color: var(--muted); cursor: pointer; transition: all .2s;
+  }
+  .origin-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .origin-btn.primary { border-color: var(--accent); color: var(--ink); background: rgba(96, 165, 250, 0.1); }
+  .origin-btn.primary:hover { background: var(--accent); color: var(--bg); }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">OGCARD<span>·019</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; OGCARD-019 · LOCAL PREVIEW</p>
+    <h1 data-en="See the share card before you post. Paste meta, preview locally.">发链接前，先看分享卡长什么样。粘贴 meta，本地预览。</h1>
+    <p class="sub" data-en="You cannot tell what the <strong>X / Slack / LinkedIn</strong> card will look like until you post. The official X Card Validator is down; fetch-based debuggers cannot reach staging / localhost. This page: paste a head block / meta → local three-platform preview + a missing-field list. Stays on this device — it does not remotely fetch the URL you paste.">
+      发链接前不知道 <strong>X / Slack / LinkedIn</strong> 分享卡长什么样；官方 X Card Validator 已挂；fetch 调试器够不到 staging / localhost。本页：粘贴 head / meta → 本地三平台预览 + 缺字段清单。全程本机，不远程 fetch 粘贴的 URL。
+    </p>
+  </header>
+
+  <aside class="privacy">
+    <span class="mono dot">● LOCAL</span>
+    <p data-en="<strong>Meta stays on this device · no upload · no remote fetch of the pasted URL · cards are layout approximations.</strong> The page itself may still load beacon.js.">
+      <strong>meta 留在本机 · 无上传 · 不远程 fetch 粘贴的 URL · 卡片为布局近似。</strong>页面本身仍可能加载 beacon.js。
+    </p>
+  </aside>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <span class="field-title" data-en="Paste head / meta">粘贴 head / meta</span>
+      <span class="field-hint" data-en="A full head block or loose meta / link tags. Parses on input / paste (debounced). Draft is stored in this browser as ogcard-019.">
+        完整 head 或零散 meta / link。输入或粘贴即解析（防抖）。草稿存在本机 ogcard-019。
+      </span>
+    </div>
+    <textarea class="raw" id="src" spellcheck="false" autocomplete="off" autocapitalize="off"
+      placeholder="粘贴完整 <head> 或零散 meta / link 标签…"
+      data-ph-zh="粘贴完整 <head> 或零散 meta / link 标签…"
+      data-ph-en="Paste a full <head> or loose meta / link tags…"></textarea>
+    <div class="tools">
+      <button class="add-btn" type="button" id="sampleBtn" data-en="Load sample head">填入样例 head</button>
+      <button class="ghost-btn" type="button" id="clearBtn" data-en="Clear">一键清空</button>
+    </div>
+    <p class="status" id="status" role="status"></p>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <span class="field-title" data-en="Layout-approx cards">布局近似预览</span>
+      <span class="field-hint" data-en="Not official crawlers. Only data: images render; http(s) / protocol-relative URLs stay as a placeholder plus the URL text.">
+        非官方抓取。只有 data: 图会显示；http(s) / 协议相对 URL 只出占位框和 URL 文本。
+      </span>
+    </div>
+    <div class="warn" id="relWarn">
+      <div class="ttl" data-en="Relative image path">相对路径图片</div>
+      <p id="relText"></p>
+      <div class="urls" id="relUrls"></div>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab on" type="button" data-tab="all" id="tabAll" data-en="All three">三平台</button>
+      <button class="tab" type="button" data-tab="x" id="tabX">X</button>
+      <button class="tab" type="button" data-tab="slack" id="tabSlack">Slack</button>
+      <button class="tab" type="button" data-tab="linkedin" id="tabLi">LinkedIn</button>
+    </div>
+    <div class="cards" id="cards">
+      <article class="plat" data-plat="x" id="platX">
+        <div class="plat-name">X</div>
+        <div id="cardX"></div>
+      </article>
+      <article class="plat" data-plat="slack" id="platSlack">
+        <div class="plat-name">Slack</div>
+        <div id="cardSlack"></div>
+      </article>
+      <article class="plat" data-plat="linkedin" id="platLi">
+        <div class="plat-name">LinkedIn</div>
+        <div id="cardLi"></div>
+      </article>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">03</span>
+      <span class="field-title" data-en="Missing fields by platform">按平台缺字段</span>
+      <span class="field-hint" data-en="X falls back twitter:* → og:* → title / description / image_src. Slack and LinkedIn only count og:* plus those fallbacks — twitter-only does not count as filled.">
+        X 回退 twitter:* → og:* → title / description / image_src。Slack / LinkedIn 只认 og:* 与上述回退；仅有 twitter 字段不算已填。
+      </span>
+    </div>
+    <div class="miss" id="miss" aria-live="polite"></div>
+  </div>
+
+  <div class="share-row">
+    <button class="share-btn" id="copyBtn" type="button" data-en="Copy blurb">复制文案摘要</button>
+    <button class="share-btn" id="shareImgBtn" type="button" data-en="Share image">生成分享图</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareCanvasWrap">
+    <canvas id="shareCanvas" width="800" height="450"></canvas>
+    <p class="share-save-hint" data-en="Long-press or right-click to save. Branding only — your pasted meta is never drawn here.">长按或右键保存。分享图只有文案，不含你粘贴的 meta。</p>
+  </div>
+
+  <aside class="origin-card">
+    <p class="mono origin-eyebrow">BUILD-100 · 019/100</p>
+    <p class="origin-text" data-en="No.019 of BUILD-100 — one person building 100 websites with AI, in public. Paste meta in the tab, preview the card, keep the HTML off the wire.">
+      BUILD-100 的第 019 号：一个人用 AI 公开做 100 个网站。在标签页里粘贴 meta、预览卡片，HTML 不必上线。
+    </p>
+    <div class="origin-actions">
+      <a class="origin-btn primary" href="https://build-100.com/" data-en="See the project →">看看这个计划 →</a>
+      <a class="origin-btn" href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="Follow along on X">在 X 上看过程</a>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="OGCARD-019 · Paste meta, preview share cards">OGCARD-019 · 粘贴 meta 预览分享卡</span>
+</footer>
+
+<script type="module">
+  import {
+    DEBOUNCE_MS,
+    SAMPLE_HEAD,
+    parseMeta,
+    checkMissing,
+    isRelativeUrl,
+    previewModel,
+    safeImgSrc,
+    buildShareText,
+    loadDraft,
+    saveDraft,
+  } from "./engine.js";
+
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  if (lang !== "en") lang = "zh";
+
+  const $ = (id) => document.getElementById(id);
+  const t = (zh, en) => (lang === "en" ? en : zh);
+
+  let lastParsed = parseMeta("");
+  let lastMissing = checkMissing(lastParsed.fields);
+  let debounceTimer = 0;
+  let statusTimer = 0;
+  let activeTab = "all";
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.title = l === "en"
+      ? "OGCARD-019 · Paste meta, preview share cards"
+      : "OGCARD-019 · 粘贴 meta 预览分享卡";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    $("src").placeholder = l === "en" ? $("src").dataset.phEn : $("src").dataset.phZh;
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    render();
+    if ($("shareCanvasWrap").classList.contains("show")) renderShare();
+  }
+
+  function setStatus(msg, kind) {
+    const el = $("status");
+    el.textContent = msg || "";
+    el.className = "status" + (kind ? " " + kind : "");
+    if (statusTimer) clearTimeout(statusTimer);
+    if (msg && kind === "ok") {
+      statusTimer = setTimeout(() => {
+        el.textContent = "";
+        el.className = "status";
+      }, 2200);
+    }
+  }
+
+  function flashCopied(btn) {
+    btn.classList.add("copied");
+    const orig = btn.textContent;
+    btn.textContent = t("已复制 ✓", "Copied ✓");
+    setTimeout(() => {
+      btn.classList.remove("copied");
+      btn.textContent = orig;
+    }, 1800);
+  }
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand("copy"); } catch (_) {}
+      ta.remove();
+      return ok;
+    }
+  }
+
+  function el(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null && text !== "") n.textContent = text;
+    return n;
+  }
+
+  function mediaBox(model, platform) {
+    const wrap = el("div", "media");
+    const src = safeImgSrc(model.image, model.imageMode);
+    if (src) {
+      const img = document.createElement("img");
+      img.alt = "";
+      img.src = src;
+      wrap.appendChild(img);
+      return wrap;
+    }
+    const ph = el("div", "ph");
+    if (model.image) {
+      const size = (model.imageWidth && model.imageHeight)
+        ? model.imageWidth + " × " + model.imageHeight
+        : t("远程图未加载", "Remote image not loaded");
+      ph.appendChild(el("div", "dim", size));
+      ph.appendChild(el("div", "url", model.image));
+      ph.appendChild(el("div", "note", t("不写入 img.src · 不 fetch", "Not assigned to img.src · no fetch")));
+    } else {
+      ph.appendChild(el("div", "dim", t("无图片", "No image")));
+      ph.appendChild(el("div", "note", platform === "x"
+        ? t("缺 twitter:image / og:image", "Missing twitter:image / og:image")
+        : t("缺 og:image（twitter:image 不算）", "Missing og:image (twitter:image does not count)")));
+    }
+    wrap.appendChild(ph);
+    return wrap;
+  }
+
+  function textOrDash(s, emptyZh, emptyEn) {
+    return s ? s : t(emptyZh, emptyEn);
+  }
+
+  function renderX(model) {
+    const root = el("div");
+    const unsupported = model.cardType === "player" || model.cardType === "app";
+    const large = model.cardType !== "summary";
+    const card = el("div", "x-card " + (large ? "large" : "summary"));
+    const body = el("div", "body");
+    body.appendChild(el("div", "c-title", textOrDash(model.title, "（无标题）", "(no title)")));
+    if (model.description) body.appendChild(el("div", "c-desc", model.description));
+    if (model.site) body.appendChild(el("div", "c-site", model.site));
+    if (large) {
+      card.appendChild(mediaBox(model, "x"));
+      card.appendChild(body);
+    } else {
+      card.appendChild(body);
+      card.appendChild(mediaBox(model, "x"));
+    }
+    root.appendChild(card);
+    if (unsupported) {
+      root.appendChild(el("div", "badge", t(
+        "twitter:card=" + model.cardType + " · 本页不预览 player / app",
+        "twitter:card=" + model.cardType + " · player / app not previewed"
+      )));
+    }
+    return root;
+  }
+
+  function renderSlack(model) {
+    const card = el("div", "slack-card");
+    if (model.site) card.appendChild(el("div", "c-site", model.site));
+    card.appendChild(el("div", "c-title", textOrDash(model.title, "（无标题）", "(no title)")));
+    if (model.description) card.appendChild(el("div", "c-desc", model.description));
+    card.appendChild(mediaBox(model, "slack"));
+    return card;
+  }
+
+  function renderLinkedIn(model) {
+    const card = el("div", "li-card");
+    card.appendChild(mediaBox(model, "linkedin"));
+    const body = el("div", "body");
+    body.appendChild(el("div", "c-title", textOrDash(model.title, "（无标题）", "(no title)")));
+    if (model.description) body.appendChild(el("div", "c-desc", model.description));
+    if (model.site) body.appendChild(el("div", "c-site", model.site));
+    card.appendChild(body);
+    return card;
+  }
+
+  function mountCard(id, node) {
+    const slot = $(id);
+    slot.replaceChildren(node);
+  }
+
+  function emptyCard() {
+    return el("div", "empty-card", t("粘贴 meta 后显示布局近似预览。", "Paste meta to see a layout-approx preview."));
+  }
+
+  function reasonLine(item) {
+    const platNote = item.platform === "x"
+      ? t("twitter:* → og:* → title", "twitter:* → og:* → title")
+      : t("只认 og:* / title（twitter 不算）", "og:* / title only (twitter does not count)");
+    if (item.field === "title" && item.reason === "missing") {
+      return t("缺标题 · ", "Missing title · ") + platNote;
+    }
+    if (item.field === "description" && item.reason === "missing") {
+      return t("缺描述 · ", "Missing description · ") + platNote;
+    }
+    if (item.field === "image" && item.reason === "missing") {
+      return t("缺图片 · ", "Missing image · ") + platNote;
+    }
+    if (item.field === "image" && item.reason === "relative") {
+      return t("图片是相对路径，不拼 base、不 fetch", "Image is a relative path — no base join, no fetch");
+    }
+    if (item.field === "image" && item.reason === "invalid") {
+      return t("图片 URL 无效（需 http(s) 或 data:；javascript: 等不算）", "Invalid image URL (need http(s) or data:; javascript: does not count)");
+    }
+    if (item.field === "card" && item.reason === "unsupported") {
+      return t("twitter:card 为 player / app，本页不预览", "twitter:card is player / app — not previewed here");
+    }
+    return item.field + " · " + item.reason;
+  }
+
+  function renderMissing(parsed, missing, empty) {
+    const box = $("miss");
+    box.replaceChildren();
+    const plats = [
+      { id: "x", label: "X" },
+      { id: "slack", label: "Slack" },
+      { id: "linkedin", label: "LinkedIn" },
+    ];
+    for (const p of plats) {
+      const col = el("div", "miss-col");
+      const items = missing.filter((m) => m.platform === p.id);
+      if (!empty) col.classList.add(items.length ? "bad" : "ok");
+      col.appendChild(el("div", "miss-h", p.label + (empty ? "" : (items.length ? " · " + items.length : " · OK"))));
+      if (empty) {
+        col.appendChild(el("div", "miss-empty", t("粘贴后按平台列出缺项。", "Missing fields appear here after you paste.")));
+      } else if (!items.length) {
+        const ul = document.createElement("ul");
+        const li = el("li", "ok", t("标题 / 描述 / 图片已齐", "Title / description / image present"));
+        ul.appendChild(li);
+        col.appendChild(ul);
+      } else {
+        const ul = document.createElement("ul");
+        for (const item of items) {
+          ul.appendChild(el("li", "", reasonLine(item)));
+        }
+        col.appendChild(ul);
+      }
+      box.appendChild(col);
+    }
+  }
+
+  function relativeHits(parsed) {
+    const pairs = [
+      ["og:image", parsed.og.image],
+      ["twitter:image", parsed.twitter.image],
+      ["image_src", parsed.imageSrc],
+    ];
+    const hits = [];
+    for (const [k, v] of pairs) {
+      if (v && isRelativeUrl(v)) hits.push(k + " → " + v);
+    }
+    return hits;
+  }
+
+  function applyTab() {
+    const plats = { x: $("platX"), slack: $("platSlack"), linkedin: $("platLi") };
+    for (const [k, node] of Object.entries(plats)) {
+      const show = activeTab === "all" || activeTab === k;
+      node.classList.toggle("hid", !show);
+    }
+    document.querySelectorAll(".tab").forEach((btn) => {
+      btn.classList.toggle("on", btn.dataset.tab === activeTab);
+    });
+  }
+
+  function render() {
+    const raw = $("src").value;
+    const empty = !raw.trim();
+    lastParsed = parseMeta(raw);
+    lastMissing = checkMissing(lastParsed.fields);
+
+    if (empty) {
+      mountCard("cardX", emptyCard());
+      mountCard("cardSlack", emptyCard());
+      mountCard("cardLi", emptyCard());
+      $("relWarn").classList.remove("show");
+      $("relUrls").textContent = "";
+      $("relText").textContent = "";
+      renderMissing(lastParsed, lastMissing, true);
+      setStatus("", "");
+      applyTab();
+      return;
+    }
+
+    const x = previewModel("x", lastParsed.fields);
+    const slack = previewModel("slack", lastParsed.fields);
+    const li = previewModel("linkedin", lastParsed.fields);
+    mountCard("cardX", renderX(x));
+    mountCard("cardSlack", renderSlack(slack));
+    mountCard("cardLi", renderLinkedIn(li));
+
+    const rel = relativeHits(lastParsed);
+    const warn = $("relWarn");
+    if (rel.length) {
+      warn.classList.add("show");
+      $("relText").textContent = t(
+        "相对路径不会拼 base、也不会 fetch。平台会相对你的页面 URL 解析。",
+        "Relative paths are not joined to a base and are not fetched. Platforms resolve them against your page URL."
+      );
+      $("relUrls").textContent = rel.join("\n");
+    } else {
+      warn.classList.remove("show");
+      $("relUrls").textContent = "";
+      $("relText").textContent = "";
+    }
+
+    renderMissing(lastParsed, lastMissing, false);
+
+    const nOg = Object.keys(lastParsed.og).length;
+    const nTw = Object.keys(lastParsed.twitter).length;
+    setStatus(
+      t(
+        "og " + nOg + " · twitter " + nTw + " · 缺项 " + lastMissing.length,
+        "og " + nOg + " · twitter " + nTw + " · missing " + lastMissing.length
+      ),
+      lastMissing.length ? "" : "ok"
+    );
+    applyTab();
+  }
+
+  function schedule() {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      debounceTimer = 0;
+      try { saveDraft($("src").value, localStorage); } catch (e) {}
+      render();
+    }, DEBOUNCE_MS);
+  }
+
+  function wrapText(ctx, text, x, y, maxW, lineH) {
+    const chars = String(text).split("");
+    let line = "";
+    let yy = y;
+    for (const ch of chars) {
+      const test = line + ch;
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line, x, yy);
+        line = ch;
+        yy += lineH;
+      } else line = test;
+    }
+    if (line) ctx.fillText(line, x, yy);
+    return yy;
+  }
+
+  function renderShare() {
+    const canvas = $("shareCanvas");
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "rgba(237,239,241,0.05)";
+    for (let x = 16; x < w; x += 36) {
+      for (let y = 16; y < h; y += 36) ctx.fillRect(x, y, 2, 2);
+    }
+    ctx.fillStyle = "#60a5fa";
+    ctx.font = "600 13px ui-monospace, SF Mono, monospace";
+    ctx.fillText("OGCARD-019", 48, 56);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 28px Helvetica Neue, PingFang SC, sans-serif";
+    wrapText(ctx, t("发链接前，先看分享卡长什么样。", "See the share card before you post."), 48, 110, w - 96, 36);
+    ctx.fillStyle = "#60a5fa";
+    ctx.font = "600 16px ui-monospace, SF Mono, monospace";
+    ctx.fillText(
+      t("meta 留在本机 · 无上传 · 不远程 fetch", "Meta stays on device · no upload · no remote fetch"),
+      48, 250
+    );
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "500 14px ui-monospace, SF Mono, monospace";
+    ctx.fillText(
+      t("X / Slack / LinkedIn · 布局近似", "X / Slack / LinkedIn · layout approx"),
+      48, 292
+    );
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "500 12px ui-monospace, SF Mono, monospace";
+    ctx.fillText("build-100.com/019", 48, 400);
+  }
+
+  $("src").addEventListener("input", schedule);
+  $("src").addEventListener("paste", schedule);
+
+  $("sampleBtn").addEventListener("click", () => {
+    $("src").value = SAMPLE_HEAD;
+    if (debounceTimer) clearTimeout(debounceTimer);
+    try { saveDraft(SAMPLE_HEAD, localStorage); } catch (e) {}
+    render();
+    setStatus(t("已填入完整 head 样例", "Loaded a full sample head"), "ok");
+  });
+
+  $("clearBtn").addEventListener("click", () => {
+    $("src").value = "";
+    if (debounceTimer) clearTimeout(debounceTimer);
+    try { saveDraft("", localStorage); } catch (e) {}
+    render();
+    setStatus(t("已清空", "Cleared"), "ok");
+  });
+
+  document.querySelectorAll(".tab").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      activeTab = btn.dataset.tab;
+      applyTab();
+    });
+  });
+
+  $("copyBtn").addEventListener("click", async () => {
+    const ok = await copyText(buildShareText(lang));
+    if (ok) flashCopied($("copyBtn"));
+  });
+
+  $("shareImgBtn").addEventListener("click", () => {
+    renderShare();
+    $("shareCanvasWrap").classList.add("show");
+  });
+
+  $("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+
+  try {
+    const draft = loadDraft(localStorage);
+    if (draft) $("src").value = draft;
+  } catch (e) {}
+
+  if (lang === "en") applyLang("en");
+  else {
+    $("src").placeholder = $("src").dataset.phZh;
+    render();
+  }
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

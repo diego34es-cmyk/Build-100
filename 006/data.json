@@ -1,0 +1,54 @@
+{
+  "code": "LIFE-006",
+  "updated": "2026-09-03",
+  "soonDays": 7,
+  "currency": "EUR",
+  "cycles": [
+    { "id": "weekly", "zh": "每周", "en": "Weekly" },
+    { "id": "monthly", "zh": "每月", "en": "Monthly" },
+    { "id": "quarterly", "zh": "每季", "en": "Quarterly" },
+    { "id": "yearly", "zh": "每年", "en": "Yearly" }
+  ],
+  "pack": {
+    "travel": {
+      "zh": "出行",
+      "en": "Travel",
+      "items": [
+        { "id": "t-passport", "zh": "护照 / 签证页", "en": "Passport / visa pages" },
+        { "id": "t-id", "zh": "身份证", "en": "National ID" },
+        { "id": "t-tickets", "zh": "机票与住宿确认", "en": "Tickets & lodging confirmation" },
+        { "id": "t-cards", "zh": "银行卡 / 少量现金", "en": "Bank cards / some cash" },
+        { "id": "t-charger", "zh": "充电器与转换插头", "en": "Charger & travel adaptor" },
+        { "id": "t-powerbank", "zh": "充电宝", "en": "Power bank" },
+        { "id": "t-meds", "zh": "常用药与处方", "en": "Meds & prescriptions" },
+        { "id": "t-toiletries", "zh": "洗漱包", "en": "Toiletry bag" },
+        { "id": "t-clothes", "zh": "换洗衣物", "en": "Clothes for the trip" },
+        { "id": "t-weather", "zh": "外套 / 雨具", "en": "Jacket / rain gear" },
+        { "id": "t-earphones", "zh": "耳机", "en": "Earphones" },
+        { "id": "t-copies", "zh": "证件复印件 / 云备份", "en": "ID copies / cloud backup" },
+        { "id": "t-insurance", "zh": "旅行保险", "en": "Travel insurance" },
+        { "id": "t-keys", "zh": "家门钥匙安排", "en": "House-key plan" }
+      ]
+    },
+    "move": {
+      "zh": "搬家",
+      "en": "Moving",
+      "items": [
+        { "id": "m-contract", "zh": "租房合同与交接清单", "en": "Lease & handover list" },
+        { "id": "m-deposit", "zh": "押金收据", "en": "Deposit receipt" },
+        { "id": "m-keys", "zh": "新旧钥匙", "en": "Old and new keys" },
+        { "id": "m-photos", "zh": "房间原状照片", "en": "Photos of the empty rooms" },
+        { "id": "m-meter", "zh": "水电表读数拍照", "en": "Meter readings (photo)" },
+        { "id": "m-utilities", "zh": "水电燃气过户 / 销户", "en": "Utilities transfer / close" },
+        { "id": "m-net", "zh": "网络销户或新装", "en": "Internet cancel / install" },
+        { "id": "m-address", "zh": "银行 / 手机地址变更", "en": "Bank / phone address change" },
+        { "id": "m-boxes", "zh": "纸箱、胶带、气泡膜", "en": "Boxes, tape, bubble wrap" },
+        { "id": "m-clean", "zh": "清洁用品", "en": "Cleaning supplies" },
+        { "id": "m-tools", "zh": "螺丝刀 / 六角扳手", "en": "Screwdriver / hex keys" },
+        { "id": "m-valuables", "zh": "贵重物品单独装箱", "en": "Valuables packed separately" },
+        { "id": "m-change", "zh": "快递 / 订阅地址", "en": "Parcel / subscription address" },
+        { "id": "m-building", "zh": "物业或房东交接预约", "en": "Handover appointment" }
+      ]
+    }
+  }
+}

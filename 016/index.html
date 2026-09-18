@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WHYSAVE-016 · 收藏坟场复盘</title>
+<meta name="description" content="Chrome / X「稍后读」堆成坟场，回头忘了为什么存。存链接时先写下为什么，不然就是坟场。本页强制一行 why，再用今日复盘决定保留 / 归档 / 删除。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/016/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E016%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="WHYSAVE-016 · 收藏坟场复盘">
+<meta property="og:description" content="Chrome / X「稍后读」堆成坟场，回头忘了为什么存。存链接时先写下为什么，不然就是坟场。">
+<meta property="og:url" content="https://build-100.com/016/">
+<meta property="og:image" content="https://build-100.com/016/og-016.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WHYSAVE-016 · 收藏坟场复盘">
+<meta name="twitter:description" content="Later-read piles become a graveyard. Write one line of why when you save, then review keep / archive / delete today.">
+<meta name="twitter:image" content="https://build-100.com/016/og-016.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #34d399;
+    --accent-glow: rgba(52, 211, 153, 0.35);
+    --danger: #f87171;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(24px, 4vh, 36px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--accent); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p.sub { color: var(--muted); max-width: 40em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  .stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    margin-bottom: clamp(28px, 5vh, 40px);
+  }
+  @media (max-width: 560px) { .stats { grid-template-columns: 1fr; } }
+  .stat {
+    border: 1px solid var(--line-strong); border-radius: 8px;
+    padding: 14px 16px; background: var(--bg-raise);
+  }
+  .stat .n {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: clamp(1.6rem, 4vw, 2.2rem); line-height: 1; color: var(--accent);
+  }
+  .stat.risk .n { color: var(--delta); }
+  .stat .k { margin-top: 8px; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .form-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .span2 { grid-column: 1 / -1; }
+  @media (max-width: 640px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .span2 { grid-column: auto; }
+  }
+  .fld { display: flex; flex-direction: column; gap: 6px; }
+  .fld > span {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--faint);
+  }
+  .fld input, .fld textarea {
+    width: 100%; background: var(--bg-raise); border: 1px solid var(--line-strong);
+    color: var(--ink); padding: 10px 12px; border-radius: 4px; font-size: 0.95rem;
+    font-family: var(--sans); outline: none; transition: border-color .18s, box-shadow .18s;
+  }
+  .fld textarea { min-height: 72px; resize: vertical; line-height: 1.5; }
+  .fld input:focus, .fld textarea:focus {
+    border-color: var(--accent); box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.25);
+  }
+  .form-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 4px; }
+
+  .add-btn, .ghost-btn, .danger-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 12px 16px; border-radius: 4px; cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .add-btn {
+    border: 1px solid var(--accent); background: rgba(52, 211, 153, 0.12); color: var(--ink);
+  }
+  .add-btn:hover { background: var(--accent); color: var(--bg); box-shadow: 0 0 20px var(--accent-glow); }
+  .ghost-btn { border: 1px solid var(--line-strong); background: none; color: var(--muted); }
+  .ghost-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .ghost-btn.active {
+    border-color: var(--accent); color: var(--ink); background: rgba(52, 211, 153, 0.12);
+  }
+  .danger-btn { border: 1px solid var(--danger); background: none; color: var(--danger); }
+  .danger-btn:hover { background: var(--danger); color: var(--bg); }
+
+  .status { min-height: 1.3em; font-size: 0.86rem; color: var(--muted); margin-top: 10px; font-family: var(--mono); letter-spacing: 0.02em; }
+  .status.err { color: var(--danger); }
+  .status.ok { color: var(--live); }
+
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+  .count { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: 0.08em; margin-left: auto; }
+
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 7px 13px; border-radius: 999px; cursor: pointer; transition: all .18s;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--ink); }
+  .chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  .card {
+    border: 1px solid var(--line-strong); border-radius: 8px;
+    padding: 16px 18px; background: var(--bg-raise); margin-bottom: 10px;
+  }
+  .card.review {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.18);
+    background: linear-gradient(160deg, rgba(52, 211, 153, 0.08), transparent 55%);
+  }
+  .card.risk { border-color: rgba(251, 191, 36, 0.45); }
+  .card-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+  @media (max-width: 640px) { .card-top { flex-direction: column; } }
+  .item-title { font-weight: 700; font-size: 1.02rem; word-break: break-word; }
+  .item-url {
+    font-family: var(--mono); font-size: 0.75rem; color: var(--muted);
+    letter-spacing: 0.02em; word-break: break-all; text-transform: none; margin-top: 4px;
+  }
+  .item-url a:hover { color: var(--ink); }
+  .why {
+    margin-top: 10px; font-size: 0.98rem; color: var(--ink); word-break: break-word;
+  }
+  .why em { font-style: normal; color: var(--accent); margin-right: 4px; }
+  .meta {
+    margin-top: 8px; font-family: var(--mono); font-size: 11px; color: var(--faint);
+    letter-spacing: 0.04em; text-transform: none;
+  }
+  .pill {
+    display: inline-block; margin: 8px 6px 0 0;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 999px;
+  }
+  .pill.due {
+    color: var(--accent); border: 1px solid rgba(52, 211, 153, 0.4);
+    background: rgba(52, 211, 153, 0.08);
+  }
+  .pill.risk {
+    color: var(--delta); border: 1px solid rgba(251, 191, 36, 0.45);
+    background: rgba(251, 191, 36, 0.08);
+  }
+  .actions { display: flex; flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
+  .act {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 7px 10px; border: 1px solid var(--line-strong); background: none;
+    color: var(--muted); border-radius: 4px; cursor: pointer; transition: all .18s;
+  }
+  .act:hover { color: var(--ink); border-color: var(--ink); }
+  .act.keep {
+    border-color: var(--accent); color: var(--ink); background: rgba(52, 211, 153, 0.1);
+  }
+  .act.keep:hover { background: var(--accent); color: var(--bg); }
+  .act.danger:hover { color: var(--danger); border-color: var(--danger); }
+  a.act { display: inline-block; }
+
+  .empty {
+    border: 1px dashed var(--line-strong); border-radius: 8px;
+    padding: 28px 18px; color: var(--muted); text-align: center;
+  }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .origin-card {
+    margin-top: 48px; padding: clamp(24px, 4vw, 32px);
+    border: 1px solid var(--line); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(52,211,153,0.08), transparent 55%);
+  }
+  .origin-eyebrow { color: var(--accent); margin-bottom: 12px; }
+  .origin-text { color: var(--muted); font-size: 0.95rem; max-width: 34em; }
+  .origin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .origin-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); border-radius: 4px;
+    color: var(--muted); cursor: pointer; transition: all .2s;
+  }
+  .origin-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .origin-btn.primary { border-color: var(--accent); color: var(--ink); background: rgba(52,211,153,0.1); }
+  .origin-btn.primary:hover { background: var(--accent); color: var(--bg); }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">WHYSAVE<span>·016</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; WHYSAVE-016 · WRITE THE WHY</p>
+    <h1 data-en="Write the why when you save, or it becomes a graveyard.">存链接时先写下为什么，不然就是坟场。</h1>
+    <p class="sub" data-en="Chrome / X later-read piles turn into a graveyard — you come back and forget why you saved it. This page forces <strong>one line of why</strong>, then a <strong>today's review</strong>: keep / archive / delete. No extension, no cloud, no reader.">
+      Chrome / X「稍后读」堆成坟场，回头完全忘了当初为什么存。本页强制<strong>一行 why</strong>，再用<strong>今日复盘</strong>决定保留 / 归档 / 删除。不做扩展、云同步、全文阅读器。
+    </p>
+  </header>
+
+  <div class="stats" id="stats">
+    <div class="stat">
+      <div class="n" id="statActive">0</div>
+      <div class="mono k" data-en="Active">在册</div>
+    </div>
+    <div class="stat">
+      <div class="n" id="statDue">0</div>
+      <div class="mono k" data-en="Due today">今日待复盘</div>
+    </div>
+    <div class="stat risk">
+      <div class="n" id="statGrave">0</div>
+      <div class="mono k" data-en="Graveyard risk">坟场风险</div>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <span class="field-title" data-en="Save with a why">写下 why 再存</span>
+      <span class="field-hint" data-en="URL required (http/https only — javascript: and data: rejected). Title optional. Why is required after trim — no why, no save. Default review in 7 local days. Stored as localStorage key whysave-016.">
+        URL 必填（只接受 http/https，拒绝 javascript: / data:）。标题可选。<strong>why 必填</strong>（trim 后非空）——没有 why 不能存。默认 7 个本地日后进入复盘。存在本机 localStorage 键 whysave-016。
+      </span>
+    </div>
+    <form id="addForm" class="form-grid" autocomplete="off">
+      <label class="fld span2">
+        <span data-en="URL">URL</span>
+        <input id="urlInput" type="text" inputmode="url" maxlength="2048" required autocomplete="off" autocapitalize="off" spellcheck="false" data-ph-zh="https://…" data-ph-en="https://…" placeholder="https://…">
+      </label>
+      <label class="fld">
+        <span data-en="Title (optional)">标题（可空）</span>
+        <input id="titleInput" type="text" maxlength="160" autocomplete="off" data-ph-zh="空则显示网站 host" data-ph-en="Blank → show host" placeholder="空则显示网站 host">
+      </label>
+      <label class="fld">
+        <span data-en="Review in">复盘周期</span>
+        <div class="chips" id="dayChips" style="margin-top:4px"></div>
+      </label>
+      <label class="fld span2">
+        <span data-en="Why (required)">why（必填）</span>
+        <textarea id="whyInput" maxlength="280" required data-ph-zh="一句话：回头为什么还要打开它？" data-ph-en="One line: why will you open this again?" placeholder="一句话：回头为什么还要打开它？"></textarea>
+      </label>
+      <div class="form-actions span2">
+        <button class="add-btn" type="submit" id="saveBtn" data-en="Save">存入</button>
+      </div>
+    </form>
+    <p class="status" id="formStatus" role="status"></p>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <span class="field-title" data-en="Today's review">今日复盘</span>
+      <span class="field-hint" data-en="Queued only if status is active and nextReviewAt is on or before the end of the local calendar day. New saves wait reviewDays (default 7) — never-reviewed is not a separate queue rule. Keep = still active, next review in reviewDays. Archive = leaves the main list. Delete = gone.">
+        入队条件写死：status 为 active 且 nextReviewAt 不晚于<strong>本地日历日结束</strong>。新建条目在 reviewDays（默认 7）天后才进队列，「从未复盘」不是独立入队条件。保留仍为 active；归档退出主列表；删除永久去掉。
+      </span>
+    </div>
+    <div class="tools">
+      <span class="count" id="dueCount"></span>
+    </div>
+    <div id="reviewList"></div>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">03</span>
+      <span class="field-title" data-en="Collection">收藏列表</span>
+      <span class="field-hint" data-en="Default: active. Switch to archived to still look them up. Graveyard risk = active and nextReviewAt overdue by more than one reviewDays.">
+        默认看在册（active）。可切到归档查看。坟场风险 = 仍为 active 且 nextReviewAt 逾期超过一个 reviewDays。
+      </span>
+    </div>
+    <div class="tools">
+      <button class="ghost-btn" type="button" data-list="active" id="tabActive" data-en="Active">在册</button>
+      <button class="ghost-btn" type="button" data-list="archived" id="tabArchived" data-en="Archived">归档</button>
+      <button class="ghost-btn" type="button" id="exportBtn" data-en="Export JSON">导出 JSON</button>
+      <button class="ghost-btn" type="button" id="importBtn" data-en="Import JSON">导入 JSON</button>
+      <input id="importFile" type="file" accept="application/json,.json" hidden>
+      <span class="count" id="listCount"></span>
+    </div>
+    <div id="itemList"></div>
+  </div>
+
+  <div class="share-row">
+    <button class="share-btn" id="copyBtn" type="button" data-en="Copy today's review">复制今日复盘摘要</button>
+    <button class="share-btn" id="shareImgBtn" type="button" data-en="Share image">生成分享图</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareCanvasWrap">
+    <canvas id="shareCanvas" width="800" height="450"></canvas>
+    <p class="share-save-hint" data-en="Long-press or right-click to save. The image has counts only — no URLs.">长按或右键保存。分享图只有统计，不含你的链接。</p>
+  </div>
+
+  <aside class="origin-card">
+    <p class="mono origin-eyebrow">BUILD-100 · 016/100</p>
+    <p class="origin-text" data-en="No.016 of BUILD-100 — one person building 100 websites with AI, in public. Later-read without a why is a graveyard. Write the reason, review today, keep / archive / delete.">
+      BUILD-100 的第 016 号：一个人用 AI 公开做 100 个网站。稍后读没有 why 就是坟场。先写原因，再今日复盘：保留 / 归档 / 删除。
+    </p>
+    <div class="origin-actions">
+      <a class="origin-btn primary" href="https://build-100.com/" data-en="See the project →">看看这个计划 →</a>
+      <a class="origin-btn" href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="Follow along on X">在 X 上看过程</a>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="WHYSAVE-016 · Later-read graveyard review">WHYSAVE-016 · 收藏坟场复盘</span>
+</footer>
+
+<script type="module">
+  import {
+    DEFAULT_REVIEW_DAYS,
+    emptyState,
+    loadState,
+    saveState,
+    createItem,
+    listDueForReview,
+    listItems,
+    keepItem,
+    archiveItem,
+    deleteItem,
+    computeStats,
+    exportJson,
+    importJson,
+    openHref,
+    displayTitle,
+    isDue,
+    isGraveyard,
+    buildShareText,
+    clampReviewDays,
+  } from "./engine.js?v=1";
+
+  const DAY_OPTS = [3, 7, 14, 30];
+
+  let state = emptyState();
+  try { state = loadState(localStorage); } catch (e) { state = emptyState(); }
+  state.settings.reviewDays = clampReviewDays(state.settings?.reviewDays || DEFAULT_REVIEW_DAYS);
+
+  let listFilter = "active";
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  if (lang !== "en") lang = "zh";
+
+  const $ = (id) => document.getElementById(id);
+  const t = (zh, en) => (lang === "en" ? en : zh);
+
+  function esc(s) {
+    return String(s ?? "").replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+    }[c]));
+  }
+
+  function persist() {
+    try { state = saveState(state, localStorage); } catch (e) {}
+  }
+
+  function fmtDate(ms) {
+    const d = new Date(ms);
+    if (!Number.isFinite(d.getTime())) return "";
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
+
+  function errText(code) {
+    const map = {
+      missing_why: t("没有 why 不能存", "No why, no save"),
+      missing_url: t("URL 必填", "URL is required"),
+      bad_scheme: t("只接受 http/https，拒绝 javascript: / data:", "http/https only — javascript: and data: rejected"),
+      invalid_url: t("URL 无效", "Invalid URL"),
+      invalid_item: t("条目无效", "Invalid item"),
+      invalid_json: t("JSON 无效", "Invalid JSON"),
+      not_found: t("找不到这条", "Item not found"),
+    };
+    return map[code] || String(code || "");
+  }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.querySelectorAll("[data-ph-zh]").forEach((el) => {
+      el.placeholder = l === "en" ? (el.dataset.phEn || el.placeholder) : (el.dataset.phZh || el.placeholder);
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.title = l === "en"
+      ? "WHYSAVE-016 · Later-read graveyard review"
+      : "WHYSAVE-016 · 收藏坟场复盘";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    render();
+  }
+
+  function setStatus(msg, kind) {
+    const el = $("formStatus");
+    el.textContent = msg || "";
+    el.className = "status" + (kind ? " " + kind : "");
+  }
+
+  function nowMs() { return Date.now(); }
+
+  function statsNow() {
+    return computeStats(state.items, nowMs(), state.settings.reviewDays);
+  }
+
+  function dueNow() {
+    return listDueForReview(state.items, nowMs());
+  }
+
+  function cardHtml(it, mode) {
+    const href = openHref(it.url);
+    const title = displayTitle(it);
+    const days = state.settings.reviewDays;
+    const due = isDue(it, nowMs());
+    const grave = isGraveyard(it, nowMs(), days);
+    const pills = [];
+    if (due && it.status === "active") pills.push(`<span class="pill due">${esc(t("今日复盘", "Due today"))}</span>`);
+    if (grave) pills.push(`<span class="pill risk">${esc(t("坟场风险", "Graveyard"))}</span>`);
+    const dates = [
+      t("存入 ", "Saved ") + fmtDate(it.createdAt),
+      t("下次 ", "Next ") + fmtDate(it.nextReviewAt),
+    ];
+    if (it.lastReviewedAt) dates.push(t("上次 ", "Last ") + fmtDate(it.lastReviewedAt));
+    const openBtn = href
+      ? `<a class="act" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(t("打开", "Open"))}</a>`
+      : "";
+    let acts;
+    if (mode === "review") {
+      acts = `${openBtn}
+        <button class="act keep" type="button" data-act="keep">${esc(t("保留", "Keep"))}</button>
+        <button class="act" type="button" data-act="archive">${esc(t("归档", "Archive"))}</button>
+        <button class="act danger" type="button" data-act="delete">${esc(t("删除", "Delete"))}</button>`;
+    } else if (it.status === "archived") {
+      acts = `${openBtn}
+        <button class="act keep" type="button" data-act="keep">${esc(t("恢复", "Restore"))}</button>
+        <button class="act danger" type="button" data-act="delete">${esc(t("删除", "Delete"))}</button>`;
+    } else {
+      acts = `${openBtn}
+        <button class="act keep" type="button" data-act="keep">${esc(t("保留", "Keep"))}</button>
+        <button class="act" type="button" data-act="archive">${esc(t("归档", "Archive"))}</button>
+        <button class="act danger" type="button" data-act="delete">${esc(t("删除", "Delete"))}</button>`;
+    }
+    const cls = ["card"];
+    if (mode === "review") cls.push("review");
+    else if (grave) cls.push("risk");
+    return `<article class="${cls.join(" ")}" data-id="${esc(it.id)}">
+      <div class="card-top">
+        <div>
+          <div class="item-title">${esc(title)}</div>
+          <div class="item-url">${href ? `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(it.url)}</a>` : esc(it.url)}</div>
+          ${pills.join("")}
+          <p class="why"><em>why</em>${esc(it.why)}</p>
+          <div class="meta">${esc(dates.join(" · "))}</div>
+        </div>
+        <div class="actions">${acts}</div>
+      </div>
+    </article>`;
+  }
+
+  function renderDays() {
+    const days = state.settings.reviewDays;
+    $("dayChips").innerHTML = DAY_OPTS.map((n) => {
+      const on = n === days ? " active" : "";
+      return `<button type="button" class="chip${on}" data-days="${n}">${n}d</button>`;
+    }).join("");
+  }
+
+  function render() {
+    const days = state.settings.reviewDays;
+    const stats = statsNow();
+    const due = dueNow();
+    $("statActive").textContent = String(stats.active);
+    $("statDue").textContent = String(stats.due);
+    $("statGrave").textContent = String(stats.graveyard);
+
+    renderDays();
+
+    $("tabActive").classList.toggle("active", listFilter === "active");
+    $("tabArchived").classList.toggle("active", listFilter === "archived");
+
+    $("dueCount").textContent = due.length
+      ? t(`${due.length} 条待复盘`, `${due.length} due`)
+      : "";
+
+    const reviewBox = $("reviewList");
+    if (!due.length) {
+      reviewBox.innerHTML = `<div class="empty">${esc(t(
+        `今日没有到期条目。新存的链接会在 ${days} 天后进入复盘，不会当天涌进来。`,
+        `Nothing due today. New saves enter review in ${days} days — not the same day.`
+      ))}</div>`;
+    } else {
+      reviewBox.innerHTML = due.map((it) => cardHtml(it, "review")).join("");
+    }
+
+    const shown = listItems(state.items, listFilter);
+    $("listCount").textContent = listFilter === "archived"
+      ? t(`归档 ${shown.length}`, `Archived ${shown.length}`)
+      : t(`在册 ${shown.length}`, `Active ${shown.length}`);
+
+    const listBox = $("itemList");
+    if (!shown.length) {
+      listBox.innerHTML = `<div class="empty">${esc(listFilter === "archived"
+        ? t("归档是空的。复盘时点归档的条目会出现在这里。", "Archive is empty. Items you archive in review show up here.")
+        : t("还没有收藏。先写下 why 再存一条链接。", "No saves yet. Write a why, then save a link.")
+      )}</div>`;
+    } else {
+      listBox.innerHTML = shown.map((it) => cardHtml(it, "list")).join("");
+    }
+  }
+
+  function runAct(act, id) {
+    if (!id || !act) return;
+    const now = nowMs();
+    const days = state.settings.reviewDays;
+    let r;
+    if (act === "keep") r = keepItem(state.items, id, now, days);
+    else if (act === "archive") r = archiveItem(state.items, id, now);
+    else if (act === "delete") {
+      if (!confirm(t("永久删除这条？", "Delete this forever?"))) return;
+      r = deleteItem(state.items, id);
+    } else return;
+    if (!r || !r.ok) {
+      setStatus(errText(r && r.error), "err");
+      return;
+    }
+    state = { ...state, items: r.items };
+    persist();
+    setStatus("", "");
+    render();
+  }
+
+  $("addForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const url = $("urlInput").value;
+    const title = $("titleInput").value;
+    const why = $("whyInput").value;
+    const v = createItem({ url, title, why }, nowMs(), state.settings.reviewDays);
+    if (!v.ok) {
+      setStatus(errText(v.error), "err");
+      return;
+    }
+    state = { ...state, items: [v.item, ...state.items] };
+    persist();
+    $("urlInput").value = "";
+    $("titleInput").value = "";
+    $("whyInput").value = "";
+    setStatus(t("已存。将在 " + state.settings.reviewDays + " 天后进入复盘。", "Saved. Review in " + state.settings.reviewDays + " days."), "ok");
+    render();
+  });
+
+  $("dayChips").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-days]");
+    if (!btn) return;
+    const n = clampReviewDays(btn.dataset.days);
+    state = { ...state, settings: { ...state.settings, reviewDays: n } };
+    persist();
+    render();
+  });
+
+  function onListClick(e) {
+    const btn = e.target.closest("[data-act]");
+    if (!btn) return;
+    const card = btn.closest("[data-id]");
+    if (!card) return;
+    runAct(btn.dataset.act, card.dataset.id);
+  }
+  $("reviewList").addEventListener("click", onListClick);
+  $("itemList").addEventListener("click", onListClick);
+
+  $("tabActive").addEventListener("click", () => { listFilter = "active"; render(); });
+  $("tabArchived").addEventListener("click", () => { listFilter = "archived"; render(); });
+
+  $("exportBtn").addEventListener("click", () => {
+    const blob = new Blob([exportJson(state)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "whysave-016.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+  });
+
+  $("importBtn").addEventListener("click", () => $("importFile").click());
+  $("importFile").addEventListener("change", async (e) => {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = "";
+    if (!file) return;
+    let text;
+    try { text = await file.text(); } catch {
+      setStatus(t("无法读取文件", "Could not read file"), "err");
+      return;
+    }
+    const r = importJson(state, text, nowMs());
+    if (!r.ok) {
+      setStatus(errText(r.error), "err");
+      return;
+    }
+    state = r.state;
+    persist();
+    setStatus(t(`导入 ${r.imported} 条，跳过 ${r.skipped} 条。`, `Imported ${r.imported}, skipped ${r.skipped}.`), "ok");
+    render();
+  });
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand("copy"); } catch (_) {}
+      ta.remove();
+      return ok;
+    }
+  }
+
+  $("copyBtn").addEventListener("click", async () => {
+    const text = buildShareText({ stats: statsNow(), due: dueNow(), lang });
+    await copyText(text);
+    const btn = $("copyBtn");
+    btn.classList.add("copied");
+    const orig = btn.textContent;
+    btn.textContent = t("已复制 ✓", "Copied ✓");
+    setTimeout(() => {
+      btn.classList.remove("copied");
+      btn.textContent = orig;
+    }, 1800);
+  });
+
+  function wrapText(ctx, text, x, y, maxW, lineH) {
+    const words = String(text).split("");
+    let line = "";
+    let yy = y;
+    for (const ch of words) {
+      const test = line + ch;
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line, x, yy);
+        line = ch;
+        yy += lineH;
+      } else line = test;
+    }
+    if (line) ctx.fillText(line, x, yy);
+    return yy;
+  }
+
+  $("shareImgBtn").addEventListener("click", () => {
+    const stats = statsNow();
+    const canvas = $("shareCanvas");
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "rgba(237,239,241,0.05)";
+    for (let x = 16; x < w; x += 36) {
+      for (let y = 16; y < h; y += 36) ctx.fillRect(x, y, 2, 2);
+    }
+    ctx.fillStyle = "#34d399";
+    ctx.font = "600 13px ui-monospace, SF Mono, monospace";
+    ctx.fillText("WHYSAVE-016", 48, 56);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 28px Helvetica Neue, PingFang SC, sans-serif";
+    const headline = t("存链接时先写下为什么，不然就是坟场。", "Write the why when you save, or it becomes a graveyard.");
+    wrapText(ctx, headline, 48, 110, w - 96, 36);
+    const cells = [
+      [String(stats.due), t("今日待复盘", "Due today")],
+      [String(stats.active), t("在册", "Active")],
+      [String(stats.graveyard), t("坟场风险", "Graveyard")],
+    ];
+    cells.forEach((c, i) => {
+      const x = 48 + i * 240;
+      ctx.fillStyle = i === 2 ? "#fbbf24" : "#34d399";
+      ctx.font = "600 52px ui-monospace, SF Mono, monospace";
+      ctx.fillText(c[0], x, 280);
+      ctx.fillStyle = "#7d848c";
+      ctx.font = "500 12px ui-monospace, SF Mono, monospace";
+      ctx.fillText(c[1].toUpperCase(), x, 310);
+    });
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "500 12px ui-monospace, SF Mono, monospace";
+    ctx.fillText("build-100.com/016", 48, 400);
+    $("shareCanvasWrap").classList.add("show");
+  });
+
+  $("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+
+  if (lang === "en") applyLang("en");
+  else render();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

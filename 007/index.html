@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PPP-007 · 欧洲 vs 国内购买力</title>
+<meta name="description" content="同一篮子日子：房租、咖啡、地铁月票、外卖、手机套餐。输入国内月薪，换算马德里同购买力月薪；也可以反过来。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/007/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E007%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PPP-007 · 欧洲 vs 国内购买力">
+<meta property="og:description" content="同一篮子日子：房租、咖啡、地铁月票、外卖、手机套餐。输入国内月薪，换算马德里同购买力月薪。">
+<meta property="og:url" content="https://build-100.com/007/">
+<meta property="og:image" content="https://build-100.com/007/og-007.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PPP-007 · 欧洲 vs 国内购买力">
+<meta name="twitter:description" content="同一篮子日子，两边各要多少钱。马德里 vs 北京 / 上海 / 成都 / 深圳。">
+<meta name="twitter:image" content="https://build-100.com/007/og-007.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --neon: #f472b6;
+    --neon-glow: rgba(244, 114, 182, 0.35);
+    --delta: #fbbf24;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--neon); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--neon); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(36px, 6vh, 56px); }
+  .hero .eyebrow { color: var(--neon); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--neon); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p { color: var(--muted); max-width: 36em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p strong { color: var(--ink); font-weight: 500; }
+  .data-badge { margin-top: 16px; color: var(--live); letter-spacing: 0.14em; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field:last-of-type { border-bottom: 1px solid var(--line); }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 7px 13px; border-radius: 999px; cursor: pointer; transition: all .18s;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--ink); }
+  .chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .chip.locked {
+    border-color: var(--neon); color: var(--neon); cursor: default;
+    background: rgba(244, 114, 182, 0.08);
+  }
+
+  .dir-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 560px) { .dir-grid { grid-template-columns: 1fr; } }
+  .dir-opt {
+    border: 1px solid var(--line-strong); border-radius: 6px; padding: 14px 16px; cursor: pointer;
+    transition: border-color .18s, background .18s; background: var(--bg-raise);
+  }
+  .dir-opt:hover { border-color: var(--muted); }
+  .dir-opt.selected { border-color: var(--neon); background: rgba(244, 114, 182, 0.08); box-shadow: 0 0 0 1px var(--neon) inset; }
+  .dir-opt .lvl { font-family: var(--mono); font-size: 11px; color: var(--faint); letter-spacing: 0.1em; }
+  .dir-opt .lbl { display: block; font-size: 0.92rem; margin-top: 4px; }
+  .dir-opt.selected .lvl { color: var(--neon); }
+
+  .budget-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .budget-input {
+    background: var(--bg-raise); border: 1px solid var(--line-strong); color: var(--ink);
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.4rem; font-weight: 500;
+    padding: 10px 14px; width: 160px; border-radius: 4px;
+  }
+  .budget-input::-webkit-outer-spin-button, .budget-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .budget-input[type=number] { -moz-appearance: textfield; }
+  .budget-prefix { font-family: var(--mono); font-size: 1.4rem; color: var(--faint); min-width: 1.2em; }
+  .budget-err { color: #f87171; font-size: 0.85rem; margin-top: 10px; min-height: 1.2em; font-family: var(--mono); letter-spacing: 0.02em; }
+
+  .err-banner { display: none; margin-bottom: 20px; padding: 14px 18px; border: 1px solid #f87171; border-radius: 6px; color: #fca5a5; font-size: 0.9rem; background: rgba(248,113,113,0.08); }
+  .err-banner.show { display: block; }
+
+  .result { margin-top: clamp(12px, 2vh, 24px); }
+  .delta-banner {
+    margin: 0 0 28px; padding: clamp(24px, 4vh, 34px); border: 1px solid var(--neon); border-radius: 8px;
+    background: linear-gradient(135deg, rgba(244,114,182,0.12), rgba(244,114,182,0.02));
+    text-align: center;
+  }
+  .delta-banner .label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
+  .delta-banner .big {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 500;
+    font-size: clamp(2.2rem, 7vw, 3.6rem); line-height: 1; margin: 10px 0; color: var(--neon);
+  }
+  .delta-banner .sub { color: var(--muted); font-size: 0.92rem; }
+  .delta-banner .verdict {
+    margin-top: 16px; color: var(--ink); font-size: clamp(1.05rem, 2.2vw, 1.25rem); font-weight: 700;
+    text-wrap: balance;
+  }
+
+  .pair {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;
+  }
+  @media (max-width: 560px) { .pair { grid-template-columns: 1fr; } }
+  .plan-card {
+    border: 1px solid var(--line-strong); border-radius: 8px; padding: clamp(18px, 3vw, 24px);
+    background: var(--bg-raise);
+  }
+  .plan-card.primary { border-color: var(--neon); box-shadow: 0 0 0 1px rgba(244,114,182,0.2); }
+  .plan-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--neon); margin-bottom: 10px; }
+  .plan-price { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.45rem; font-weight: 500; }
+  .plan-price small { color: var(--faint); font-size: 0.55em; font-weight: 400; }
+  .plan-vs { color: var(--muted); font-size: 0.85rem; margin-top: 6px; }
+
+  .basket { border: 1px solid var(--line-strong); border-radius: 8px; overflow: hidden; background: var(--bg-raise); margin-bottom: 20px; }
+  .basket-head, .basket-row {
+    display: grid; grid-template-columns: 1.3fr 0.7fr 1fr 1fr; gap: 8px;
+    padding: 12px 16px; align-items: baseline;
+  }
+  .basket-head {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--faint); border-bottom: 1px solid var(--line);
+  }
+  .basket-row { border-top: 1px solid var(--line); font-size: 0.92rem; }
+  .basket-row:first-of-type { border-top: none; }
+  .basket-row .name { font-weight: 600; }
+  .basket-row .name small { display: block; color: var(--faint); font-size: 0.75rem; font-weight: 400; }
+  .basket-row .qty, .basket-row .amt { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 0.86rem; color: var(--muted); }
+  .basket-row .amt b { color: var(--ink); font-weight: 500; display: block; }
+  .basket-foot {
+    display: grid; grid-template-columns: 1.3fr 0.7fr 1fr 1fr; gap: 8px;
+    padding: 14px 16px; border-top: 1px solid var(--line-strong);
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+  }
+  .basket-foot b { color: var(--neon); }
+  @media (max-width: 640px) {
+    .basket-head { display: none; }
+    .basket-row, .basket-foot { grid-template-columns: 1fr 1fr; }
+    .basket-row .qty { grid-column: 1 / -1; }
+  }
+
+  .note { color: var(--muted); font-size: 0.86rem; margin-top: 8px; }
+  .note code { font-family: var(--mono); color: var(--ink); font-size: 0.84em; letter-spacing: 0.02em; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .origin-card {
+    margin-top: 48px; padding: clamp(24px, 4vw, 32px);
+    border: 1px solid var(--line); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(244,114,182,0.06), transparent 55%);
+  }
+  .origin-eyebrow { color: var(--neon); margin-bottom: 12px; }
+  .origin-text { color: var(--muted); font-size: 0.95rem; max-width: 34em; }
+  .origin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .origin-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); border-radius: 4px;
+    color: var(--muted); cursor: pointer; transition: all .2s;
+  }
+  .origin-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .origin-btn.primary { border-color: var(--neon); color: var(--ink); background: rgba(244,114,182,0.1); }
+  .origin-btn.primary:hover { background: var(--neon); color: var(--bg); }
+
+  footer { border-top: 1px solid var(--line); padding: 24px var(--pad); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">PPP<span>·007</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; PPP-007 · EUROPE VS CHINA</p>
+    <h1 data-en="Same basket of days. Two price tags.">同一篮子日子，<br>两边各要多少钱。</h1>
+    <p data-en="Madrid vs Beijing / Shanghai / Chengdu / Shenzhen. Rent, coffee, metro pass, takeout, phone plan. Baked prices, no live FX API. Type a salary, get the other city’s equivalent.">
+      默认欧洲侧是<strong>马德里</strong>。国内侧可选北京 / 上海 / 成都 / 深圳。篮子：房租（一室）、咖啡、地铁月票、外卖一餐、手机套餐。数据烘焙，不打实时接口。
+    </p>
+    <p class="mono data-badge" id="dataBadge"></p>
+  </header>
+
+  <div class="err-banner" id="errBanner"></div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <span class="field-title" data-en="Cities">城市</span>
+      <span class="field-hint" data-en="Europe is locked to Madrid. Pick a China city.">欧洲侧锁死马德里。国内侧选一座城。</span>
+    </div>
+    <div class="chip-row" style="margin-bottom:10px">
+      <button class="chip locked" type="button" disabled data-en="Madrid · Europe">马德里 · 欧洲</button>
+    </div>
+    <div class="chip-row" id="cityChips"></div>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <span class="field-title" data-en="Direction">换算方向</span>
+      <span class="field-hint" data-en="China monthly pay → Madrid equivalent, or the other way.">国内月薪 → 马德里同购买力；也可以反过来。</span>
+    </div>
+    <div class="dir-grid" id="dirGrid">
+      <div class="dir-opt selected" data-from="cny" tabindex="0">
+        <span class="lvl">CNY → EUR</span>
+        <span class="lbl" data-en="China salary → Madrid">国内月薪 → 马德里</span>
+      </div>
+      <div class="dir-opt" data-from="eur" tabindex="0">
+        <span class="lvl">EUR → CNY</span>
+        <span class="lbl" data-en="Madrid salary → China">马德里月薪 → 国内</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">03</span>
+      <span class="field-title" id="payTitle" data-en="Monthly pay">月薪</span>
+      <span class="field-hint" id="payHint" data-en="What you earn per month in the starting city.">从这一侧出发，换另一侧同购买力的月薪。</span>
+    </div>
+    <div class="budget-row">
+      <span class="budget-prefix" id="payPrefix">¥</span>
+      <input class="budget-input" id="payInput" type="number" inputmode="decimal" min="0" step="100" value="20000" aria-label="Monthly salary">
+      <div class="chip-row" id="quickChips"></div>
+    </div>
+    <div class="budget-err" id="payErr"></div>
+  </div>
+
+  <section class="result" id="resultView" hidden></section>
+
+  <div class="share-row">
+    <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+    <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareCanvasWrap">
+    <canvas id="shareCanvas" width="800" height="450"></canvas>
+    <p class="share-save-hint" data-en="Long-press or right-click to save the image.">长按或右键保存图片。</p>
+  </div>
+
+  <aside class="origin-card">
+    <p class="mono origin-eyebrow">BUILD-100 · 007/100</p>
+    <p class="origin-text" data-en="This tool is No.007 of BUILD-100 — one person building 100 websites with AI, in public.">
+      这个工具是 BUILD-100 的第 007 号作品——一个人用 AI 公开做 100 个网站。
+    </p>
+    <div class="origin-actions">
+      <a class="origin-btn primary" href="https://build-100.com/" data-en="See the project →">看看这个计划 →</a>
+      <a class="origin-btn" href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="Follow along on X">在 X 上看过程</a>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono">PPP-007 · 同一篮子两边比</span>
+</footer>
+
+<script type="module">
+  import { pppConvert, conclusion, roundMoney } from "./engine.js?v=1";
+
+  const CITIES = [
+    { id: "beijing", zh: "北京", en: "Beijing" },
+    { id: "shanghai", zh: "上海", en: "Shanghai" },
+    { id: "chengdu", zh: "成都", en: "Chengdu" },
+    { id: "shenzhen", zh: "深圳", en: "Shenzhen" },
+  ];
+  const QUICK = {
+    cny: [8000, 12000, 20000, 35000, 50000],
+    eur: [1200, 1800, 2500, 3500, 5000],
+  };
+
+  let DATA = null;
+  let last = null;
+  let chinaId = "beijing";
+  let from = "cny";
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+
+  const t = (zh, en) => (lang === "en" ? en : zh);
+  const $ = (id) => document.getElementById(id);
+
+  function fmt(n, cur) {
+    const whole = Math.abs(n - Math.round(n)) < 1e-9;
+    const s = new Intl.NumberFormat(lang === "en" ? "en-US" : "zh-CN", {
+      maximumFractionDigits: 2,
+      minimumFractionDigits: whole ? 0 : 2,
+    }).format(n);
+    return cur === "EUR" ? "€" + s : "¥" + s;
+  }
+  function fmtN(n, digits) {
+    return new Intl.NumberFormat(lang === "en" ? "en-US" : "zh-CN", {
+      maximumFractionDigits: digits,
+      minimumFractionDigits: 0,
+    }).format(n);
+  }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.title = l === "en"
+      ? "PPP-007 · Europe vs China purchasing power"
+      : "PPP-007 · 欧洲 vs 国内购买力";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    paintStatic();
+    renderCities();
+    renderQuick();
+    compute();
+  }
+
+  function paintStatic() {
+    $("payPrefix").textContent = from === "cny" ? "¥" : "€";
+    $("payTitle").dataset.zh = "月薪";
+    $("payHint").dataset.zh = "从这一侧出发，换另一侧同购买力的月薪。";
+    if (DATA) {
+      const badge = $("dataBadge");
+      const fx = DATA.fx.eur_cny;
+      const d = DATA.updated;
+      badge.dataset.zh = `● EUR/CNY ${fx} · 数据 ${d} · 烘焙，无实时接口`;
+      badge.dataset.en = `● EUR/CNY ${fx} · baked ${d} · no live API`;
+      badge.textContent = lang === "en" ? badge.dataset.en : badge.dataset.zh;
+    }
+  }
+
+  function renderCities() {
+    const box = $("cityChips");
+    box.innerHTML = CITIES.map((c) => {
+      const label = lang === "en" ? c.en : c.zh;
+      const on = c.id === chinaId ? " active" : "";
+      return `<button class="chip${on}" type="button" data-city="${c.id}">${label}</button>`;
+    }).join("");
+  }
+
+  function renderQuick() {
+    const list = QUICK[from];
+    const prefix = from === "cny" ? "¥" : "€";
+    const v = String(Number($("payInput").value));
+    $("quickChips").innerHTML = list.map((n) => {
+      const on = String(n) === v ? " active" : "";
+      return `<button class="chip${on}" type="button" data-v="${n}">${prefix}${n.toLocaleString("en-US")}</button>`;
+    }).join("");
+  }
+
+  $("cityChips").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-city]");
+    if (!b) return;
+    chinaId = b.dataset.city;
+    renderCities();
+    compute();
+  });
+
+  $("dirGrid").addEventListener("click", (e) => {
+    const opt = e.target.closest(".dir-opt");
+    if (!opt) return;
+    pickDir(opt.dataset.from);
+  });
+  $("dirGrid").addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.target.closest(".dir-opt")?.click();
+    }
+  });
+  function pickDir(next) {
+    if (next === from) return;
+    from = next;
+    document.querySelectorAll(".dir-opt").forEach((o) => o.classList.toggle("selected", o.dataset.from === from));
+    $("payInput").value = from === "cny" ? 20000 : 2500;
+    paintStatic();
+    renderQuick();
+    compute();
+  }
+
+  $("payInput").addEventListener("input", () => { renderQuick(); compute(); });
+  $("quickChips").addEventListener("click", (e) => {
+    const c = e.target.closest("[data-v]");
+    if (!c) return;
+    $("payInput").value = c.dataset.v;
+    renderQuick();
+    compute();
+  });
+
+  function compute() {
+    const err = $("payErr");
+    const banner = $("errBanner");
+    banner.classList.remove("show");
+    if (!DATA) return;
+    const raw = $("payInput").value;
+    const amt = Number(raw);
+    if (raw === "" || !Number.isFinite(amt)) {
+      err.textContent = t("请输入有效数字", "Enter a valid number");
+      $("resultView").hidden = true;
+      last = null;
+      return;
+    }
+    if (amt < 0) {
+      err.textContent = t("月薪不能为负", "Salary cannot be negative");
+      $("resultView").hidden = true;
+      last = null;
+      return;
+    }
+    err.textContent = "";
+    const r = pppConvert({ amount: amt, from, chinaId, data: DATA });
+    if (!r.ok) {
+      banner.textContent = t("数据算不出来，请刷新。", "Could not compute. Refresh.");
+      banner.classList.add("show");
+      last = null;
+      return;
+    }
+    last = r;
+    renderResult(r);
+  }
+
+  function renderResult(r) {
+    const city = lang === "en" ? r.city.name_en : r.city.name_zh;
+    const madrid = lang === "en" ? r.europe.name_en : r.europe.name_zh;
+    const line = conclusion(r, lang);
+    const outCur = from === "cny" ? "EUR" : "CNY";
+    const outAmt = from === "cny" ? r.salaryEur : r.salaryCny;
+    const inCur = from === "cny" ? "CNY" : "EUR";
+    const inAmt = from === "cny" ? r.salaryCny : r.salaryEur;
+    const ratio = r.costRatio;
+    const ratioTxt = lang === "en"
+      ? `Same basket: Madrid is about ${fmtN(ratio, 2)}× ${r.city.name_en}.`
+      : `同一篮子，马德里大约是${city}的 ${fmtN(ratio, 2)} 倍。`;
+    const fxNote = lang === "en"
+      ? `FX only (EUR/CNY ${r.fx}): ${fmt(r.fxSalaryEur, "EUR")} / ${fmt(r.fxSalaryCny, "CNY")}. PPP uses the basket, not the mid-market print.`
+      : `若只按汇率 EUR/CNY ${r.fx}：一边是 ${fmt(r.fxSalaryEur, "EUR")}，一边是 ${fmt(r.fxSalaryCny, "CNY")}。购买力用篮子，不用中间价硬乘。`;
+
+    const rows = r.linesMadrid.map((m, i) => {
+      const c = r.linesChina[i];
+      const label = lang === "en" ? m.label_en : m.label_zh;
+      const qUnit = lang === "en" ? m.qty_unit_en : m.qty_unit_zh;
+      const uM = lang === "en" ? m.unit_en : m.unit_zh;
+      const uC = lang === "en" ? c.unit_en : c.unit_zh;
+      const note = lang === "en" ? m.note_en : m.note_zh;
+      return `<div class="basket-row">
+        <div class="name">${label}<small>${note}</small></div>
+        <div class="qty">${m.qty} ${qUnit}</div>
+        <div class="amt"><b>${fmt(m.line, "EUR")}</b>${fmt(m.unit, "EUR")} · ${uM}</div>
+        <div class="amt"><b>${fmt(c.line, "CNY")}</b>${fmt(c.unit, "CNY")} · ${uC}</div>
+      </div>`;
+    }).join("");
+
+    $("resultView").hidden = false;
+    $("resultView").innerHTML = `
+      <div class="delta-banner">
+        <div class="label">${t("同购买力月薪", "PPP-EQUIVALENT PAY")}</div>
+        <div class="big">${fmt(roundMoney(outAmt, 0), outCur)}</div>
+        <div class="sub">${t("输入", "From")} ${fmt(roundMoney(inAmt, 0), inCur)} · ${t("可买", "Buys")} ${fmtN(r.baskets, 2)} ${t("个篮子", "baskets")}</div>
+        <p class="verdict">${line}</p>
+      </div>
+      <div class="pair">
+        <div class="plan-card primary">
+          <div class="plan-tag">${madrid}</div>
+          <div class="plan-price">${fmt(roundMoney(r.salaryEur, 0), "EUR")}<small>/mo</small></div>
+          <div class="plan-vs">${t("篮子", "Basket")} ${fmt(r.madridTotal, "EUR")} · ${t("按汇率", "FX")} ${fmt(r.madridCnyFx, "CNY")}</div>
+        </div>
+        <div class="plan-card">
+          <div class="plan-tag">${city}</div>
+          <div class="plan-price">${fmt(roundMoney(r.salaryCny, 0), "CNY")}<small>/mo</small></div>
+          <div class="plan-vs">${t("篮子", "Basket")} ${fmt(r.chinaTotal, "CNY")} · ${t("按汇率", "FX")} ${fmt(r.chinaEurFx, "EUR")}</div>
+        </div>
+      </div>
+      <div class="basket">
+        <div class="basket-head">
+          <span>${t("篮子项目", "Item")}</span>
+          <span>${t("数量", "Qty")}</span>
+          <span>${madrid} EUR</span>
+          <span>${city} CNY</span>
+        </div>
+        ${rows}
+        <div class="basket-foot">
+          <span>${t("一个月合计", "One-month total")}</span>
+          <span></span>
+          <b>${fmt(r.madridTotal, "EUR")}</b>
+          <b>${fmt(r.chinaTotal, "CNY")}</b>
+        </div>
+      </div>
+      <p class="note">${ratioTxt}</p>
+      <p class="note">${fxNote}</p>
+    `;
+  }
+
+  function shareText(r) {
+    const line = conclusion(r, lang);
+    const city = lang === "en" ? r.city.name_en : r.city.name_zh;
+    if (lang === "en") {
+      return `PPP-007 · Europe vs China\n${line}\n${city} ${fmt(roundMoney(r.salaryCny, 0), "CNY")}  ↔  Madrid ${fmt(roundMoney(r.salaryEur, 0), "EUR")}\nSame basket: Madrid ≈ ${fmtN(r.costRatio, 2)}× ${r.city.name_en}.\nhttps://build-100.com/007/`;
+    }
+    return `PPP-007 · 欧洲 vs 国内购买力\n${line}\n${city} ${fmt(roundMoney(r.salaryCny, 0), "CNY")}  ↔  马德里 ${fmt(roundMoney(r.salaryEur, 0), "EUR")}\n同一篮子，马德里大约是${city}的 ${fmtN(r.costRatio, 2)} 倍。\nhttps://build-100.com/007/`;
+  }
+
+  $("copyBtn").addEventListener("click", async () => {
+    if (!last) return;
+    const text = shareText(last);
+    try { await navigator.clipboard.writeText(text); } catch (e) {
+      const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch (_) {} ta.remove();
+    }
+    const btn = $("copyBtn");
+    btn.classList.add("copied");
+    const orig = btn.textContent;
+    btn.textContent = t("已复制 ✓", "Copied ✓");
+    setTimeout(() => { btn.classList.remove("copied"); btn.textContent = orig; }, 1800);
+  });
+
+  $("shareImgBtn").addEventListener("click", () => {
+    if (!last) return;
+    drawShare($("shareCanvas"), last);
+    $("shareCanvasWrap").classList.add("show");
+  });
+
+  function drawShare(canvas, r) {
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width, h = canvas.height;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "rgba(237,239,241,0.06)";
+    for (let x = 0; x < w; x += 36) for (let y = 0; y < h; y += 36) {
+      ctx.fillRect(x, y, 1, 1);
+    }
+    ctx.fillStyle = "#f472b6";
+    ctx.fillRect(0, 0, 8, h);
+    ctx.font = "600 14px ui-monospace, Menlo, monospace";
+    ctx.fillStyle = "#f472b6";
+    ctx.fillText("PPP-007  ·  BUILD-100", 40, 48);
+    ctx.font = "700 32px Helvetica Neue, PingFang SC, sans-serif";
+    ctx.fillStyle = "#edeff1";
+    wrapText(ctx, conclusion(r, lang), 40, 120, w - 80, 40);
+    ctx.font = "500 28px ui-monospace, Menlo, monospace";
+    ctx.fillStyle = "#f472b6";
+    ctx.fillText(fmt(roundMoney(r.salaryEur, 0), "EUR") + "   ↔   " + fmt(roundMoney(r.salaryCny, 0), "CNY"), 40, 250);
+    ctx.font = "16px Helvetica Neue, PingFang SC, sans-serif";
+    ctx.fillStyle = "#7d848c";
+    const city = lang === "en" ? r.city.name_en : r.city.name_zh;
+    ctx.fillText(lang === "en" ? `Madrid vs ${city}  ·  EUR/CNY ${r.fx}` : `马德里 vs ${city}  ·  EUR/CNY ${r.fx}`, 40, 300);
+    ctx.font = "14px ui-monospace, Menlo, monospace";
+    ctx.fillStyle = "#4a5057";
+    ctx.fillText("build-100.com/007", 40, 410);
+  }
+  function wrapText(ctx, text, x, y, maxW, lh) {
+    const chars = text.split("");
+    let line = "", yy = y;
+    for (const ch of chars) {
+      const test = line + ch;
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line, x, yy);
+        line = ch;
+        yy += lh;
+      } else line = test;
+    }
+    if (line) ctx.fillText(line, x, yy);
+  }
+
+  async function load() {
+    try {
+      const res = await fetch("./data.json?v=1");
+      DATA = await res.json();
+      paintStatic();
+      renderCities();
+      renderQuick();
+      if (lang === "en") applyLang("en");
+      else compute();
+    } catch (e) {
+      $("errBanner").textContent = t("价格数据加载失败。", "Failed to load price data.");
+      $("errBanner").classList.add("show");
+    }
+  }
+
+  $("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+  load();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

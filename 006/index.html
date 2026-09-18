@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LIFE-006 · 生活麻烦工具箱</title>
+<meta name="description" content="订阅扣款、租房对比、出行搬家打包——三件生活麻烦，记在这页，不上传。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/006/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E006%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="LIFE-006 · 生活麻烦工具箱">
+<meta property="og:description" content="订阅扣款、租房对比、出行搬家打包——三件生活麻烦，记在这页，不上传。">
+<meta property="og:url" content="https://build-100.com/006/">
+<meta property="og:image" content="https://build-100.com/006/og-006.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="LIFE-006 · 生活麻烦工具箱">
+<meta name="twitter:description" content="Subscriptions, rent comparison, packing lists — one page, local only.">
+<meta name="twitter:image" content="https://build-100.com/006/og-006.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #fb923c;
+    --accent-glow: rgba(251, 146, 60, 0.35);
+    --danger: #f87171;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 44px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p.sub { color: var(--muted); max-width: 36em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  .tabs {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 28px;
+  }
+  .tab {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 10px 16px; border-radius: 999px; cursor: pointer; transition: all .18s;
+  }
+  .tab:hover { color: var(--ink); border-color: var(--ink); }
+  .tab.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .panel { display: none; }
+  .panel.show { display: block; animation: fadeUp .4s cubic-bezier(0.16,1,0.3,1); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  .banner {
+    margin-bottom: 22px; padding: 18px 20px; border: 1px solid var(--line-strong); border-radius: 8px;
+    background: var(--bg-raise); display: flex; flex-wrap: wrap; gap: 8px 28px; align-items: baseline;
+  }
+  .banner .big {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 500; color: var(--accent); line-height: 1;
+  }
+  .banner .lbl { color: var(--muted); font-size: 0.88rem; }
+
+  .form-grid {
+    display: grid; grid-template-columns: 1.4fr 0.8fr 0.9fr 1.1fr auto;
+    gap: 10px; align-items: end; margin-bottom: 22px;
+  }
+  @media (max-width: 720px) {
+    .form-grid { grid-template-columns: 1fr 1fr; }
+    .form-grid .span2 { grid-column: 1 / -1; }
+  }
+  label.fld { display: flex; flex-direction: column; gap: 6px; }
+  label.fld span {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint);
+  }
+  input, select, textarea {
+    background: var(--bg-raise); border: 1px solid var(--line-strong); color: var(--ink);
+    font-family: var(--sans); font-size: 0.95rem; padding: 10px 12px; border-radius: 4px; width: 100%;
+  }
+  textarea { resize: vertical; min-height: 64px; }
+  .add-btn, .ghost-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 12px 16px; border-radius: 4px; cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .add-btn {
+    border: 1px solid var(--accent); background: rgba(251, 146, 60, 0.12); color: var(--ink);
+  }
+  .add-btn:hover { background: var(--accent); color: var(--bg); box-shadow: 0 0 20px var(--accent-glow); }
+  .ghost-btn {
+    border: 1px solid var(--line-strong); background: none; color: var(--muted);
+  }
+  .ghost-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .ghost-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .sub-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .sub-card {
+    display: grid; grid-template-columns: 1fr auto auto; gap: 8px 16px; align-items: center;
+    padding: 16px 18px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--bg-raise);
+  }
+  .sub-card.soon { border-color: var(--accent); box-shadow: 0 0 0 1px rgba(251,146,60,0.25); }
+  .sub-card.overdue { border-color: var(--danger); background: rgba(248,113,113,0.06); }
+  .sub-name { font-weight: 700; }
+  .sub-meta { color: var(--muted); font-size: 0.86rem; font-family: var(--mono); letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
+  .pill {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--muted); white-space: nowrap;
+  }
+  .pill.soon { color: var(--accent); border-color: var(--accent); }
+  .pill.overdue { color: var(--danger); border-color: var(--danger); }
+  .del {
+    background: none; border: none; color: var(--faint); cursor: pointer;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; padding: 6px;
+  }
+  .del:hover { color: var(--danger); }
+
+  .empty { color: var(--muted); padding: 28px 4px; }
+
+  .apt-toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .apt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 22px; }
+  @media (max-width: 640px) { .apt-grid { grid-template-columns: 1fr; } }
+  .apt-card {
+    border: 1px solid var(--line-strong); border-radius: 8px; padding: 16px; background: var(--bg-raise);
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .apt-card h3 { font-size: 0.95rem; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .apt-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line-strong); border-radius: 8px; }
+  table.cmp { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; min-width: 520px; }
+  table.cmp th, table.cmp td {
+    padding: 12px 14px; text-align: right; border-bottom: 1px solid var(--line); font-size: 0.92rem;
+  }
+  table.cmp th:first-child, table.cmp td:first-child { text-align: left; color: var(--muted); font-weight: 500; }
+  table.cmp th { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--faint); font-weight: 400; }
+  table.cmp tr:last-child td { border-bottom: none; }
+  td.win { color: var(--live); font-weight: 700; }
+  .note-cell { text-align: left !important; color: var(--muted); font-size: 0.84rem; max-width: 14em; }
+
+  .pack-head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+  .prog-wrap { flex: 1; min-width: 180px; }
+  .prog-bar { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; margin-top: 8px; }
+  .prog-bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s; }
+  .checks { list-style: none; display: flex; flex-direction: column; }
+  .checks li {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 4px; border-bottom: 1px solid var(--line);
+  }
+  .checks label { flex: 1; cursor: pointer; }
+  .checks input[type=checkbox] {
+    width: 18px; height: 18px; margin-top: 3px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0;
+  }
+  .checks li.done label { color: var(--muted); text-decoration: line-through; }
+  .add-row { display: flex; gap: 10px; margin-top: 16px; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .origin-card {
+    margin-top: 48px; padding: clamp(24px, 4vw, 32px);
+    border: 1px solid var(--line); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(251,146,60,0.08), transparent 55%);
+  }
+  .origin-eyebrow { color: var(--accent); margin-bottom: 12px; }
+  .origin-text { color: var(--muted); font-size: 0.95rem; max-width: 34em; }
+  .origin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .origin-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); border-radius: 4px;
+    color: var(--muted); cursor: pointer; transition: all .2s;
+  }
+  .origin-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .origin-btn.primary { border-color: var(--accent); color: var(--ink); background: rgba(251,146,60,0.1); }
+  .origin-btn.primary:hover { background: var(--accent); color: var(--bg); }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+    .panel.show { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">LIFE<span>·006</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span style="color:var(--accent)">●</span>&nbsp; LIFE-006 · LIFE ADMIN</p>
+    <h1 data-en="Three life chores.<br>One local page.">三件生活麻烦。<br>记在这一页。</h1>
+    <p class="sub" data-en="Subscriptions about to charge, two to four flats side by side, travel or moving lists. All in <strong>this browser</strong> — no account, no server.">
+      订阅快扣款、两到四套房对比、出行或搬家的箱子。全部留在<strong>这台浏览器</strong>——不登录，不上传。
+    </p>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" type="button" role="tab" data-tab="subs" aria-selected="true" data-en="Subscriptions">订阅提醒</button>
+    <button class="tab" type="button" role="tab" data-tab="rent" aria-selected="false" data-en="Rent">租房对比</button>
+    <button class="tab" type="button" role="tab" data-tab="pack" aria-selected="false" data-en="Pack">打包清单</button>
+  </div>
+
+  <section class="panel show" id="panel-subs" role="tabpanel">
+    <div class="banner" id="subBanner"></div>
+    <form class="form-grid" id="subForm">
+      <label class="fld span2">
+        <span data-en="Name">名称</span>
+        <input id="subName" name="name" maxlength="80" required autocomplete="off" placeholder="Netflix">
+      </label>
+      <label class="fld">
+        <span data-en="Amount">月费 / 周期费</span>
+        <input id="subFee" name="fee" type="number" min="0" step="0.01" inputmode="decimal" placeholder="12.99" required>
+      </label>
+      <label class="fld">
+        <span data-en="Cycle">周期</span>
+        <select id="subCycle">
+          <option value="monthly" data-en="Monthly" data-zh="每月">每月</option>
+          <option value="quarterly" data-en="Quarterly" data-zh="每季">每季</option>
+          <option value="yearly" data-en="Yearly" data-zh="每年">每年</option>
+          <option value="weekly" data-en="Weekly" data-zh="每周">每周</option>
+        </select>
+      </label>
+      <label class="fld">
+        <span data-en="Next charge">下次扣款</span>
+        <input id="subNext" name="next" type="date" required>
+      </label>
+      <button class="add-btn" type="submit" data-en="Add">加入</button>
+    </form>
+    <ul class="sub-list" id="subList"></ul>
+  </section>
+
+  <section class="panel" id="panel-rent" role="tabpanel">
+    <div class="apt-toolbar">
+      <button class="ghost-btn" type="button" id="addApt" data-en="+ Flat">+ 套房</button>
+      <button class="ghost-btn" type="button" id="rmApt" data-en="− Remove last">− 去掉最后一套</button>
+    </div>
+    <div class="apt-grid" id="aptGrid"></div>
+    <div class="table-wrap">
+      <table class="cmp" id="cmpTable"></table>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-pack" role="tabpanel">
+    <div class="pack-head">
+      <div class="tabs" style="border:none;padding:0;margin:0;" role="tablist">
+        <button class="tab active" type="button" data-pack="travel" id="packTravel" data-en="Travel">出行</button>
+        <button class="tab" type="button" data-pack="move" id="packMove" data-en="Moving">搬家</button>
+      </div>
+      <div class="prog-wrap">
+        <div class="mono" id="packStat"></div>
+        <div class="prog-bar"><i id="packBar"></i></div>
+      </div>
+    </div>
+    <ul class="checks" id="packList"></ul>
+    <form class="add-row" id="packAdd">
+      <input id="packCustom" maxlength="80" autocomplete="off" data-ph-zh="自定义一项…" data-ph-en="Add a custom item…">
+      <button class="add-btn" type="submit" data-en="Add">加入</button>
+    </form>
+  </section>
+
+  <div class="share-row">
+    <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制摘要</button>
+    <button class="share-btn" id="shareImgBtn" type="button" data-en="Share image">生成分享图</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareCanvasWrap">
+    <canvas id="shareCanvas" width="800" height="450"></canvas>
+    <p class="share-save-hint" data-en="Long-press or right-click to save.">长按或右键保存图片。</p>
+  </div>
+
+  <aside class="origin-card">
+    <p class="mono origin-eyebrow">BUILD-100 · 006/100</p>
+    <p class="origin-text" data-en="No.006 of BUILD-100 — a utilities page for the chores that eat a Sunday: charges, leases, bags.">
+      BUILD-100 的第 006 号：把吞掉周日下午的那些琐事——扣款、看房、装箱——收成一页效率工具。
+    </p>
+    <div class="origin-actions">
+      <a class="origin-btn primary" href="https://build-100.com/" data-en="See the project →">看看这个计划 →</a>
+      <a class="origin-btn" href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="Follow on X">在 X 上看过程</a>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="LIFE-006 · subs / rent / pack">LIFE-006 · 订阅 / 租房 / 打包</span>
+</footer>
+
+<script type="module">
+  import {
+    daysUntil, dueStatus, monthlyEquivalent, totalMonthly, soonestDue,
+    normalizeSub, compareRents, packProgress, mergePack,
+    seedSubs, seedApts,
+  } from "./engine.js?v=1";
+
+  const KEYS = { subs: "life006.subs", apts: "life006.apts", pack: "life006.pack" };
+  const CYCLE_ZH = { weekly: "每周", monthly: "每月", quarterly: "每季", yearly: "每年" };
+  const CYCLE_EN = { weekly: "weekly", monthly: "monthly", quarterly: "quarterly", yearly: "yearly" };
+
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  if (lang !== "en") lang = "zh";
+
+  function L(zh, en) { return lang === "en" ? en : zh; }
+  function esc(s) {
+    return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+  function load(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback();
+      return JSON.parse(raw);
+    } catch (e) { return fallback(); }
+  }
+  function save(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
+  }
+
+  const rawSubs = load(KEYS.subs, () => null);
+  let subs = Array.isArray(rawSubs) ? rawSubs.map(normalizeSub).filter(Boolean) : seedSubs();
+
+  const rawApts = load(KEYS.apts, () => null);
+  let apts = Array.isArray(rawApts) && rawApts.length >= 2 ? rawApts.slice(0, 4) : seedApts();
+
+  let packState = load(KEYS.pack, () => ({ travel: { checked: {}, custom: [] }, move: { checked: {}, custom: [] } }));
+  if (!packState.travel) packState.travel = { checked: {}, custom: [] };
+  if (!packState.move) packState.move = { checked: {}, custom: [] };
+  let packKind = "travel";
+
+  function persist() {
+    save(KEYS.subs, subs);
+    save(KEYS.apts, apts);
+    save(KEYS.pack, packState);
+  }
+
+  function applyLang(l) {
+    lang = l === "en" ? "en" : "zh";
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.tagName === "OPTION") {
+        const zh = el.dataset.zh || el.textContent;
+        if (!el.dataset.zh) el.dataset.zh = zh;
+        el.textContent = lang === "en" ? el.dataset.en : zh;
+        return;
+      }
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = lang === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = lang === "en" ? "en" : "zh-CN";
+    document.title = lang === "en" ? "LIFE-006 · Life admin toolbox" : "LIFE-006 · 生活麻烦工具箱";
+    document.getElementById("langBtn").textContent = lang === "en" ? "中文" : "EN";
+    const ph = document.getElementById("packCustom");
+    ph.placeholder = lang === "en" ? ph.dataset.phEn : ph.dataset.phZh;
+    try { localStorage.setItem("lang", lang); } catch (e) {}
+    renderAll();
+  }
+
+  document.getElementById("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+
+  const panels = {
+    subs: document.getElementById("panel-subs"),
+    rent: document.getElementById("panel-rent"),
+    pack: document.getElementById("panel-pack"),
+  };
+  function setTab(id) {
+    const key = panels[id] ? id : "subs";
+    document.querySelectorAll(".tabs > .tab[data-tab]").forEach((t) => {
+      const on = t.dataset.tab === key;
+      t.classList.toggle("active", on);
+      t.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    Object.entries(panels).forEach(([k, el]) => el.classList.toggle("show", k === key));
+    if (location.hash !== "#" + key) history.replaceState(null, "", "#" + key);
+  }
+  document.querySelectorAll(".tab[data-tab]").forEach((t) => {
+    t.addEventListener("click", () => setTab(t.dataset.tab));
+  });
+  window.addEventListener("hashchange", () => setTab(location.hash.replace("#", "")));
+  setTab((location.hash || "#subs").replace("#", ""));
+
+  function money(n) {
+    const x = Number(n);
+    if (!Number.isFinite(x)) return "—";
+    return (x % 1 ? x.toFixed(2) : String(x));
+  }
+
+  function renderSubs() {
+    const banner = document.getElementById("subBanner");
+    const monthly = totalMonthly(subs);
+    const next = soonestDue(subs);
+    let nextLine = L("还没有订阅", "No subscriptions yet");
+    if (next) {
+      const d = next.days;
+      const name = next.sub.name || L("未命名", "Untitled");
+      if (d < 0) nextLine = L(`${name} 已过期 ${-d} 天`, `${name} overdue by ${-d}d`);
+      else if (d === 0) nextLine = L(`${name} 今天扣款`, `${name} charges today`);
+      else nextLine = L(`${name} 还有 ${d} 天`, `${name} in ${d} days`);
+    }
+    banner.innerHTML =
+      `<div><div class="lbl" data-skip>${L("折合每月", "Effective / month")}</div><div class="big">${money(monthly)}</div></div>` +
+      `<div class="lbl">${esc(nextLine)} · ${L("≤7 天高亮", "highlighted if ≤7 days")}</div>`;
+
+    const ul = document.getElementById("subList");
+    if (!subs.length) {
+      ul.innerHTML = `<li class="empty">${L("加上第一笔订阅。扣款日前 7 天会亮起来。", "Add a subscription. It lights up 7 days before the charge.")}</li>`;
+      return;
+    }
+    const sorted = subs.slice().sort((a, b) => {
+      const da = daysUntil(a.next); const db = daysUntil(b.next);
+      if (da === null) return 1; if (db === null) return -1;
+      return da - db;
+    });
+    ul.innerHTML = sorted.map((s) => {
+      const st = dueStatus(s.next);
+      const d = daysUntil(s.next);
+      let when = L("未填日期", "No date");
+      if (d === 0) when = L("今天", "today");
+      else if (d !== null && d < 0) when = L(`过期 ${-d} 天`, `${-d}d overdue`);
+      else if (d !== null) when = L(`${d} 天后 · ${s.next}`, `in ${d}d · ${s.next}`);
+      const pill = st === "overdue" ? L("已过期", "Overdue") : st === "soon" ? L("将近", "Due soon") : L("正常", "OK");
+      const cyc = lang === "en" ? CYCLE_EN[s.cycle] : CYCLE_ZH[s.cycle];
+      return `<li class="sub-card ${st}">
+        <div>
+          <div class="sub-name">${esc(s.name || L("未命名", "Untitled"))}</div>
+          <div class="sub-meta">${money(s.fee)} · ${esc(cyc)} · ${L("折合每月", "≈/mo")} ${money(monthlyEquivalent(s.fee, s.cycle))} · ${esc(when)}</div>
+        </div>
+        <span class="pill ${st}">${pill}</span>
+        <button class="del" type="button" data-del="${esc(s.id)}">${L("删除", "Delete")}</button>
+      </li>`;
+    }).join("");
+  }
+
+  document.getElementById("subList").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-del]");
+    if (!btn) return;
+    subs = subs.filter((s) => s.id !== btn.dataset.del);
+    persist(); renderSubs();
+  });
+
+  document.getElementById("subForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = document.getElementById("subName").value.trim();
+    const fee = Number(document.getElementById("subFee").value);
+    const cycle = document.getElementById("subCycle").value;
+    const next = document.getElementById("subNext").value;
+    const row = normalizeSub({ id: uid(), name, fee, cycle, next });
+    if (!row || !row.name || !row.next) return;
+    subs.push(row);
+    persist();
+    e.target.reset();
+    renderSubs();
+  });
+
+  function renderApts() {
+    const grid = document.getElementById("aptGrid");
+    grid.innerHTML = apts.map((a, i) => `
+      <article class="apt-card" data-apt="${esc(a.id)}">
+        <h3>
+          <input value="${esc(a.name || "")}" data-k="name" maxlength="40" aria-label="name">
+          ${apts.length > 2 ? `<button class="del" type="button" data-rm="${esc(a.id)}">${L("去掉", "Remove")}</button>` : ""}
+        </h3>
+        <div class="apt-fields">
+          <label class="fld"><span>${L("月租", "Rent / mo")}</span><input type="number" min="0" step="1" data-k="rent" value="${esc(a.rent ?? "")}"></label>
+          <label class="fld"><span>${L("押金", "Deposit")}</span><input type="number" min="0" step="1" data-k="deposit" value="${esc(a.deposit ?? "")}"></label>
+          <label class="fld"><span>${L("通勤（分钟）", "Commute min")}</span><input type="number" min="0" step="1" data-k="commute" value="${esc(a.commute ?? "")}"></label>
+          <label class="fld"><span>${L("面积 ㎡", "Area m²")}</span><input type="number" min="0" step="0.1" data-k="area" value="${esc(a.area ?? "")}"></label>
+        </div>
+        <label class="fld"><span>${L("备注", "Note")}</span><input data-k="note" maxlength="80" value="${esc(a.note || "")}"></label>
+      </article>`).join("");
+
+    document.getElementById("addApt").disabled = apts.length >= 4;
+    document.getElementById("rmApt").disabled = apts.length <= 2;
+    renderTable();
+  }
+
+  function renderTable() {
+    const cmp = compareRents(apts);
+    const labels = [
+      ["rent", L("月租", "Rent / mo")],
+      ["deposit", L("押金", "Deposit")],
+      ["commute", L("通勤（分）", "Commute (min)")],
+      ["area", L("面积 ㎡", "Area m²")],
+      ["perSqm", L("月租 / ㎡", "Rent / m²")],
+      ["moveIn", L("入住首付（租+押）", "Move-in (rent+deposit)")],
+    ];
+    const fmt = (key, v) => {
+      if (v === null || v === undefined || !Number.isFinite(Number(v))) return "—";
+      if (key === "perSqm") return Number(v).toFixed(1);
+      if (key === "commute") return String(v);
+      return money(v);
+    };
+    let html = "<thead><tr><th></th>" + apts.map((a) => `<th>${esc(a.name || "—")}</th>`).join("") + "</tr></thead><tbody>";
+    for (const [key, lab] of labels) {
+      html += `<tr><td>${lab}</td>`;
+      cmp.rows.forEach((r) => {
+        const v = r.metrics[key];
+        html += `<td class="${r.win[key] ? "win" : ""}">${fmt(key, v)}</td>`;
+      });
+      html += "</tr>";
+    }
+    html += `<tr><td>${L("备注", "Note")}</td>` + apts.map((a) => `<td class="note-cell">${esc(a.note || "—")}</td>`).join("") + "</tr>";
+    html += "</tbody>";
+    document.getElementById("cmpTable").innerHTML = html;
+  }
+
+  document.getElementById("aptGrid").addEventListener("input", (e) => {
+    const card = e.target.closest("[data-apt]");
+    if (!card) return;
+    const apt = apts.find((a) => a.id === card.dataset.apt);
+    if (!apt) return;
+    const k = e.target.dataset.k;
+    if (!k) return;
+    if (k === "name" || k === "note") apt[k] = e.target.value;
+    else apt[k] = e.target.value === "" ? "" : Number(e.target.value);
+    persist();
+    renderTable();
+  });
+  document.getElementById("aptGrid").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-rm]");
+    if (!btn) return;
+    if (apts.length <= 2) return;
+    apts = apts.filter((a) => a.id !== btn.dataset.rm);
+    persist(); renderApts();
+  });
+  document.getElementById("addApt").addEventListener("click", () => {
+    if (apts.length >= 4) return;
+    const n = apts.length + 1;
+    const names = ["A", "B", "C", "D"];
+    apts.push({ id: uid(), name: names[n - 1] || String(n), rent: "", deposit: "", commute: "", area: "", note: "" });
+    persist(); renderApts();
+  });
+  document.getElementById("rmApt").addEventListener("click", () => {
+    if (apts.length <= 2) return;
+    apts.pop();
+    persist(); renderApts();
+  });
+
+  function renderPack() {
+    document.getElementById("packTravel").classList.toggle("active", packKind === "travel");
+    document.getElementById("packMove").classList.toggle("active", packKind === "move");
+    const items = mergePack(packKind, packState[packKind]);
+    const st = packProgress(items);
+    document.getElementById("packStat").textContent = L(
+      `${st.done} / ${st.total} · ${st.pct}%`,
+      `${st.done} / ${st.total} · ${st.pct}%`
+    );
+    document.getElementById("packBar").style.width = st.pct + "%";
+    document.getElementById("packList").innerHTML = items.map((it) => `
+      <li class="${it.checked ? "done" : ""}">
+        <input type="checkbox" ${it.checked ? "checked" : ""} data-id="${esc(it.id)}">
+        <label>${esc(lang === "en" ? it.en : it.zh)}</label>
+        ${it.custom ? `<button class="del" type="button" data-x="${esc(it.id)}">${L("删", "Del")}</button>` : ""}
+      </li>`).join("");
+  }
+
+  document.getElementById("packTravel").addEventListener("click", () => { packKind = "travel"; renderPack(); });
+  document.getElementById("packMove").addEventListener("click", () => { packKind = "move"; renderPack(); });
+  document.getElementById("packList").addEventListener("change", (e) => {
+    const id = e.target.dataset.id;
+    if (!id) return;
+    const bucket = packState[packKind];
+    if (!bucket.checked) bucket.checked = {};
+    bucket.checked[id] = e.target.checked;
+    persist(); renderPack();
+  });
+  document.getElementById("packList").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-x]");
+    if (!btn) return;
+    const bucket = packState[packKind];
+    bucket.custom = (bucket.custom || []).filter((c) => c.id !== btn.dataset.x);
+    if (bucket.checked) delete bucket.checked[btn.dataset.x];
+    persist(); renderPack();
+  });
+  document.getElementById("packAdd").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const v = document.getElementById("packCustom").value.trim();
+    if (!v) return;
+    const bucket = packState[packKind];
+    if (!bucket.custom) bucket.custom = [];
+    bucket.custom.push({ id: "c-" + uid(), zh: v, en: v });
+    document.getElementById("packCustom").value = "";
+    persist(); renderPack();
+  });
+
+  function renderAll() { renderSubs(); renderApts(); renderPack(); }
+
+  function summaryText() {
+    const monthly = totalMonthly(subs);
+    const next = soonestDue(subs);
+    const packT = packProgress(mergePack("travel", packState.travel));
+    const packM = packProgress(mergePack("move", packState.move));
+    const lines = [
+      "LIFE-006 · " + L("生活麻烦工具箱", "Life admin toolbox"),
+      L(`订阅折合每月 ${money(monthly)}`, `Subs ≈ ${money(monthly)} / mo`),
+      next ? L(`最近扣款：${next.sub.name}（${next.days} 天）`, `Next charge: ${next.sub.name} (${next.days}d)`) : "",
+      L(`出行打包 ${packT.done}/${packT.total}`, `Travel pack ${packT.done}/${packT.total}`),
+      L(`搬家打包 ${packM.done}/${packM.total}`, `Move pack ${packM.done}/${packM.total}`),
+      "https://build-100.com/006/",
+    ];
+    return lines.filter(Boolean).join("\n");
+  }
+
+  document.getElementById("copyBtn").addEventListener("click", async () => {
+    const text = summaryText();
+    try { await navigator.clipboard.writeText(text); } catch (e) {
+      const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch (_) {} ta.remove();
+    }
+    const btn = document.getElementById("copyBtn");
+    btn.classList.add("copied");
+    const orig = btn.textContent;
+    btn.textContent = L("已复制 ✓", "Copied ✓");
+    setTimeout(() => { btn.classList.remove("copied"); btn.textContent = orig; }, 1600);
+  });
+
+  document.getElementById("shareImgBtn").addEventListener("click", () => {
+    const c = document.getElementById("shareCanvas");
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = "#060709"; ctx.fillRect(0, 0, 800, 450);
+    ctx.fillStyle = "#fb923c"; ctx.font = "14px ui-monospace, monospace";
+    ctx.fillText("LIFE-006  ·  BUILD-100", 48, 64);
+    ctx.fillStyle = "#edeff1"; ctx.font = "700 36px Helvetica, Arial, sans-serif";
+    ctx.fillText(L("生活麻烦，收成一页。", "Life admin, one page."), 48, 130);
+    ctx.fillStyle = "#fb923c"; ctx.font = "500 64px ui-monospace, monospace";
+    ctx.fillText(money(totalMonthly(subs)), 48, 230);
+    ctx.fillStyle = "#7d848c"; ctx.font = "16px Helvetica, Arial, sans-serif";
+    ctx.fillText(L("折合每月订阅", "effective monthly subscriptions"), 48, 262);
+    const next = soonestDue(subs);
+    ctx.fillText(next ? (next.sub.name + "  ·  " + next.days + L(" 天", "d")) : "—", 48, 320);
+    ctx.fillStyle = "#4a5057"; ctx.font = "13px ui-monospace, monospace";
+    ctx.fillText("build-100.com/006", 48, 400);
+    document.getElementById("shareCanvasWrap").classList.add("show");
+  });
+
+  applyLang(lang);
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

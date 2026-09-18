@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VAULT-014 · 本地隔离柜</title>
+<meta name="description" content="浏览器书签 / 收藏夹里混着成人链接，不敢放日常栏，又怕丢。这页是本地隔离柜：模糊显示、可选 PIN，不是通用书签，也不做推荐或播放器。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/014/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E014%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="VAULT-014 · 本地隔离柜">
+<meta property="og:description" content="浏览器书签里混着成人链接，不敢放日常栏，又怕丢。本地隔离柜：模糊、可选 PIN，不进云。">
+<meta property="og:url" content="https://build-100.com/014/">
+<meta property="og:image" content="https://build-100.com/014/og-014.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="VAULT-014 · 本地隔离柜">
+<meta name="twitter:description" content="Adult links mixed into everyday bookmarks. A local isolation vault — blur, optional PIN, nothing leaves this device.">
+<meta name="twitter:image" content="https://build-100.com/014/og-014.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #c084fc;
+    --accent-glow: rgba(192, 132, 252, 0.35);
+    --danger: #f87171;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 44px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--accent); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p.sub { color: var(--muted); max-width: 38em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .span2 { grid-column: 1 / -1; }
+  @media (max-width: 640px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .span2 { grid-column: auto; }
+  }
+  .fld { display: flex; flex-direction: column; gap: 6px; }
+  .fld > span {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--faint);
+  }
+  .fld input, .fld textarea, .search {
+    width: 100%; background: var(--bg-raise); border: 1px solid var(--line-strong);
+    color: var(--ink); padding: 10px 12px; border-radius: 4px; font-size: 0.95rem;
+    font-family: var(--sans); outline: none; transition: border-color .18s, box-shadow .18s;
+  }
+  .fld textarea { min-height: 72px; resize: vertical; line-height: 1.5; }
+  .fld input:focus, .fld textarea:focus, .search:focus {
+    border-color: var(--accent); box-shadow: 0 0 0 1px rgba(192, 132, 252, 0.25);
+  }
+  .form-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 4px; }
+
+  .add-btn, .ghost-btn, .danger-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 12px 16px; border-radius: 4px; cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .add-btn {
+    border: 1px solid var(--accent); background: rgba(192, 132, 252, 0.12); color: var(--ink);
+  }
+  .add-btn:hover { background: var(--accent); color: var(--bg); box-shadow: 0 0 20px var(--accent-glow); }
+  .ghost-btn { border: 1px solid var(--line-strong); background: none; color: var(--muted); }
+  .ghost-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .ghost-btn.active {
+    border-color: var(--accent); color: var(--ink); background: rgba(192, 132, 252, 0.12);
+  }
+  .danger-btn { border: 1px solid var(--danger); background: none; color: var(--danger); }
+  .danger-btn:hover { background: var(--danger); color: var(--bg); }
+
+  .status { min-height: 1.3em; font-size: 0.86rem; color: var(--muted); margin-top: 10px; font-family: var(--mono); letter-spacing: 0.02em; }
+  .status.err { color: var(--danger); }
+  .status.ok { color: var(--live); }
+
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+  .search { flex: 1; min-width: 180px; font-size: 0.92rem; }
+  .count { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: 0.08em; }
+
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .chip {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 7px 13px; border-radius: 999px; cursor: pointer; transition: all .18s;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--ink); }
+  .chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  .pin-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+  .pin-row input {
+    width: 140px; background: var(--bg-raise); border: 1px solid var(--line-strong);
+    color: var(--ink); padding: 10px 12px; border-radius: 4px; font-family: var(--mono);
+    letter-spacing: 0.2em; font-size: 0.95rem; outline: none;
+  }
+  .pin-row input:focus { border-color: var(--accent); }
+
+  .card {
+    border: 1px solid var(--line-strong); border-radius: 8px;
+    padding: 16px 18px; background: var(--bg-raise); margin-bottom: 10px;
+  }
+  .card-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+  @media (max-width: 640px) {
+    .card-top { flex-direction: column; }
+  }
+  .item-title { font-weight: 700; font-size: 1.02rem; word-break: break-word; }
+  .item-url {
+    font-family: var(--mono); font-size: 0.75rem; color: var(--muted);
+    letter-spacing: 0.02em; word-break: break-all; text-transform: none; margin-top: 4px;
+  }
+  .item-note { color: var(--muted); font-size: 0.88rem; margin-top: 8px; word-break: break-word; }
+  .item-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .tag {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+    color: var(--accent); border: 1px solid rgba(192, 132, 252, 0.35);
+    padding: 3px 8px; border-radius: 999px;
+  }
+  .actions { display: flex; flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
+  .act {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 7px 10px; border: 1px solid var(--line-strong); background: none;
+    color: var(--muted); border-radius: 4px; cursor: pointer; transition: all .18s;
+  }
+  .act:hover { color: var(--ink); border-color: var(--ink); }
+  .act.danger:hover { color: var(--danger); border-color: var(--danger); }
+  a.act { display: inline-block; }
+  .is-blur .item-title, .is-blur .item-url {
+    filter: blur(8px);
+    user-select: none;
+  }
+
+  .empty {
+    border: 1px dashed var(--line-strong); border-radius: 8px;
+    padding: 28px 18px; color: var(--muted); text-align: center;
+  }
+
+  .lock-card {
+    border: 1px solid var(--accent); border-radius: 8px;
+    padding: clamp(28px, 5vw, 44px);
+    background: linear-gradient(160deg, rgba(192, 132, 252, 0.1), transparent 60%);
+    text-align: center;
+  }
+  .lock-card h2 { font-size: clamp(1.3rem, 3vw, 1.8rem); margin: 10px 0 8px; }
+  .lock-card p { color: var(--muted); max-width: 32em; margin: 0 auto 18px; }
+  .lock-form { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .lock-form input {
+    width: 180px; background: var(--bg); border: 1px solid var(--line-strong);
+    color: var(--ink); padding: 12px 14px; border-radius: 4px; font-family: var(--mono);
+    letter-spacing: 0.24em; text-align: center; font-size: 1rem; outline: none;
+  }
+  .lock-form input:focus { border-color: var(--accent); }
+
+  .warn-bar {
+    display: none; margin-top: 12px; padding: 12px 14px; border: 1px solid var(--danger);
+    border-radius: 6px; background: rgba(248, 113, 113, 0.08); color: #fca5a5;
+    font-size: 0.9rem;
+  }
+  .warn-bar.show { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .origin-card {
+    margin-top: 48px; padding: clamp(24px, 4vw, 32px);
+    border: 1px solid var(--line); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(192,132,252,0.08), transparent 55%);
+  }
+  .origin-eyebrow { color: var(--accent); margin-bottom: 12px; }
+  .origin-text { color: var(--muted); font-size: 0.95rem; max-width: 34em; }
+  .origin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .origin-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); border-radius: 4px;
+    color: var(--muted); cursor: pointer; transition: all .2s;
+  }
+  .origin-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .origin-btn.primary { border-color: var(--accent); color: var(--ink); background: rgba(192,132,252,0.1); }
+  .origin-btn.primary:hover { background: var(--accent); color: var(--bg); }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">VAULT<span>·014</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; VAULT-014 · LOCAL ISOLATION VAULT</p>
+    <h1 data-en="Can't put it on the daily bar.<br>Can't risk losing it.">日常栏不敢放，又怕丢。</h1>
+    <p class="sub" data-en="Adult links mixed into browser bookmarks and collections. This page is a <strong>local isolation vault</strong> — not a general bookmark manager, and not a recommender or player. Blur the list. Optional PIN. Nothing leaves this device.">
+      浏览器书签 / 收藏夹里混着成人链接，不敢放日常栏，又怕丢。这页是<strong>本地隔离柜</strong>，不是通用书签，也不做推荐或播放器。可模糊、可选 PIN。数据只留在这台设备。
+    </p>
+  </header>
+
+  <div id="lockView" hidden>
+    <div class="lock-card">
+      <p class="mono" style="color:var(--accent)">● LOCKED</p>
+      <h2 data-en="Vault is locked">柜已上锁</h2>
+      <p data-en="List and export are hidden. This is a <strong>device-only soft lock</strong>, not cryptography — DevTools can still read localStorage. It is for shoulder-surfing, not attackers.">
+        列表与导出已隐藏。<strong>仅本机软锁</strong>，不是密码学保险——打开 DevTools 仍能读到。用来挡路过瞥见，防不了本机攻击。
+      </p>
+      <form class="lock-form" id="unlockForm" autocomplete="off">
+        <input id="unlockPin" type="password" inputmode="numeric" maxlength="8" pattern="[0-9]*" autocomplete="off" data-ph-zh="4–8 位数字" data-ph-en="4–8 digits" placeholder="4–8 位数字" aria-label="PIN">
+        <button class="add-btn" type="submit" data-en="Unlock">解锁</button>
+      </form>
+      <p class="status err" id="unlockErr"></p>
+    </div>
+  </div>
+
+  <div id="vaultView">
+    <div class="field">
+      <div class="field-head">
+        <span class="field-no">01</span>
+        <span class="field-title" data-en="Put a link in">收入柜子</span>
+        <span class="field-hint" data-en="URL required. Empty title uses the host. Tags are comma-separated. http/https only — javascript: and data: are rejected.">
+          URL 必填；标题可空（空则用 host）；标签用逗号分隔。只接受 http/https，拒绝 javascript: / data:。
+        </span>
+      </div>
+      <form id="addForm" class="form-grid" autocomplete="off">
+        <label class="fld span2">
+          <span data-en="URL">URL</span>
+          <input id="urlInput" type="text" inputmode="url" maxlength="2048" required autocomplete="off" autocapitalize="off" spellcheck="false" data-ph-zh="https://…" data-ph-en="https://…" placeholder="https://…">
+        </label>
+        <label class="fld">
+          <span data-en="Title (optional)">标题（可空）</span>
+          <input id="titleInput" type="text" maxlength="120" autocomplete="off" data-ph-zh="空则用网站 host" data-ph-en="Blank → use host" placeholder="空则用网站 host">
+        </label>
+        <label class="fld">
+          <span data-en="Tags">标签</span>
+          <input id="tagsInput" type="text" maxlength="200" autocomplete="off" data-ph-zh="订阅, 收藏" data-ph-en="sub, stash" placeholder="订阅, 收藏">
+        </label>
+        <label class="fld span2">
+          <span data-en="Note">备注</span>
+          <textarea id="noteInput" maxlength="400" data-ph-zh="给自己看的一句，可选" data-ph-en="A private note, optional" placeholder="给自己看的一句，可选"></textarea>
+        </label>
+        <div class="form-actions span2">
+          <button class="add-btn" type="submit" id="saveBtn" data-en="Add to vault">放入柜子</button>
+          <button class="ghost-btn" type="button" id="cancelEdit" hidden data-en="Cancel">取消编辑</button>
+        </div>
+      </form>
+      <p class="status" id="formStatus"></p>
+    </div>
+
+    <div class="field">
+      <div class="field-head">
+        <span class="field-no">02</span>
+        <span class="field-title" data-en="Inside the vault">柜内</span>
+        <span class="field-hint" data-en="Search title / URL / tags / note. Filter by tag chips. Newest first. Stored as localStorage key vault-014.">
+          搜索标题 / URL / 标签 / 备注；点标签 chip 筛选；最新优先。存在本机 localStorage 键 vault-014。
+        </span>
+      </div>
+
+      <div class="tools">
+        <input class="search" id="searchInput" type="search" data-ph-zh="搜索标题、URL、标签、备注" data-ph-en="Search title, URL, tags, note" placeholder="搜索标题、URL、标签、备注" aria-label="Search">
+        <span class="count" id="countEl"></span>
+        <button class="ghost-btn" type="button" id="blurBtn" data-en="Blur">模糊</button>
+        <button class="ghost-btn" type="button" id="exportBtn" data-en="Export JSON">导出 JSON</button>
+        <button class="ghost-btn" type="button" id="importBtn" data-en="Import JSON">导入 JSON</button>
+        <button class="danger-btn" type="button" id="clearBtn" data-en="Empty vault">清空柜</button>
+        <input id="importFile" type="file" accept="application/json,.json" hidden>
+      </div>
+      <p class="field-hint" style="margin-bottom:14px" data-en="Import replaces every item in the cabinet. The PIN on this device is kept — a backup cannot overwrite pinHash. Any locked flag in a backup is ignored.">
+        导入会整柜覆盖条目。本机 PIN（pinHash）保留，不会被备份改写。备份里的 locked 一律忽略。
+      </p>
+      <div class="chips" id="chips"></div>
+      <div id="list"></div>
+
+      <div class="field-head" style="margin-top:28px">
+        <span class="field-no">03</span>
+        <span class="field-title" data-en="Optional PIN">可选 PIN</span>
+        <span class="field-hint" data-en="4–8 digits. Soft lock on this device only — a simple hash in localStorage, not cryptography. If a pinHash exists, every visit starts locked. locked is never written to storage.">
+          4–8 位数字。<strong>仅本机软锁</strong>：简单 hash 存 localStorage，不是密码学保险。有 pinHash 则每次打开默认上锁。locked 只放内存，不写入存储。
+        </span>
+      </div>
+      <div class="pin-row">
+        <input id="pinInput" type="password" inputmode="numeric" maxlength="8" pattern="[0-9]*" autocomplete="off" data-ph-zh="4–8 位数字" data-ph-en="4–8 digits" placeholder="4–8 位数字" aria-label="PIN">
+        <button class="ghost-btn" type="button" id="setPinBtn" data-en="Set / change PIN">设置 / 改 PIN</button>
+        <button class="ghost-btn" type="button" id="clearPinBtn" data-en="Clear PIN">清 PIN</button>
+        <button class="ghost-btn" type="button" id="lockNowBtn" data-en="Lock now">立即上锁</button>
+      </div>
+      <p class="status" id="pinStatus"></p>
+
+      <div class="warn-bar" id="clearBar">
+        <span data-en="Empty the whole vault? This cannot be undone.">确认清空整柜？此操作不可撤销。</span>
+        <span>
+          <button class="danger-btn" type="button" id="clearYes" data-en="Yes, empty it">确认清空</button>
+          <button class="ghost-btn" type="button" id="clearNo" data-en="Cancel">取消</button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="share-row">
+    <button class="share-btn" id="copyBtn" type="button" data-en="Copy blurb">复制文案</button>
+    <button class="share-btn" id="shareImgBtn" type="button" data-en="Share image">生成分享图</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareCanvasWrap">
+    <canvas id="shareCanvas" width="800" height="450"></canvas>
+    <p class="share-save-hint" data-en="Long-press or right-click to save. The image never includes your links.">长按或右键保存。分享图不含柜内链接。</p>
+  </div>
+
+  <aside class="origin-card">
+    <p class="mono origin-eyebrow">BUILD-100 · 014/100</p>
+    <p class="origin-text" data-en="No.014 of BUILD-100 — one person building 100 websites with AI, in public. A vault for links you do not want on the everyday bookmark bar.">
+      BUILD-100 的第 014 号：一个人用 AI 公开做 100 个网站。给那些不想出现在日常书签栏里的链接，做一只本地柜子。
+    </p>
+    <div class="origin-actions">
+      <a class="origin-btn primary" href="https://build-100.com/" data-en="See the project →">看看这个计划 →</a>
+      <a class="origin-btn" href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="Follow along on X">在 X 上看过程</a>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="VAULT-014 · Local isolation vault">VAULT-014 · 本地隔离柜</span>
+</footer>
+
+<script type="module">
+  import {
+    STORAGE_KEY,
+    emptyStore,
+    parseStore,
+    persistable,
+    exportVaultJson,
+    importVault,
+    createItem,
+    updateItem,
+    deleteItem,
+    filterItems,
+    collectTags,
+    openHref,
+    displayTitle,
+    initialLocked,
+    withPin,
+    withoutPin,
+    verifyPin,
+    isValidPin,
+    buildShareText,
+  } from "./engine.js?v=1";
+
+  let store = emptyStore();
+  let locked = false;
+  let query = "";
+  let activeTag = "";
+  let editingId = null;
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  if (lang !== "en") lang = "zh";
+
+  const $ = (id) => document.getElementById(id);
+  const t = (zh, en) => (lang === "en" ? en : zh);
+
+  function esc(s) {
+    return String(s ?? "").replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+    }[c]));
+  }
+
+  const ERR = {
+    missing_url: () => t("请填写 URL", "URL is required"),
+    invalid_url: () => t("URL 无效", "Invalid URL"),
+    bad_scheme: () => t("只接受 http/https，拒绝 javascript: / data: 等", "http/https only — javascript: and data: rejected"),
+    invalid_pin: () => t("PIN 须为 4–8 位数字", "PIN must be 4–8 digits"),
+    pin_mismatch: () => t("PIN 不对", "Wrong PIN"),
+    invalid_backup: () => t("备份无法读取", "Backup could not be read"),
+    not_found: () => t("找不到这条", "Entry not found"),
+    invalid_item: () => t("条目无效", "Invalid entry"),
+  };
+
+  function setStatus(el, msg, kind) {
+    el.textContent = msg || "";
+    el.classList.remove("err", "ok");
+    if (kind) el.classList.add(kind);
+  }
+
+  function load() {
+    let raw = null;
+    try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+    store = parseStore(raw);
+    locked = initialLocked(store);
+  }
+
+  function persist() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(persistable(store))); } catch (e) {}
+  }
+
+  function applyPlaceholders() {
+    document.querySelectorAll("[data-ph-zh]").forEach((el) => {
+      el.placeholder = lang === "en" ? (el.dataset.phEn || "") : (el.dataset.phZh || "");
+    });
+  }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.title = l === "en" ? "VAULT-014 · Local isolation vault" : "VAULT-014 · 本地隔离柜";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    applyPlaceholders();
+    render();
+  }
+
+  function resetForm() {
+    editingId = null;
+    $("addForm").reset();
+    $("cancelEdit").hidden = true;
+    $("saveBtn").textContent = t("放入柜子", "Add to vault");
+  }
+
+  function render() {
+    const lockView = $("lockView");
+    const vaultView = $("vaultView");
+    lockView.hidden = !locked;
+    vaultView.hidden = locked;
+    $("unlockErr").textContent = "";
+
+    if (locked) {
+      $("list").innerHTML = "";
+      $("chips").innerHTML = "";
+      applyPlaceholders();
+      return;
+    }
+
+    $("blurBtn").classList.toggle("active", store.blur);
+    $("blurBtn").textContent = store.blur
+      ? t("取消模糊", "Unblur")
+      : t("模糊", "Blur");
+    $("lockNowBtn").hidden = !store.pinHash;
+    $("clearPinBtn").hidden = !store.pinHash;
+    $("setPinBtn").textContent = store.pinHash
+      ? t("改 PIN", "Change PIN")
+      : t("设置 PIN", "Set PIN");
+
+    const visible = filterItems(store.items, { query, tag: activeTag });
+    $("countEl").textContent = t(`${visible.length} / ${store.items.length} 条`, `${visible.length} / ${store.items.length}`);
+
+    const tags = collectTags(store.items);
+    const chips = [{ id: "", label: t("全部", "All") }, ...tags.map((x) => ({ id: x, label: x }))];
+    $("chips").innerHTML = chips.map((c) => {
+      const on = (c.id === "" && !activeTag) || (c.id && c.id.toLowerCase() === activeTag.toLowerCase());
+      return `<button type="button" class="chip${on ? " active" : ""}" data-tag="${esc(c.id)}">${esc(c.label)}</button>`;
+    }).join("");
+
+    const list = $("list");
+    list.classList.toggle("is-blur", store.blur);
+    if (!store.items.length) {
+      list.innerHTML = `<div class="empty">${t("柜子是空的。把不想出现在日常书签栏的链接加进来。", "Vault is empty. Add the links you do not want on the everyday bookmark bar.")}</div>`;
+    } else if (!visible.length) {
+      list.innerHTML = `<div class="empty">${t("没有匹配的条目。", "No matching entries.")}</div>`;
+    } else {
+      list.innerHTML = visible.map((it) => {
+        const href = openHref(it.url);
+        const title = displayTitle(it);
+        const tagsHtml = (it.tags || []).map((tg) => `<span class="tag">${esc(tg)}</span>`).join("");
+        const open = href
+          ? `<a class="act" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${t("打开", "Open")}</a>`
+          : "";
+        return `<article class="card" data-id="${esc(it.id)}">
+          <div class="card-top">
+            <div>
+              <div class="item-title">${esc(title)}</div>
+              <div class="item-url">${esc(it.url)}</div>
+              ${it.note ? `<div class="item-note">${esc(it.note)}</div>` : ""}
+              ${tagsHtml ? `<div class="item-tags">${tagsHtml}</div>` : ""}
+            </div>
+            <div class="actions">
+              ${open}
+              <button class="act" type="button" data-act="copy">${t("复制", "Copy")}</button>
+              <button class="act" type="button" data-act="edit">${t("编辑", "Edit")}</button>
+              <button class="act danger" type="button" data-act="del">${t("删除", "Delete")}</button>
+            </div>
+          </div>
+        </article>`;
+      }).join("");
+    }
+
+    $("saveBtn").textContent = editingId ? t("保存", "Save") : t("放入柜子", "Add to vault");
+    applyPlaceholders();
+  }
+
+  $("addForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const payload = {
+      url: $("urlInput").value,
+      title: $("titleInput").value,
+      tags: $("tagsInput").value,
+      note: $("noteInput").value,
+    };
+    if (editingId) {
+      const u = updateItem(store.items, editingId, payload);
+      if (!u.ok) { setStatus($("formStatus"), (ERR[u.error] || (() => u.error))(), "err"); return; }
+      store.items = u.items;
+      setStatus($("formStatus"), t("已保存", "Saved"), "ok");
+    } else {
+      const c = createItem(payload);
+      if (!c.ok) { setStatus($("formStatus"), (ERR[c.error] || (() => c.error))(), "err"); return; }
+      store.items = [c.item, ...store.items];
+      setStatus($("formStatus"), t("已放入柜子", "Added to vault"), "ok");
+    }
+    persist();
+    resetForm();
+    render();
+  });
+
+  $("cancelEdit").addEventListener("click", () => {
+    resetForm();
+    setStatus($("formStatus"), "", "");
+  });
+
+  $("searchInput").addEventListener("input", () => {
+    query = $("searchInput").value;
+    render();
+  });
+
+  $("chips").addEventListener("click", (e) => {
+    const btn = e.target.closest(".chip");
+    if (!btn) return;
+    const tag = btn.dataset.tag || "";
+    activeTag = activeTag.toLowerCase() === tag.toLowerCase() && tag ? "" : tag;
+    render();
+  });
+
+  $("list").addEventListener("click", async (e) => {
+    const btn = e.target.closest("[data-act]");
+    if (!btn) return;
+    const card = btn.closest("[data-id]");
+    if (!card) return;
+    const id = card.dataset.id;
+    const it = store.items.find((x) => x.id === id);
+    if (!it) return;
+    const act = btn.dataset.act;
+    if (act === "copy") {
+      try {
+        await navigator.clipboard.writeText(it.url);
+      } catch {
+        const ta = document.createElement("textarea");
+        ta.value = it.url;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand("copy"); } catch (_) {}
+        ta.remove();
+      }
+      btn.textContent = t("已复制", "Copied");
+      setTimeout(() => { btn.textContent = t("复制", "Copy"); }, 1400);
+    } else if (act === "edit") {
+      editingId = it.id;
+      $("urlInput").value = it.url;
+      $("titleInput").value = it.title;
+      $("tagsInput").value = (it.tags || []).join(", ");
+      $("noteInput").value = it.note || "";
+      $("cancelEdit").hidden = false;
+      $("saveBtn").textContent = t("保存", "Save");
+      $("urlInput").focus();
+      setStatus($("formStatus"), t("正在编辑", "Editing"), "");
+      window.scrollTo({ top: $("addForm").offsetTop - 80, behavior: "smooth" });
+    } else if (act === "del") {
+      store.items = deleteItem(store.items, id);
+      if (editingId === id) resetForm();
+      persist();
+      setStatus($("formStatus"), t("已删除", "Deleted"), "ok");
+      render();
+    }
+  });
+
+  $("blurBtn").addEventListener("click", () => {
+    store.blur = !store.blur;
+    persist();
+    render();
+  });
+
+  $("exportBtn").addEventListener("click", () => {
+    const json = exportVaultJson(store);
+    const blob = new Blob([json], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "vault-014.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    setStatus($("formStatus"), t("已导出（不含 PIN，不含 locked）", "Exported (no PIN, no locked)"), "ok");
+  });
+
+  $("importBtn").addEventListener("click", () => $("importFile").click());
+  $("importFile").addEventListener("change", async () => {
+    const file = $("importFile").files && $("importFile").files[0];
+    $("importFile").value = "";
+    if (!file) return;
+    let text = "";
+    try { text = await file.text(); } catch {
+      setStatus($("formStatus"), ERR.invalid_backup(), "err");
+      return;
+    }
+    const r = importVault(store, text);
+    if (!r.ok) { setStatus($("formStatus"), (ERR[r.error] || (() => r.error))(), "err"); return; }
+    store = r.store;
+    persist();
+    activeTag = "";
+    query = "";
+    $("searchInput").value = "";
+    resetForm();
+    setStatus(
+      $("formStatus"),
+      t(`已导入 ${r.imported} 条，跳过 ${r.skipped} 条。本机 PIN 未改。`, `Imported ${r.imported}, skipped ${r.skipped}. Device PIN unchanged.`),
+      "ok"
+    );
+    render();
+  });
+
+  $("clearBtn").addEventListener("click", () => $("clearBar").classList.add("show"));
+  $("clearNo").addEventListener("click", () => $("clearBar").classList.remove("show"));
+  $("clearYes").addEventListener("click", () => {
+    store.items = [];
+    persist();
+    $("clearBar").classList.remove("show");
+    resetForm();
+    setStatus($("formStatus"), t("柜子已清空", "Vault emptied"), "ok");
+    render();
+  });
+
+  $("setPinBtn").addEventListener("click", () => {
+    const pin = $("pinInput").value;
+    const r = withPin(store, pin);
+    if (!r.ok) { setStatus($("pinStatus"), ERR.invalid_pin(), "err"); return; }
+    store = r.store;
+    persist();
+    $("pinInput").value = "";
+    setStatus($("pinStatus"), t("PIN 已写入（仅本机软锁）。下次打开将默认上锁。", "PIN saved (device-only soft lock). Next visit starts locked."), "ok");
+    render();
+  });
+
+  $("clearPinBtn").addEventListener("click", () => {
+    store = withoutPin(store);
+    persist();
+    $("pinInput").value = "";
+    setStatus($("pinStatus"), t("PIN 已清除", "PIN cleared"), "ok");
+    render();
+  });
+
+  $("lockNowBtn").addEventListener("click", () => {
+    if (!store.pinHash) return;
+    locked = true;
+    query = "";
+    activeTag = "";
+    $("searchInput").value = "";
+    $("pinInput").value = "";
+    $("unlockPin").value = "";
+    resetForm();
+    $("list").innerHTML = "";
+    $("chips").innerHTML = "";
+    render();
+  });
+
+  $("unlockForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const pin = $("unlockPin").value;
+    if (!isValidPin(pin) || !verifyPin(pin, store.pinHash)) {
+      $("unlockErr").textContent = ERR.pin_mismatch();
+      return;
+    }
+    locked = false;
+    $("unlockPin").value = "";
+    $("unlockErr").textContent = "";
+    render();
+  });
+
+  $("copyBtn").addEventListener("click", async () => {
+    const text = buildShareText(lang);
+    try { await navigator.clipboard.writeText(text); } catch {
+      const ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch (_) {}
+      ta.remove();
+    }
+    const btn = $("copyBtn");
+    btn.classList.add("copied");
+    const orig = btn.textContent;
+    btn.textContent = t("已复制 ✓", "Copied ✓");
+    setTimeout(() => { btn.classList.remove("copied"); btn.textContent = orig; }, 1600);
+  });
+
+  $("shareImgBtn").addEventListener("click", () => {
+    const canvas = $("shareCanvas");
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "#c084fc";
+    ctx.fillRect(0, 0, 8, h);
+    ctx.font = "600 14px ui-monospace, Menlo, monospace";
+    ctx.fillStyle = "#c084fc";
+    ctx.fillText("VAULT-014  ·  BUILD-100", 40, 48);
+    ctx.font = "700 28px Helvetica Neue, PingFang SC, sans-serif";
+    ctx.fillStyle = "#edeff1";
+    ctx.fillText(t("日常栏不敢放，又怕丢。", "Can't put it on the daily bar."), 40, 120);
+    ctx.font = "16px Helvetica Neue, PingFang SC, sans-serif";
+    ctx.fillStyle = "#7d848c";
+    const line = t("本地隔离柜 · 模糊 · 可选 PIN · 不进云", "Local isolation vault · blur · optional PIN · stays here");
+    ctx.fillText(line, 40, 168);
+    ctx.font = "14px ui-monospace, Menlo, monospace";
+    ctx.fillStyle = "#4a5057";
+    ctx.fillText("build-100.com/014", 40, 410);
+    $("shareCanvasWrap").classList.add("show");
+  });
+
+  $("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+
+  load();
+  if (lang === "en") applyLang("en");
+  else {
+    applyPlaceholders();
+    render();
+  }
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

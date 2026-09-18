@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BOTRULES-020 · AI 爬虫 robots.txt</title>
+<meta name="description" content="想放行或拦 GPTBot、ClaudeBot、Google-Extended 等，UA 记不住、怕写错。勾选常见 AI 爬虫，本机预览并下载 robots.txt。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/020/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E020%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="BOTRULES-020 · AI 爬虫 robots.txt">
+<meta property="og:description" content="别再手抄 GPTBot 了。勾选 AI 爬虫，一键出 robots.txt。全程本机。">
+<meta property="og:url" content="https://build-100.com/020/">
+<meta property="og:image" content="https://build-100.com/020/og-020.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="BOTRULES-020 · AI 爬虫 robots.txt">
+<meta name="twitter:description" content="Stop hand-writing GPTBot rules. Check AI crawlers, download robots.txt.">
+<meta name="twitter:image" content="https://build-100.com/020/og-020.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #f59e0b;
+    --accent-glow: rgba(245, 158, 11, 0.35);
+    --danger: #f87171;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(24px, 4vh, 36px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--accent); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p.sub { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  .privacy {
+    display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap;
+    margin-bottom: clamp(28px, 5vh, 40px);
+    padding: 14px 16px; border: 1px solid var(--line-strong); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(245, 158, 11, 0.12), transparent 60%);
+  }
+  .privacy .dot { color: var(--live); letter-spacing: 0.18em; }
+  .privacy p { color: var(--muted); font-size: 0.9rem; max-width: 42em; }
+  .privacy p strong { color: var(--ink); font-weight: 500; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .chip {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 9px 14px; border-radius: 999px; cursor: pointer; transition: all .18s;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--ink); }
+  .chip.danger { border-color: rgba(248, 113, 113, 0.55); color: var(--danger); }
+  .chip.danger:hover { background: rgba(248, 113, 113, 0.1); }
+  .chip.ok { border-color: rgba(74, 222, 128, 0.5); color: var(--live); }
+  .chip.ok:hover { background: rgba(74, 222, 128, 0.08); }
+
+  .tally {
+    display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 8px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tally b { font-weight: 600; }
+  .tally .n-disallow { color: var(--danger); }
+  .tally .n-allow { color: var(--live); }
+  .tally .n-ignore { color: var(--faint); }
+
+  .bot-list { border-top: 1px solid var(--line); }
+  .bot-row {
+    display: grid; gap: 8px;
+    padding: 16px 0; border-bottom: 1px solid var(--line);
+  }
+  .bot-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+  .bot-ua { font-family: var(--mono); font-weight: 700; font-size: 0.95rem; letter-spacing: 0.02em; }
+  .bot-vendor {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint);
+  }
+  .bot-desc { color: var(--muted); font-size: 0.86rem; max-width: 54em; overflow-wrap: anywhere; }
+  .seg { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+  .seg-opt {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 8px 13px; border: 1px solid var(--line-strong); border-radius: 999px;
+    cursor: pointer; color: var(--muted); background: none; transition: all .18s;
+  }
+  .seg-opt:hover { color: var(--ink); border-color: var(--muted); }
+  .seg-opt.on-allow { border-color: var(--live); color: var(--live); background: rgba(74, 222, 128, 0.1); }
+  .seg-opt.on-disallow { border-color: var(--danger); color: var(--danger); background: rgba(248, 113, 113, 0.1); }
+  .seg-opt.on-ignore { border-color: var(--line-strong); color: var(--ink); background: rgba(237, 239, 241, 0.06); }
+
+  textarea.raw {
+    width: 100%; min-height: 280px; resize: vertical;
+    background: var(--bg-raise); border: 1px solid var(--line-strong); border-radius: 8px;
+    color: var(--ink); font-family: var(--mono); font-size: 0.82rem; line-height: 1.55;
+    padding: 14px; outline: none; transition: border-color .18s, box-shadow .18s;
+  }
+  textarea.raw:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow); }
+  textarea.raw::placeholder { color: var(--faint); }
+  textarea.raw[readonly] { color: #d5d8dc; }
+
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+  .add-btn, .ghost-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 12px 16px; border-radius: 4px; cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .add-btn {
+    border: 1px solid var(--accent); background: rgba(245, 158, 11, 0.12); color: var(--ink);
+  }
+  .add-btn:hover { background: var(--accent); color: var(--bg); box-shadow: 0 0 20px var(--accent-glow); }
+  .ghost-btn {
+    border: 1px solid var(--line-strong); background: none; color: var(--muted);
+  }
+  .ghost-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .add-btn.copied, .ghost-btn.copied, .share-btn.copied {
+    border-color: var(--live); color: var(--live); background: rgba(74, 222, 128, 0.1);
+  }
+
+  .status { min-height: 1.3em; margin-top: 10px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); }
+  .status.ok { color: var(--live); }
+  .status.err { color: var(--danger); }
+
+  .err-banner {
+    display: none; margin-bottom: 20px; padding: 14px 18px;
+    border: 1px solid #f87171; border-radius: 6px; color: #fca5a5;
+    font-size: 0.9rem; background: rgba(248, 113, 113, 0.08);
+  }
+  .err-banner.show { display: block; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .origin-card {
+    margin-top: 48px; padding: clamp(24px, 4vw, 32px);
+    border: 1px solid var(--line); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(245, 158, 11, 0.1), transparent 55%);
+  }
+  .origin-eyebrow { color: var(--accent); margin-bottom: 12px; }
+  .origin-text { color: var(--muted); font-size: 0.95rem; max-width: 34em; }
+  .origin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .origin-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); border-radius: 4px;
+    color: var(--muted); cursor: pointer; transition: all .2s;
+  }
+  .origin-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .origin-btn.primary { border-color: var(--accent); color: var(--ink); background: rgba(245, 158, 11, 0.1); }
+  .origin-btn.primary:hover { background: var(--accent); color: var(--bg); }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">BOTRULES<span>·020</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; BOTRULES-020 · AI ROBOTS.TXT</p>
+    <h1 data-en="Stop hand-writing GPTBot rules. Check AI crawlers, download robots.txt.">别再手抄 GPTBot 了。勾选 AI 爬虫，一键出 robots.txt。</h1>
+    <p class="sub" data-en="Want to allow or block <strong>GPTBot, ClaudeBot, Google-Extended</strong> and the rest, but you cannot remember the UA tokens and you are afraid of writing robots.txt wrong. This page: check common AI crawlers → preview and download robots.txt. All on this device.">
+      想放行 / 拦 <strong>GPTBot、ClaudeBot、Google-Extended</strong> 等，UA 记不住、怕写错。本页：勾选常见 AI 爬虫 → 预览并下载 robots.txt。全程本机。
+    </p>
+  </header>
+
+  <aside class="privacy">
+    <span class="mono dot">● LOCAL</span>
+    <p data-en="<strong>The bot table is baked into this page.</strong> Checks and pasted robots.txt never upload. The page still loads <strong>beacon.js</strong> — this is not a zero-network page.">
+      <strong>bot 表烘焙在本页。</strong>勾选与粘贴内容不上传。页面仍会加载 <strong>beacon.js</strong>，不声称整页零网络。
+    </p>
+  </aside>
+
+  <div class="err-banner" id="errBanner"></div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <span class="field-title" data-en="AI crawlers">AI 爬虫</span>
+      <span class="field-hint" data-en="Each row is Allow / Disallow / ignore. Ignore omits that UA. Google-Extended and Applebot-Extended do not block Googlebot / Applebot search. “Block all AI” writes one Disallow: / per table token — never a wildcard agent.">
+        每行 Allow / Disallow / 忽略。忽略则不写该 UA。Google-Extended / Applebot-Extended 不挡 Googlebot / Applebot 搜索。「全拦 AI」只对表内 token 各写一块 Disallow: /，不会生成通配代理。
+      </span>
+    </div>
+    <div class="presets">
+      <button class="chip danger" type="button" id="presetBlock" data-en="Block all AI">全拦 AI</button>
+      <button class="chip ok" type="button" id="presetAllow" data-en="Allow all AI">全放行 AI</button>
+      <button class="chip" type="button" id="presetReset" data-en="Reset defaults">重置默认</button>
+    </div>
+    <div class="tally" id="tally"></div>
+    <div class="bot-list" id="botList"></div>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <span class="field-title" data-en="Preview robots.txt">预览 robots.txt</span>
+      <span class="field-hint" data-en="Allow becomes Allow: / · Disallow becomes Disallow: / (never an empty Disallow: — that would allow). Blocks follow table order, blank line in between.">
+        Allow 写成 Allow: / · Disallow 写成 Disallow: /（禁止空的 Disallow:，空等于放行）。块顺序跟表，块间空行。
+      </span>
+    </div>
+    <textarea class="raw" id="preview" readonly spellcheck="false" aria-label="robots.txt preview"></textarea>
+    <div class="tools">
+      <button class="add-btn" type="button" id="copyRobotsBtn" data-en="Copy robots.txt">复制 robots.txt</button>
+      <button class="ghost-btn" type="button" id="downloadBtn" data-en="Download robots.txt">下载 robots.txt</button>
+    </div>
+    <p class="status" id="previewStatus" role="status"></p>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">03</span>
+      <span class="field-title" data-en="Paste &amp; merge">粘贴合并</span>
+      <span class="field-hint" data-en="Only a single known UA plus whole-site Allow: / or Disallow: / writes into the checks (UA match is case-insensitive). Wildcard agent, Sitemap / Host / Crawl-delay, shared multi-UA blocks, and path rules stay in “kept custom”. Known UAs are peeled out of extras; checks override same-name blocks.">
+        仅「单个已知 UA + 整站 Allow: / 或 Disallow: /」写入勾选（UA 大小写不敏感）。通配代理、Sitemap / Host / Crawl-delay、多 UA 共用块、带路径规则 → 原样进「自定义保留」。已知 UA 从 extras 剥掉；勾选覆盖同名块。
+      </span>
+    </div>
+    <textarea class="raw" id="paste" spellcheck="false" autocomplete="off"
+      placeholder="粘贴已有 robots.txt…"
+      data-ph-zh="粘贴已有 robots.txt…"
+      data-ph-en="Paste an existing robots.txt…"></textarea>
+    <div class="tools">
+      <button class="add-btn" type="button" id="mergeBtn" data-en="Merge into checks">合并进勾选</button>
+      <button class="ghost-btn" type="button" id="sampleBtn" data-en="Load sample">填入示例</button>
+    </div>
+    <p class="status" id="mergeStatus" role="status"></p>
+    <div class="field-head" style="margin-top: 22px;">
+      <span class="field-title" data-en="Kept custom" style="font-size: 1rem;">自定义保留</span>
+      <span class="field-hint" data-en="Appended after the AI blocks. Table UAs are stripped on output so the same UA never appears twice. Presets do not touch this box.">
+        拼在 AI 块后面。输出时会剥掉表内 UA，同一 UA 不会出现两次。预设不碰这框。
+      </span>
+    </div>
+    <textarea class="raw" id="extras" spellcheck="false" autocomplete="off"
+      placeholder="Sitemap / Host / 通配代理 / 路径规则…"
+      data-ph-zh="Sitemap / Host / 通配代理 / 路径规则…"
+      data-ph-en="Sitemap / Host / wildcard agent / path rules…"
+      style="min-height: 160px;"></textarea>
+  </div>
+
+  <div class="share-row">
+    <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+    <button class="share-btn" id="shareImgBtn" type="button" data-en="Share image">生成分享图</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareCanvasWrap">
+    <canvas id="shareCanvas" width="800" height="450"></canvas>
+    <p class="share-save-hint" data-en="Long-press or right-click to save. The image is branding only — it does not draw your robots.txt.">长按或右键保存。分享图只有文案，不把完整 robots.txt 画进去。</p>
+  </div>
+
+  <aside class="origin-card">
+    <p class="mono origin-eyebrow">BUILD-100 · 020/100</p>
+    <p class="origin-text" data-en="No.020 of BUILD-100 — one person building 100 websites with AI, in public. Check AI crawlers, download robots.txt, keep the paste on this device.">
+      BUILD-100 的第 020 号：一个人用 AI 公开做 100 个网站。勾选 AI 爬虫，下载 robots.txt，粘贴留在本机。
+    </p>
+    <div class="origin-actions">
+      <a class="origin-btn primary" href="https://build-100.com/" data-en="See the project →">看看这个计划 →</a>
+      <a class="origin-btn" href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="Follow along on X">在 X 上看过程</a>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="BOTRULES-020 · AI crawler robots.txt">BOTRULES-020 · AI 爬虫 robots.txt</span>
+</footer>
+
+<script type="module">
+  import {
+    buildRobots,
+    parseRobots,
+    applyPreset,
+    mergeSelections,
+    loadDraft,
+    saveDraft,
+    hydrateSelections,
+    asBotList,
+    buildShareText,
+    countActions,
+  } from "./engine.js?v=1";
+
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  if (lang !== "en") lang = "zh";
+
+  const $ = (id) => document.getElementById(id);
+  const t = (zh, en) => (lang === "en" ? en : zh);
+
+  let bots = { bots: [] };
+  let list = [];
+  let selections = {};
+  let saveTimer = 0;
+  let statusTimer = 0;
+
+  const SAMPLE = [
+    "# example site robots.txt",
+    "User-agent: GPTBot",
+    "Disallow: /",
+    "",
+    "User-agent: ClaudeBot",
+    "Allow: /",
+    "",
+    "User-agent: *",
+    "Disallow: /nogo",
+    "",
+    "Sitemap: https://example.com/sitemap.xml",
+  ].join("\n");
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.title = l === "en"
+      ? "BOTRULES-020 · AI crawler robots.txt"
+      : "BOTRULES-020 · AI 爬虫 robots.txt";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    $("paste").placeholder = l === "en" ? $("paste").dataset.phEn : $("paste").dataset.phZh;
+    $("extras").placeholder = l === "en" ? $("extras").dataset.phEn : $("extras").dataset.phZh;
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    $("previewStatus").textContent = "";
+    $("previewStatus").className = "status";
+    $("mergeStatus").textContent = "";
+    $("mergeStatus").className = "status";
+    renderList();
+    renderPreview();
+    if ($("shareCanvasWrap").classList.contains("show")) renderShare();
+  }
+
+  function setStatus(id, msg, kind) {
+    const el = $(id);
+    el.textContent = msg || "";
+    el.className = "status" + (kind ? " " + kind : "");
+    if (statusTimer) clearTimeout(statusTimer);
+    if (msg && kind === "ok") {
+      statusTimer = setTimeout(() => {
+        el.textContent = "";
+        el.className = "status";
+      }, 2200);
+    }
+  }
+
+  function flashCopied(btn) {
+    btn.classList.add("copied");
+    const orig = btn.textContent;
+    btn.textContent = t("已复制 ✓", "Copied ✓");
+    setTimeout(() => {
+      btn.classList.remove("copied");
+      btn.textContent = orig;
+    }, 1800);
+  }
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand("copy"); } catch (_) {}
+      ta.remove();
+      return ok;
+    }
+  }
+
+  function extrasText() {
+    return $("extras").value;
+  }
+
+  function currentRobots() {
+    return buildRobots(bots, selections, extrasText());
+  }
+
+  function persist() {
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      saveTimer = 0;
+      try {
+        saveDraft({ selections, extras: extrasText() }, localStorage);
+      } catch (e) {}
+    }, 80);
+  }
+
+  function el(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null && text !== "") n.textContent = text;
+    return n;
+  }
+
+  function setAction(ua, value) {
+    selections[ua] = value;
+    persist();
+    const row = [...document.querySelectorAll(".bot-row")].find(
+      (r) => r.querySelector(".bot-ua")?.textContent === ua
+    );
+    if (row) {
+      row.querySelectorAll(".seg-opt").forEach((btn) => {
+        const on = btn.dataset.action === value;
+        btn.setAttribute("aria-pressed", on ? "true" : "false");
+        btn.classList.remove("on-allow", "on-disallow", "on-ignore");
+        if (on) btn.classList.add("on-" + value);
+      });
+    }
+    renderTally();
+    renderPreview();
+  }
+
+  function renderTally() {
+    const c = countActions(bots, selections);
+    const box = $("tally");
+    box.replaceChildren();
+    const parts = [
+      [t("拦 ", "Blocked ") + c.disallow, "n-disallow"],
+      [t("放行 ", "Allowed ") + c.allow, "n-allow"],
+      [t("忽略 ", "Ignored ") + c.ignore, "n-ignore"],
+    ];
+    parts.forEach((p, i) => {
+      const s = el("span", p[1]);
+      s.appendChild(el("b", "", p[0]));
+      box.appendChild(s);
+      if (i < parts.length - 1) box.appendChild(document.createTextNode(" · "));
+    });
+  }
+
+  function renderList() {
+    const box = $("botList");
+    box.replaceChildren();
+    for (const bot of list) {
+      const row = el("div", "bot-row");
+      const top = el("div", "bot-top");
+      top.appendChild(el("span", "bot-ua", bot.ua));
+      if (bot.vendor) top.appendChild(el("span", "bot-vendor", bot.vendor));
+      row.appendChild(top);
+      row.appendChild(el("p", "bot-desc", t(bot.zh, bot.en)));
+      const seg = el("div", "seg");
+      seg.setAttribute("role", "radiogroup");
+      seg.setAttribute("aria-label", bot.ua);
+      const action = selections[bot.ua] || bot.default || "ignore";
+      [
+        ["allow", t("Allow", "Allow")],
+        ["disallow", t("Disallow", "Disallow")],
+        ["ignore", t("忽略", "Ignore")],
+      ].forEach(([value, label]) => {
+        const btn = el("button", "seg-opt", label);
+        btn.type = "button";
+        btn.dataset.ua = bot.ua;
+        btn.dataset.action = value;
+        btn.setAttribute("aria-pressed", action === value ? "true" : "false");
+        if (action === value) btn.classList.add("on-" + value);
+        btn.addEventListener("click", () => setAction(bot.ua, value));
+        seg.appendChild(btn);
+      });
+      row.appendChild(seg);
+      box.appendChild(row);
+    }
+    renderTally();
+  }
+
+  function renderPreview() {
+    $("preview").value = currentRobots();
+  }
+
+  function wrapText(ctx, text, x, y, maxW, lineH) {
+    const chars = String(text).split("");
+    let line = "";
+    let yy = y;
+    for (const ch of chars) {
+      const test = line + ch;
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line, x, yy);
+        line = ch;
+        yy += lineH;
+      } else line = test;
+    }
+    if (line) ctx.fillText(line, x, yy);
+    return yy;
+  }
+
+  function renderShare() {
+    const canvas = $("shareCanvas");
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    const c = countActions(bots, selections);
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "rgba(237,239,241,0.05)";
+    for (let x = 16; x < w; x += 36) {
+      for (let y = 16; y < h; y += 36) ctx.fillRect(x, y, 2, 2);
+    }
+    ctx.fillStyle = "#f59e0b";
+    ctx.font = "600 13px ui-monospace, SF Mono, monospace";
+    ctx.fillText("BOTRULES-020", 48, 56);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 28px Helvetica Neue, PingFang SC, sans-serif";
+    wrapText(
+      ctx,
+      t("别再手抄 GPTBot 了。", "Stop hand-writing GPTBot rules."),
+      48, 110, w - 96, 36
+    );
+    ctx.fillStyle = "#f59e0b";
+    ctx.font = "600 16px ui-monospace, SF Mono, monospace";
+    ctx.fillText(
+      t("勾选 AI 爬虫，一键出 robots.txt", "Check AI crawlers, download robots.txt"),
+      48, 210
+    );
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "500 14px ui-monospace, SF Mono, monospace";
+    ctx.fillText(
+      t(
+        "拦 " + c.disallow + " · 放行 " + c.allow + " · 忽略 " + c.ignore,
+        "blocked " + c.disallow + " · allowed " + c.allow + " · ignored " + c.ignore
+      ),
+      48, 258
+    );
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "500 12px ui-monospace, SF Mono, monospace";
+    ctx.fillText("build-100.com/020", 48, 400);
+  }
+
+  function applyPresetName(name) {
+    selections = applyPreset(name, bots);
+    persist();
+    renderList();
+    renderPreview();
+  }
+
+  $("presetBlock").addEventListener("click", () => applyPresetName("block-all"));
+  $("presetAllow").addEventListener("click", () => applyPresetName("allow-all"));
+  $("presetReset").addEventListener("click", () => applyPresetName("reset"));
+
+  $("copyRobotsBtn").addEventListener("click", async () => {
+    const ok = await copyText(currentRobots());
+    if (ok) {
+      flashCopied($("copyRobotsBtn"));
+      setStatus("previewStatus", t("已复制 robots.txt", "robots.txt copied"), "ok");
+    } else {
+      setStatus("previewStatus", t("无法写入剪贴板", "Could not write clipboard"), "err");
+    }
+  });
+
+  $("downloadBtn").addEventListener("click", () => {
+    const blob = new Blob([currentRobots()], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "robots.txt";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 800);
+    setStatus("previewStatus", t("已开始下载 robots.txt", "Downloading robots.txt"), "ok");
+  });
+
+  $("mergeBtn").addEventListener("click", () => {
+    const raw = $("paste").value;
+    if (!String(raw).trim()) {
+      setStatus("mergeStatus", t("先粘贴一段 robots.txt", "Paste a robots.txt first"), "err");
+      return;
+    }
+    const parsed = parseRobots(raw);
+    const merged = mergeSelections(parsed, bots, selections);
+    selections = merged.selections;
+    $("extras").value = merged.extras;
+    persist();
+    renderList();
+    renderPreview();
+    setStatus("mergeStatus", t("已合并进勾选；未知块进自定义保留", "Merged into checks; unknown blocks kept custom"), "ok");
+  });
+
+  $("sampleBtn").addEventListener("click", () => {
+    $("paste").value = SAMPLE;
+    setStatus("mergeStatus", t("已填入示例，点「合并进勾选」", "Sample loaded — click Merge into checks"), "ok");
+  });
+
+  $("extras").addEventListener("input", () => {
+    persist();
+    renderPreview();
+  });
+
+  $("copyBtn").addEventListener("click", async () => {
+    const text = buildShareText(bots, selections, lang);
+    const ok = await copyText(text);
+    if (ok) flashCopied($("copyBtn"));
+  });
+
+  $("shareImgBtn").addEventListener("click", () => {
+    renderShare();
+    $("shareCanvasWrap").classList.add("show");
+  });
+
+  $("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+
+  async function boot() {
+    try {
+      const res = await fetch("./bots.json?v=1");
+      if (!res.ok) throw new Error("bots.json " + res.status);
+      bots = await res.json();
+      list = asBotList(bots);
+      if (!list.length) throw new Error("empty table");
+    } catch (e) {
+      $("errBanner").textContent = t("无法加载烘焙 bot 表。", "Could not load the baked bot table.");
+      $("errBanner").classList.add("show");
+      return;
+    }
+    let extras = "";
+    try {
+      const draft = loadDraft(localStorage);
+      if (draft) {
+        selections = hydrateSelections(bots, draft.selections);
+        extras = draft.extras || "";
+      } else {
+        selections = applyPreset("reset", bots);
+      }
+    } catch (e) {
+      selections = applyPreset("reset", bots);
+    }
+    $("extras").value = extras;
+    if (lang === "en") applyLang("en");
+    else {
+      $("paste").placeholder = $("paste").dataset.phZh;
+      $("extras").placeholder = $("extras").dataset.phZh;
+      renderList();
+      renderPreview();
+    }
+  }
+
+  boot();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

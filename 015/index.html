@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>METASTRIP-015 · 发图前清 EXIF</title>
+<meta name="description" content="发原图前先看有没有定位。相机原图常带 GPS / 机型 / 拍摄时间；在线 EXIF 站要你上传。这页只在浏览器里剥元数据，本地处理 · 不上传。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/015/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E015%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="METASTRIP-015 · 发图前清 EXIF">
+<meta property="og:description" content="发原图前先看有没有定位。浏览器里剥 GPS / 机型 / 拍摄时间，本地处理 · 不上传。">
+<meta property="og:url" content="https://build-100.com/015/">
+<meta property="og:image" content="https://build-100.com/015/og-015.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="METASTRIP-015 · 发图前清 EXIF">
+<meta name="twitter:description" content="Check GPS before you post. Strip EXIF in the browser — nothing is uploaded.">
+<meta name="twitter:image" content="https://build-100.com/015/og-015.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #818cf8;
+    --accent-glow: rgba(129, 140, 248, 0.35);
+    --danger: #f87171;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(24px, 4vh, 36px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero .eyebrow .tick { color: var(--accent); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p.sub { color: var(--muted); max-width: 40em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  .privacy {
+    display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap;
+    margin-bottom: clamp(28px, 5vh, 40px);
+    padding: 14px 16px; border: 1px solid var(--line-strong); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(129, 140, 248, 0.1), transparent 60%);
+  }
+  .privacy .dot { color: var(--live); letter-spacing: 0.18em; }
+  .privacy p { color: var(--muted); font-size: 0.9rem; max-width: 42em; }
+  .privacy p strong { color: var(--ink); font-weight: 500; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .drop {
+    border: 1px dashed var(--line-strong); border-radius: 8px;
+    background: var(--bg-raise); padding: clamp(28px, 5vw, 44px) 20px;
+    text-align: center; cursor: pointer; transition: border-color .18s, background .18s, box-shadow .18s;
+  }
+  .drop:hover, .drop.drag {
+    border-color: var(--accent);
+    background: rgba(129, 140, 248, 0.08);
+    box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.25) inset;
+  }
+  .drop .ttl { font-weight: 700; margin-bottom: 6px; }
+  .drop .sub { color: var(--muted); font-size: 0.9rem; }
+
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 7px 13px; border-radius: 999px; cursor: pointer; transition: all .18s;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--ink); }
+  .chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  .loss {
+    margin-top: 12px; color: var(--delta); font-size: 0.86rem;
+    font-family: var(--mono); letter-spacing: 0.02em;
+  }
+
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+  .count { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: 0.08em; margin-left: auto; }
+
+  .add-btn, .ghost-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 12px 16px; border-radius: 4px; cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .add-btn {
+    border: 1px solid var(--accent); background: rgba(129, 140, 248, 0.12); color: var(--ink);
+  }
+  .add-btn:hover:not(:disabled) { background: var(--accent); color: var(--bg); box-shadow: 0 0 20px var(--accent-glow); }
+  .add-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .ghost-btn { border: 1px solid var(--line-strong); background: none; color: var(--muted); }
+  .ghost-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+  .empty {
+    border: 1px dashed var(--line-strong); border-radius: 8px;
+    padding: 28px 18px; color: var(--muted); text-align: center;
+  }
+
+  .card {
+    border: 1px solid var(--line-strong); border-radius: 8px;
+    padding: 16px 18px; background: var(--bg-raise); margin-bottom: 12px;
+  }
+  .card.is-err { border-color: var(--danger); }
+  .card-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+  @media (max-width: 640px) {
+    .card-top { flex-direction: column; }
+  }
+  .item-title { font-weight: 700; font-size: 1.02rem; word-break: break-word; }
+  .item-sub {
+    font-family: var(--mono); font-size: 0.75rem; color: var(--muted);
+    letter-spacing: 0.02em; text-transform: none; margin-top: 4px;
+  }
+  .err-text { color: var(--danger); font-size: 0.9rem; margin-top: 8px; }
+  .gps-pill {
+    display: inline-block; margin-top: 8px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em;
+    color: var(--delta); border: 1px solid rgba(251, 191, 36, 0.45);
+    padding: 4px 8px; border-radius: 999px; background: rgba(251, 191, 36, 0.08);
+  }
+  .ok-pill {
+    display: inline-block; margin-top: 8px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em;
+    color: var(--live); border: 1px solid rgba(74, 222, 128, 0.4);
+    padding: 4px 8px; border-radius: 999px;
+  }
+  .actions { display: flex; flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
+  .act {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 7px 10px; border: 1px solid var(--line-strong); background: none;
+    color: var(--muted); border-radius: 4px; cursor: pointer; transition: all .18s;
+  }
+  .act:hover:not(:disabled) { color: var(--ink); border-color: var(--ink); }
+  .act.primary { border-color: var(--accent); color: var(--ink); background: rgba(129, 140, 248, 0.1); }
+  .act.primary:hover:not(:disabled) { background: var(--accent); color: var(--bg); }
+  .act:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .compare {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px;
+  }
+  @media (max-width: 640px) {
+    .compare { grid-template-columns: 1fr; }
+  }
+  .pane {
+    border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px;
+  }
+  .pane h3 {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 10px; font-weight: 500;
+  }
+  .banner {
+    margin-bottom: 10px; padding: 8px 10px; border-radius: 4px;
+    border: 1px dashed var(--line-strong); color: var(--muted); font-size: 0.84rem;
+  }
+  .banner.gps {
+    border-color: rgba(251, 191, 36, 0.45); color: var(--delta);
+    background: rgba(251, 191, 36, 0.08);
+  }
+  .banner.clear {
+    border-color: rgba(74, 222, 128, 0.4); color: var(--live);
+    background: rgba(74, 222, 128, 0.06);
+  }
+  .meta-table {
+    display: grid; grid-template-columns: 7.2em 1fr; gap: 0 12px; font-size: 0.9rem;
+  }
+  .mk {
+    color: var(--muted); padding: 7px 0; border-bottom: 1px solid var(--line);
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .mv {
+    padding: 7px 0; border-bottom: 1px solid var(--line);
+    font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.01em;
+    text-transform: none; word-break: break-all;
+  }
+  .mv.warn { color: var(--delta); }
+  .mv.clear { color: var(--live); }
+  .mv.empty { color: var(--faint); }
+
+  .recode {
+    margin-top: 12px; color: var(--faint); font-size: 0.8rem;
+    font-family: var(--mono); letter-spacing: 0.03em;
+  }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-save-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .origin-card {
+    margin-top: 48px; padding: clamp(24px, 4vw, 32px);
+    border: 1px solid var(--line); border-radius: 8px;
+    background: linear-gradient(160deg, rgba(129,140,248,0.08), transparent 55%);
+  }
+  .origin-eyebrow { color: var(--accent); margin-bottom: 12px; }
+  .origin-text { color: var(--muted); font-size: 0.95rem; max-width: 34em; }
+  .origin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .origin-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); border-radius: 4px;
+    color: var(--muted); cursor: pointer; transition: all .2s;
+  }
+  .origin-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .origin-btn.primary { border-color: var(--accent); color: var(--ink); background: rgba(129,140,248,0.1); }
+  .origin-btn.primary:hover { background: var(--accent); color: var(--bg); }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">METASTRIP<span>·015</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; METASTRIP-015 · STRIP EXIF LOCALLY</p>
+    <h1 data-en="Check GPS before you post.">发原图前先看有没有定位。</h1>
+    <p class="sub" data-en="Camera originals often carry <strong>GPS / camera model / capture time</strong>. Online EXIF sites ask you to upload. This page peels metadata in the browser — <strong>local only, nothing uploaded</strong>. No retouching, collages, or OCR.">
+      相机原图常带 <strong>GPS / 机型 / 拍摄时间</strong>；在线 EXIF 站要你上传。这页只在浏览器里剥元数据，<strong>本地处理 · 不上传</strong>。不做修图、拼图或 OCR。
+    </p>
+  </header>
+
+  <aside class="privacy">
+    <span class="mono dot">● LOCAL</span>
+    <p data-en="Files stay in memory on this device. Nothing is uploaded. Refresh the page and they are gone.">
+      全程内存 / 本机处理，<strong>不上传</strong>服务器；刷新页面即丢。
+    </p>
+  </aside>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <span class="field-title" data-en="Drop local images">拖入或点选本地图片</span>
+      <span class="field-hint" data-en="JPEG / PNG / WebP only, ≤20MB each. HEIC / DNG rejected — on iPhone, export JPEG first. Multiple files queue up. Magic bytes, not the filename, decide the type.">
+        仅 JPEG / PNG / WebP，单张 ≤20MB。HEIC / DNG 会拒绝——iPhone 请先导出 JPEG。可多张排队。以文件头 magic bytes 为准，不看扩展名。
+      </span>
+    </div>
+    <div class="drop" id="drop" tabindex="0" role="button" aria-controls="fileInput">
+      <div class="ttl" data-en="Drop images here, or click to choose">拖到这里，或点击选择</div>
+      <div class="sub" data-en="Queue many. iPhone HEIC is not accepted — export JPEG first.">可一次多张。iPhone HEIC 不收，请先导出 JPEG。</div>
+    </div>
+    <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple hidden>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <span class="field-title" data-en="Export format">导出格式</span>
+      <span class="field-hint" data-en="Remembered as localStorage key metastrip-015. One-click strip redraws via canvas — JPEG is lossy at quality 0.92. This is not a retouching tool.">
+        记在本机 localStorage 键 metastrip-015。一键剥离走 canvas 重绘——JPEG quality 0.92，有损。这不是修图工具。
+      </span>
+    </div>
+    <div class="chips" id="fmtChips">
+      <button type="button" class="chip" data-fmt="jpeg">JPEG</button>
+      <button type="button" class="chip" data-fmt="png">PNG</button>
+    </div>
+    <p class="loss" data-en="Canvas re-encode. JPEG is lossy (quality ≈ 0.92). Comparison is the metadata table, not pixels looking 'cleaner'.">
+      canvas 重编码。JPEG 有损（quality ≈ 0.92）。对照看元数据表，不要用前后预览图假装像素更干净。
+    </p>
+  </div>
+
+  <div class="field">
+    <div class="field-head">
+      <span class="field-no">03</span>
+      <span class="field-title" data-en="Metadata before / after">元数据对照</span>
+      <span class="field-hint" data-en="GPS is numbers only — no map, no reverse geocoding. After strip, EXIF rows show Cleared. Download one by one; no zip.">
+        GPS 只出数字坐标，禁止地图 / 逆地理。剥离后 EXIF 行显示已清空。下载逐张进行，不做 zip。
+      </span>
+    </div>
+    <div class="tools">
+      <button class="add-btn" type="button" id="stripAll" disabled data-en="Strip all">全部剥离</button>
+      <button class="ghost-btn" type="button" id="clearQ" data-en="Clear queue">清空队列</button>
+      <span class="count" id="countEl"></span>
+    </div>
+    <div id="queue"></div>
+  </div>
+
+  <div class="share-row">
+    <button class="share-btn" id="copyBtn" type="button" data-en="Copy blurb">复制文案</button>
+    <button class="share-btn" id="shareImgBtn" type="button" data-en="Share image">生成分享图</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareCanvasWrap">
+    <canvas id="shareCanvas" width="800" height="450"></canvas>
+    <p class="share-save-hint" data-en="Long-press or right-click to save. The image never includes your photos.">长按或右键保存。分享图不含你的照片。</p>
+  </div>
+
+  <aside class="origin-card">
+    <p class="mono origin-eyebrow">BUILD-100 · 015/100</p>
+    <p class="origin-text" data-en="No.015 of BUILD-100 — one person building 100 websites with AI, in public. See the GPS on a camera original, strip it in the browser, download a clean file. Nothing leaves this tab.">
+      BUILD-100 的第 015 号：一个人用 AI 公开做 100 个网站。先看原图有没有定位，再在浏览器里剥掉，下载干净文件。文件不离开这个标签页。
+    </p>
+    <div class="origin-actions">
+      <a class="origin-btn primary" href="https://build-100.com/" data-en="See the project →">看看这个计划 →</a>
+      <a class="origin-btn" href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="Follow along on X">在 X 上看过程</a>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="METASTRIP-015 · Strip EXIF before you post">METASTRIP-015 · 发图前清 EXIF</span>
+</footer>
+
+<script type="module">
+  import {
+    JPEG_QUALITY,
+    loadPrefs,
+    savePrefs,
+    validateFile,
+    listMetaSummary,
+    downloadName,
+    buildShareText,
+  } from "./engine.js?v=1";
+
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  if (lang !== "en") lang = "zh";
+
+  let prefs = { format: "jpeg" };
+  try { prefs = loadPrefs(localStorage); } catch (e) { prefs = loadPrefs(null); }
+
+  const queue = [];
+  let seq = 0;
+  let busy = false;
+
+  const $ = (id) => document.getElementById(id);
+  const t = (zh, en) => (lang === "en" ? en : zh);
+
+  function esc(s) {
+    return String(s ?? "").replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+    }[c]));
+  }
+
+  function fmtSize(n) {
+    if (n < 1024) return n + " B";
+    if (n < 1024 * 1024) return (n / 1024).toFixed(1) + " KB";
+    return (n / (1024 * 1024)).toFixed(1) + " MB";
+  }
+
+  function mimeLabel(m) {
+    if (m === "image/jpeg") return "JPEG";
+    if (m === "image/png") return "PNG";
+    if (m === "image/webp") return "WebP";
+    return m || "";
+  }
+
+  function orientLabel(n) {
+    if (n == null) return "";
+    const map = {
+      1: t("1（正常）", "1 (normal)"),
+      3: t("3（180°）", "3 (180°)"),
+      6: t("6（顺时针 90°）", "6 (90° CW)"),
+      8: t("8（逆时针 90°）", "8 (90° CCW)"),
+    };
+    return map[n] || String(n);
+  }
+
+  function dash() { return t("无", "none"); }
+
+  function readBytes(file) {
+    return new Promise((resolve, reject) => {
+      const fr = new FileReader();
+      fr.onload = () => resolve(new Uint8Array(fr.result));
+      fr.onerror = () => reject(fr.error || new Error("read"));
+      fr.readAsArrayBuffer(file);
+    });
+  }
+
+  function decodeViaImg(blob) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("decode")); };
+      img.src = url;
+    });
+  }
+
+  async function stripViaCanvas(bytes, mime, format) {
+    const blob = new Blob([bytes], { type: mime || "application/octet-stream" });
+    let bmp;
+    if (typeof createImageBitmap === "function") {
+      try {
+        bmp = await createImageBitmap(blob, { imageOrientation: "from-image" });
+      } catch {
+        bmp = await createImageBitmap(blob);
+      }
+    } else {
+      bmp = await decodeViaImg(blob);
+    }
+    const canvas = document.createElement("canvas");
+    canvas.width = bmp.width || 1;
+    canvas.height = bmp.height || 1;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(bmp, 0, 0);
+    if (typeof bmp.close === "function") bmp.close();
+    const outMime = format === "png" ? "image/png" : "image/jpeg";
+    const quality = format === "png" ? undefined : JPEG_QUALITY;
+    const outBlob = await new Promise((resolve, reject) => {
+      canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob"))), outMime, quality);
+    });
+    return { blob: outBlob, width: canvas.width, height: canvas.height };
+  }
+
+  function downloadBlob(blob, name) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+  }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.title = l === "en"
+      ? "METASTRIP-015 · Strip EXIF before you post"
+      : "METASTRIP-015 · 发图前清 EXIF";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    render();
+  }
+
+  function persistFmt() {
+    prefs = savePrefs(prefs, localStorage);
+  }
+
+  function metaRows(meta, mode) {
+    const after = mode === "after";
+    const emptyLabel = after ? t("已清空", "Cleared") : dash();
+    const emptyClass = after ? "clear" : "empty";
+    const cell = (value, kind) => {
+      if (value == null || value === "") {
+        return `<div class="mv ${emptyClass}">${esc(emptyLabel)}</div>`;
+      }
+      return `<div class="mv${kind === "gps" ? " warn" : ""}">${esc(value)}</div>`;
+    };
+    const gps = meta && meta.gps ? meta.gps.text : "";
+    const dt = meta && meta.datetime ? meta.datetime : "";
+    const device = meta && (meta.device || [meta.make, meta.model].filter(Boolean).join(" "));
+    const software = meta && meta.software ? meta.software : "";
+    const ori = meta && meta.orientation != null ? orientLabel(meta.orientation) : "";
+    let res = "";
+    if (meta && meta.width && meta.height) res = meta.width + " × " + meta.height;
+    return `<div class="meta-table">
+      <div class="mk">GPS</div>${cell(gps, "gps")}
+      <div class="mk">${esc(t("拍摄时间", "Taken"))}</div>${cell(dt)}
+      <div class="mk">${esc(t("设备 / 机型", "Device"))}</div>${cell(device)}
+      <div class="mk">${esc(t("软件", "Software"))}</div>${cell(software)}
+      <div class="mk">${esc(t("方向", "Orientation"))}</div>${cell(ori)}
+      <div class="mk">${esc(t("分辨率", "Size"))}</div>${cell(res)}
+    </div>`;
+  }
+
+  function render() {
+    $("drop").setAttribute("aria-label", t("选择本地图片", "Choose local images"));
+    document.querySelectorAll("#fmtChips .chip").forEach((c) => {
+      c.classList.toggle("active", c.dataset.fmt === prefs.format);
+    });
+
+    const ready = queue.filter((x) => x.ok && !x.stripped);
+    $("stripAll").disabled = busy || ready.length === 0;
+    $("countEl").textContent = queue.length
+      ? t(`${queue.length} 张`, `${queue.length}`)
+      : "";
+
+    const box = $("queue");
+    if (!queue.length) {
+      box.innerHTML = `<div class="empty">${esc(t("队列是空的。拖入相机原图，先看有没有定位。", "Queue is empty. Drop a camera original and check for GPS."))}</div>`;
+      return;
+    }
+
+    box.innerHTML = queue.map((it) => {
+      if (!it.ok) {
+        const msg = lang === "en" ? (it.messageEn || it.messageZh) : (it.messageZh || it.messageEn);
+        return `<article class="card is-err" data-id="${esc(it.id)}">
+          <div class="card-top">
+            <div>
+              <div class="item-title">${esc(it.name)}</div>
+              <div class="item-sub">${esc(fmtSize(it.size || 0))}</div>
+              <p class="err-text">${esc(msg)}</p>
+            </div>
+            <div class="actions">
+              <button class="act" type="button" data-act="rm">${esc(t("移除", "Remove"))}</button>
+            </div>
+          </div>
+        </article>`;
+      }
+
+      const gps = it.meta && it.meta.gps;
+      const almost = it.meta && it.meta.almostNoExif;
+      let beforeBanner = "";
+      if (gps) {
+        beforeBanner = `<div class="banner gps">${esc(t("这张图带定位 " + gps.text, "This file has GPS " + gps.text))}</div>`;
+      } else if (almost) {
+        beforeBanner = `<div class="banner">${esc(t("几乎无 EXIF", "Almost no EXIF"))}</div>`;
+      }
+
+      let afterInner;
+      if (it.stripped && it.after) {
+        const afterBanner = it.after.hasApp1
+          ? `<div class="banner">${esc(t("仍检测到 APP1", "APP1 still present"))}</div>`
+          : `<div class="banner clear">${esc(t("已清空", "Cleared"))}</div>`;
+        afterInner = afterBanner + metaRows(it.after, "after");
+      } else if (it.working) {
+        afterInner = `<p class="item-sub">${esc(t("正在 canvas 重绘…", "Redrawing on canvas…"))}</p>`;
+      } else {
+        afterInner = `<p class="item-sub">${esc(t("剥离后对照会出现在这里。", "The after table shows up here."))}</p>`;
+      }
+
+      const recode = it.stripped
+        ? t(
+            `已 canvas 重编码为 ${it.outFormat === "png" ? "PNG" : "JPEG"}` + (it.outFormat === "jpeg" ? " · quality 0.92 · 有损" : ""),
+            `Canvas re-encoded as ${it.outFormat === "png" ? "PNG" : "JPEG"}` + (it.outFormat === "jpeg" ? " · quality 0.92 · lossy" : "")
+          )
+        : t("对照是元数据表，不是前后预览图。", "Compare the metadata tables, not before/after pixels.");
+
+      return `<article class="card" data-id="${esc(it.id)}">
+        <div class="card-top">
+          <div>
+            <div class="item-title">${esc(it.name)}</div>
+            <div class="item-sub">${esc(fmtSize(it.size))} · ${esc(mimeLabel(it.mime))}</div>
+            ${gps ? `<span class="gps-pill">GPS ${esc(gps.text)}</span>` : ""}
+            ${it.stripped ? `<span class="ok-pill">${esc(t("已剥离", "Stripped"))}</span>` : ""}
+          </div>
+          <div class="actions">
+            <button class="act primary" type="button" data-act="strip" ${it.working || busy ? "disabled" : ""}>${esc(it.stripped ? t("再剥离", "Strip again") : t("剥离", "Strip"))}</button>
+            <button class="act" type="button" data-act="dl" ${it.stripped && it.outBlob ? "" : "disabled"}>${esc(t("下载", "Download"))}</button>
+            <button class="act" type="button" data-act="rm">${esc(t("移除", "Remove"))}</button>
+          </div>
+        </div>
+        <div class="compare">
+          <div class="pane">
+            <h3>${esc(t("剥离前", "Before"))}</h3>
+            ${beforeBanner}
+            ${metaRows(it.meta, "before")}
+          </div>
+          <div class="pane">
+            <h3>${esc(t("剥离后", "After"))}</h3>
+            ${afterInner}
+          </div>
+        </div>
+        <p class="recode">${esc(recode)}</p>
+      </article>`;
+    }).join("");
+  }
+
+  async function ingest(files) {
+    const list = Array.from(files || []);
+    for (const file of list) {
+      const id = "f" + (++seq);
+      let bytes;
+      try {
+        bytes = await readBytes(file);
+      } catch {
+        queue.push({
+          id, name: file.name, size: file.size, ok: false,
+          messageZh: "无法读取文件", messageEn: "Could not read file",
+        });
+        continue;
+      }
+      const v = validateFile({ name: file.name, size: file.size, bytes });
+      if (!v.ok) {
+        queue.push({
+          id, name: file.name, size: file.size || bytes.byteLength,
+          ok: false, code: v.code, messageZh: v.messageZh, messageEn: v.messageEn,
+        });
+        continue;
+      }
+      const meta = listMetaSummary(bytes);
+      queue.push({
+        id, name: file.name, size: bytes.byteLength, mime: v.mime,
+        ok: true, bytes, meta, stripped: false, outBlob: null, after: null, working: false,
+      });
+    }
+    render();
+  }
+
+  async function stripOne(it) {
+    if (!it || !it.ok || it.working) return;
+    it.working = true;
+    render();
+    try {
+      const { blob, width, height } = await stripViaCanvas(it.bytes, it.mime, prefs.format);
+      const buf = new Uint8Array(await blob.arrayBuffer());
+      const after = listMetaSummary(buf);
+      if (!after.width && width) after.width = width;
+      if (!after.height && height) after.height = height;
+      it.outBlob = blob;
+      it.after = after;
+      it.outFormat = prefs.format;
+      it.outName = downloadName(it.name, prefs.format);
+      it.stripped = true;
+    } catch {
+      it.ok = false;
+      it.messageZh = "无法解码此图（文件可能已损坏，或浏览器不支持该编码）";
+      it.messageEn = "Could not decode this image (corrupt file, or the browser cannot decode it)";
+    } finally {
+      it.working = false;
+      render();
+    }
+  }
+
+  const drop = $("drop");
+  const fileInput = $("fileInput");
+
+  drop.addEventListener("click", () => fileInput.click());
+  drop.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fileInput.click(); }
+  });
+  drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("drag"); });
+  drop.addEventListener("dragleave", () => drop.classList.remove("drag"));
+  drop.addEventListener("drop", (e) => {
+    e.preventDefault();
+    drop.classList.remove("drag");
+    ingest(e.dataTransfer.files);
+  });
+  fileInput.addEventListener("change", () => {
+    ingest(fileInput.files);
+    fileInput.value = "";
+  });
+
+  $("fmtChips").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-fmt]");
+    if (!btn) return;
+    prefs = { format: btn.dataset.fmt === "png" ? "png" : "jpeg" };
+    persistFmt();
+    for (const it of queue) {
+      if (!it.ok) continue;
+      it.stripped = false;
+      it.outBlob = null;
+      it.after = null;
+    }
+    render();
+  });
+
+  $("stripAll").addEventListener("click", async () => {
+    if (busy) return;
+    busy = true;
+    render();
+    for (const it of queue) {
+      if (it.ok && !it.stripped) await stripOne(it);
+    }
+    busy = false;
+    render();
+  });
+
+  $("clearQ").addEventListener("click", () => {
+    queue.splice(0, queue.length);
+    render();
+  });
+
+  $("queue").addEventListener("click", async (e) => {
+    const btn = e.target.closest("[data-act]");
+    if (!btn) return;
+    const card = btn.closest("[data-id]");
+    if (!card) return;
+    const it = queue.find((x) => x.id === card.dataset.id);
+    if (!it) return;
+    const act = btn.dataset.act;
+    if (act === "rm") {
+      const i = queue.indexOf(it);
+      if (i >= 0) queue.splice(i, 1);
+      render();
+      return;
+    }
+    if (act === "strip") {
+      await stripOne(it);
+      return;
+    }
+    if (act === "dl" && it.outBlob) {
+      downloadBlob(it.outBlob, it.outName || downloadName(it.name, prefs.format));
+    }
+  });
+
+  $("copyBtn").addEventListener("click", async () => {
+    const text = buildShareText(lang);
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch (_) {}
+      ta.remove();
+    }
+    const btn = $("copyBtn");
+    btn.classList.add("copied");
+    const orig = btn.textContent;
+    btn.textContent = t("已复制 ✓", "Copied ✓");
+    setTimeout(() => { btn.classList.remove("copied"); btn.textContent = orig; }, 1600);
+  });
+
+  $("shareImgBtn").addEventListener("click", () => {
+    const canvas = $("shareCanvas");
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "#818cf8";
+    ctx.fillRect(0, 0, 8, h);
+    ctx.font = "600 14px ui-monospace, Menlo, monospace";
+    ctx.fillStyle = "#818cf8";
+    ctx.fillText("METASTRIP-015  ·  BUILD-100", 40, 48);
+    ctx.font = "700 28px Helvetica Neue, PingFang SC, sans-serif";
+    ctx.fillStyle = "#edeff1";
+    ctx.fillText(t("发原图前先看有没有定位。", "Check GPS before you post."), 40, 120);
+    ctx.font = "16px Helvetica Neue, PingFang SC, sans-serif";
+    ctx.fillStyle = "#7d848c";
+    ctx.fillText(t("浏览器里剥 EXIF · 本地处理 · 不上传", "Strip EXIF in the browser · local only · no upload"), 40, 168);
+    ctx.font = "14px ui-monospace, Menlo, monospace";
+    ctx.fillStyle = "#4a5057";
+    ctx.fillText("build-100.com/015", 40, 410);
+    $("shareCanvasWrap").classList.add("show");
+  });
+
+  $("langBtn").addEventListener("click", () => applyLang(lang === "en" ? "zh" : "en"));
+
+  if (lang === "en") applyLang("en");
+  else render();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

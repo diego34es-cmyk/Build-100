@@ -1,0 +1,293 @@
+{
+  "updated": "2026-09-18",
+  "filters": [
+    {
+      "id": "all",
+      "zh": "全部",
+      "en": "All"
+    },
+    {
+      "id": "finance",
+      "zh": "金融",
+      "en": "Finance"
+    },
+    {
+      "id": "learn",
+      "zh": "学习",
+      "en": "Learn"
+    },
+    {
+      "id": "life",
+      "zh": "生活",
+      "en": "Life"
+    },
+    {
+      "id": "market",
+      "zh": "市场",
+      "en": "Markets"
+    },
+    {
+      "id": "tools",
+      "zh": "工具效率",
+      "en": "Tools"
+    }
+  ],
+  "sites": [
+    {
+      "id": "001",
+      "code": "COMBO",
+      "name": "COMBO-001",
+      "sub_zh": "AI 订阅最优搭配器 — 只为用到的付费",
+      "sub_en": "AI subscription optimizer — pay for what you use",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/001/"
+    },
+    {
+      "id": "002",
+      "code": "RETIRE",
+      "name": "RETIRE-002",
+      "sub_zh": "只管存钱的退休计算器 — 算算几岁能退",
+      "sub_en": "Savings-only retirement calculator — when can you retire?",
+      "cats": [
+        "finance"
+      ],
+      "live": true,
+      "url": "https://build-100.com/002/"
+    },
+    {
+      "id": "003",
+      "code": "PROMPT",
+      "name": "PROMPT-003",
+      "sub_zh": "提示词结构器 — 大白话扩写成可粘贴提示词",
+      "sub_en": "Prompt builder — plain language expanded into paste-ready prompts",
+      "cats": [
+        "learn"
+      ],
+      "live": true,
+      "url": "https://build-100.com/003/"
+    },
+    {
+      "id": "004",
+      "code": "WEEK",
+      "name": "WEEK-004",
+      "sub_zh": "下个礼拜会怎样 — 赔率≥60% 就当会发生",
+      "sub_en": "What happens next week — odds ≥60% count as will happen",
+      "cats": [
+        "market"
+      ],
+      "live": true,
+      "url": "https://build-100.com/004/"
+    },
+    {
+      "id": "005",
+      "code": "LOCK",
+      "name": "LOCK-005",
+      "sub_zh": "扫尾盘图书馆 — 价格站稳某档之后还会不会翻",
+      "sub_en": "Lock library — after a price dwells, does it still flip",
+      "cats": [
+        "market"
+      ],
+      "live": true,
+      "url": "https://build-100.com/005/"
+    },
+    {
+      "id": "006",
+      "code": "LIFE",
+      "name": "LIFE-006",
+      "sub_zh": "生活麻烦工具箱 — 订阅、租房、打包",
+      "sub_en": "Life-admin kit — subs, rent, packing lists",
+      "cats": [
+        "life",
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/006/"
+    },
+    {
+      "id": "007",
+      "code": "PPP",
+      "name": "PPP-007",
+      "sub_zh": "欧洲 vs 国内购买力 — 同一篮子日子值多少",
+      "sub_en": "Europe vs China purchasing power — the same basket of days",
+      "cats": [
+        "life",
+        "market"
+      ],
+      "live": true,
+      "url": "https://build-100.com/007/"
+    },
+    {
+      "id": "008",
+      "code": "REGRET",
+      "name": "REGRET-008",
+      "sub_zh": "订阅后悔计算器 — 已经买了的月费真正花在哪",
+      "sub_en": "Subscription regret — what those monthly fees actually cost",
+      "cats": [
+        "finance",
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/008/"
+    },
+    {
+      "id": "009",
+      "code": "INTUIT",
+      "name": "INTUIT-009",
+      "sub_zh": "金融直觉馆 — 短课目录，一课一个小计算器",
+      "sub_en": "Finance intuition hall — short lessons, one tiny calculator each",
+      "cats": [
+        "finance",
+        "learn"
+      ],
+      "live": true,
+      "url": "https://build-100.com/009/"
+    },
+    {
+      "id": "010",
+      "code": "DECIDE",
+      "name": "DECIDE-010",
+      "sub_zh": "决策一页纸 — 选项×标准，加权打分后导出",
+      "sub_en": "One-page decision — options × criteria, weighted scores, export",
+      "cats": [
+        "learn",
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/010/"
+    },
+    {
+      "id": "011",
+      "code": "PAPER",
+      "name": "PAPER-011",
+      "sub_zh": "办事清单生成器 — NIE / 租房 / 回国材料",
+      "sub_en": "Paperwork lists — NIE, rental, going-home docs",
+      "cats": [
+        "life",
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/011/"
+    },
+    {
+      "id": "012",
+      "code": "PLAY",
+      "name": "PLAY-012",
+      "sub_zh": "3 分钟金融小游戏 — 复利、赔率、杠杆",
+      "sub_en": "3-minute finance games — compounding, odds, leverage",
+      "cats": [
+        "finance"
+      ],
+      "live": true,
+      "url": "https://build-100.com/012/"
+    },
+    {
+      "id": "013",
+      "code": "INDEX",
+      "name": "INDEX-013",
+      "sub_zh": "分类总目录 — 按金融 / 学习 / 生活 / 市场筛选",
+      "sub_en": "Catalog — filter by finance / learn / life / markets",
+      "cats": [],
+      "live": true,
+      "url": "https://build-100.com/013/"
+    },
+    {
+      "id": "014",
+      "code": "VAULT",
+      "name": "VAULT-014",
+      "sub_zh": "本地隔离柜 — 成人链接模糊收纳，可选 PIN，不进云",
+      "sub_en": "Local isolation vault — blur adult links, optional PIN, nothing leaves the device",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/014/"
+    },
+    {
+      "id": "015",
+      "code": "METASTRIP",
+      "name": "METASTRIP-015",
+      "sub_zh": "发图前清 EXIF — 浏览器剥 GPS/机型/时间，本地不上传",
+      "sub_en": "Strip EXIF before posting — GPS/device/time, local only",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/015/"
+    },
+    {
+      "id": "016",
+      "code": "WHYSAVE",
+      "name": "WHYSAVE-016",
+      "sub_zh": "收藏坟场复盘 — 存链接强制写 why，今日复盘保留/归档/删除",
+      "sub_en": "Later-read graveyard review — force a why on save; keep / archive / delete",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/016/"
+    },
+    {
+      "id": "017",
+      "code": "REDACT",
+      "name": "REDACT-017",
+      "sub_zh": "截图脱敏打码 — 框选/画笔马赛克，本地导出 PNG，不上传",
+      "sub_en": "Screenshot redaction — rectangle/brush mosaic, local PNG, never upload",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/017/"
+    },
+    {
+      "id": "018",
+      "code": "UNHIDE",
+      "name": "UNHIDE-018",
+      "sub_zh": "粘贴前揭隐形字 — 零宽/Bidi/Tag 可见化，一键净化，不上传",
+      "sub_en": "Reveal invisible Unicode before paste — ZW/Bidi/Tag pills, one-click clean, local only",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/018/"
+    },
+    {
+      "id": "019",
+      "code": "OGCARD",
+      "name": "OGCARD-019",
+      "sub_zh": "粘贴 meta 预览分享卡 — 本地看 X/Slack/LinkedIn",
+      "sub_en": "Paste meta → preview X/Slack/LinkedIn cards locally",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/019/"
+    },
+    {
+      "id": "020",
+      "code": "BOTRULES",
+      "name": "BOTRULES-020",
+      "sub_zh": "勾选 AI 爬虫，一键出 robots.txt",
+      "sub_en": "Check AI crawlers → download robots.txt",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/020/"
+    },
+    {
+      "id": "021",
+      "code": "LLMSTXT",
+      "name": "LLMSTXT-021",
+      "sub_zh": "填分区一键出 llms.txt — 本机预览下载，可粘贴解析",
+      "sub_en": "Fill sections → download llms.txt; optional paste-parse, local only",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/021/"
+    }
+  ]
+}
