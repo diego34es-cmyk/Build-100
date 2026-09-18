@@ -52,6 +52,7 @@
   <span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span>
   ```
 - [ ] 确认 `.m-name` 里仍是 `<span class="redact" style="width: Xem;"></span>` 涂黑条（解密动画会替换它，不要手写真名）
+- [ ] **把上一件（NNN−1）改成永久 Live**：去掉 `data-name` / `.redact` / `is-dev`，写成 `<a class="m-row revealed" href="…">`（真名 + 副标题 + Live）。全站清单同时只允许最新一行保留解码特效。
 
 > 为什么不直接写 is-live：解密动画 `declassify()` 的 `finish()` 会把 is-dev 翻成 is-live。直接写 is-live 会出现"绿点 + 涂黑条"的矛盾中间态。
 

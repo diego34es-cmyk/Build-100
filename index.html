@@ -613,7 +613,8 @@
          访客一进清单就会看到涂黑条解码成真名（状态翻成 Live，行变成链接）。例：
          <div class="m-row" data-name="EJEMPLO" data-sub="一句话描述" data-url="https://build-100.com/042/">
          同时把 SITE 配置里的 completed 加一、PROJECTS 数组加一条。
-         发布期过后，把涂黑条换成真名的永久写法，模板如下：
+         【红线】清单里同时只允许「当天最新」一行保留涂黑条+data-name 解码特效；
+         发新作品时，必须把上一件改成永久 Live 写法（不要再挂 data-name / redact）。模板如下：
          <a class="m-row" href="https://build-100.com/042/" target="_blank" rel="noopener">
            <span class="m-no">042</span>
            <span class="m-name">EJEMPLO<span>一句话描述</span></span>
@@ -626,47 +627,125 @@
          data-sub 是中文副标题，data-sub-en 是英文副标题（切换语言时跟随）。
          data-open=self 在当前标签打开（同站 /NNN/ 路径），留空则新标签。 -->
     <div class="m-row" data-name="LLMSTXT-021" data-sub="填分区一键出 llms.txt — 本机预览下载，可粘贴解析" data-sub-en="Fill sections → download llms.txt; optional paste-parse, local only" data-url="https://build-100.com/021/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/021" data-open="self"><span class="m-no">021</span><span class="m-name"><span class="redact" style="width: 9em;"></span></span><span class="m-cat" data-en="Utilities">效率<span class="mono">Utilities</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-    <div class="m-row" data-name="BOTRULES-020" data-sub="勾选 AI 爬虫，一键出 robots.txt — 本机预览下载，可粘贴合并" data-sub-en="Check AI crawlers → download robots.txt; optional paste-merge, local only" data-url="https://build-100.com/020/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/020" data-open="self"><span class="m-no">020</span><span class="m-name"><span class="redact" style="width: 9em;"></span></span><span class="m-cat" data-en="Utilities">效率<span class="mono">Utilities</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-    <div class="m-row" data-name="OGCARD-019" data-sub="粘贴 meta 预览分享卡 — 本地看 X/Slack/LinkedIn，不远程 fetch" data-sub-en="Paste meta → preview X/Slack/LinkedIn cards locally, no remote fetch" data-url="https://build-100.com/019/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/019" data-open="self"><span class="m-no">019</span><span class="m-name"><span class="redact" style="width: 9em;"></span></span><span class="m-cat" data-en="Utilities">效率<span class="mono">Utilities</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-    <div class="m-row" data-name="UNHIDE-018" data-sub="粘贴前揭隐形字 — 零宽/Bidi/Tag 可见化，一键净化，不上传" data-sub-en="Reveal invisible Unicode before paste — ZW/Bidi/Tag pills, one-click clean, local only" data-url="https://build-100.com/018/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/018" data-open="self"><span class="m-no">018</span><span class="m-name"><span class="redact" style="width: 9em;"></span></span><span class="m-cat" data-en="Utilities">效率<span class="mono">Utilities</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-    <div class="m-row" data-name="REDACT-017" data-sub="截图脱敏打码 — 框选/画笔马赛克，本地导出 PNG，不上传" data-sub-en="Screenshot redaction — rectangle/brush mosaic, local PNG, never upload" data-url="https://build-100.com/017/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/017" data-open="self"><span class="m-no">017</span><span class="m-name"><span class="redact" style="width: 9em;"></span></span><span class="m-cat" data-en="Utilities">效率<span class="mono">Utilities</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-    <div class="m-row" data-name="WHYSAVE-016" data-sub="收藏坟场复盘 — 存链接强制写 why，今日复盘保留/归档/删除" data-sub-en="Later-read graveyard review — force a why on save; keep / archive / delete" data-url="https://build-100.com/016/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/016" data-open="self"><span class="m-no">016</span><span class="m-name"><span class="redact" style="width: 9em;"></span></span><span class="m-cat" data-en="Utilities">效率<span class="mono">Utilities</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-<div class="m-row" data-name="METASTRIP-015" data-sub="发图前清 EXIF — 浏览器剥 GPS/机型/时间，本地不上传" data-sub-en="Strip EXIF before posting — GPS/device/time, local only" data-url="https://build-100.com/015/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/015" data-open="self"><span class="m-no">015</span><span class="m-name"><span class="redact" style="width: 9em;"></span></span><span class="m-cat" data-en="Utilities">效率<span class="mono">Utilities</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-<div class="m-row" data-name="VAULT-014" data-sub="本地隔离柜 — 成人链接 PIN 柜，标签+备注，全 localStorage" data-sub-en="Local vault for adult links — PIN, tags, notes, localStorage only" data-url="https://build-100.com/014/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/014" data-open="self"><span class="m-no">014</span><span class="m-name"><span class="redact" style="width: 8em;"></span></span><span class="m-cat" data-en="Utilities">效率<span class="mono">Utilities</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-<div class="m-row" data-name="INDEX-013" data-sub="总目录升级 — 按金融/学习/生活/市场筛选 001–013" data-sub-en="Updated index — filter projects by category" data-url="https://build-100.com/013/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/013" data-open="self"><span class="m-no">013</span><span class="m-name"><span class="redact" style="width: 8em;"></span></span><span class="m-cat" data-en="Tools">工具<span class="mono">Tools</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-    <div class="m-row" data-name="PLAY-012" data-sub="3 分钟金融小游戏 — 复利/赔率/杠杆三关小测验" data-sub-en="3-minute finance game — compounding, odds, and leverage quizzes" data-url="https://build-100.com/012/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/012" data-open="self"><span class="m-no">012</span><span class="m-name"><span class="redact" style="width: 8em;"></span></span><span class="m-cat" data-en="Finance">金融<span class="mono">Finance</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-    <div class="m-row" data-name="PAPER-011" data-sub="办事清单生成器 — NIE/租房/回国材料，中西双语，可打印" data-sub-en="Bilingual printable paperwork checklists" data-url="https://build-100.com/011/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/011" data-open="self"><span class="m-no">011</span><span class="m-name"><span class="redact" style="width: 8em;"></span></span><span class="m-cat" data-en="Life">生活<span class="mono">Life</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-    <div class="m-row" data-name="DECIDE-010" data-sub="决策一页纸 — 2–4 个选项按权重打分对比，导出 Markdown" data-sub-en="Weighted one-page comparison for 2–4 options" data-url="https://build-100.com/010/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/010" data-open="self"><span class="m-no">010</span><span class="m-name"><span class="redact" style="width: 8em;"></span></span><span class="m-cat" data-en="Learning">学习<span class="mono">Learning</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-    <div class="m-row" data-name="INTUIT-009" data-sub="金融直觉馆 — 40 篇短课目录（1 篇已写完+计算器，其余占位)" data-sub-en="40 short financial intuition lessons" data-url="https://build-100.com/009/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/009" data-open="self"><span class="m-no">009</span><span class="m-name"><span class="redact" style="width: 8em;"></span></span><span class="m-cat" data-en="Learning">学习<span class="mono">Learning</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-    <div class="m-row" data-name="REGRET-008" data-sub="订阅后悔计算器 — 已经买的月费，按真实使用天数算浪费" data-sub-en="Subscription waste based on actual days used" data-url="https://build-100.com/008/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/008" data-open="self"><span class="m-no">008</span><span class="m-name"><span class="redact" style="width: 8em;"></span></span><span class="m-cat" data-en="Finance">金融<span class="mono">Finance</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-    <div class="m-row" data-name="PPP-007" data-sub="欧洲 vs 国内购买力 — 马德里对国内几个城市，同购买力换算" data-sub-en="Madrid compared with Chinese cities by purchasing power" data-url="https://build-100.com/007/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/007" data-open="self"><span class="m-no">007</span><span class="m-name"><span class="redact" style="width: 8em;"></span></span><span class="m-cat" data-en="Life">生活<span class="mono">Life</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-    <div class="m-row" data-name="LIFE-006" data-sub="生活麻烦工具箱 — 订阅提醒/租房对比/打包清单，全 localStorage" data-sub-en="Everyday fixes toolkit in localStorage" data-url="https://build-100.com/006/" data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/006" data-open="self"><span class="m-no">006</span><span class="m-name"><span class="redact" style="width: 8em;"></span></span><span class="m-cat" data-en="Utilities">效率<span class="mono">Utilities</span></span><span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span><span class="m-arrow"></span></div>
-    <div class="m-row"
-         data-name="LOCK-005"
-         data-sub="扫尾盘图书馆 — 价格站稳某档之后还会不会翻"
-         data-sub-en="Lock library — after a price dwells, does it still flip"
-         data-url="https://build-100.com/005/"
-         data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/005"
-         data-open="self">
+    <a class="m-row revealed" href="https://build-100.com/020/" target="_blank" rel="noopener">
+      <span class="m-no">020</span>
+      <span class="m-name">BOTRULES-020<span data-en="Check AI crawlers → download robots.txt; optional paste-merge, local only">勾选 AI 爬虫，一键出 robots.txt — 本机预览下载，可粘贴合并</span></span>
+      <span class="m-url">build-100.com/020</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/019/" target="_blank" rel="noopener">
+      <span class="m-no">019</span>
+      <span class="m-name">OGCARD-019<span data-en="Paste meta → preview X/Slack/LinkedIn cards locally, no remote fetch">粘贴 meta 预览分享卡 — 本地看 X/Slack/LinkedIn，不远程 fetch</span></span>
+      <span class="m-url">build-100.com/019</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/018/" target="_blank" rel="noopener">
+      <span class="m-no">018</span>
+      <span class="m-name">UNHIDE-018<span data-en="Reveal invisible Unicode before paste — ZW/Bidi/Tag pills, one-click clean, local only">粘贴前揭隐形字 — 零宽/Bidi/Tag 可见化，一键净化，不上传</span></span>
+      <span class="m-url">build-100.com/018</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/017/" target="_blank" rel="noopener">
+      <span class="m-no">017</span>
+      <span class="m-name">REDACT-017<span data-en="Screenshot redaction — rectangle/brush mosaic, local PNG, never upload">截图脱敏打码 — 框选/画笔马赛克，本地导出 PNG，不上传</span></span>
+      <span class="m-url">build-100.com/017</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/016/" target="_blank" rel="noopener">
+      <span class="m-no">016</span>
+      <span class="m-name">WHYSAVE-016<span data-en="Later-read graveyard review — force a why on save; keep / archive / delete">收藏坟场复盘 — 存链接强制写 why，今日复盘保留/归档/删除</span></span>
+      <span class="m-url">build-100.com/016</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/015/" target="_blank" rel="noopener">
+      <span class="m-no">015</span>
+      <span class="m-name">METASTRIP-015<span data-en="Strip EXIF before posting — GPS/device/time, local only">发图前清 EXIF — 浏览器剥 GPS/机型/时间，本地不上传</span></span>
+      <span class="m-url">build-100.com/015</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/014/" target="_blank" rel="noopener">
+      <span class="m-no">014</span>
+      <span class="m-name">VAULT-014<span data-en="Local vault for adult links — PIN, tags, notes, localStorage only">本地隔离柜 — 成人链接 PIN 柜，标签+备注，全 localStorage</span></span>
+      <span class="m-url">build-100.com/014</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/013/" target="_blank" rel="noopener">
+      <span class="m-no">013</span>
+      <span class="m-name">INDEX-013<span data-en="Updated index — filter projects by category">总目录升级 — 按金融/学习/生活/市场筛选 001–013</span></span>
+      <span class="m-url">build-100.com/013</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/012/" target="_blank" rel="noopener">
+      <span class="m-no">012</span>
+      <span class="m-name">PLAY-012<span data-en="3-minute finance game — compounding, odds, and leverage quizzes">3 分钟金融小游戏 — 复利/赔率/杠杆三关小测验</span></span>
+      <span class="m-url">build-100.com/012</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/011/" target="_blank" rel="noopener">
+      <span class="m-no">011</span>
+      <span class="m-name">PAPER-011<span data-en="Bilingual printable paperwork checklists">办事清单生成器 — NIE/租房/回国材料，中西双语，可打印</span></span>
+      <span class="m-url">build-100.com/011</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/010/" target="_blank" rel="noopener">
+      <span class="m-no">010</span>
+      <span class="m-name">DECIDE-010<span data-en="Weighted one-page comparison for 2–4 options">决策一页纸 — 2–4 个选项按权重打分对比，导出 Markdown</span></span>
+      <span class="m-url">build-100.com/010</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/009/" target="_blank" rel="noopener">
+      <span class="m-no">009</span>
+      <span class="m-name">INTUIT-009<span data-en="40 short financial intuition lessons">金融直觉馆 — 40 篇短课目录（1 篇已写完+计算器，其余占位)</span></span>
+      <span class="m-url">build-100.com/009</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/008/" target="_blank" rel="noopener">
+      <span class="m-no">008</span>
+      <span class="m-name">REGRET-008<span data-en="Subscription waste based on actual days used">订阅后悔计算器 — 已经买的月费，按真实使用天数算浪费</span></span>
+      <span class="m-url">build-100.com/008</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/007/" target="_blank" rel="noopener">
+      <span class="m-no">007</span>
+      <span class="m-name">PPP-007<span data-en="Madrid compared with Chinese cities by purchasing power">欧洲 vs 国内购买力 — 马德里对国内几个城市，同购买力换算</span></span>
+      <span class="m-url">build-100.com/007</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/006/" target="_blank" rel="noopener">
+      <span class="m-no">006</span>
+      <span class="m-name">LIFE-006<span data-en="Everyday fixes toolkit in localStorage">生活麻烦工具箱 — 订阅提醒/租房对比/打包清单，全 localStorage</span></span>
+      <span class="m-url">build-100.com/006</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/005/" target="_blank" rel="noopener">
       <span class="m-no">005</span>
-      <span class="m-name"><span class="redact" style="width: 10em;"></span></span>
-      <span class="m-cat" data-en='<span class="mono">Markets · Data</span>'>市场 · 数据<span class="mono">Markets</span></span>
-      <span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span>
-      <span class="m-arrow"></span>
-    </div>
-    <div class="m-row"
-         data-name="WEEK-004"
-         data-sub="下个礼拜会怎样 — 赔率≥60% 就当会发生"
-         data-sub-en="What happens next week — odds ≥60% count as will happen"
-         data-url="https://build-100.com/004/"
-         data-url-source="https://github.com/diego34es-cmyk/Build-100/tree/main/004"
-         data-open="self">
+      <span class="m-name">LOCK-005<span data-en="Lock library — after a price dwells, does it still flip">扫尾盘图书馆 — 价格站稳某档之后还会不会翻</span></span>
+      <span class="m-url">build-100.com/005</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
+    <a class="m-row revealed" href="https://build-100.com/004/" target="_blank" rel="noopener">
       <span class="m-no">004</span>
-      <span class="m-name"><span class="redact" style="width: 9em;"></span></span>
-      <span class="m-cat" data-en='<span class="mono">Markets · Data</span>'>市场 · 数据<span class="mono">Markets</span></span>
-      <span class="m-status is-dev"><i class="dot"></i>In&nbsp;Dev</span>
-      <span class="m-arrow"></span>
-    </div>
+      <span class="m-name">WEEK-004<span data-en="What happens next week — odds ≥60% count as will happen">下个礼拜会怎样 — 赔率≥60% 就当会发生</span></span>
+      <span class="m-url">build-100.com/004</span>
+      <span class="m-status is-live"><i class="dot"></i>Live</span>
+      <span class="m-arrow">↗</span>
+    </a>
     <a class="m-row revealed" href="https://build-100.com/003/" target="_blank" rel="noopener">
       <span class="m-no">003</span>
       <span class="m-name">PROMPT-003<span data-en="Prompt builder — plain language expanded into paste-ready prompts">提示词结构器 — 大白话扩写成可粘贴提示词</span></span>
