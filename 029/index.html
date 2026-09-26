@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IPO-029 · 散户热门 IPO 打新迷你游戏</title>
+<meta name="description" content="扮演散户参与热门 IPO 打新——申购 → 中签抽奖 → 上市首日涨跌。三家虚构公司，还原「分得极少」的真实体验。纯娱乐，非投资建议。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/029/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E029%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="IPO-029 · 散户热门 IPO 打新迷你游戏">
+<meta property="og:description" content="申购 → 中签抽奖 → 上市首日涨跌。三家虚构公司，还原「分得极少」。纯娱乐，非投资建议。">
+<meta property="og:url" content="https://build-100.com/029/">
+<meta property="og:image" content="https://build-100.com/029/og-029.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="IPO-029 · 散户热门 IPO 打新迷你游戏">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="IPO-029 · 散户热门 IPO 打新迷你游戏">
+<meta name="twitter:description" content="Subscribe → lottery allotment → first-day price walk. Fiction only — not investment advice.">
+<meta name="twitter:image" content="https://build-100.com/029/og-029.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #06b6d4;
+    --accent-glow: rgba(6, 182, 212, 0.35);
+    --danger: #f87171;
+    --mid: #fb923c;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-padding-top: 72px; color-scheme: dark; }
+  [hidden] { display: none !important; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 44px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p { color: var(--muted); max-width: 40em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p strong { color: var(--ink); font-weight: 500; }
+
+  .steps {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    margin-top: 22px;
+  }
+  .step-pill {
+    border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px;
+    background: var(--bg-raise);
+  }
+  .step-pill .n { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 4px; }
+  .step-pill .t { font-size: 0.92rem; font-weight: 600; }
+  @media (max-width: 640px) { .steps { grid-template-columns: 1fr; } }
+
+  .disclaimer {
+    margin-top: 20px; padding: 14px 16px; border-radius: 8px;
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    background: rgba(251, 191, 36, 0.06);
+    color: var(--delta); font-size: 0.88rem; line-height: 1.55;
+  }
+  .disclaimer strong { color: #fde68a; font-weight: 600; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(22px, 4vh, 32px) 0; }
+  .field:last-of-type { border-bottom: 1px solid var(--line); }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .ipo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 720px) { .ipo-grid { grid-template-columns: 1fr; } }
+  .ipo-card {
+    text-align: left; background: var(--bg-raise); border: 1px solid var(--line-strong);
+    border-radius: 10px; padding: 16px; cursor: pointer; transition: border-color .18s, box-shadow .18s, transform .18s;
+    color: var(--ink); width: 100%;
+  }
+  .ipo-card:hover { border-color: var(--ink); }
+  .ipo-card.active {
+    border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow), 0 0 24px var(--accent-glow);
+  }
+  .ipo-card .ticker { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 6px; }
+  .ipo-card .name { font-weight: 700; font-size: 1.05rem; margin-bottom: 4px; }
+  .ipo-card .tag { color: var(--muted); font-size: 0.84rem; margin-bottom: 12px; }
+  .ipo-meta { display: grid; gap: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--muted); }
+  .ipo-meta b { color: var(--ink); font-weight: 600; }
+  .heat { display: inline-flex; gap: 3px; vertical-align: middle; }
+  .heat i { width: 8px; height: 8px; border-radius: 2px; background: var(--faint); display: inline-block; }
+  .heat i.on { background: var(--accent); box-shadow: 0 0 6px var(--accent-glow); }
+
+  .budget-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .budget-prefix { font-family: var(--mono); font-size: 1.4rem; color: var(--faint); }
+  .budget-input {
+    background: var(--bg-raise); border: 1px solid var(--line-strong); color: var(--ink);
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.4rem; font-weight: 500;
+    padding: 10px 14px; width: 160px; border-radius: 4px;
+  }
+  .budget-input::-webkit-outer-spin-button, .budget-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .budget-input[type=number] { -moz-appearance: textfield; }
+  .quick-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .chip {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 7px 13px; border-radius: 999px; cursor: pointer; transition: all .18s;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--ink); }
+  .chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .budget-err { color: var(--danger); font-size: 0.85rem; margin-top: 10px; min-height: 1.2em; font-family: var(--mono); letter-spacing: 0.02em; }
+
+  .cta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .btn-primary {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 14px 22px; border-radius: 4px; cursor: pointer; border: 1px solid var(--accent);
+    background: var(--accent); color: var(--bg); font-weight: 700;
+    box-shadow: 0 0 18px var(--accent-glow); transition: opacity .18s, transform .18s;
+  }
+  .btn-primary:hover { opacity: 0.92; }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+  .btn-ghost {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 14px 22px; border-radius: 4px; cursor: pointer;
+    background: none; border: 1px solid var(--line-strong); color: var(--ink); transition: all .18s;
+  }
+  .btn-ghost:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+
+  .panel {
+    margin-top: 8px; padding: 20px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--bg-raise);
+  }
+  .panel h3 { font-size: 1.05rem; margin-bottom: 8px; }
+  .panel .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 14px; }
+  .lottery-spin {
+    font-family: var(--mono); font-size: clamp(1.6rem, 4vw, 2.4rem); letter-spacing: 0.08em;
+    text-align: center; padding: 28px 12px; color: var(--accent);
+    min-height: 88px; display: flex; align-items: center; justify-content: center;
+  }
+  .lottery-spin.miss { color: var(--danger); }
+  .lottery-spin.win { color: var(--live); }
+  .allot-box {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px;
+  }
+  .stat-cell {
+    border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px;
+  }
+  .stat-cell .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--faint); margin-bottom: 4px; }
+  .stat-cell .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.15rem; font-weight: 600; }
+  .stat-cell .v.up { color: var(--live); }
+  .stat-cell .v.down { color: var(--danger); }
+  @media (max-width: 560px) { .allot-box, .stats-grid { grid-template-columns: 1fr 1fr; } }
+
+  .chart-wrap {
+    margin-top: 14px; border: 1px solid var(--line); border-radius: 8px;
+    padding: 12px; background: #07090c; position: relative;
+  }
+  #priceChart { width: 100%; height: 220px; display: block; }
+  .chart-legend {
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    margin-top: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--muted);
+  }
+  .chart-legend .px { color: var(--ink); font-weight: 600; }
+
+  .settle {
+    margin-top: 16px; padding: 16px; border-radius: 8px;
+    border: 1px solid var(--line-strong);
+  }
+  .settle .big {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 700; margin: 6px 0 4px;
+  }
+  .settle .big.up { color: var(--live); }
+  .settle .big.down { color: var(--danger); }
+  .settle .big.flat { color: var(--delta); }
+
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+  }
+  @media (max-width: 640px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { margin-top: 16px; display: none; }
+  .share-canvas-wrap.show { display: block; }
+  #shareCanvas { width: 100%; max-width: 560px; border: 1px solid var(--line); border-radius: 8px; background: #060709; }
+  .share-hint { color: var(--muted); font-size: 0.85rem; margin-top: 8px; }
+
+  footer {
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 28px var(--pad) 48px; border-top: 1px solid var(--line);
+    max-width: 880px; margin: 0 auto;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">IPO<span>·029</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; <span data-en="MINI GAME · RETAIL IPO LOTTERY">迷你游戏 · 散户打新抽奖</span></p>
+    <h1 data-en="Can you win the IPO lottery?">打新能中吗？能赚多少？</h1>
+    <p data-en="Pick a fictional IPO, subscribe, draw allotment, then watch the first-day price walk. Hot deals allot almost nothing — just like real life.">选一家虚构公司申购，抽中签、看首日涨跌。热门标的分得极少——还原真实散户体验。</p>
+    <div class="steps" aria-hidden="false">
+      <div class="step-pill"><div class="n">01</div><div class="t" data-en="Pick an IPO">选股</div></div>
+      <div class="step-pill"><div class="n">02</div><div class="t" data-en="Subscribe">申购</div></div>
+      <div class="step-pill"><div class="n">03</div><div class="t" data-en="Draw &amp; trade day 1">开奖 · 首日</div></div>
+    </div>
+    <div class="disclaimer" role="note">
+      <strong data-en="Fiction · Entertainment only.">虚构模拟 · 仅供娱乐。</strong>
+      <span data-en=" Companies, prices, and outcomes are made up. This is not investment advice, not a solicitation, and not a real brokerage."> 公司、价格与结果均为虚构。不构成投资建议，非招股/荐股，非真实券商交易。</span>
+    </div>
+  </header>
+
+  <section class="field" id="step1">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <span class="field-title" data-en="Choose an IPO">选一家 IPO</span>
+      <span class="field-hint" data-en="Heat ↑ → win rate ↓. Volatility drives the first-day walk.">热度越高中签越难；波动率决定首日走势幅度。</span>
+    </div>
+    <div class="ipo-grid" id="ipoGrid" role="listbox" aria-label="IPO list"></div>
+  </section>
+
+  <section class="field" id="step2">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <span class="field-title" data-en="Subscription amount">申购金额</span>
+      <span class="field-hint" data-en="Even if you win, you only get a tiny allotment — often a few shares.">即使中签，也只按配售比例分到极少股数。</span>
+    </div>
+    <div class="budget-row">
+      <span class="budget-prefix">$</span>
+      <input class="budget-input" id="amountInput" type="number" min="100" max="1000000" step="100" value="5000" inputmode="numeric" aria-label="Subscription amount">
+    </div>
+    <div class="quick-chips" id="chips">
+      <button type="button" class="chip" data-v="1000">$1,000</button>
+      <button type="button" class="chip active" data-v="5000">$5,000</button>
+      <button type="button" class="chip" data-v="10000">$10,000</button>
+      <button type="button" class="chip" data-v="50000">$50,000</button>
+    </div>
+    <p class="budget-err" id="amountErr"></p>
+    <div class="cta-row">
+      <button type="button" class="btn-primary" id="drawBtn" data-en="Draw allotment">开奖抽签</button>
+      <button type="button" class="btn-ghost" id="resetBtn" data-en="Play again" hidden>再玩一局</button>
+    </div>
+  </section>
+
+  <section class="field" id="step3" hidden>
+    <div class="field-head">
+      <span class="field-no">03</span>
+      <span class="field-title" data-en="Allotment result">中签结果</span>
+    </div>
+    <div class="panel">
+      <div class="lottery-spin" id="lotterySpin" aria-live="polite">…</div>
+      <div class="allot-box" id="allotBox" hidden>
+        <div class="stat-cell"><div class="k" data-en="ALLOTTED">获配股数</div><div class="v" id="allotShares">—</div></div>
+        <div class="stat-cell"><div class="k" data-en="COST BASIS">成本</div><div class="v" id="allotCost">—</div></div>
+        <div class="stat-cell"><div class="k" data-en="FILL RATIO">获配比例</div><div class="v" id="allotRatio">—</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="field" id="step4" hidden>
+    <div class="field-head">
+      <span class="field-no">04</span>
+      <span class="field-title" data-en="First trading day">上市首日</span>
+      <span class="field-hint" data-en="Random walk — can pop or break issue price.">随机游走曲线——可大涨，也可破发。</span>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="priceChart" width="800" height="220" aria-label="First-day price chart"></canvas>
+      <div class="chart-legend">
+        <span><span data-en="Issue">发行价</span> <span class="px" id="legIssue">—</span></span>
+        <span><span data-en="Now">现价</span> <span class="px" id="legNow">—</span></span>
+        <span><span data-en="Day change">日内</span> <span class="px" id="legChg">—</span></span>
+      </div>
+    </div>
+    <div class="settle" id="settleBox" hidden>
+      <p class="mono" data-en="DAY-1 P&amp;L">首日盈亏</p>
+      <div class="big" id="pnlBig">—</div>
+      <p id="pnlSub" style="color:var(--muted);font-size:0.92rem;"></p>
+    </div>
+  </section>
+
+  <section class="field" id="stats">
+    <div class="field-head">
+      <span class="field-no">Σ</span>
+      <span class="field-title" data-en="Career stats">累计战绩</span>
+      <span class="field-hint" data-en="Stored locally in your browser.">保存在本机浏览器，不上传。</span>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-cell"><div class="k" data-en="ROUNDS">参与次数</div><div class="v" id="stRounds">0</div></div>
+      <div class="stat-cell"><div class="k" data-en="WIN RATE">中签率</div><div class="v" id="stWin">—</div></div>
+      <div class="stat-cell"><div class="k" data-en="TOTAL P&amp;L">总盈亏</div><div class="v" id="stPnl">$0</div></div>
+      <div class="stat-cell"><div class="k" data-en="BEST ROUND">最佳一单</div><div class="v" id="stBest">—</div></div>
+    </div>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy scorecard">复制战绩</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+      <button class="share-btn" id="clearStatsBtn" type="button" data-en="Reset stats">清空战绩</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap">
+      <canvas id="shareCanvas" width="1200" height="630"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono">IPO-029 · 散户打新迷你游戏</span>
+</footer>
+
+<script>
+(function () {
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  function t(zh, en) { return lang === "en" ? en : zh; }
+  function $(id) { return document.getElementById(id); }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    renderIpos();
+    renderStats();
+    if (lastRound) renderSettle(lastRound);
+  }
+  $("langBtn").addEventListener("click", function () { applyLang(lang === "en" ? "zh" : "en"); });
+
+  var IPOS = [
+    {
+      id: "ringfit",
+      ticker: "RING",
+      nameZh: "RingFit", nameEn: "RingFit",
+      tagZh: "智能穿戴 · 指环", tagEn: "Smart wear · ring",
+      price: 18,
+      heat: 4,
+      winRate: 0.08,
+      allotPct: 0.02,
+      vol: 0.28
+    },
+    {
+      id: "neurochip",
+      ticker: "NRCH",
+      nameZh: "NeuroChip", nameEn: "NeuroChip",
+      tagZh: "AI 芯片", tagEn: "AI chip",
+      price: 45,
+      heat: 3,
+      winRate: 0.18,
+      allotPct: 0.05,
+      vol: 0.18
+    },
+    {
+      id: "orbitgo",
+      ticker: "ORBT",
+      nameZh: "OrbitGo", nameEn: "OrbitGo",
+      tagZh: "太空旅游", tagEn: "Space tourism",
+      price: 28,
+      heat: 5,
+      winRate: 0.04,
+      allotPct: 0.01,
+      vol: 0.36
+    }
+  ];
+
+  var selected = IPOS[0].id;
+  var lastRound = null;
+  var animTimer = null;
+  var STAT_KEY = "ipo029-stats";
+
+  function loadStats() {
+    try {
+      var raw = localStorage.getItem(STAT_KEY);
+      if (!raw) return { rounds: 0, wins: 0, pnl: 0, best: null };
+      var o = JSON.parse(raw);
+      return {
+        rounds: o.rounds | 0,
+        wins: o.wins | 0,
+        pnl: Number(o.pnl) || 0,
+        best: o.best == null ? null : Number(o.best)
+      };
+    } catch (e) {
+      return { rounds: 0, wins: 0, pnl: 0, best: null };
+    }
+  }
+  function saveStats(s) {
+    try { localStorage.setItem(STAT_KEY, JSON.stringify(s)); } catch (e) {}
+  }
+
+  function heatHtml(n) {
+    var h = '<span class="heat" aria-hidden="true">';
+    for (var i = 1; i <= 5; i++) h += '<i class="' + (i <= n ? "on" : "") + '"></i>';
+    return h + "</span>";
+  }
+
+  function renderIpos() {
+    var grid = $("ipoGrid");
+    grid.innerHTML = IPOS.map(function (c) {
+      var active = c.id === selected ? " active" : "";
+      return '<button type="button" class="ipo-card' + active + '" role="option" aria-selected="' + (c.id === selected) + '" data-id="' + c.id + '">' +
+        '<div class="ticker">' + c.ticker + '</div>' +
+        '<div class="name">' + t(c.nameZh, c.nameEn) + '</div>' +
+        '<div class="tag">' + t(c.tagZh, c.tagEn) + '</div>' +
+        '<div class="ipo-meta">' +
+          '<div>' + t("发行价", "Issue") + ' <b>$' + c.price.toFixed(2) + '</b></div>' +
+          '<div>' + t("热度", "Heat") + ' ' + heatHtml(c.heat) + ' <b>~' + Math.round(c.winRate * 100) + '%</b></div>' +
+          '<div>' + t("配售比例", "Allot") + ' <b>~' + (c.allotPct * 100).toFixed(1) + '%</b></div>' +
+          '<div>' + t("首日波动", "Day-1 vol") + ' <b>±' + Math.round(c.vol * 100) + '%</b></div>' +
+        '</div></button>';
+    }).join("");
+    grid.querySelectorAll(".ipo-card").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        selected = btn.dataset.id;
+        renderIpos();
+      });
+    });
+  }
+
+  function fmtMoney(n, signed) {
+    var abs = Math.abs(n);
+    var s = abs >= 1000 ? abs.toLocaleString(undefined, { maximumFractionDigits: 2 }) : abs.toFixed(2);
+    if (signed) {
+      if (n > 0.005) return "+$" + s;
+      if (n < -0.005) return "-$" + s;
+      return "$" + s;
+    }
+    return "$" + s;
+  }
+
+  function renderStats() {
+    var s = loadStats();
+    $("stRounds").textContent = String(s.rounds);
+    $("stWin").textContent = s.rounds ? (Math.round((s.wins / s.rounds) * 1000) / 10) + "%" : "—";
+    var pnlEl = $("stPnl");
+    pnlEl.textContent = fmtMoney(s.pnl, true);
+    pnlEl.className = "v " + (s.pnl > 0.005 ? "up" : s.pnl < -0.005 ? "down" : "");
+    var bestEl = $("stBest");
+    if (s.best == null) { bestEl.textContent = "—"; bestEl.className = "v"; }
+    else {
+      bestEl.textContent = fmtMoney(s.best, true);
+      bestEl.className = "v " + (s.best > 0 ? "up" : s.best < 0 ? "down" : "");
+    }
+  }
+
+  function getCompany() {
+    for (var i = 0; i < IPOS.length; i++) if (IPOS[i].id === selected) return IPOS[i];
+    return IPOS[0];
+  }
+
+  function validateAmount() {
+    var v = Number($("amountInput").value);
+    var err = $("amountErr");
+    if (!isFinite(v) || v < 100) {
+      err.textContent = t("最少申购 $100。", "Minimum subscription $100.");
+      return null;
+    }
+    if (v > 1000000) {
+      err.textContent = t("本游戏上限 $1,000,000。", "Cap for this game: $1,000,000.");
+      return null;
+    }
+    err.textContent = "";
+    return v;
+  }
+
+  document.getElementById("chips").addEventListener("click", function (e) {
+    var btn = e.target.closest(".chip");
+    if (!btn) return;
+    document.querySelectorAll("#chips .chip").forEach(function (c) { c.classList.remove("active"); });
+    btn.classList.add("active");
+    $("amountInput").value = btn.dataset.v;
+    $("amountErr").textContent = "";
+  });
+  $("amountInput").addEventListener("input", function () {
+    document.querySelectorAll("#chips .chip").forEach(function (c) {
+      c.classList.toggle("active", Number(c.dataset.v) === Number($("amountInput").value));
+    });
+  });
+
+  function rand() { return Math.random(); }
+  function randn() {
+    // Box-Muller
+    var u = 1 - rand(), v = rand();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+
+  function simulateWalk(issue, vol, steps) {
+    var prices = [issue];
+    var p = issue;
+    // mild upward drift bias for "IPO pop" but still can break
+    var drift = (rand() - 0.42) * vol * 0.35;
+    for (var i = 1; i < steps; i++) {
+      var shock = randn() * (vol / Math.sqrt(steps)) + drift / steps;
+      p = Math.max(0.5, p * (1 + shock));
+      prices.push(p);
+    }
+    return prices;
+  }
+
+  function drawChart(canvas, prices, issue) {
+    var ctx = canvas.getContext("2d");
+    var W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "#07090c";
+    ctx.fillRect(0, 0, W, H);
+    var padL = 48, padR = 16, padT = 16, padB = 28;
+    var min = Math.min.apply(null, prices.concat([issue]));
+    var max = Math.max.apply(null, prices.concat([issue]));
+    var span = Math.max(0.01, max - min) * 1.12;
+    var mid = (max + min) / 2;
+    min = mid - span / 2; max = mid + span / 2;
+    function X(i) { return padL + (i / (prices.length - 1)) * (W - padL - padR); }
+    function Y(v) { return padT + (1 - (v - min) / (max - min)) * (H - padT - padB); }
+
+    // issue line
+    ctx.strokeStyle = "rgba(237,239,241,0.18)";
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(padL, Y(issue));
+    ctx.lineTo(W - padR, Y(issue));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    var last = prices[prices.length - 1];
+    var up = last >= issue;
+    var col = up ? "#4ade80" : "#f87171";
+    // area
+    ctx.beginPath();
+    ctx.moveTo(X(0), Y(prices[0]));
+    for (var i = 1; i < prices.length; i++) ctx.lineTo(X(i), Y(prices[i]));
+    ctx.lineTo(X(prices.length - 1), H - padB);
+    ctx.lineTo(X(0), H - padB);
+    ctx.closePath();
+    ctx.fillStyle = up ? "rgba(74,222,128,0.08)" : "rgba(248,113,113,0.08)";
+    ctx.fill();
+    // line
+    ctx.beginPath();
+    ctx.moveTo(X(0), Y(prices[0]));
+    for (var j = 1; j < prices.length; j++) ctx.lineTo(X(j), Y(prices[j]));
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 2.2;
+    ctx.stroke();
+    // end dot
+    ctx.fillStyle = col;
+    ctx.beginPath();
+    ctx.arc(X(prices.length - 1), Y(last), 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "11px ui-monospace, Menlo, monospace";
+    ctx.fillText("$" + max.toFixed(2), 6, padT + 10);
+    ctx.fillText("$" + min.toFixed(2), 6, H - padB);
+  }
+
+  function animateChart(full, issue, onDone) {
+    var canvas = $("priceChart");
+    var i = 2;
+    if (animTimer) { clearInterval(animTimer); animTimer = null; }
+    function tick() {
+      var slice = full.slice(0, i);
+      drawChart(canvas, slice, issue);
+      var now = slice[slice.length - 1];
+      var chg = ((now - issue) / issue) * 100;
+      $("legIssue").textContent = "$" + issue.toFixed(2);
+      $("legNow").textContent = "$" + now.toFixed(2);
+      $("legChg").textContent = (chg >= 0 ? "+" : "") + chg.toFixed(2) + "%";
+      $("legChg").style.color = chg >= 0 ? "var(--live)" : "var(--danger)";
+      i++;
+      if (i > full.length) {
+        if (animTimer) clearInterval(animTimer);
+        animTimer = null;
+        if (onDone) onDone(now);
+      }
+    }
+    if (reduced) {
+      drawChart(canvas, full, issue);
+      var now2 = full[full.length - 1];
+      var chg2 = ((now2 - issue) / issue) * 100;
+      $("legIssue").textContent = "$" + issue.toFixed(2);
+      $("legNow").textContent = "$" + now2.toFixed(2);
+      $("legChg").textContent = (chg2 >= 0 ? "+" : "") + chg2.toFixed(2) + "%";
+      $("legChg").style.color = chg2 >= 0 ? "var(--live)" : "var(--danger)";
+      if (onDone) onDone(now2);
+      return;
+    }
+    tick();
+    animTimer = setInterval(tick, 45);
+  }
+
+  function renderSettle(round) {
+    if (!round || !round.won) {
+      $("settleBox").hidden = true;
+      return;
+    }
+    $("settleBox").hidden = false;
+    var el = $("pnlBig");
+    el.textContent = fmtMoney(round.pnl, true);
+    el.className = "big " + (round.pnl > 0.005 ? "up" : round.pnl < -0.005 ? "down" : "flat");
+    $("pnlSub").textContent = t(
+      "获配 " + round.shares + " 股 · 成本 " + fmtMoney(round.cost) + " · 收盘 " + fmtMoney(round.close),
+      round.shares + " shares · cost " + fmtMoney(round.cost) + " · close " + fmtMoney(round.close)
+    );
+  }
+
+  function setSpinning() {
+    $("step3").hidden = false;
+    $("step4").hidden = true;
+    $("allotBox").hidden = true;
+    $("settleBox").hidden = true;
+    var spin = $("lotterySpin");
+    spin.className = "lottery-spin";
+    var framesZh = ["抽签中…", "配售中…", "摇号中…", "清算中…"];
+    var framesEn = ["Drawing…", "Allotting…", "Lottery…", "Clearing…"];
+    var i = 0;
+    spin.textContent = t(framesZh[0], framesEn[0]);
+    if (reduced) return function () {};
+    var id = setInterval(function () {
+      i = (i + 1) % framesZh.length;
+      spin.textContent = t(framesZh[i], framesEn[i]);
+    }, 220);
+    return function () { clearInterval(id); };
+  }
+
+  function runRound() {
+    var amount = validateAmount();
+    if (amount == null) return;
+    var co = getCompany();
+    $("drawBtn").disabled = true;
+    $("resetBtn").hidden = true;
+    var stopSpin = setSpinning();
+
+    var delay = reduced ? 80 : 1400;
+    setTimeout(function () {
+      stopSpin();
+      var won = rand() < co.winRate;
+      var spin = $("lotterySpin");
+      var stats = loadStats();
+      stats.rounds += 1;
+
+      if (!won) {
+        spin.className = "lottery-spin miss";
+        spin.textContent = t("未中签 · 下次好运", "No allotment · better luck next time");
+        $("allotBox").hidden = true;
+        $("step4").hidden = true;
+        lastRound = { won: false, co: co, amount: amount, pnl: 0, shares: 0, cost: 0, close: co.price };
+        saveStats(stats);
+        renderStats();
+        $("drawBtn").disabled = false;
+        $("resetBtn").hidden = false;
+        return;
+      }
+
+      // win: tiny allotment
+      var rawShares = (amount * co.allotPct) / co.price;
+      // jitter ±30%, floor at 1 if any win
+      var shares = Math.max(1, Math.floor(rawShares * (0.7 + rand() * 0.6)));
+      // sometimes even "win" is fractional tiny — keep integer for clarity
+      if (rawShares < 1) shares = 1;
+      var cost = shares * co.price;
+      var fill = cost / amount;
+
+      spin.className = "lottery-spin win";
+      spin.textContent = t("中签！但只分到一点点", "Allotted — but almost nothing");
+      $("allotBox").hidden = false;
+      $("allotShares").textContent = String(shares);
+      $("allotCost").textContent = fmtMoney(cost);
+      $("allotRatio").textContent = (fill * 100).toFixed(2) + "%";
+
+      $("step4").hidden = false;
+      var walk = simulateWalk(co.price, co.vol, 64);
+      animateChart(walk, co.price, function (close) {
+        var pnl = shares * (close - co.price);
+        lastRound = { won: true, co: co, amount: amount, shares: shares, cost: cost, close: close, pnl: pnl, fill: fill };
+        stats.wins += 1;
+        stats.pnl += pnl;
+        if (stats.best == null || pnl > stats.best) stats.best = pnl;
+        saveStats(stats);
+        renderStats();
+        renderSettle(lastRound);
+        $("drawBtn").disabled = false;
+        $("resetBtn").hidden = false;
+      });
+    }, delay);
+  }
+
+  $("drawBtn").addEventListener("click", runRound);
+  $("resetBtn").addEventListener("click", function () {
+    if (animTimer) { clearInterval(animTimer); animTimer = null; }
+    $("step3").hidden = true;
+    $("step4").hidden = true;
+    $("settleBox").hidden = true;
+    $("allotBox").hidden = true;
+    lastRound = null;
+    $("resetBtn").hidden = true;
+    $("drawBtn").disabled = false;
+    window.scrollTo({ top: $("step1").offsetTop - 80, behavior: reduced ? "auto" : "smooth" });
+  });
+
+  function scorecardText() {
+    var s = loadStats();
+    var lines = [];
+    lines.push(t("IPO-029 · 散户打新战绩", "IPO-029 · Retail IPO scorecard"));
+    lines.push(t("参与 " + s.rounds + " 次 · 中签率 " + (s.rounds ? (Math.round(s.wins / s.rounds * 1000) / 10) + "%" : "—"),
+      s.rounds + " rounds · win rate " + (s.rounds ? (Math.round(s.wins / s.rounds * 1000) / 10) + "%" : "—")));
+    lines.push(t("总盈亏 " + fmtMoney(s.pnl, true) + " · 最佳 " + (s.best == null ? "—" : fmtMoney(s.best, true)),
+      "Total P&L " + fmtMoney(s.pnl, true) + " · Best " + (s.best == null ? "—" : fmtMoney(s.best, true))));
+    if (lastRound && lastRound.won) {
+      lines.push(t(
+        "最近一单：" + lastRound.co.ticker + " 获配 " + lastRound.shares + " 股，首日 " + fmtMoney(lastRound.pnl, true),
+        "Latest: " + lastRound.co.ticker + " " + lastRound.shares + " sh, day-1 " + fmtMoney(lastRound.pnl, true)
+      ));
+    } else if (lastRound && !lastRound.won) {
+      lines.push(t("最近一单：未中签（" + lastRound.co.ticker + "）", "Latest: no allotment (" + lastRound.co.ticker + ")"));
+    }
+    lines.push(t("虚构模拟 · 非投资建议 · build-100.com/029", "Fiction · not advice · build-100.com/029"));
+    return lines.join("\n");
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); resolve(); } catch (e) { reject(e); }
+      document.body.removeChild(ta);
+    });
+  }
+
+  $("copyBtn").addEventListener("click", function () {
+    var btn = $("copyBtn");
+    copyText(scorecardText()).then(function () {
+      btn.classList.add("copied");
+      var old = btn.innerHTML;
+      btn.textContent = t("已复制", "Copied");
+      setTimeout(function () { btn.classList.remove("copied"); btn.innerHTML = old; }, 1600);
+    }).catch(function () {
+      btn.textContent = t("复制失败", "Copy failed");
+    });
+  });
+
+  $("clearStatsBtn").addEventListener("click", function () {
+    if (!confirm(t("确定清空本机累计战绩？", "Clear local career stats?"))) return;
+    saveStats({ rounds: 0, wins: 0, pnl: 0, best: null });
+    renderStats();
+  });
+
+  function drawShare() {
+    var c = $("shareCanvas");
+    var ctx = c.getContext("2d");
+    var W = c.width, H = c.height;
+    var s = loadStats();
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.06)";
+    for (var x = 20; x < W; x += 36) for (var y = 20; y < H; y += 36) {
+      ctx.beginPath(); ctx.arc(x, y, 1.2, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.fillStyle = "#06b6d4";
+    ctx.font = "600 22px ui-monospace, Menlo, monospace";
+    ctx.fillText("IPO · 029", 64, 80);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 48px Helvetica Neue, Arial, sans-serif";
+    ctx.fillText(t("散户打新战绩", "Retail IPO scorecard"), 64, 160);
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "400 26px Helvetica Neue, Arial, sans-serif";
+    ctx.fillText(t("参与 " + s.rounds + " 次", s.rounds + " rounds"), 64, 230);
+    ctx.fillText(t("中签率 " + (s.rounds ? (Math.round(s.wins / s.rounds * 1000) / 10) + "%" : "—"),
+      "Win rate " + (s.rounds ? (Math.round(s.wins / s.rounds * 1000) / 10) + "%" : "—")), 64, 275);
+    var pnlColor = s.pnl > 0 ? "#4ade80" : s.pnl < 0 ? "#f87171" : "#fbbf24";
+    ctx.fillStyle = pnlColor;
+    ctx.font = "700 56px ui-monospace, Menlo, monospace";
+    ctx.fillText(fmtMoney(s.pnl, true), 64, 370);
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "400 24px Helvetica Neue, Arial, sans-serif";
+    ctx.fillText(t("总盈亏 · 最佳 " + (s.best == null ? "—" : fmtMoney(s.best, true)),
+      "Total P&L · Best " + (s.best == null ? "—" : fmtMoney(s.best, true))), 64, 420);
+    ctx.fillStyle = "#fbbf24";
+    ctx.font = "500 20px Helvetica Neue, Arial, sans-serif";
+    ctx.fillText(t("虚构模拟 · 非投资建议", "Fiction · not investment advice"), 64, 490);
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "500 20px ui-monospace, Menlo, monospace";
+    ctx.fillText("build-100.com/029", 64, H - 56);
+    $("shareWrap").classList.add("show");
+  }
+  $("shareImgBtn").addEventListener("click", drawShare);
+
+  renderIpos();
+  renderStats();
+  if (lang === "en") applyLang("en");
+})();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

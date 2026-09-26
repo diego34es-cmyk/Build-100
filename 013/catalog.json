@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-18",
+  "updated": "2026-09-26",
   "filters": [
     {
       "id": "all",
@@ -103,7 +103,7 @@
         "life",
         "tools"
       ],
-      "live": true,
+      "live": false,
       "url": "https://build-100.com/006/"
     },
     {
@@ -116,7 +116,7 @@
         "life",
         "market"
       ],
-      "live": true,
+      "live": false,
       "url": "https://build-100.com/007/"
     },
     {
@@ -129,7 +129,7 @@
         "finance",
         "tools"
       ],
-      "live": true,
+      "live": false,
       "url": "https://build-100.com/008/"
     },
     {
@@ -142,7 +142,7 @@
         "finance",
         "learn"
       ],
-      "live": true,
+      "live": false,
       "url": "https://build-100.com/009/"
     },
     {
@@ -168,7 +168,7 @@
         "life",
         "tools"
       ],
-      "live": true,
+      "live": false,
       "url": "https://build-100.com/011/"
     },
     {
@@ -180,7 +180,7 @@
       "cats": [
         "finance"
       ],
-      "live": true,
+      "live": false,
       "url": "https://build-100.com/012/"
     },
     {
@@ -288,6 +288,102 @@
       ],
       "live": true,
       "url": "https://build-100.com/021/"
+    },
+    {
+      "id": "022",
+      "code": "ICONPACK",
+      "name": "ICONPACK-022",
+      "sub_zh": "拖图出 favicon/apple-touch/PWA 图标包 + HTML",
+      "sub_en": "Drop one image → favicon / apple-touch / PWA pack + HTML, local only",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/022/"
+    },
+    {
+      "id": "023",
+      "code": "SITEMAP",
+      "name": "SITEMAP-023",
+      "sub_zh": "粘贴 URL 列表一键出 sitemap.xml",
+      "sub_en": "Paste URL list → download sitemap.xml, local only",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/023/"
+    },
+    {
+      "id": "024",
+      "code": "HREFLANG",
+      "name": "HREFLANG-024",
+      "sub_zh": "填语言码与 URL 一键出 alternate + x-default",
+      "sub_en": "Fill language codes + URLs → alternate + x-default tags, local only",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/024/"
+    },
+    {
+      "id": "025",
+      "code": "SECTXT",
+      "name": "SECTXT-025",
+      "sub_zh": "填 Contact+Expires 一键出 security.txt",
+      "sub_en": "Fill Contact + Expires → download security.txt, local only",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/025/"
+    },
+    {
+      "id": "026",
+      "code": "CHGPWD",
+      "name": "CHGPWD-026",
+      "sub_zh": "填改密 URL 一键出 change-password 临时跳转",
+      "sub_en": "Paste change-password URL → temporary /.well-known redirect, local only",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/026/"
+    },
+    {
+      "id": "027",
+      "code": "HIKE",
+      "name": "HIKE-027",
+      "sub_zh": "加息之后：测算房贷/信用卡/存款/债券影响",
+      "sub_en": "After the hike: mortgage, card, deposit & bond impact",
+      "cats": [
+        "finance"
+      ],
+      "live": true,
+      "url": "https://build-100.com/027/"
+    },
+    {
+      "id": "028",
+      "code": "LIKENESS",
+      "name": "LIKENESS-028",
+      "sub_zh": "AI 换脸拟声风险自查 —— 测暴露面，生成预防/检测/维权清单",
+      "sub_en": "AI deepfake likeness risk check — exposure score + prevent/detect/act checklist",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/028/"
+    },
+    {
+      "id": "029",
+      "code": "IPO",
+      "name": "IPO-029",
+      "sub_zh": "散户热门 IPO 打新迷你游戏——申购·中签·首日涨跌",
+      "sub_en": "Retail IPO lottery — subscribe, allotment, day-1 price walk",
+      "cats": [
+        "finance"
+      ],
+      "live": true,
+      "url": "https://build-100.com/029/"
     }
   ]
 }
