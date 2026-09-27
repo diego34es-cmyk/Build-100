@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MODEL-030 · 9 月 AI 模型大爆炸</title>
+<meta name="description" content="2026 年 9 月 AI 模型大爆炸——交互时间线 + 模型速查卡 + 5 道测验。5 分钟搞清 Astra / Fable / Flash / Opus / Sol / Luna。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/030/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E030%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MODEL-030 · 9 月 AI 模型大爆炸">
+<meta property="og:description" content="交互时间线 + 速查卡 + 5 道测验。搞清 GPT-6 Astra、Claude Fable 5.1、Gemini 3.8 Flash 谁是谁。">
+<meta property="og:url" content="https://build-100.com/030/">
+<meta property="og:image" content="https://build-100.com/030/og-030.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="MODEL-030 · 9 月 AI 模型大爆炸">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MODEL-030 · 9 月 AI 模型大爆炸">
+<meta name="twitter:description" content="Interactive Sept 2026 AI model timeline + cheat cards + 5-quiz. Who is Astra / Fable / Flash?">
+<meta name="twitter:image" content="https://build-100.com/030/og-030.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #a78bfa;
+    --accent-glow: rgba(167, 139, 250, 0.35);
+    --danger: #f87171;
+    --mid: #fb923c;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-padding-top: 72px; color-scheme: dark; }
+  [hidden] { display: none !important; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 44px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p strong { color: var(--ink); font-weight: 500; }
+
+  .cta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+  .btn-primary {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 14px 22px; border-radius: 4px; cursor: pointer; border: 1px solid var(--accent);
+    background: var(--accent); color: var(--bg); font-weight: 700;
+    box-shadow: 0 0 18px var(--accent-glow); transition: opacity .18s;
+  }
+  .btn-primary:hover { opacity: 0.92; }
+  .btn-ghost {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 14px 22px; border-radius: 4px; cursor: pointer;
+    background: none; border: 1px solid var(--line-strong); color: var(--ink); transition: all .18s;
+  }
+  .btn-ghost:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+
+  .disclaimer {
+    margin-top: 20px; padding: 14px 16px; border-radius: 8px;
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    background: rgba(251, 191, 36, 0.06);
+    color: var(--delta); font-size: 0.88rem; line-height: 1.55;
+  }
+  .disclaimer strong { color: #fde68a; font-weight: 600; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(22px, 4vh, 32px) 0; }
+  .field:last-of-type { border-bottom: 1px solid var(--line); }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  /* Timeline */
+  .tl { list-style: none; position: relative; padding-left: 0; }
+  .tl::before {
+    content: ""; position: absolute; left: 18px; top: 8px; bottom: 8px; width: 2px;
+    background: linear-gradient(180deg, var(--accent), rgba(167,139,250,0.15));
+  }
+  .tl-item { position: relative; padding: 0 0 14px 52px; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-dot {
+    position: absolute; left: 10px; top: 14px; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--accent); box-shadow: 0 0 10px var(--accent-glow);
+    z-index: 1;
+  }
+  .tl-item.open .tl-dot { background: var(--accent); }
+  .tl-btn {
+    width: 100%; text-align: left; background: var(--bg-raise); border: 1px solid var(--line-strong);
+    border-radius: 10px; padding: 14px 16px; cursor: pointer; color: var(--ink);
+    transition: border-color .18s, box-shadow .18s;
+  }
+  .tl-btn:hover { border-color: var(--ink); }
+  .tl-item.open .tl-btn {
+    border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow), 0 0 20px var(--accent-glow);
+  }
+  .tl-date { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 4px; }
+  .tl-name { font-weight: 700; font-size: 1.02rem; }
+  .tl-org { color: var(--muted); font-size: 0.86rem; margin-top: 2px; }
+  .tl-body {
+    margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 0.92rem; display: none;
+  }
+  .tl-item.open .tl-body { display: block; }
+  .tl-stat {
+    margin-top: 10px; display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em;
+    color: var(--ink); background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.25);
+    border-radius: 6px; padding: 8px 12px;
+  }
+  .tl-stat b { color: var(--accent); }
+
+  /* Model cards */
+  .card-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+  }
+  @media (max-width: 640px) { .card-grid { grid-template-columns: 1fr; } }
+  .mcard {
+    background: var(--bg-raise); border: 1px solid var(--line-strong); border-radius: 10px;
+    padding: 16px; transition: border-color .18s;
+  }
+  .mcard:hover { border-color: var(--accent); }
+  .mcard .tag {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 8px;
+  }
+  .mcard h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+  .mcard .when { color: var(--muted); font-size: 0.84rem; margin-bottom: 10px; font-family: var(--mono); letter-spacing: 0.04em; }
+  .mcard .pos { color: var(--ink); font-size: 0.92rem; margin-bottom: 12px; }
+  .mcard .price {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    color: var(--delta); border-top: 1px solid var(--line); padding-top: 10px;
+  }
+  .mcard .price b { color: var(--ink); font-weight: 600; }
+
+  /* Quiz */
+  .quiz-list { display: grid; gap: 14px; }
+  .qcard {
+    background: var(--bg-raise); border: 1px solid var(--line-strong); border-radius: 10px; padding: 16px;
+  }
+  .qcard .qn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 8px;
+  }
+  .qcard .qq { font-weight: 700; font-size: 1.02rem; margin-bottom: 12px; }
+  .qopts { display: grid; gap: 8px; }
+  .qopt {
+    text-align: left; background: transparent; border: 1px solid var(--line); border-radius: 8px;
+    padding: 11px 14px; cursor: pointer; color: var(--ink); font-size: 0.92rem; transition: all .15s;
+  }
+  .qopt:hover:not(:disabled) { border-color: var(--ink); }
+  .qopt:disabled { cursor: default; }
+  .qopt.correct { border-color: var(--live); background: rgba(74,222,128,0.08); color: var(--live); }
+  .qopt.wrong { border-color: var(--danger); background: rgba(248,113,113,0.08); color: var(--danger); }
+  .qopt.reveal-ans { border-color: var(--live); background: rgba(74,222,128,0.08); }
+  .qexplain {
+    margin-top: 12px; padding: 12px; border-radius: 8px; font-size: 0.9rem;
+    border: 1px solid var(--line); color: var(--muted); display: none;
+  }
+  .qexplain.show { display: block; }
+  .qexplain strong { color: var(--ink); font-weight: 600; }
+  .quiz-score {
+    margin-top: 18px; padding: 16px; border-radius: 10px; border: 1px solid var(--line-strong);
+    background: var(--bg-raise); text-align: center;
+  }
+  .quiz-score .big {
+    font-family: var(--mono); font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 700;
+    color: var(--accent); margin: 6px 0;
+  }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { margin-top: 16px; display: none; }
+  .share-canvas-wrap.show { display: block; }
+  #shareCanvas { width: 100%; max-width: 560px; border: 1px solid var(--line); border-radius: 8px; background: #060709; }
+  .share-hint { color: var(--muted); font-size: 0.85rem; margin-top: 8px; }
+
+  footer {
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 28px var(--pad) 48px; border-top: 1px solid var(--line);
+    max-width: 880px; margin: 0 auto;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">MODEL<span>·030</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow"><span class="tick">●</span>&nbsp; <span data-en="LEARNING · SEPT 2026 MODEL BLAST">学习 · 2026 年 9 月模型大爆炸</span></p>
+    <h1 data-en="Who is who in the Sept AI blast?">9 月连发，谁是谁？</h1>
+    <p data-en="Three flagships in three days, then a price war. Interactive timeline + cheat cards + 5-quiz — clear Astra / Fable / Flash / Opus / Sol / Luna in five minutes.">三天三连发，再打价格战。交互时间线 + 速查卡 + 5 道测验——5 分钟搞清 Astra / Fable / Flash / Opus / Sol / Luna。</p>
+    <div class="cta-row">
+      <a class="btn-primary" href="#timeline" data-en="Open timeline">打开时间线</a>
+      <a class="btn-ghost" href="#quiz" data-en="Take the quiz">去做测验</a>
+    </div>
+    <div class="disclaimer" role="note">
+      <strong data-en="Learning snapshot.">学习整理快照。</strong>
+      <span data-en=" Prices and dates are public-report snapshots as of 2026-09-27 and may change. Not investment advice."> 价格与时间为公开报道快照（截至 2026-09-27），可能变动；内容为学习整理，非投资建议。</span>
+    </div>
+  </header>
+
+  <section class="field" id="timeline">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <span class="field-title" data-en="Interactive timeline">交互时间线</span>
+      <span class="field-hint" data-en="2026-09-01 → 2026-09-26 · tap a node to expand">2026-09-01 → 2026-09-26 · 点击节点展开</span>
+    </div>
+    <ul class="tl" id="tlList" role="list"></ul>
+  </section>
+
+  <section class="field" id="cards">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <span class="field-title" data-en="Model cheat cards">模型速查卡</span>
+      <span class="field-hint" data-en="Astra / Fable / Flash / Opus / Sol / Luna — who ships what">Astra / Fable / Flash / Opus / Sol / Luna —— 谁发了什么</span>
+    </div>
+    <div class="card-grid" id="cardGrid"></div>
+  </section>
+
+  <section class="field" id="quiz">
+    <div class="field-head">
+      <span class="field-no">03</span>
+      <span class="field-title" data-en="5-question quiz">5 道测验</span>
+      <span class="field-hint" data-en="Single choice — tap to reveal answer + why">单选题 · 点选后出答案与解析</span>
+    </div>
+    <div class="quiz-list" id="quizList"></div>
+    <div class="quiz-score" id="quizScore" hidden>
+      <p class="mono" data-en="YOUR SCORE">你的得分</p>
+      <div class="big" id="scoreBig">0 / 5</div>
+      <p id="scoreSub" style="color:var(--muted);font-size:0.92rem;"></p>
+    </div>
+  </section>
+
+  <div class="share-row">
+    <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+    <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareWrap">
+    <canvas id="shareCanvas" width="1200" height="630"></canvas>
+    <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+  </div>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono">MODEL-030 · Sept AI blast</span>
+</footer>
+
+<script>
+(function () {
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  function t(zh, en) { return lang === "en" ? en : zh; }
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.getElementById("langBtn").textContent = l === "en" ? "中文" : "EN";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    renderTimeline();
+    renderCards();
+    renderQuiz();
+    updateScoreLabel();
+  }
+  document.getElementById("langBtn").addEventListener("click", function () {
+    applyLang(lang === "en" ? "zh" : "en");
+  });
+
+  /* —— Timeline data (BRIEF only) —— */
+  var TIMELINE = [
+    {
+      date: "2026-09-01",
+      nameZh: "Claude Fable 5.1",
+      nameEn: "Claude Fable 5.1",
+      orgZh: "Anthropic",
+      orgEn: "Anthropic",
+      blurbZh: "创意叙事向旗舰——三天三连发的第一枪。",
+      blurbEn: "Creative-narrative flagship — first shot of the three-day blast.",
+      statZh: "关键：9/1 最先发布",
+      statEn: "Key: first of the three-day blast (9/1)"
+    },
+    {
+      date: "2026-09-02",
+      nameZh: "Gemini 3.8 Flash",
+      nameEn: "Gemini 3.8 Flash",
+      orgZh: "Google",
+      orgEn: "Google",
+      blurbZh: "实时对话 / 多任务向——三连发第二天。",
+      blurbEn: "Realtime chat / multitask — day two of the blast.",
+      statZh: "关键：实时对话与多任务",
+      statEn: "Key: realtime dialogue + multitask"
+    },
+    {
+      date: "2026-09-03",
+      nameZh: "GPT-6 Astra",
+      nameEn: "GPT-6 Astra",
+      orgZh: "OpenAI",
+      orgEn: "OpenAI",
+      blurbZh: "复杂推理 / 计算机使用向旗舰——三连发收官。",
+      blurbEn: "Complex reasoning / computer-use flagship — closes the three-day blast.",
+      statZh: "API：$10 / $50 每百万 token（另有 fast 档）",
+      statEn: "API: $10 / $50 per 1M tokens (plus a fast tier)"
+    },
+    {
+      date: "2026-09-11",
+      nameZh: "Agents API 公开测试",
+      nameEn: "Agents API public beta",
+      orgZh: "OpenAI",
+      orgEn: "OpenAI",
+      blurbZh: "托管式 agent 运行环境——不用自己搭编排 / 上下文压缩 / 子 agent 管道。",
+      blurbEn: "Hosted agent runtime — no DIY orchestration / context compression / sub-agent plumbing.",
+      statZh: "关键：托管式 agent 运行环境",
+      statEn: "Key: hosted agent runtime"
+    },
+    {
+      date: "2026-09-22",
+      nameZh: "GPT-6 Sol / Luna",
+      nameEn: "GPT-6 Sol / Luna",
+      orgZh: "OpenAI",
+      orgEn: "OpenAI",
+      blurbZh: "比 GPT-5.6 便宜 50%——价格战开火的一侧。",
+      blurbEn: "50% cheaper than GPT-5.6 — one side of the price war.",
+      statZh: "价格：GPT-5.6 促销价的 50%",
+      statEn: "Price: 50% of GPT-5.6 promo pricing"
+    },
+    {
+      date: "2026-09-22",
+      nameZh: "Opus 5.5",
+      nameEn: "Opus 5.5",
+      orgZh: "Anthropic",
+      orgEn: "Anthropic",
+      blurbZh: "同日发布并降价——与 OpenAI 对打价格战。",
+      blurbEn: "Shipped same day with a price cut — the other side of the war.",
+      statZh: "关键：9/22 同日降价开火",
+      statEn: "Key: same-day price cut that ignited the war"
+    },
+    {
+      date: "2026-09-24",
+      nameZh: "Horizon Create / Studio",
+      nameEn: "Horizon Create / Studio",
+      orgZh: "Meta",
+      orgEn: "Meta",
+      blurbZh: "用自然语言提示词生成可发布的 2D/3D 游戏。",
+      blurbEn: "Natural-language prompts → shippable 2D/3D games.",
+      statZh: "关键：提示词做游戏",
+      statEn: "Key: prompt-to-game"
+    },
+    {
+      date: "2026-09-26",
+      nameZh: "Googlebook",
+      nameEn: "Googlebook",
+      orgZh: "Google",
+      orgEn: "Google",
+      blurbZh: "AI 笔记本——9 月模型潮尾声的知识工作入口。",
+      blurbEn: "AI notebook — knowledge-work entry at the end of the Sept wave.",
+      statZh: "关键：AI 笔记本",
+      statEn: "Key: AI notebook"
+    }
+  ];
+
+  var openTl = -1;
+  function renderTimeline() {
+    var list = document.getElementById("tlList");
+    list.innerHTML = "";
+    TIMELINE.forEach(function (n, i) {
+      var li = document.createElement("li");
+      li.className = "tl-item" + (openTl === i ? " open" : "");
+      li.innerHTML =
+        '<span class="tl-dot" aria-hidden="true"></span>' +
+        '<button type="button" class="tl-btn" aria-expanded="' + (openTl === i) + '">' +
+          '<div class="tl-date">' + n.date + "</div>" +
+          '<div class="tl-name">' + t(n.nameZh, n.nameEn) + "</div>" +
+          '<div class="tl-org">' + t(n.orgZh, n.orgEn) + "</div>" +
+          '<div class="tl-body">' +
+            "<p>" + t(n.blurbZh, n.blurbEn) + "</p>" +
+            '<div class="tl-stat"><b>●</b> ' + t(n.statZh, n.statEn) + "</div>" +
+          "</div>" +
+        "</button>";
+      li.querySelector(".tl-btn").addEventListener("click", function () {
+        openTl = openTl === i ? -1 : i;
+        renderTimeline();
+      });
+      list.appendChild(li);
+    });
+  }
+
+  /* —— Cheat cards —— */
+  var CARDS = [
+    {
+      code: "Astra",
+      full: "GPT-6 Astra",
+      orgZh: "OpenAI", orgEn: "OpenAI",
+      when: "2026-09-03",
+      posZh: "复杂推理 / 计算机使用",
+      posEn: "Complex reasoning / computer use",
+      priceZh: "API $10 / $50 每百万 token（另有 fast 档）",
+      priceEn: "API $10 / $50 per 1M tokens (plus fast tier)"
+    },
+    {
+      code: "Fable",
+      full: "Claude Fable 5.1",
+      orgZh: "Anthropic", orgEn: "Anthropic",
+      when: "2026-09-01",
+      posZh: "创意叙事向旗舰",
+      posEn: "Creative-narrative flagship",
+      priceZh: "三连发最先发布（9/1）",
+      priceEn: "First of the three-day blast (9/1)"
+    },
+    {
+      code: "Flash",
+      full: "Gemini 3.8 Flash",
+      orgZh: "Google", orgEn: "Google",
+      when: "2026-09-02",
+      posZh: "实时对话 / 多任务",
+      posEn: "Realtime dialogue / multitask",
+      priceZh: "三连发第二天（9/2）",
+      priceEn: "Day two of the three-day blast (9/2)"
+    },
+    {
+      code: "Opus",
+      full: "Opus 5.5",
+      orgZh: "Anthropic", orgEn: "Anthropic",
+      when: "2026-09-22",
+      posZh: "同日降价，打响价格战",
+      posEn: "Same-day price cut that ignited the war",
+      priceZh: "与 Sol/Luna 同日开火",
+      priceEn: "Fired same day as Sol / Luna"
+    },
+    {
+      code: "Sol",
+      full: "GPT-6 Sol",
+      orgZh: "OpenAI", orgEn: "OpenAI",
+      when: "2026-09-22",
+      posZh: "性价比档 · 价格战一侧",
+      posEn: "Value tier · one side of the price war",
+      priceZh: "GPT-5.6 促销价的 50%",
+      priceEn: "50% of GPT-5.6 promo pricing"
+    },
+    {
+      code: "Luna",
+      full: "GPT-6 Luna",
+      orgZh: "OpenAI", orgEn: "OpenAI",
+      when: "2026-09-22",
+      posZh: "性价比档 · 与 Sol 同发",
+      posEn: "Value tier · shipped with Sol",
+      priceZh: "GPT-5.6 促销价的 50%",
+      priceEn: "50% of GPT-5.6 promo pricing"
+    }
+  ];
+
+  function renderCards() {
+    var grid = document.getElementById("cardGrid");
+    grid.innerHTML = "";
+    CARDS.forEach(function (c) {
+      var d = document.createElement("div");
+      d.className = "mcard";
+      d.innerHTML =
+        '<div class="tag">' + c.code + "</div>" +
+        "<h3>" + c.full + "</h3>" +
+        '<div class="when">' + t(c.orgZh, c.orgEn) + " · " + c.when + "</div>" +
+        '<div class="pos">' + t(c.posZh, c.posEn) + "</div>" +
+        '<div class="price"><b>' + t("快照", "Snapshot") + "</b> · " + t(c.priceZh, c.priceEn) + "</div>";
+      grid.appendChild(d);
+    });
+  }
+
+  /* —— Quiz (BRIEF answers) —— */
+  var QUIZ = [
+    {
+      qZh: "三天三连发中，最先发布的是谁？",
+      qEn: "In the three-day blast, who shipped first?",
+      optsZh: ["Claude Fable 5.1（9/1）", "Gemini 3.8 Flash（9/2）", "GPT-6 Astra（9/3）", "Opus 5.5（9/22）"],
+      optsEn: ["Claude Fable 5.1 (9/1)", "Gemini 3.8 Flash (9/2)", "GPT-6 Astra (9/3)", "Opus 5.5 (9/22)"],
+      ans: 0,
+      whyZh: "Anthropic 9/1 发 Fable 5.1，是三连发的第一枪。",
+      whyEn: "Anthropic shipped Fable 5.1 on 9/1 — first shot of the blast."
+    },
+    {
+      qZh: "GPT-6 Astra 的 API 定价（输入/输出，每百万 token）？",
+      qEn: "GPT-6 Astra API pricing (input/output, per 1M tokens)?",
+      optsZh: ["$5 / $25", "$10 / $50", "$15 / $75", "$20 / $100"],
+      optsEn: ["$5 / $25", "$10 / $50", "$15 / $75", "$20 / $100"],
+      ans: 1,
+      whyZh: "BRIEF 快照：Astra 为 $10 / $50 每百万 token，另有 fast 档。",
+      whyEn: "BRIEF snapshot: Astra is $10 / $50 per 1M tokens, plus a fast tier."
+    },
+    {
+      qZh: "9/22 同日降价打响价格战的是哪两家？",
+      qEn: "Which two firms cut prices the same day (9/22) and started the war?",
+      optsZh: ["OpenAI + Google", "OpenAI + Anthropic", "Anthropic + Meta", "Google + Meta"],
+      optsEn: ["OpenAI + Google", "OpenAI + Anthropic", "Anthropic + Meta", "Google + Meta"],
+      ans: 1,
+      whyZh: "OpenAI 推 GPT-6 Sol/Luna，Anthropic 推 Opus 5.5 并降价。",
+      whyEn: "OpenAI shipped Sol/Luna; Anthropic shipped Opus 5.5 with a cut."
+    },
+    {
+      qZh: "OpenAI 9/11 推出的 Agents API 是做什么的？",
+      qEn: "What is OpenAI’s Agents API (9/11) for?",
+      optsZh: [
+        "仅做图像生成加速",
+        "托管式 agent 运行环境（不用自己搭编排/上下文压缩/子 agent 管道）",
+        "只提供向量数据库",
+        "取代全部聊天 UI"
+      ],
+      optsEn: [
+        "Image-gen acceleration only",
+        "Hosted agent runtime (no DIY orchestration / context compression / sub-agent pipes)",
+        "Vector DB only",
+        "Replaces all chat UIs"
+      ],
+      ans: 1,
+      whyZh: "托管式 agent 运行环境，省去自建编排与子 agent 管道。",
+      whyEn: "A hosted agent runtime — skip DIY orchestration and sub-agent plumbing."
+    },
+    {
+      qZh: "Meta 9/24 发布的 Horizon Create / Studio 是什么？",
+      qEn: "What is Meta’s Horizon Create / Studio (9/24)?",
+      optsZh: [
+        "新的大语言模型旗舰",
+        "用自然语言提示词生成可发布的 2D/3D 游戏",
+        "云端 GPU 租赁市场",
+        "仅 VR 硬件驱动"
+      ],
+      optsEn: [
+        "A new flagship LLM",
+        "Natural-language prompts → shippable 2D/3D games",
+        "Cloud GPU rental marketplace",
+        "VR hardware drivers only"
+      ],
+      ans: 1,
+      whyZh: "提示词生成可发布的 2D/3D 游戏。",
+      whyEn: "Prompt your way to shippable 2D/3D games."
+    }
+  ];
+
+  var answers = [null, null, null, null, null];
+
+  function renderQuiz() {
+    var list = document.getElementById("quizList");
+    list.innerHTML = "";
+    QUIZ.forEach(function (q, qi) {
+      var card = document.createElement("div");
+      card.className = "qcard";
+      var opts = t(q.optsZh, q.optsEn);
+      var optsHtml = "";
+      for (var oi = 0; oi < opts.length; oi++) {
+        var cls = "qopt";
+        if (answers[qi] !== null) {
+          if (oi === q.ans) cls += " correct reveal-ans";
+          else if (oi === answers[qi] && answers[qi] !== q.ans) cls += " wrong";
+        }
+        optsHtml += '<button type="button" class="' + cls + '" data-qi="' + qi + '" data-oi="' + oi + '"' +
+          (answers[qi] !== null ? " disabled" : "") + ">" + opts[oi] + "</button>";
+      }
+      var explained = answers[qi] !== null;
+      card.innerHTML =
+        '<div class="qn">Q' + (qi + 1) + "</div>" +
+        '<div class="qq">' + t(q.qZh, q.qEn) + "</div>" +
+        '<div class="qopts">' + optsHtml + "</div>" +
+        '<div class="qexplain' + (explained ? " show" : "") + '"><strong>' +
+          t("解析", "Why") + " · </strong>" + t(q.whyZh, q.whyEn) + "</div>";
+      list.appendChild(card);
+    });
+    list.querySelectorAll(".qopt").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var qi = +btn.dataset.qi;
+        var oi = +btn.dataset.oi;
+        if (answers[qi] !== null) return;
+        answers[qi] = oi;
+        renderQuiz();
+        updateScore();
+      });
+    });
+  }
+
+  function updateScore() {
+    var done = answers.every(function (a) { return a !== null; });
+    var box = document.getElementById("quizScore");
+    if (!done) { box.hidden = true; return; }
+    var score = 0;
+    answers.forEach(function (a, i) { if (a === QUIZ[i].ans) score++; });
+    box.hidden = false;
+    document.getElementById("scoreBig").textContent = score + " / 5";
+    updateScoreLabel(score);
+  }
+  function updateScoreLabel(score) {
+    if (score === undefined) {
+      if (answers.every(function (a) { return a !== null; })) {
+        score = 0;
+        answers.forEach(function (a, i) { if (a === QUIZ[i].ans) score++; });
+      } else return;
+    }
+    var sub = document.getElementById("scoreSub");
+    if (!sub) return;
+    if (score === 5) sub.textContent = t("全对。Astra / Fable / Flash 分得清了。", "Perfect. Astra / Fable / Flash sorted.");
+    else if (score >= 3) sub.textContent = t("不错，回去再扫一眼时间线。", "Solid — skim the timeline once more.");
+    else sub.textContent = t("再过一遍速查卡，然后重开测验。", "Revisit the cheat cards, then retry.");
+  }
+
+  /* —— Share —— */
+  document.getElementById("copyBtn").addEventListener("click", function () {
+    var text = t(
+      "MODEL-030 · 9 月 AI 模型大爆炸\n三天三连发 + 价格战。时间线 / 速查卡 / 5 道测验。\nhttps://build-100.com/030/",
+      "MODEL-030 · Sept AI model blast\nThree flagships in three days + a price war. Timeline / cheat cards / 5-quiz.\nhttps://build-100.com/030/"
+    );
+    var btn = document.getElementById("copyBtn");
+    function ok() {
+      btn.classList.add("copied");
+      var old = btn.innerHTML;
+      btn.innerHTML = t("已复制", "Copied");
+      setTimeout(function () { btn.classList.remove("copied"); btn.innerHTML = old; }, 1600);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok).catch(function () {
+        var ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand("copy"); ok(); } catch (e) {}
+        document.body.removeChild(ta);
+      });
+    } else {
+      var ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); ok(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+  });
+
+  document.getElementById("shareImgBtn").addEventListener("click", function () {
+    var c = document.getElementById("shareCanvas");
+    var ctx = c.getContext("2d");
+    var W = 1200, H = 630;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    // dots
+    ctx.fillStyle = "rgba(237,239,241,0.05)";
+    for (var x = 0; x < W; x += 36) for (var y = 0; y < H; y += 36) ctx.fillRect(x, y, 1, 1);
+    ctx.fillStyle = "#a78bfa";
+    ctx.font = "600 22px ui-monospace, Menlo, monospace";
+    ctx.fillText("MODEL · 030", 64, 100);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 52px Helvetica Neue, Helvetica, Arial, sans-serif";
+    var title = t("9 月 AI 模型大爆炸", "Sept AI model blast");
+    ctx.fillText(title, 64, 180);
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "400 28px Helvetica Neue, Helvetica, Arial, sans-serif";
+    ctx.fillText(t("时间线 · 速查卡 · 5 道测验", "Timeline · cheat cards · 5-quiz"), 64, 240);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "500 24px ui-monospace, Menlo, monospace";
+    ctx.fillText("Astra  Fable  Flash  Opus  Sol  Luna", 64, 320);
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "400 20px ui-monospace, Menlo, monospace";
+    ctx.fillText("build-100.com/030", 64, 560);
+    document.getElementById("shareWrap").classList.add("show");
+  });
+
+  renderTimeline();
+  renderCards();
+  renderQuiz();
+  if (lang === "en") applyLang("en");
+})();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>
