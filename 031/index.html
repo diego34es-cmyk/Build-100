@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TOKEN-031 · 代币化美股 24/7 对比</title>
+<meta name="description" content="代币化美股 24/7 交易对比计算器——输入交易习惯，一键算清传统券商 vs 代币化股票在费用、可交易时段、结算速度上的差距。截至 2026-09。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/031/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E031%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="TOKEN-031 · 代币化美股 24/7 对比">
+<meta property="og:description" content="输入交易习惯，一键算清传统券商 vs 代币化股票在费用、可交易时段、结算速度上的差距。">
+<meta property="og:url" content="https://build-100.com/031/">
+<meta property="og:image" content="https://build-100.com/031/og-031.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="TOKEN-031 · 代币化美股 24/7 对比">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TOKEN-031 · 代币化美股 24/7 对比">
+<meta name="twitter:description" content="Tokenized US stocks 24/7 vs a cash broker — fees, hours, settlement. As of 2026-09.">
+<meta name="twitter:image" content="https://build-100.com/031/og-031.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #10b981;
+    --accent-glow: rgba(16,185,129,0.35);
+    --danger: #f87171;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-padding-top: 72px; color-scheme: dark; }
+  [hidden] { display: none !important; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(24px, 4vh, 36px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; margin-bottom: 18px; word-break: keep-all;
+  }
+  .hero p.sub { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+
+  .kpis {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+    margin: 22px 0 0;
+  }
+  @media (min-width: 640px) { .kpis { grid-template-columns: repeat(4, 1fr); } }
+  .kpi {
+    background: var(--bg-raise); border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 14px 12px;
+  }
+  .kpi .n {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    font-size: clamp(1.15rem, 2.4vw, 1.45rem); color: var(--accent); letter-spacing: -0.02em;
+  }
+  .kpi .l { color: var(--faint); font-size: 0.75rem; margin-top: 4px; line-height: 1.35; }
+
+  .privacy, .legal {
+    display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap;
+    margin-bottom: 14px;
+    padding: 14px 16px; border: 1px solid var(--line-strong); border-radius: 8px;
+  }
+  .privacy {
+    background: linear-gradient(160deg, rgba(16, 185, 129, 0.14), transparent 62%);
+  }
+  .legal {
+    margin-bottom: clamp(28px, 5vh, 40px);
+    border-style: dashed;
+    background: rgba(248, 113, 113, 0.06);
+  }
+  .privacy .dot, .legal .dot { color: var(--live); letter-spacing: 0.18em; }
+  .legal .dot { color: var(--danger); }
+  .privacy p, .legal p { color: var(--muted); font-size: 0.9rem; max-width: 46em; }
+  .privacy p strong, .legal p strong { color: var(--ink); font-weight: 500; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
+  .lab { display: flex; flex-direction: column; gap: 6px; }
+  .lab span { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
+  .textin, select.textin {
+    width: 100%; background: var(--bg-raise); border: 1px solid var(--line-strong); border-radius: 8px;
+    color: var(--ink); font-family: var(--mono); font-size: 0.9rem; line-height: 1.4;
+    padding: 12px 14px; outline: none; transition: border-color .18s, box-shadow .18s;
+  }
+  .textin:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow); }
+  .textin::-webkit-outer-spin-button, .textin::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .textin[type=number] { -moz-appearance: textfield; }
+
+  .quick-chips, .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .chip {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted);
+    padding: 7px 13px; border-radius: 999px; cursor: pointer; transition: all .18s;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--ink); }
+  .chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .chip.multi.active {
+    background: rgba(16, 185, 129, 0.16); color: var(--ink); border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent) inset;
+  }
+
+  .freq-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (min-width: 640px) { .freq-grid { grid-template-columns: repeat(4, 1fr); } }
+  .int-opt {
+    border: 1px solid var(--line-strong); border-radius: 6px; padding: 14px 16px; cursor: pointer;
+    transition: border-color .18s, background .18s; background: var(--bg-raise); text-align: left;
+    color: inherit; width: 100%;
+  }
+  .int-opt:hover { border-color: var(--muted); }
+  .int-opt.selected { border-color: var(--accent); background: rgba(16, 185, 129, 0.08); box-shadow: 0 0 0 1px var(--accent) inset; }
+  .int-opt .lvl { font-family: var(--mono); font-size: 11px; color: var(--faint); letter-spacing: 0.1em; }
+  .int-opt .lbl { display: block; font-size: 0.92rem; margin-top: 4px; }
+  .int-opt.selected .lvl { color: var(--accent); }
+
+  .submit-wrap { margin-top: 22px; }
+  .submit-btn {
+    width: 100%; font-family: var(--mono); font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase;
+    padding: 18px; border: 1px solid var(--accent); background: rgba(16, 185, 129, 0.1); color: var(--ink);
+    cursor: pointer; transition: all .2s; border-radius: 4px;
+  }
+  .submit-btn:hover { background: var(--accent); color: var(--bg); box-shadow: 0 0 24px var(--accent-glow); }
+
+  .trio { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 720px) { .trio { grid-template-columns: 1fr 1fr 1fr; } }
+  .compare-card {
+    background: var(--bg-raise); border: 1px solid var(--line); border-radius: 10px;
+    padding: 16px 16px 14px; min-height: 180px; display: flex; flex-direction: column;
+  }
+  .compare-card .k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin-bottom: 12px; }
+  .side { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); }
+  .side:first-of-type { border-top: none; padding-top: 0; }
+  .side .who { color: var(--muted); font-size: 0.82rem; }
+  .side .amt {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    font-size: 1.05rem;
+  }
+  .side .amt.tok { color: var(--accent); }
+  .side .amt.cash { color: var(--delta); }
+  .card-note { color: var(--faint); font-size: 0.78rem; margin-top: auto; padding-top: 12px; line-height: 1.45; }
+
+  .clock { margin-top: 8px; }
+  .clock-row { display: grid; grid-template-columns: 108px 1fr; gap: 10px; align-items: center; margin-bottom: 12px; }
+  @media (max-width: 560px) { .clock-row { grid-template-columns: 1fr; gap: 6px; } }
+  .clock-lab { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .clock-track {
+    position: relative; height: 32px; border-radius: 6px;
+    background: rgba(237,239,241,0.04); border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .clock-fill { position: absolute; top: 2px; bottom: 2px; border-radius: 4px; }
+  .clock-fill.trad { background: rgba(251,191,36,0.38); border: 1px solid rgba(251,191,36,0.55); }
+  .clock-fill.tok { background: rgba(16,185,129,0.32); border: 1px solid rgba(16,185,129,0.55); }
+  .clock-fill.pref {
+    top: 0; bottom: 0; border-radius: 0;
+    background: rgba(237,239,241,0.05); border: none;
+    box-shadow: inset 0 0 0 1px rgba(237,239,241,0.12);
+  }
+  .clock-hours {
+    display: flex; justify-content: space-between;
+    font-family: var(--mono); font-size: 10px; color: var(--faint);
+    margin-left: 118px; letter-spacing: 0.04em;
+  }
+  @media (max-width: 560px) { .clock-hours { margin-left: 0; } }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; color: var(--muted); font-size: 0.8rem; }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+  .legend .lg-trad { background: rgba(251,191,36,0.7); }
+  .legend .lg-tok { background: var(--accent); }
+  .legend .lg-pref { background: rgba(237,239,241,0.25); }
+
+  .weekend-pill {
+    margin-top: 14px; padding: 12px 14px; border: 1px dashed var(--line-strong); border-radius: 8px;
+    color: var(--muted); font-size: 0.88rem;
+  }
+  .weekend-pill b { color: var(--ink); font-weight: 500; }
+
+  .miss-hero {
+    margin: 8px 0 16px; padding: clamp(22px, 4vh, 32px); border: 1px solid var(--accent); border-radius: 10px;
+    background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(16,185,129,0.02));
+    text-align: center;
+  }
+  .miss-hero .label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
+  .miss-hero .big {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 500;
+    font-size: clamp(2.4rem, 8vw, 3.6rem); line-height: 1; margin: 10px 0; color: var(--accent);
+  }
+  .miss-hero .sub { color: var(--muted); font-size: 0.92rem; }
+
+  .tl { list-style: none; margin-top: 8px; }
+  .tl li {
+    display: grid; grid-template-columns: 108px 1fr; gap: 14px;
+    padding: 16px 0; border-top: 1px solid var(--line);
+  }
+  .tl li:first-child { border-top: none; }
+  .tl .d { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: 0.04em; }
+  .tl h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+  .tl p { color: var(--muted); font-size: 0.9rem; }
+  .tl .src { color: var(--faint); font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.04em; margin-top: 6px; text-transform: none; }
+  @media (max-width: 560px) { .tl li { grid-template-columns: 1fr; gap: 4px; } }
+
+  .snap {
+    margin-top: 14px; padding: 16px; border: 1px solid var(--line-strong); border-radius: 10px;
+    background: linear-gradient(160deg, rgba(16,185,129,0.12), transparent 70%);
+  }
+  .snap .n { font-family: var(--mono); font-size: clamp(1.6rem, 4vw, 2.1rem); font-weight: 700; color: var(--accent); }
+  .snap p { color: var(--muted); font-size: 0.9rem; margin-top: 6px; }
+  .snap .src { color: var(--faint); font-size: 0.75rem; font-family: var(--mono); margin-top: 8px; letter-spacing: 0.04em; }
+
+  .risk-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  @media (min-width: 640px) { .risk-grid { grid-template-columns: 1fr 1fr 1fr; } }
+  .risk {
+    background: var(--bg-raise); border: 1px solid var(--line); border-radius: 10px; padding: 16px;
+  }
+  .risk .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--danger); margin-bottom: 8px; }
+  .risk h3 { font-size: 0.95rem; margin-bottom: 6px; }
+  .risk p { color: var(--muted); font-size: 0.86rem; }
+
+  .assumptions {
+    margin-top: 16px; color: var(--muted); font-size: 0.84rem; line-height: 1.55;
+    padding: 12px 14px; border-left: 2px solid var(--line-strong);
+  }
+  details.tune {
+    margin-top: 16px; border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px;
+    background: var(--bg-raise);
+  }
+  details.tune summary { cursor: pointer; color: var(--ink); font-size: 0.9rem; }
+  details.tune .tune-grid { margin-top: 12px; }
+  .check {
+    display: flex; align-items: center; gap: 8px; margin-top: 12px; color: var(--muted); font-size: 0.88rem;
+  }
+  .check input { accent-color: var(--accent); width: 16px; height: 16px; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237, 239, 241, 0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); background: rgba(74, 222, 128, 0.1); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line); }
+  .share-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  footer {
+    display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: space-between; align-items: center;
+    padding: 28px var(--pad) 48px; border-top: 1px solid var(--line); max-width: 880px; margin: 0 auto;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">TOKEN<span>·031</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="TOKEN24 · Finance Tools · 031/100">TOKEN24 · Finance Tools · 031/100</p>
+    <h1 data-en="You wanted to trade. The market was closed.">想交易时，市场关门了。</h1>
+    <p class="sub" data-en="TOKEN24 compares a cash US broker vs tokenized stocks: fees, hours, settlement. Madrid cash session is <strong>15:30–22:00</strong>. Tokenized venues pitch <strong>24/7</strong>. DEX tokenized-stock volume hit <strong>$20.9B</strong> in 30 days — as of 2026-09, not a live quote.">
+      TOKEN24 对比计算器：输入交易习惯，一键算清传统券商 vs 代币化股票在费用、可交易时段、结算速度上的差距。马德里看美股现金盘是 <strong>15:30–22:00</strong>；代币化承诺 <strong>24/7</strong>。全网 DEX 过去 30 天代币化股票成交 <strong>$20.9B</strong>——截至 2026-09，不是实时行情。
+    </p>
+    <div class="kpis">
+      <div class="kpi">
+        <div class="n">$20.9B</div>
+        <div class="l" data-en="DEX tokenized stocks · 30d · as of 2026-09">DEX 代币化股票 · 30 天 · 截至 2026-09</div>
+      </div>
+      <div class="kpi">
+        <div class="n">$9.7B</div>
+        <div class="l" data-en="Robinhood Chain · 30d · live since 2026-07-01">Robinhood Chain · 30 天 · 2026-07-01 上线</div>
+      </div>
+      <div class="kpi">
+        <div class="n">15:30–22:00</div>
+        <div class="l" data-en="US cash regular hours in Madrid (CEST)">美股常规时段 · 马德里夏令</div>
+      </div>
+      <div class="kpi">
+        <div class="n">24/7</div>
+        <div class="l" data-en="Tokenized venues · hours claim">代币化场所 · 可交易时段主张</div>
+      </div>
+    </div>
+  </header>
+
+  <aside class="privacy">
+    <span class="mono dot">LOCAL</span>
+    <p data-en="<strong>Runs in your browser.</strong> Numbers never leave this device. The page still loads <strong>beacon.js</strong> for visit stats — not a zero-network claim.">
+      <strong>纯本机计算。</strong>数字不离开这台设备。页面仍会加载 <strong>beacon.js</strong> 做访问统计，不声称整页零网络。
+    </p>
+  </aside>
+  <aside class="legal">
+    <span class="mono dot">NOT ADVICE</span>
+    <p data-en="<strong>Information only — not investment advice.</strong> Tokenization, exemptions and venue hours are in flux. This page uses static assumptions dated 2026-09.">
+      <strong>本工具仅为信息对比，不构成投资建议。</strong>代币化、监管豁免与场所时段仍在变化。本页使用截至 2026-09 的静态假设。
+    </p>
+  </aside>
+
+  <section class="field" id="inputs">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <h2 class="field-title" data-en="Your trading habit">你的交易习惯</h2>
+      <p class="field-hint" data-en="Monthly count × average ticket. Sessions are Madrid time, multi-select.">每月次数 × 平均单笔。时段按马德里时间，可多选。</p>
+    </div>
+
+    <div class="grid2">
+      <label class="lab"><span data-en="Trades per month">每月交易次数</span>
+        <input class="textin" id="trades" type="number" min="0" max="500" step="1" value="8" inputmode="numeric">
+      </label>
+      <label class="lab"><span data-en="Average ticket (USD)">平均单笔金额（USD）</span>
+        <input class="textin" id="size" type="number" min="0" max="1000000" step="50" value="2500" inputmode="decimal">
+      </label>
+    </div>
+    <div class="quick-chips" id="tradeChips">
+      <button class="chip" type="button" data-trades="4">4</button>
+      <button class="chip active" type="button" data-trades="8">8</button>
+      <button class="chip" type="button" data-trades="20">20</button>
+      <button class="chip" type="button" data-trades="40">40</button>
+    </div>
+    <div class="quick-chips" id="sizeChips">
+      <button class="chip" type="button" data-size="500">$500</button>
+      <button class="chip active" type="button" data-size="2500">$2,500</button>
+      <button class="chip" type="button" data-size="10000">$10,000</button>
+      <button class="chip" type="button" data-size="25000">$25,000</button>
+    </div>
+
+    <div class="field-head" style="margin-top:22px">
+      <span class="field-no">01b</span>
+      <h2 class="field-title" data-en="Usual sessions (Madrid)">常用交易时段（马德里）</h2>
+      <p class="field-hint" data-en="Multi-select. Cash US regular hours = 15:30–22:00 CEST in summer.">可多选。美股现金常规时段夏令 = 15:30–22:00。</p>
+    </div>
+    <div class="chips" id="sessionChips" role="group" aria-label="sessions">
+      <button class="chip multi active" type="button" data-session="madrid_day" data-en="Madrid daytime 09:00–18:00">马德里白天 09:00–18:00</button>
+      <button class="chip multi active" type="button" data-session="us_session" data-en="US cash hours 15:30–22:00">美股盘中 15:30–22:00</button>
+      <button class="chip multi" type="button" data-session="late_night" data-en="Late night 22:00–09:00">深夜 22:00–09:00</button>
+      <button class="chip multi" type="button" data-session="weekend" data-en="Weekend">周末</button>
+    </div>
+
+    <div class="field-head" style="margin-top:22px">
+      <span class="field-no">01c</span>
+      <h2 class="field-title" data-en="Wanted to trade while the market was shut?">想交易时市场关门了？</h2>
+      <p class="field-hint" data-en="How often did that happen? Used only for a conservative missed-window estimate.">发生过几次？只用于保守估算错失窗口，不是盈亏预测。</p>
+    </div>
+    <div class="freq-grid" id="freqGrid">
+      <button class="int-opt" type="button" data-freq="never"><span class="lvl">00</span><span class="lbl" data-en="Never">从没遇到</span></button>
+      <button class="int-opt" type="button" data-freq="rare"><span class="lvl">01</span><span class="lbl" data-en="Rarely">偶尔一两次</span></button>
+      <button class="int-opt selected" type="button" data-freq="sometimes"><span class="lvl">02</span><span class="lbl" data-en="Some months">每个月都有</span></button>
+      <button class="int-opt" type="button" data-freq="often"><span class="lvl">03</span><span class="lbl" data-en="Almost weekly">几乎每周</span></button>
+    </div>
+
+    <div class="submit-wrap">
+      <button class="submit-btn" id="calcBtn" type="button" data-en="Compute the gap">一键算清差距</button>
+    </div>
+  </section>
+
+  <section class="field" id="compare">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <h2 class="field-title" data-en="Three-way comparison">三维对比</h2>
+      <p class="field-hint" data-en="Broker = IBKR-class US cash equity (illustrative). Tokenized = spread + optional L2 gas. Static constants, as of 2026-09.">券商 = IBKR 类美股现金账户（示意）。代币化 = 价差 + 可选 L2 gas。静态常量，截至 2026-09。</p>
+    </div>
+    <div class="trio" id="trio"></div>
+    <details class="tune">
+      <summary data-en="Assumptions (tunable) · as of 2026-09">计算假设（可调）· 截至 2026-09</summary>
+      <div class="tune-grid grid2">
+        <label class="lab"><span data-en="Tokenized round-trip spread (bps)">代币化往返价差（bps）</span>
+          <input class="textin" id="spreadBps" type="number" min="0" max="100" step="0.5" value="8" inputmode="decimal">
+        </label>
+        <label class="lab"><span data-en="Gas per trade (USD)">单笔 gas（USD）</span>
+          <input class="textin" id="gasUsd" type="number" min="0" max="50" step="0.01" value="0.15" inputmode="decimal">
+        </label>
+      </div>
+      <label class="check"><input id="includeGas" type="checkbox" checked> <span data-en="Include gas in the tokenized fee">把 gas 计入代币化费用</span></label>
+    </details>
+    <p class="assumptions" data-en="<strong>Assumptions:</strong> cash broker commission ≈ $0 + blended regulatory fee 0.14 bps (Section 31 / FINRA-style, sells-only blended), $0.01 floor. US regular hours Madrid 15:30–22:00 (CEST, summer); weekends shut; settlement T+1. Tokenized: round-trip spread vs mid + optional L2 gas; 24/7; near-instant on-chain settlement. Not a quote. Sources: SEC fee schedule (illustrative), NYSE regular session, public venue dashboards as of 2026-09.">
+      <strong>假设：</strong>传统券商佣金 ≈ $0 + 监管费 0.14 bps（Section 31 / FINRA 类，按卖出侧折半混合），单笔下限 $0.01。美股常规时段马德里 15:30–22:00（夏令）；周末休市；T+1。代币化：相对中间价的往返价差 + 可选 L2 gas；24/7；链上近即时结算。不是行情。来源：SEC 费用示意、NYSE 常规时段、公开场所仪表盘，截至 2026-09。
+    </p>
+  </section>
+
+  <section class="field" id="clock">
+    <div class="field-head">
+      <span class="field-no">03</span>
+      <h2 class="field-title" data-en="24h Madrid clock">24 小时 · 马德里时区</h2>
+      <p class="field-hint" data-en="One weekday. Gold = US cash regular hours. Emerald = tokenized 24/7. Faint bands = sessions you selected.">一个工作日。金 = 美股现金常规时段。翠绿 = 代币化 24/7。浅带 = 你勾选的常用时段。</p>
+    </div>
+    <div id="clockViz"></div>
+  </section>
+
+  <section class="field" id="missed">
+    <div class="field-head">
+      <span class="field-no">04</span>
+      <h2 class="field-title" data-en="Missed-window estimate">错失成本（估算）</h2>
+      <p class="field-hint" data-en="Conservative count of times you wanted to trade while cash markets were shut. Not lost P&amp;L.">按你「盘外想交易」的频率，保守估算一年错过的交易窗口。不是已实现盈亏。</p>
+    </div>
+    <div id="missBox"></div>
+  </section>
+
+  <section class="field" id="timeline">
+    <div class="field-head">
+      <span class="field-no">05</span>
+      <h2 class="field-title" data-en="September 2026 timeline">2026 年 9 月大事记</h2>
+      <p class="field-hint" data-en="Static constants with dates and sources. Not a live feed.">静态常量，带日期与来源。不是直播。</p>
+    </div>
+    <ol class="tl" id="tl">
+      <li>
+        <div class="d">2026-07-01</div>
+        <div>
+          <h3 data-en="Robinhood Chain goes live">Robinhood Chain 上线</h3>
+          <p data-en="Past 30d tokenized-stock volume $9.7B (as of 2026-09).">过去 30 天代币化股票交易量 $9.7B（截至 2026-09）。</p>
+          <div class="src" data-en="Public venue dashboards, as of 2026-09">公开市场仪表盘，截至 2026-09</div>
+        </div>
+      </li>
+      <li>
+        <div class="d">2026-09-17</div>
+        <div>
+          <h3 data-en="SEC Innovation Exemption">SEC Innovation Exemption</h3>
+          <p data-en="Five-year exemption for tokenized US stocks; holders keep equivalent rights — read as a step toward 24/7 trading.">代币化美股 5 年期豁免；持有人保留与真实股票同等权利，被解读为迈向 24/7 交易的一步。</p>
+          <div class="src" data-en="SEC.gov / Innovation Exemption, 2026-09-17">SEC.gov / Innovation Exemption，2026-09-17</div>
+        </div>
+      </li>
+      <li>
+        <div class="d">2026-09-22</div>
+        <div>
+          <h3 data-en="NYSE Group × Blockchain.com">NYSE Group × Blockchain.com</h3>
+          <p data-en="Exploring 24/7 tokenized US stocks and ETFs for global crypto users.">探索为全球加密用户提供 24/7 代币化美股与 ETF 交易。</p>
+          <div class="src" data-en="NYSE Group announcement, 2026-09-22">NYSE Group 公告，2026-09-22</div>
+        </div>
+      </li>
+    </ol>
+    <div class="snap">
+      <div class="n">$20.9B</div>
+      <p data-en="Global DEX tokenized-stock volume over the past 30 days. Uniswap V4/V3 ≈ 60%. Robinhood Chain (live 2026-07-01) did $9.7B in the same window.">
+        全网 DEX 过去 30 天代币化股票成交 $20.9B。Uniswap V4/V3 约占六成。Robinhood Chain（2026-07-01 上线）同期 $9.7B。
+      </p>
+      <div class="src" data-en="Public venue dashboards · as of 2026-09">公开市场仪表盘 · 截至 2026-09</div>
+    </div>
+  </section>
+
+  <section class="field" id="risk">
+    <div class="field-head">
+      <span class="field-no">06</span>
+      <h2 class="field-title" data-en="Risk notes">风险提示</h2>
+      <p class="field-hint" data-en="Read this before treating the gap as a reason to switch venues.">把「差距」当成换场所的理由之前，先看这三张卡。</p>
+    </div>
+    <div class="risk-grid">
+      <article class="risk">
+        <div class="tag">REG</div>
+        <h3 data-en="Exemption, not a finished market">豁免试点，不是完工市场</h3>
+        <p data-en="The SEC Innovation Exemption (2026-09-17) is a five-year pilot. Equivalent rights on paper do not mean every tokenized ticker is interchangeable with a DTCC-settled share, or that 24/7 trading is allowed everywhere.">
+          2026-09-17 的 SEC Innovation Exemption 是 5 年期试点。纸面上的同等权利，不等于每只代币化标的都能和 DTCC 结算股票互换，也不等于全球都允许 24/7 交易。
+        </p>
+      </article>
+      <article class="risk">
+        <div class="tag">SPREAD</div>
+        <h3 data-en="Spread and liquidity">价差与流动性</h3>
+        <p data-en="The 8 bps round-trip used here is a static, mid-tier guess. Off-hours and thin tickers can be much wider. A cheap cash commission can still lose to a wide tokenized book — or the reverse.">
+          这里的 8 bps 往返价差是静态、中档猜测。盘外与冷门标的可能宽得多。现金盘佣金再低，也可能输给薄订单簿——反过来也成立。
+        </p>
+      </article>
+      <article class="risk">
+        <div class="tag">CUSTODY</div>
+        <h3 data-en="Custody / smart-contract risk">托管 / 智能合约风险</h3>
+        <p data-en="On-chain instant settlement still sits on a chain, a bridge, a custodian or a smart contract. Key loss, upgrade bugs and issuer freeze are not in the fee math.">
+          链上即时结算仍落在链、桥、托管人或合约上。密钥丢失、升级漏洞、发行方冻结，都不在费用公式里。
+        </p>
+      </article>
+    </div>
+    <p class="assumptions" data-en="<strong>This tool is an information comparison only. It is not investment, tax or legal advice.</strong> Do not treat the missed-window notional as expected profit.">
+      <strong>本工具仅为信息对比，不构成投资、税务或法律建议。</strong>不要把错失窗口的名义金额当成预期利润。
+    </p>
+  </section>
+
+  <div class="share-row">
+    <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+    <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareWrap">
+    <canvas id="shareCanvas" width="1200" height="628" aria-label="share card"></canvas>
+    <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+  </div>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="TOKEN-031 · Tokenized US stocks 24/7">TOKEN-031 · 代币化美股 24/7 对比</span>
+</footer>
+
+<script type="module">
+import {
+  TIMELINE,
+  MARKET_SNAPSHOT,
+  mergeAssumptions,
+  compareAll,
+  sessionBands,
+  buildShareText,
+  formatUsd,
+} from "./engine.js";
+
+var lang = "zh";
+try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+var hasSubmitted = true;
+var frequency = "sometimes";
+
+function t(zh, en) { return lang === "en" ? en : zh; }
+function $(id) { return document.getElementById(id); }
+function num(id) {
+  var v = parseFloat($(id).value);
+  return isFinite(v) ? v : 0;
+}
+
+function selectedSessions() {
+  var out = [];
+  document.querySelectorAll("#sessionChips .chip.active").forEach(function (el) {
+    out.push(el.dataset.session);
+  });
+  return out;
+}
+
+function assumptions() {
+  return mergeAssumptions({
+    tok: {
+      spreadBpsRoundTrip: num("spreadBps"),
+      gasUsdPerTrade: num("gasUsd"),
+    },
+  });
+}
+
+function readForm() {
+  return {
+    tradesPerMonth: num("trades"),
+    avgSizeUsd: num("size"),
+    sessions: selectedSessions(),
+    frequency: frequency,
+    includeGas: $("includeGas").checked,
+  };
+}
+
+function result() {
+  return compareAll(readForm(), assumptions());
+}
+
+function applyLang(l) {
+  lang = l;
+  document.querySelectorAll("[data-en]").forEach(function (el) {
+    if (el.tagName === "OPTION") return;
+    if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+  });
+  document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+  $("langBtn").textContent = l === "en" ? "中文" : "EN";
+  try { localStorage.setItem("lang", l); } catch (e) {}
+  if (hasSubmitted) renderAll();
+}
+
+function cardNote(r) {
+  if (r.fees.cheaper === "trad") {
+    return t(
+      "现金盘费用通常更低；代币化买的是时段与结算。",
+      "Cash fees are usually lower; tokenized buys hours and settlement."
+    );
+  }
+  if (r.fees.cheaper === "tok") {
+    return t("按当前假设，代币化费用更低。", "Under these assumptions, tokenized fees are lower.");
+  }
+  return t("两边费用打平。", "Fees match.");
+}
+
+function renderTrio() {
+  var r = result();
+  var hoursClosed = Math.round(r.preferred.closedShare * 100);
+  $("trio").innerHTML =
+    '<article class="compare-card">' +
+      '<div class="k">' + t("费用 / 月", "Fees / month") + "</div>" +
+      '<div class="side"><span class="who">' + t("传统券商", "Cash broker") + '</span><span class="amt cash">' + formatUsd(r.fees.tradMonthly) + "</span></div>" +
+      '<div class="side"><span class="who">' + t("代币化", "Tokenized") + '</span><span class="amt tok">' + formatUsd(r.fees.tokMonthly) + "</span></div>" +
+      '<div class="card-note">' +
+        t("年化 ", "Annual ") + formatUsd(r.fees.tradAnnual) + " vs " + formatUsd(r.fees.tokAnnual) +
+        " · " + t("单笔监管费 ", "reg/trade ") + formatUsd(r.fees.tradPerTrade) +
+        " / " + t("价差+gas ", "spread+gas ") + formatUsd(r.fees.tokPerTrade) +
+        " · " + cardNote(r) +
+      "</div>" +
+    "</article>" +
+    '<article class="compare-card">' +
+      '<div class="k">' + t("可交易时段", "Hours") + "</div>" +
+      '<div class="side"><span class="who">' + t("现金盘 / 周", "Cash / week") + '</span><span class="amt cash">' + r.hours.tradHoursPerWeek + "h</span></div>" +
+      '<div class="side"><span class="who">' + t("代币化 / 周", "Tokenized / week") + '</span><span class="amt tok">' + r.hours.tokHoursPerWeek + "h</span></div>" +
+      '<div class="card-note">' +
+        t("一年 ", "Year ") + r.hours.tradHoursPerYear + "h vs " + r.hours.tokHoursPerYear + "h · " +
+        t("约 ", "~") + r.hours.coverageRatio + t(" 倍覆盖。你勾选的时段里，现金盘约 ", "× coverage. Of your selected sessions, cash is shut ~") +
+        hoursClosed + t("% 是关着的。", "% of the time.") +
+      "</div>" +
+    "</article>" +
+    '<article class="compare-card">' +
+      '<div class="k">' + t("结算", "Settlement") + "</div>" +
+      '<div class="side"><span class="who">' + t("传统券商", "Cash broker") + '</span><span class="amt cash">T+1</span></div>' +
+      '<div class="side"><span class="who">' + t("代币化", "Tokenized") + '</span><span class="amt tok">' + t("链上即时", "On-chain instant") + "</span></div>" +
+      '<div class="card-note">' +
+        t("一年大约 ", "About ") + r.settlement.tradWaitingDaysPerYear +
+        t(" 个交易日的名义本金在 T+1 路上；代币化按 0 天计。周末与假日会拉长现金盘。", " trade-days of notional sitting in T+1; tokenized counted as 0. Weekends/holidays stretch cash.") +
+      "</div>" +
+    "</article>";
+}
+
+function bandHtml(cls, startPct, widthPct) {
+  return '<div class="clock-fill ' + cls + '" style="left:' + startPct.toFixed(3) + "%;width:" + widthPct.toFixed(3) + '%"></div>';
+}
+
+function renderClock() {
+  var r = result();
+  var pref = "";
+  r.input.sessions.forEach(function (id) {
+    if (id === "weekend") return;
+    sessionBands(id).forEach(function (b) {
+      pref += bandHtml("pref", b.startPct, b.widthPct);
+    });
+  });
+  var hours = ["00", "03", "06", "09", "12", "15", "18", "21", "24"];
+  var hourMarks = hours.map(function (h) { return "<span>" + h + "</span>"; }).join("");
+  var weekendNote = r.input.sessions.indexOf("weekend") >= 0
+    ? t("你勾了周末：现金盘休市，代币化仍开。", "You selected weekend: cash is shut, tokenized stays open.")
+    : t("周末：现金盘休市（约 48h），代币化仍开。", "Weekends: cash shut (~48h), tokenized stays open.");
+  $("clockViz").innerHTML =
+    '<div class="clock">' +
+      '<div class="clock-row"><div class="clock-lab">' + t("你的时段", "Your hours") + "</div>" +
+        '<div class="clock-track">' + pref + "</div></div>" +
+      '<div class="clock-row"><div class="clock-lab">' + t("传统券商", "Cash broker") + "</div>" +
+        '<div class="clock-track">' + bandHtml("trad", r.timeline.usOpenPct, r.timeline.usWidthPct) + "</div></div>" +
+      '<div class="clock-row"><div class="clock-lab">' + t("代币化 24/7", "Tokenized 24/7") + "</div>" +
+        '<div class="clock-track">' + bandHtml("tok", 0, 100) + "</div></div>" +
+      '<div class="clock-hours">' + hourMarks + "</div>" +
+      '<div class="legend">' +
+        "<span><i class='lg-trad'></i>" + t("美股盘中 15:30–22:00", "US cash 15:30–22:00") + "</span>" +
+        "<span><i class='lg-tok'></i>" + t("代币化全天", "Tokenized all day") + "</span>" +
+        "<span><i class='lg-pref'></i>" + t("你勾选的白天/深夜", "Your day / night chips") + "</span>" +
+      "</div>" +
+      '<div class="weekend-pill">' + weekendNote + " · " + t("夏令 CEST。冬令 CET 会再平移 1 小时。", "CEST summer. CET winter shifts +1h.") + "</div>" +
+    "</div>";
+}
+
+function renderMissed() {
+  var r = result();
+  var m = r.missed;
+  $("missBox").innerHTML =
+    '<div class="miss-hero">' +
+      '<div class="label">' + t("一年可能错过的交易窗口（估算）", "Missed trading windows / year (estimate)") + "</div>" +
+      '<div class="big">' + m.missedPerYear + "</div>" +
+      '<div class="sub">' +
+        t("按每月 ", "From ") + m.missedPerMonth + t(" 次 × 12。对应名义金额约 ", "/mo × 12. Linked notional ≈ ") +
+        formatUsd(m.missedNotionalPerYear, 0) +
+        t("——这是窗口，不是亏损。", " — windows, not losses.") +
+      "</div>" +
+    "</div>" +
+    '<p class="assumptions">' +
+      t(
+        "映射（保守）：从没 = 0；偶尔 = 1 次/月；每月都有 = 3；几乎每周 = 8。不把常用时段再叠加进这个数字，避免双计。若你主要在深夜/周末交易，现金盘对那些时段是全关的。",
+        "Mapping (conservative): never = 0; rare = 1/month; some months = 3; almost weekly = 8. Selected sessions are not added on top, to avoid double counting. If you mostly trade nights/weekends, cash is fully shut for those slots."
+      ) +
+    "</p>";
+}
+
+function renderTimeline() {
+  var html = "";
+  TIMELINE.forEach(function (ev) {
+    html += "<li>" +
+      '<div class="d">' + ev.date + "</div>" +
+      "<div><h3>" + t(ev.zh, ev.en) + "</h3>" +
+      "<p>" + t(ev.detailZh, ev.detailEn) + "</p>" +
+      '<div class="src">' + t(ev.sourceZh, ev.sourceEn) + "</div></div>" +
+    "</li>";
+  });
+  $("tl").innerHTML = html;
+}
+
+function renderAll() {
+  renderTrio();
+  renderClock();
+  renderMissed();
+  renderTimeline();
+  syncChips();
+}
+
+function syncChips() {
+  var trades = String(parseInt($("trades").value, 10) || 0);
+  document.querySelectorAll("#tradeChips .chip").forEach(function (el) {
+    el.classList.toggle("active", el.dataset.trades === trades);
+  });
+  var size = String(parseInt($("size").value, 10) || 0);
+  document.querySelectorAll("#sizeChips .chip").forEach(function (el) {
+    el.classList.toggle("active", el.dataset.size === size);
+  });
+}
+
+function setFreq(id) {
+  frequency = id;
+  document.querySelectorAll("#freqGrid .int-opt").forEach(function (el) {
+    el.classList.toggle("selected", el.dataset.freq === id);
+  });
+  renderAll();
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (e) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      var ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e2) { return false; }
+  }
+}
+
+function flashCopied(btn) {
+  btn.classList.add("copied");
+  var old = btn.innerHTML;
+  btn.innerHTML = t("已复制", "Copied");
+  setTimeout(function () { btn.classList.remove("copied"); btn.innerHTML = old; }, 1600);
+}
+
+function renderShare() {
+  var r = result();
+  var c = $("shareCanvas");
+  var ctx = c.getContext("2d");
+  var W = 1200, H = 628;
+  ctx.fillStyle = "#060709";
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "rgba(237,239,241,0.06)";
+  for (var x = 20; x < W; x += 36) for (var y = 20; y < H; y += 36) {
+    ctx.beginPath(); ctx.arc(x, y, 1.2, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.fillStyle = "#10b981";
+  ctx.font = "600 22px ui-monospace, Menlo, monospace";
+  ctx.fillText("TOKEN · 031", 64, 72);
+  ctx.fillStyle = "#edeff1";
+  ctx.font = "700 44px Helvetica Neue, Helvetica, Arial, sans-serif";
+  ctx.fillText(t("代币化美股 24/7 对比", "Tokenized US stocks 24/7"), 64, 138);
+  ctx.fillStyle = "#7d848c";
+  ctx.font = "400 20px Helvetica Neue, Helvetica, Arial, sans-serif";
+  ctx.fillText(t("截至 2026-09 · 不构成投资建议", "As of 2026-09 · not investment advice"), 64, 180);
+
+  var rows = [
+    [t("月度费用 券商 / 代币化", "Fees / mo  broker / tok"), formatUsd(r.fees.tradMonthly) + "  /  " + formatUsd(r.fees.tokMonthly)],
+    [t("每周可交易小时", "Hours / week"), r.hours.tradHoursPerWeek + "h  /  " + r.hours.tokHoursPerWeek + "h"],
+    [t("结算", "Settlement"), "T+1  /  " + t("即时", "instant")],
+    [t("一年错失窗口（估算）", "Missed windows / yr (est.)"), String(r.missed.missedPerYear)],
+    [t("DEX 30 天成交", "DEX 30d volume"), "$" + MARKET_SNAPSHOT.dex30dUsdBn + "B"],
+  ];
+  var y0 = 240;
+  rows.forEach(function (row, i) {
+    var y = y0 + i * 54;
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "500 16px ui-monospace, Menlo, monospace";
+    ctx.fillText(row[0].toUpperCase(), 64, y);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 26px Helvetica Neue, Helvetica, Arial, sans-serif";
+    ctx.fillText(row[1], 520, y);
+  });
+
+  ctx.fillStyle = "#4a5057";
+  ctx.font = "500 18px ui-monospace, Menlo, monospace";
+  ctx.fillText("build-100.com/031", 64, H - 48);
+  ctx.fillStyle = "#10b981";
+  ctx.fillText("031", W - 110, H - 48);
+}
+
+document.querySelectorAll("#sessionChips .chip").forEach(function (el) {
+  el.addEventListener("click", function () {
+    el.classList.toggle("active");
+    renderAll();
+  });
+});
+document.querySelectorAll("#freqGrid .int-opt").forEach(function (el) {
+  el.addEventListener("click", function () { setFreq(el.dataset.freq); });
+});
+document.querySelectorAll("#tradeChips .chip").forEach(function (el) {
+  el.addEventListener("click", function () {
+    $("trades").value = el.dataset.trades;
+    renderAll();
+  });
+});
+document.querySelectorAll("#sizeChips .chip").forEach(function (el) {
+  el.addEventListener("click", function () {
+    $("size").value = el.dataset.size;
+    renderAll();
+  });
+});
+["trades", "size", "spreadBps", "gasUsd", "includeGas"].forEach(function (id) {
+  $(id).addEventListener("input", renderAll);
+  $(id).addEventListener("change", renderAll);
+});
+$("calcBtn").addEventListener("click", function () {
+  renderAll();
+  var reduce = false;
+  try { reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+  $("compare").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+});
+$("copyBtn").addEventListener("click", async function () {
+  var ok = await copyText(buildShareText(result(), lang));
+  if (ok) flashCopied($("copyBtn"));
+});
+$("shareImgBtn").addEventListener("click", function () {
+  renderShare();
+  $("shareWrap").classList.add("show");
+});
+$("langBtn").addEventListener("click", function () { applyLang(lang === "en" ? "zh" : "en"); });
+
+applyLang(lang);
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-26",
+  "updated": "2026-09-28",
   "filters": [
     {
       "id": "all",
@@ -384,6 +384,30 @@
       ],
       "live": true,
       "url": "https://build-100.com/029/"
+    },
+    {
+      "id": "030",
+      "code": "MODEL",
+      "name": "MODEL-030",
+      "sub_zh": "9 月 AI 模型大爆炸——交互时间线 + 速查卡 + 5 道测验",
+      "sub_en": "Sept AI model blast — interactive timeline + cheat cards + 5-quiz",
+      "cats": [
+        "learn"
+      ],
+      "live": true,
+      "url": "https://build-100.com/030/"
+    },
+    {
+      "id": "031",
+      "code": "TOKEN",
+      "name": "TOKEN-031",
+      "sub_zh": "代币化美股 24/7 交易对比——费用/时段/结算一键算清",
+      "sub_en": "Tokenized US stocks 24/7 vs broker — fees, hours, settlement",
+      "cats": [
+        "finance"
+      ],
+      "live": true,
+      "url": "https://build-100.com/031/"
     }
   ]
 }
