@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-28",
+  "updated": "2026-09-29",
   "filters": [
     {
       "id": "all",
@@ -408,6 +408,19 @@
       ],
       "live": true,
       "url": "https://build-100.com/031/"
+    },
+    {
+      "id": "032",
+      "code": "PERMCHK",
+      "name": "PERMCHK-032",
+      "sub_zh": "AI 助手权限体检——本地查权限关权限 + 假数据风险演示",
+      "sub_en": "AI assistant permission checkup — local revoke paths + fake risk demos",
+      "cats": [
+        "life",
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/032/"
     }
   ]
 }

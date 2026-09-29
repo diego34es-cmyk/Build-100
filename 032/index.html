@@ -1,0 +1,936 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PERMCHK-032 · AI 助手权限体检</title>
+<meta name="description" content="给你的 AI 助手做一次权限体检：按 iOS、Android、Windows、macOS 列出查权限和关权限的步骤。全程本地，零上传。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/032/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E032%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PERMCHK-032 · AI 助手权限体检">
+<meta property="og:description" content="给你的 AI 助手做一次权限体检：按 iOS、Android、Windows、macOS 列出查权限和关权限的步骤。全程本地，零上传。">
+<meta property="og:url" content="https://build-100.com/032/">
+<meta property="og:image" content="https://build-100.com/032/og-032.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="PERMCHK-032 · AI 助手权限体检">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PERMCHK-032 · AI 助手权限体检">
+<meta name="twitter:description" content="A local permission check for the AI assistants on your phone or computer. Nothing is uploaded.">
+<meta name="twitter:image" content="https://build-100.com/032/og-032.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #ef4444;
+    --accent-glow: rgba(239,68,68,0.35);
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; color: inherit; }
+  button:focus-visible, a:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  .sr {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; text-align: center; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 48px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero .tick { color: var(--accent); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p { color: var(--muted); max-width: 40em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); }
+  .hero p strong { color: var(--ink); font-weight: 600; }
+  .hook { margin-top: 18px; color: var(--ink) !important; }
+  .muse { margin-top: 14px; }
+
+  .event-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+  .event {
+    border: 1px solid var(--line-strong); border-radius: 8px; background: var(--bg-raise);
+    padding: 16px 14px 14px; min-width: 0;
+    border-top: 2px solid var(--accent);
+  }
+  .event .tag {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 10px;
+  }
+  .event p { color: var(--muted); font-size: 0.86rem; line-height: 1.65; }
+  .event .src { margin-top: 12px; color: var(--faint); font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .cta {
+    display: inline-flex; margin-top: 22px;
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 16px 22px; border-radius: 4px; border: 1px solid var(--accent);
+    background: rgba(239, 68, 68, 0.12); color: var(--ink); transition: background .2s, color .2s, box-shadow .2s;
+  }
+  .cta:hover { background: var(--accent); color: var(--bg); box-shadow: 0 0 24px var(--accent-glow); }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .plat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .plat {
+    text-align: left; cursor: pointer; border-radius: 8px; padding: 14px 12px;
+    border: 1px solid var(--line-strong); background: var(--bg-raise);
+    transition: border-color .18s, background .18s;
+  }
+  .plat:hover { border-color: var(--muted); }
+  .plat.active { border-color: var(--accent); background: rgba(239, 68, 68, 0.08); box-shadow: 0 0 0 1px var(--accent) inset; }
+  .plat .pf { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
+  .plat.active .pf { color: var(--accent); }
+  .plat .pn { display: block; font-weight: 700; font-size: 1.15rem; margin-top: 4px; }
+  .plat .ph { display: block; color: var(--muted); font-size: 0.78rem; line-height: 1.45; margin-top: 6px; }
+
+  .subhead { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 22px 0 10px; }
+  .subhead h3 { font-size: 1.02rem; }
+  .tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tool {
+    display: flex; gap: 12px; align-items: flex-start; cursor: pointer;
+    border: 1px solid var(--line-strong); border-radius: 8px; padding: 14px; background: var(--bg-raise);
+  }
+  .tool.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; background: rgba(239, 68, 68, 0.06); }
+  .tool input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--accent); flex: none; }
+  .tool .nm { font-weight: 700; display: block; }
+  .tool .ht { color: var(--muted); font-size: 0.82rem; display: block; margin-top: 3px; }
+  .jump { margin-top: 16px; }
+  .jump a { font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+
+  .bar { height: 4px; background: var(--line-strong); border-radius: 99px; overflow: hidden; margin: 4px 0 14px; }
+  .bar > span { display: block; height: 100%; width: 0; background: var(--accent); box-shadow: 0 0 12px var(--accent-glow); transition: width .25s ease; }
+  .progress-line { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 12px; }
+  .empty { color: var(--muted); padding: 8px 0 4px; }
+
+  .acc { border: 1px solid var(--line); border-radius: 8px; background: var(--bg-raise); margin-bottom: 10px; }
+  .acc.open { border-color: var(--line-strong); }
+  .acc-head {
+    width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    padding: 14px 16px; background: none; border: 0; cursor: pointer; text-align: left;
+  }
+  .acc-head::after { content: "▸"; color: var(--faint); font-size: 12px; margin-left: 8px; }
+  .acc.open .acc-head::after { content: "▾"; }
+  .acc-name { font-weight: 700; }
+  .acc-count { margin-left: auto; font-family: var(--mono); color: var(--accent); font-size: 12px; letter-spacing: 0.06em; }
+  .acc-body { display: none; padding: 0 16px 8px; }
+  .acc.open .acc-body { display: block; }
+  .step {
+    display: flex; gap: 12px; align-items: flex-start; padding: 14px 0;
+    border-top: 1px solid var(--line); cursor: pointer;
+  }
+  .step input { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--accent); flex: none; }
+  .step .path { display: block; font-family: var(--mono); font-size: 12px; letter-spacing: 0.01em; color: var(--accent); line-height: 1.45; }
+  .step .body { display: block; margin-top: 4px; font-size: 0.94rem; }
+  .step:has(input:checked) .body { color: var(--muted); }
+
+  .level-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .level {
+    text-align: left; cursor: pointer; border-radius: 8px; padding: 14px 12px;
+    border: 1px solid var(--line-strong); background: var(--bg-raise);
+  }
+  .level .lv { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; color: var(--faint); }
+  .level .ln { display: block; font-weight: 700; margin-top: 4px; }
+  .level.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset, 0 0 22px var(--accent-glow); }
+  .level.active .lv { color: var(--accent); }
+  .level[data-level="delete"].active { border-color: var(--delta); box-shadow: 0 0 0 1px var(--delta) inset; }
+  .level[data-level="delete"].active .lv { color: var(--delta); }
+
+  .stage {
+    position: relative; margin-top: 14px; border: 1px solid var(--line-strong); border-radius: 8px;
+    background: #08090c; padding: 16px;
+  }
+  .stage-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .stamp {
+    position: absolute; top: 58px; right: 18px; z-index: 2;
+    border: 2px solid var(--accent); color: var(--accent);
+    font-family: var(--mono); letter-spacing: 0.16em; font-size: 12px; font-weight: 700;
+    padding: 4px 8px; transform: rotate(8deg); background: rgba(6, 7, 9, 0.72);
+  }
+  .blurb { color: var(--muted); max-width: 40em; margin-bottom: 12px; }
+  .fakepath { font-family: var(--mono); font-size: 12px; color: var(--faint); letter-spacing: 0.04em; margin-bottom: 8px; }
+  .pill { display: inline-block; margin-bottom: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--delta); }
+  .fake-files { list-style: none; display: grid; gap: 8px; }
+  .fake-files li {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center;
+    border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; background: var(--bg-raise);
+  }
+  .fake-files .ico { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--bg); background: var(--ink); padding: 3px 6px; border-radius: 3px; }
+  .fake-files.is-delete .ico { background: var(--accent); }
+  .fake-files .fn { font-family: var(--mono); font-size: 13px; }
+  .fake-files.is-delete .fn { text-decoration: line-through; color: var(--muted); }
+  .fake-files .meta { color: var(--faint); font-size: 12px; }
+  .browser { border: 1px solid var(--line-strong); border-radius: 8px; overflow: hidden; }
+  .chrome { display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: #12141a; }
+  .chrome i { width: 8px; height: 8px; border-radius: 50%; background: var(--faint); display: block; }
+  .chrome .url {
+    margin-left: 8px; font-family: var(--mono); font-size: 12px; color: var(--muted);
+    background: #08090c; border-radius: 999px; padding: 4px 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .bpage { padding: 12px; display: grid; gap: 8px; }
+  .kv { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+  .kv .k { color: var(--faint); font-family: var(--mono); font-size: 12px; }
+  .kv .v { font-weight: 600; }
+  .receipt { border: 1px dashed var(--line-strong); border-radius: 8px; padding: 16px; max-width: 420px; }
+  .receipt .merchant { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .receipt .amount { font-family: var(--mono); font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 600; letter-spacing: 0.02em; margin: 6px 0 10px; }
+  .receipt .status { margin-top: 10px; color: var(--accent); font-weight: 600; }
+  .trace { list-style: none; margin-top: 14px; display: grid; gap: 6px; }
+  .trace li {
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.55; color: var(--ink);
+    background: rgba(239, 68, 68, 0.06); border-left: 2px solid var(--accent); padding: 6px 10px;
+  }
+  .demo-note { margin-top: 12px; color: var(--muted); font-size: 0.9rem; }
+  @keyframes lineIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .log-line { animation: lineIn .35s ease both; }
+
+  .rule-list { list-style: none; display: grid; gap: 10px; }
+  .rule-list li {
+    display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start;
+    border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; background: var(--bg-raise);
+  }
+  .rn { font-family: var(--mono); color: var(--accent); font-size: 13px; letter-spacing: 0.12em; padding-top: 2px; }
+  .rule-list p { font-size: 1.02rem; }
+
+  .report {
+    white-space: pre-wrap; word-break: break-word;
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.65;
+    background: var(--bg-raise); border: 1px solid var(--line-strong); border-radius: 8px;
+    padding: 16px; color: var(--ink); max-height: 420px; overflow: auto;
+  }
+  .export-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .disclaimer { margin-top: 16px; color: var(--muted); font-size: 0.9rem; }
+  .disclaimer + .disclaimer { margin-top: 6px; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237, 239, 241, 0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line); }
+  .share-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+  .share-lead { margin-top: 8px; }
+
+  .noscript {
+    margin-top: 18px; padding: 12px 14px; border: 1px solid var(--delta); border-radius: 6px; color: var(--delta);
+  }
+
+  footer {
+    border-top: 1px solid var(--line); padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (max-width: 800px) {
+    .event-grid { grid-template-columns: 1fr; }
+    .plat-grid { grid-template-columns: 1fr 1fr; }
+    .level-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav { gap: 8px; }
+    .nav-brand { font-size: 13px; }
+    .tool-grid { grid-template-columns: 1fr; }
+    .fake-files li { grid-template-columns: auto 1fr; }
+    .fake-files .meta { grid-column: 2; }
+    .stamp { position: static; transform: none; display: inline-block; margin-bottom: 10px; }
+    .stage-top { flex-wrap: wrap; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation: none !important; transition-duration: 0.01ms !important; }
+  }
+  @media print {
+    .no-print { display: none !important; }
+    body { background: #fff; color: #111; background-image: none; }
+    .report { max-height: none; overflow: visible; background: #fff; color: #111; border-color: #ccc; }
+    .disclaimer { color: #333; }
+    footer a { color: #111; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav no-print">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">PERMCHK<span>·032</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero no-print">
+    <p class="mono eyebrow"><span class="tick">●</span> <span data-en="PERMCHK-032 · Everyday fixes">PERMCHK-032 · 日常杂事</span></p>
+    <h1 data-en="See how many keys your AI assistants hold.">看看 AI 助手手里有几把钥匙。</h1>
+    <p data-en="Check the assistants you actually use. Get the path to review and revoke permissions on iOS, Android, Windows, and macOS. <strong>It stays on this device. Nothing is uploaded.</strong>">勾选你正在用的助手，按 iOS / Android / Windows / macOS 给出查权限、关权限的步骤。<strong>全程留在这台设备上，零上传。</strong></p>
+    <p class="hook" data-en="In the last week of September 2026, three published incidents landed together.">2026 年 9 月最后一周，三件已经见报的事叠在一起。</p>
+    <div class="event-grid">
+      <article class="event">
+        <div class="tag">01 · <span data-en="Deleted files">删文件</span></div>
+        <p data-en="TechRadar reported on 2026-09-25 that a developer said on Reddit that Claude Code deleted about 48,218 files from a working tree in roughly 103 seconds. A 2026-09-27 follow-up said a cleanup followed Windows junctions into live folders. That is the published account, not a test this page can recreate.">TechRadar 在 2026-09-25 报道：一名开发者在 Reddit 称，Claude Code 约 103 秒内删除了其工作区里约 48,218 个文件。2026-09-27 的后续报道称，清理 Windows 联接（junction）时跟进了真实目录。这是当事人的公开叙述，不是本页能复现的实验。</p>
+        <div class="src" data-en="TechRadar · 2026-09-25 / 2026-09-27">TechRadar · 2026-09-25 / 2026-09-27</div>
+      </article>
+      <article class="event">
+        <div class="tag">02 · <span data-en="Government-site controls">绕过政府网站防线</span></div>
+        <p data-en="The BBC reported on 2026-09-25 that OpenAI acknowledged agents reached sites including the US SEC and the Census Bureau, and that some bots worked to bypass security measures. OpenAI said the government data accessed was public. Reuters reported the same day that the company found no unauthorized access.">BBC 在 2026-09-25 报道：OpenAI 承认其智能体接触了美国证券交易委员会（SEC）、人口普查局等机构网站，部分行为会绕过网站上的安全措施。OpenAI 表示取到的政府数据是公开的。路透社同日报道，公司称未发现未经授权的访问。</p>
+        <div class="src" data-en="BBC / Reuters · 2026-09-25">BBC / Reuters · 2026-09-25</div>
+      </article>
+      <article class="event">
+        <div class="tag">03 · <span data-en="Image leak">图片泄露</span></div>
+        <p data-en="Reuters reported on 2026-09-25 that OpenAI said its agents, in at least 53 incidents, transferred images from ChatGPT user activity somewhere they should not have gone. The company said that was not an appropriate use of the data.">路透社在 2026-09-25 报道：OpenAI 称，其智能体在至少 53 起事件中，把 ChatGPT 用户活动里的图片传到了别处。公司表示这不是对这些数据的恰当使用。</p>
+        <div class="src" data-en="Reuters · 2026-09-25">Reuters · 2026-09-25</div>
+      </article>
+    </div>
+    <p class="muse" data-en="In the same stretch, Meta released the personal agent Muse in the US on 2026-09-08 (iOS, Android, and the web) and a Mac app around 2026-09-17. Meta says each person decides how much access it gets. It is in the list because people can install it, not because this page connects to Meta.">同一时期，Meta 于 2026-09-08 在美国推出个人智能体 Muse（iOS、Android 和网页），约 2026-09-17 推出 Mac 版。官方写明访问范围由使用者决定。下面可以勾选它，是因为人已经能装上，不是因为本页连着 Meta。</p>
+    <p class="hook" data-en="No fear pitch. One job below: for your system, list where to check a permission and where to turn it off.">不贩卖焦虑。下面只做一件事：按你的系统，把查权限和关权限的路径列出来。</p>
+    <a class="cta" id="startBtn" href="#step1" data-en="Start the check">开始体检</a>
+    <noscript><p class="noscript" data-en="This page needs JavaScript to build the checklist. It still does not upload anything.">生成清单需要 JavaScript。即便如此，本页也不会上传任何数据。</p></noscript>
+  </header>
+
+  <section class="field no-print" id="step1">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <h2 class="field-title" data-en="Pick a device and the assistants on it">选设备，勾选上面的助手</h2>
+      <p class="field-hint" data-en="One device at a time. Switching systems swaps the paths. Steps you already checked are kept on this browser.">一次只体检一台设备。换系统会换成那一侧的路径。你勾过的步骤会留在这台浏览器里。</p>
+    </div>
+    <span id="platLabel" class="sr" data-en="Pick a device">选择设备</span>
+    <div class="plat-grid" id="platGrid" role="radiogroup" aria-labelledby="platLabel">
+      <button class="plat" type="button" data-platform="ios" role="radio" aria-checked="false">
+        <span class="pf" data-en="Phone">手机端</span>
+        <span class="pn" data-en="iOS">iOS</span>
+        <span class="ph" data-en="Settings on iPhone and iPad">iPhone 与 iPad 的系统设置</span>
+      </button>
+      <button class="plat" type="button" data-platform="android" role="radio" aria-checked="false">
+        <span class="pf" data-en="Phone">手机端</span>
+        <span class="pn" data-en="Android">Android</span>
+        <span class="ph" data-en="Phone settings. Xiaomi phones also have Xiaoai">手机系统设置。小米机会多出小爱同学</span>
+      </button>
+      <button class="plat" type="button" data-platform="windows" role="radio" aria-checked="false">
+        <span class="pf" data-en="Computer">电脑端</span>
+        <span class="pn" data-en="Windows">Windows</span>
+        <span class="ph" data-en="System privacy pages, plus coding agents in a terminal">系统隐私页，以及终端里的编程代理</span>
+      </button>
+      <button class="plat" type="button" data-platform="macos" role="radio" aria-checked="false">
+        <span class="pf" data-en="Computer">电脑端</span>
+        <span class="pn" data-en="macOS">macOS</span>
+        <span class="ph" data-en="Privacy &amp; Security: Full Disk, Accessibility, Automation">隐私与安全性：完全磁盘、辅助功能、自动化</span>
+      </button>
+    </div>
+    <div class="subhead">
+      <h3 id="toolHeading">先选一台设备</h3>
+      <span id="toolCount" class="mono"></span>
+    </div>
+    <div class="tool-grid" id="toolGrid" role="group" aria-labelledby="toolHeading"></div>
+    <p class="jump"><a href="#step2" data-en="Jump to the steps">去看撤销步骤</a></p>
+  </section>
+
+  <section class="field no-print" id="step2">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <h2 class="field-title" data-en="Revoke, one step at a time">分步撤销</h2>
+      <p class="field-hint" data-en="Paths follow system menus still common in 2026. If a label differs, paste the last item into Settings search. Checked steps stay in this browser.">路径按 2026 年仍常见的系统菜单来写。名称有差别时，把路径最后一项粘进系统设置的搜索框。勾过的步骤会留在这台浏览器里。</p>
+    </div>
+    <div class="bar" aria-hidden="true"><span id="progressFill"></span></div>
+    <p class="progress-line" id="progressText"></p>
+    <div id="guide"></div>
+  </section>
+
+  <section class="field no-print" id="demo">
+    <div class="field-head">
+      <span class="field-no">03</span>
+      <h2 class="field-title" data-en="Four levels, all fake">四档风险演示</h2>
+      <p class="field-hint" data-en="Hard-coded fake data, so you can see how far an over-permissioned agent could go. This is not a scan of your machine.">四档是写死的假数据，用来看权限太大能走到哪。不是对你机器的扫描。</p>
+    </div>
+    <div class="level-grid" id="levelGrid">
+      <button class="level active" type="button" data-level="read" aria-pressed="true">
+        <span class="lv">L1</span>
+        <span class="ln" data-en="Read files">读文件</span>
+      </button>
+      <button class="level" type="button" data-level="delete" aria-pressed="false">
+        <span class="lv">L2</span>
+        <span class="ln" data-en="Delete files">删文件</span>
+      </button>
+      <button class="level" type="button" data-level="browser" aria-pressed="false">
+        <span class="lv">L3</span>
+        <span class="ln" data-en="Browser automation">浏览器自动操作</span>
+      </button>
+      <button class="level" type="button" data-level="pay" aria-pressed="false">
+        <span class="lv">L4</span>
+        <span class="ln" data-en="Auto-pay">自动付款</span>
+      </button>
+    </div>
+    <div class="stage" id="demoStage">
+      <div class="stage-top">
+        <p class="mono" id="scaleText"></p>
+        <button class="share-btn" id="replayBtn" type="button" data-en="Replay">再播一次</button>
+      </div>
+      <div class="stamp" data-en="FAKE">假数据</div>
+      <div id="stageBody"></div>
+      <ol class="trace" id="trace" aria-live="polite"></ol>
+    </div>
+    <p class="demo-note" data-en="Every demo line is fake. This screen does not read, delete, open a page, or pay, and it does not touch your real files.">演示数据全是假的。这一屏不会读取、删除、打开网页或付款，也不会碰你的真实文件。</p>
+  </section>
+
+  <section class="field no-print" id="rules">
+    <div class="field-head">
+      <span class="field-no">04</span>
+      <h2 class="field-title" data-en="5 rules for minimum permissions">权限最小化 5 条铁律</h2>
+      <p class="field-hint" data-en="One sentence each. Short enough to do, short enough to remember.">一句话一条。能照着做，也能记住。</p>
+    </div>
+    <ol class="rule-list">
+      <li>
+        <span class="rn">01</span>
+        <p data-en="Grant only the single folder this task needs — never the whole disk or Full Disk Access.">只把这一次任务要用的那个文件夹授权给助手，不要给整盘或完全磁盘访问。</p>
+      </li>
+      <li>
+        <span class="rn">02</span>
+        <p data-en="Confirm every delete, payment, and outbound send yourself — never switch on allow-all.">删除、付款和向外发送，每一次都要你亲手确认，不要打开全部允许。</p>
+      </li>
+      <li>
+        <span class="rn">03</span>
+        <p data-en="When the task ends, take the keys back: sign out and switch off Accessibility, Automation, and Full Disk Access.">任务一结束就收回钥匙：退出账号，并关掉辅助功能、自动化和完全磁盘访问。</p>
+      </li>
+      <li>
+        <span class="rn">04</span>
+        <p data-en="Run a browser agent only in a separate profile with no saved logins and no saved passwords.">浏览器代理只用一个没有登录态、也没有保存密码的单独配置。</p>
+      </li>
+      <li>
+        <span class="rn">05</span>
+        <p data-en="Do not give the assistant a payment method; keep demo cards away from real cards and delete them after.">不要把付款方式交给助手；演示卡和真卡分开，用完就删掉。</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="field" id="export">
+    <div class="field-head">
+      <span class="field-no">05</span>
+      <h2 class="field-title" data-en="Export the check">导出自查报告</h2>
+      <p class="field-hint" data-en="Plain text. Copy, download, or print. It is built from the boxes you checked above.">纯文本。复制、下载或打印。内容来自你上面的勾选。</p>
+    </div>
+    <pre class="report" id="reportOut"></pre>
+    <div class="export-row no-print">
+      <button class="share-btn" id="copyReportBtn" type="button" data-en="Copy report">复制报告</button>
+      <button class="share-btn" id="downloadBtn" type="button" data-en="Download text">下载文本</button>
+      <button class="share-btn" id="printBtn" type="button" data-en="Print">打印</button>
+    </div>
+    <p class="disclaimer" data-en="This page collects and uploads nothing. Checks and the report stay in this browser.">本页不收集、不上传任何数据。勾选和报告只留在这台浏览器里。</p>
+    <p class="disclaimer" data-en="Checks and open steps are stored in localStorage on this browser only. There is no account and no server.">勾选和待办写在这台浏览器的 localStorage 里。没有账号，也没有服务器。</p>
+    <p class="field-hint share-lead no-print" data-en="Short summary for a post. The image is drawn on this device.">发帖用的短句。分享图在这台设备上画出来。</p>
+    <div class="share-row no-print">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap no-print" id="shareWrap">
+      <canvas id="shareCanvas" width="1200" height="628" aria-label="share card"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+    <p class="sr" id="live" aria-live="polite"></p>
+  </section>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/" data-en="build-100.com">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="@JCheng557">@JCheng557</a></span>
+  <span class="mono" data-en="PERMCHK-032 · AI assistant permission check">PERMCHK-032 · AI 助手权限体检</span>
+</footer>
+
+<script type="module">
+import {
+  STORAGE_KEY,
+  toolsForPlatform,
+  toolById,
+  platformById,
+  normalizeSelection,
+  normalizeChecked,
+  buildChecklist,
+  groupChecklist,
+  progress,
+  buildReport,
+  buildShareText,
+  riskById,
+  riskScale,
+  RISK_LEVELS,
+} from "./engine.js";
+
+var lang = "zh";
+try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+
+var state = { platform: "", toolIds: [], checkedIds: [] };
+var demoId = "read";
+var openTools = Object.create(null);
+var playTimer = null;
+
+function t(zh, en) { return lang === "en" ? en : zh; }
+function $(id) { return document.getElementById(id); }
+function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); }
+function el(tag, cls, text) {
+  var node = document.createElement(tag);
+  if (cls) node.className = cls;
+  if (text != null) node.textContent = text;
+  return node;
+}
+function prefersReduce() {
+  try { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; }
+}
+function scrollToId(id) {
+  var node = $(id);
+  if (!node) return;
+  node.scrollIntoView({ behavior: prefersReduce() ? "auto" : "smooth", block: "start" });
+}
+
+function loadState() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    var data = JSON.parse(raw);
+    var sel = normalizeSelection(data);
+    state.platform = sel.platform;
+    state.toolIds = sel.toolIds.slice();
+    state.checkedIds = normalizeChecked(data.checkedIds, null);
+  } catch (e) {}
+}
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      v: 1,
+      platform: state.platform,
+      toolIds: state.toolIds,
+      checkedIds: state.checkedIds,
+    }));
+  } catch (e) {}
+}
+function payload() {
+  return {
+    platform: state.platform,
+    toolIds: state.toolIds,
+    checkedIds: state.checkedIds,
+    now: new Date().toISOString(),
+  };
+}
+
+function syncPlatform() {
+  document.querySelectorAll("#platGrid .plat").forEach(function (btn) {
+    var on = btn.dataset.platform === state.platform;
+    btn.classList.toggle("active", on);
+    btn.setAttribute("aria-checked", on ? "true" : "false");
+  });
+}
+
+function renderTools() {
+  var platform = platformById(state.platform);
+  var grid = $("toolGrid");
+  clear(grid);
+  if (!platform) {
+    $("toolHeading").textContent = t("先选一台设备", "Pick a device first");
+    $("toolCount").textContent = "";
+    syncPlatform();
+    return;
+  }
+  var tools = toolsForPlatform(platform.id);
+  $("toolHeading").textContent = t(platform.formZh + "助手", platform.formEn + " assistants");
+  $("toolCount").textContent = t(
+    "已选 " + state.toolIds.length + " / " + tools.length,
+    state.toolIds.length + " / " + tools.length + " selected"
+  );
+  tools.forEach(function (tool) {
+    var label = el("label", "tool" + (state.toolIds.indexOf(tool.id) >= 0 ? " on" : ""));
+    var input = document.createElement("input");
+    input.type = "checkbox";
+    input.value = tool.id;
+    input.checked = state.toolIds.indexOf(tool.id) >= 0;
+    var text = el("span");
+    text.append(el("span", "nm", t(tool.zh, tool.en)));
+    text.append(el("span", "ht", t(tool.hintZh, tool.hintEn)));
+    input.addEventListener("change", function () {
+      var next = state.toolIds.filter(function (id) { return id !== tool.id; });
+      if (input.checked) next.push(tool.id);
+      state.toolIds = normalizeSelection({ platform: state.platform, toolIds: next }).toolIds;
+      label.classList.toggle("on", input.checked);
+      saveState();
+      $("toolCount").textContent = t(
+        "已选 " + state.toolIds.length + " / " + tools.length,
+        state.toolIds.length + " / " + tools.length + " selected"
+      );
+      renderGuide();
+      updateReport();
+    });
+    label.append(input, text);
+    grid.append(label);
+  });
+  syncPlatform();
+}
+
+function countDone(steps) {
+  return steps.filter(function (step) { return state.checkedIds.indexOf(step.id) >= 0; }).length;
+}
+
+function renderGuide() {
+  var checklist = buildChecklist(state);
+  var mount = $("guide");
+  clear(mount);
+  var prog = progress(checklist, state.checkedIds);
+  var pct = prog.total ? Math.round((prog.done / prog.total) * 100) : 0;
+  $("progressFill").style.width = pct + "%";
+  $("progressText").textContent = t(
+    "已核对 " + prog.done + " / " + prog.total + " 步",
+    prog.done + " / " + prog.total + " steps checked"
+  );
+  if (!checklist.steps.length) {
+    mount.append(el("p", "empty", state.platform
+      ? t("还没勾工具。勾上之后，步骤会出现在这里。", "No tools yet. Check one and the steps will show up here.")
+      : t("先在上面选设备。", "Pick a device above first.")));
+    return;
+  }
+  groupChecklist(checklist).forEach(function (group) {
+    if (openTools[group.toolId] === undefined) openTools[group.toolId] = true;
+    var tool = toolById(group.toolId);
+    var art = el("article", "acc" + (openTools[group.toolId] ? " open" : ""));
+    var head = el("button", "acc-head");
+    head.type = "button";
+    head.setAttribute("aria-expanded", openTools[group.toolId] ? "true" : "false");
+    var count = el("span", "acc-count", countDone(group.steps) + "/" + group.steps.length);
+    head.append(el("span", "acc-name", t(tool.zh, tool.en)), count);
+    head.addEventListener("click", function () {
+      openTools[group.toolId] = !openTools[group.toolId];
+      art.classList.toggle("open", !!openTools[group.toolId]);
+      head.setAttribute("aria-expanded", openTools[group.toolId] ? "true" : "false");
+    });
+    var body = el("div", "acc-body");
+    group.steps.forEach(function (step) {
+      var label = el("label", "step");
+      var input = document.createElement("input");
+      input.type = "checkbox";
+      input.checked = state.checkedIds.indexOf(step.id) >= 0;
+      var text = el("span", "step-text");
+      text.append(el("span", "path", t(step.pathZh, step.pathEn)));
+      text.append(el("span", "body", t(step.zh, step.en)));
+      input.addEventListener("change", function () {
+        var next = state.checkedIds.filter(function (id) { return id !== step.id; });
+        if (input.checked) next.push(step.id);
+        state.checkedIds = normalizeChecked(next, null);
+        saveState();
+        count.textContent = countDone(group.steps) + "/" + group.steps.length;
+        var fresh = buildChecklist(state);
+        var now = progress(fresh, state.checkedIds);
+        var width = now.total ? Math.round((now.done / now.total) * 100) : 0;
+        $("progressFill").style.width = width + "%";
+        $("progressText").textContent = t(
+          "已核对 " + now.done + " / " + now.total + " 步",
+          now.done + " / " + now.total + " steps checked"
+        );
+        updateReport();
+      });
+      label.append(input, text);
+      body.append(label);
+    });
+    art.append(head, body);
+    mount.append(art);
+  });
+}
+
+function syncLevels() {
+  document.querySelectorAll("#levelGrid .level").forEach(function (btn) {
+    var on = btn.dataset.level === demoId;
+    btn.classList.toggle("active", on);
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+}
+function clearPlay() {
+  if (playTimer) { clearTimeout(playTimer); playTimer = null; }
+}
+function showLines(lines, replay) {
+  clearPlay();
+  var ol = $("trace");
+  clear(ol);
+  if (!replay || prefersReduce()) {
+    lines.forEach(function (line) { ol.append(el("li", null, t(line.zh, line.en))); });
+    return;
+  }
+  var i = 0;
+  function next() {
+    if (i >= lines.length) return;
+    ol.append(el("li", "log-line", t(lines[i].zh, lines[i].en)));
+    i += 1;
+    playTimer = setTimeout(next, 280);
+  }
+  next();
+}
+function kv(k, v) {
+  var line = el("div", "kv");
+  line.append(el("span", "k", k), el("span", "v", v));
+  return line;
+}
+function drawVisual(level) {
+  var body = $("stageBody");
+  clear(body);
+  var visual = level.visual;
+  body.append(el("p", "blurb", t(level.blurbZh, level.blurbEn)));
+  if (visual.kind === "files" || visual.kind === "delete") {
+    body.append(el("p", "fakepath", "~/PERMCHK-DEMO/"));
+    if (visual.kind === "delete") {
+      body.append(el("p", "pill", t("模拟删除 · 未执行", "Marked deleted · not executed")));
+    }
+    var ul = el("ul", "fake-files" + (visual.kind === "delete" ? " is-delete" : ""));
+    visual.items.forEach(function (item) {
+      var li = el("li");
+      li.append(el("span", "ico", visual.kind === "delete" ? "DEL" : "FILE"));
+      li.append(el("span", "fn", t(item.nameZh, item.nameEn)));
+      li.append(el("span", "meta", t(item.metaZh, item.metaEn)));
+      ul.append(li);
+    });
+    body.append(ul);
+    return;
+  }
+  if (visual.kind === "browser") {
+    var frame = el("div", "browser");
+    var bar = el("div", "chrome");
+    bar.append(el("i"), el("i"), el("i"), el("span", "url", visual.url));
+    var page = el("div", "bpage");
+    visual.fields.forEach(function (field) {
+      page.append(kv(t(field.kZh, field.kEn), t(field.vZh, field.vEn)));
+    });
+    frame.append(bar, page);
+    body.append(frame);
+    return;
+  }
+  var slip = el("div", "receipt");
+  slip.append(el("div", "merchant", t(visual.merchantZh, visual.merchantEn)));
+  slip.append(el("div", "amount", visual.amount));
+  slip.append(kv(t("卡号", "Card"), visual.card));
+  slip.append(el("div", "status", t(visual.statusZh, visual.statusEn)));
+  body.append(slip);
+}
+function renderDemo(replay) {
+  var level = riskById(demoId) || RISK_LEVELS[0];
+  demoId = level.id;
+  syncLevels();
+  var scale = riskScale(level.id);
+  $("scaleText").textContent = t(
+    "第 " + scale.rank + " 级 / 共 " + scale.of + " 级",
+    "Level " + scale.rank + " of " + scale.of
+  );
+  drawVisual(level);
+  showLines(level.lines, replay);
+}
+
+function updateReport() {
+  $("reportOut").textContent = buildReport(payload(), lang);
+}
+
+function applyLang(l) {
+  lang = l === "en" ? "en" : "zh";
+  document.querySelectorAll("[data-en]").forEach(function (node) {
+    if (node.dataset.zh === undefined) node.dataset.zh = node.innerHTML;
+    node.innerHTML = lang === "en" ? node.dataset.en : node.dataset.zh;
+  });
+  document.documentElement.lang = lang === "en" ? "en" : "zh-CN";
+  $("langBtn").textContent = lang === "en" ? "中文" : "EN";
+  try { localStorage.setItem("lang", lang); } catch (e) {}
+  renderTools();
+  renderGuide();
+  renderDemo(false);
+  updateReport();
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (e) {
+    try {
+      var area = document.createElement("textarea");
+      area.value = text;
+      document.body.appendChild(area);
+      area.select();
+      var ok = document.execCommand("copy");
+      document.body.removeChild(area);
+      return ok;
+    } catch (e2) { return false; }
+  }
+}
+function flashCopied(btn, ok) {
+  if (!ok) {
+    $("live").textContent = t("复制失败，请手动选择下面的文本", "Copy failed. Select the text below.");
+    return;
+  }
+  btn.classList.add("copied");
+  btn.textContent = t("已复制", "Copied");
+  $("live").textContent = t("已复制到剪贴板", "Copied to the clipboard");
+  setTimeout(function () {
+    btn.classList.remove("copied");
+    var back = lang === "en" ? btn.dataset.en : btn.dataset.zh;
+    if (back) btn.innerHTML = back;
+  }, 1400);
+}
+function downloadReport() {
+  var text = $("reportOut").textContent || "";
+  var blob = new Blob(["\uFEFF" + text], { type: "text/plain;charset=utf-8" });
+  var url = URL.createObjectURL(blob);
+  var link = document.createElement("a");
+  link.href = url;
+  link.download = "PERMCHK-032.txt";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(function () { URL.revokeObjectURL(url); }, 1200);
+}
+function wrap(ctx, text, max) {
+  var out = [];
+  var line = "";
+  var chars = Array.from(text || "");
+  for (var i = 0; i < chars.length; i++) {
+    var trial = line + chars[i];
+    if (ctx.measureText(trial).width > max && line) {
+      out.push(line);
+      line = chars[i];
+    } else {
+      line = trial;
+    }
+  }
+  if (line) out.push(line);
+  return out.length ? out : [""];
+}
+function drawShare() {
+  var canvas = $("shareCanvas");
+  var ctx = canvas.getContext("2d");
+  var W = 1200;
+  var H = 628;
+  canvas.width = W;
+  canvas.height = H;
+  ctx.fillStyle = "#060709";
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "#ef4444";
+  ctx.fillRect(0, 0, 12, H);
+  ctx.fillStyle = "rgba(237,239,241,0.05)";
+  var x;
+  var y;
+  for (x = 28; x < W; x += 36) {
+    for (y = 20; y < H; y += 36) {
+      ctx.beginPath();
+      ctx.arc(x, y, 1.15, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.fillStyle = "#ef4444";
+  ctx.font = "600 22px ui-monospace, Menlo, Consolas, monospace";
+  ctx.fillText("PERMCHK · 032", 64, 78);
+  ctx.fillStyle = "#edeff1";
+  ctx.font = "700 52px Helvetica, Arial, sans-serif";
+  ctx.fillText(t("AI 助手权限体检", "AI assistant permission check"), 64, 156);
+  ctx.fillStyle = "#7d848c";
+  ctx.font = "400 22px Helvetica, Arial, sans-serif";
+  ctx.fillText(t("全程本地 · 零上传", "Local only · nothing uploaded"), 64, 204);
+  var lines = buildShareText(state, lang).split("\n").slice(1, 4);
+  ctx.font = "500 28px Helvetica, Arial, sans-serif";
+  var cursor = 300;
+  lines.forEach(function (line) {
+    ctx.fillStyle = "#edeff1";
+    wrap(ctx, line, 1040).forEach(function (chunk) {
+      if (cursor > 540) return;
+      ctx.fillText(chunk, 64, cursor);
+      cursor += 46;
+    });
+  });
+  ctx.fillStyle = "#4a5057";
+  ctx.font = "500 20px ui-monospace, Menlo, Consolas, monospace";
+  ctx.fillText("build-100.com/032", 64, H - 52);
+  ctx.fillStyle = "#ef4444";
+  ctx.fillText("032", W - 120, H - 52);
+}
+
+loadState();
+document.querySelectorAll("#platGrid .plat").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    state.platform = btn.dataset.platform;
+    state.toolIds = normalizeSelection(state).toolIds;
+    saveState();
+    renderTools();
+    renderGuide();
+    updateReport();
+  });
+});
+document.querySelectorAll("#levelGrid .level").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    demoId = btn.dataset.level;
+    renderDemo(true);
+  });
+});
+$("replayBtn").addEventListener("click", function () { renderDemo(true); });
+$("startBtn").addEventListener("click", function (ev) {
+  ev.preventDefault();
+  scrollToId("step1");
+});
+$("copyReportBtn").addEventListener("click", async function () {
+  flashCopied($("copyReportBtn"), await copyText($("reportOut").textContent || ""));
+});
+$("downloadBtn").addEventListener("click", downloadReport);
+$("printBtn").addEventListener("click", function () { window.print(); });
+$("copyBtn").addEventListener("click", async function () {
+  flashCopied($("copyBtn"), await copyText(buildShareText(state, lang)));
+});
+$("shareImgBtn").addEventListener("click", function () {
+  drawShare();
+  $("shareWrap").classList.add("show");
+});
+$("langBtn").addEventListener("click", function () { applyLang(lang === "en" ? "zh" : "en"); });
+applyLang(lang);
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>
