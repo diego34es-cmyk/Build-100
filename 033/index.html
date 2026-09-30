@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TOPRUN-033 · 散户生存小游戏</title>
+<meta name="description" content="研报吹目标价 150、大股东偷偷卖。一款散户生存小游戏：读信息卡，分辨烟雾弹与静默减持，在闪崩前带着本金逃出山顶。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/033/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E033%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="TOPRUN-033 · 散户生存小游戏">
+<meta property="og:description" content="研报吹目标价 150、大股东偷偷卖。你能在闪崩前带着本金逃出山顶吗？">
+<meta property="og:url" content="https://build-100.com/033/">
+<meta property="og:image" content="https://build-100.com/033/og-033.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="TOPRUN-033 · 散户生存小游戏">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TOPRUN-033 · 散户生存小游戏">
+<meta name="twitter:description" content="Research says 150. The large holder is selling. Can you leave the peak before the air pocket?">
+<meta name="twitter:image" content="https://build-100.com/033/og-033.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;         /* 「再加 $X」的视觉锚点色 */
+    --accent: #f59e0b;
+    --accent-glow: rgba(245,158,11,0.35);
+    --up: #f87171;
+    --down: #4ade80;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; color: inherit; }
+  button:focus-visible, a:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  .sr {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+  [hidden] { display: none !important; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; text-align: center; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 48px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero .tick { color: var(--accent); }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; text-wrap: balance; margin-bottom: 18px;
+  }
+  .hero p { color: var(--muted); max-width: 40em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); }
+  .hero p strong { color: var(--ink); font-weight: 600; }
+  .hook { margin-top: 18px; color: var(--ink) !important; }
+
+  .kline-wrap {
+    margin: 22px 0 8px; border: 1px solid var(--line); border-radius: 8px;
+    background: linear-gradient(180deg, rgba(245,158,11,0.07), transparent 70%);
+    overflow: hidden;
+  }
+  .kline { display: block; width: 100%; height: auto; }
+
+  .how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 22px; }
+  .how article {
+    border: 1px solid var(--line-strong); border-radius: 8px; background: var(--bg-raise);
+    padding: 14px 14px 12px; border-top: 2px solid var(--accent);
+  }
+  .how .tag {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 8px;
+  }
+  .how p { color: var(--muted); font-size: 0.86rem; line-height: 1.65; }
+
+  .cta {
+    display: inline-flex; margin-top: 22px;
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 16px 22px; border-radius: 4px; border: 1px solid var(--accent);
+    background: rgba(245, 158, 11, 0.12); color: var(--ink); cursor: pointer;
+    transition: background .2s, color .2s, box-shadow .2s;
+  }
+  .cta:hover { background: var(--accent); color: var(--bg); box-shadow: 0 0 24px var(--accent-glow); }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .scen-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .scen {
+    text-align: left; cursor: pointer; border-radius: 8px; padding: 14px 12px;
+    border: 1px solid var(--line-strong); background: var(--bg-raise);
+    transition: border-color .18s, background .18s;
+  }
+  .scen:hover { border-color: var(--muted); }
+  .scen.active { border-color: var(--accent); background: rgba(245, 158, 11, 0.08); box-shadow: 0 0 0 1px var(--accent) inset; }
+  .scen .sf { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
+  .scen.active .sf { color: var(--accent); }
+  .scen .sn { display: block; font-weight: 700; font-size: 1.02rem; margin-top: 4px; }
+  .scen .sh { display: block; color: var(--muted); font-size: 0.78rem; line-height: 1.45; margin-top: 6px; }
+
+  .dash { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .stat {
+    border: 1px solid var(--line); border-radius: 8px; padding: 12px 12px 10px; background: var(--bg-raise);
+  }
+  .stat .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
+  .stat .v {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: clamp(1rem, 2.4vw, 1.28rem);
+    margin-top: 4px; letter-spacing: 0.01em;
+  }
+  .stat .v.up { color: var(--up); }
+  .stat .v.down { color: var(--down); }
+  .stat .sub { color: var(--faint); font-size: 0.75rem; margin-top: 2px; font-family: var(--mono); }
+
+  .spark-wrap { margin: 0 0 16px; height: 64px; }
+  .spark { width: 100%; height: 64px; display: block; }
+
+  .card-wrap { perspective: 980px; margin-bottom: 14px; }
+  .market-card {
+    border: 1px solid var(--line-strong); border-top: 2px solid var(--accent);
+    border-radius: 8px; padding: 22px 22px 18px; background: var(--bg-raise); min-height: 210px;
+    transform-origin: center;
+  }
+  .market-card.flip { animation: cardFlip .55s cubic-bezier(0.16, 1, 0.3, 1); }
+  .market-card.signal { border-top-color: var(--delta); }
+  .market-card.disclosure { border-top-color: var(--up); box-shadow: 0 0 24px rgba(248, 113, 113, 0.12); }
+  .market-card.aftermath { border-top-color: var(--muted); }
+  @keyframes cardFlip {
+    from { transform: rotateY(78deg) translateY(10px); opacity: 0; }
+    to { transform: none; opacity: 1; }
+  }
+  .card-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; margin-bottom: 10px; }
+  .card-tag {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
+  }
+  .card-move { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; }
+  .card-move.up { color: var(--up); }
+  .card-move.down { color: var(--down); }
+  .market-card h3 { font-size: clamp(1.15rem, 2.4vw, 1.45rem); line-height: 1.3; margin-bottom: 10px; text-wrap: balance; }
+  .market-card .body { color: var(--muted); font-size: 0.95rem; line-height: 1.7; }
+  .crash-banner {
+    display: none; margin-bottom: 14px; padding: 14px 16px; border: 1px solid var(--up); border-radius: 8px;
+    background: rgba(248, 113, 113, 0.08); color: var(--up);
+  }
+  .crash-banner.show { display: block; }
+  .crash-banner strong { color: var(--ink); }
+
+  .act-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .act {
+    cursor: pointer; border-radius: 4px; padding: 14px 8px 12px; background: none;
+    font-family: var(--mono); letter-spacing: 0.12em; text-transform: uppercase;
+    transition: background .2s, border-color .2s, box-shadow .2s;
+  }
+  .act span { display: block; font-size: 13px; }
+  .act small { display: block; margin-top: 6px; letter-spacing: 0.04em; text-transform: none; color: var(--faint); font-size: 11px; }
+  .act:disabled { opacity: 0.4; cursor: not-allowed; }
+  .act-buy { border: 1px solid rgba(248, 113, 113, 0.55); color: var(--ink); }
+  .act-buy:hover:not(:disabled) { background: rgba(248, 113, 113, 0.12); border-color: var(--up); }
+  .act-hold { border: 1px solid var(--line-strong); }
+  .act-hold:hover:not(:disabled) { border-color: var(--ink); background: rgba(237, 239, 241, 0.05); }
+  .act-sell { border: 1px solid rgba(74, 222, 128, 0.5); }
+  .act-sell:hover:not(:disabled) { background: rgba(74, 222, 128, 0.1); border-color: var(--live); }
+
+  .log-box {
+    margin-top: 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg-raise);
+    padding: 4px 16px 8px;
+  }
+  .log-box summary {
+    cursor: pointer; list-style: none; padding: 12px 0; font-family: var(--mono);
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
+  }
+  .log-box summary::-webkit-details-marker { display: none; }
+  .log-box ol { list-style: none; padding-bottom: 8px; }
+  .log-box li {
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.55; color: var(--ink);
+    border-top: 1px solid var(--line); padding: 8px 0;
+  }
+  .log-box li.crash { color: var(--up); }
+
+  .grade-hero { text-align: center; margin-bottom: 22px; }
+  .grade-hero .label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
+  .grade-hero .big {
+    font-size: clamp(2rem, 6vw, 3.1rem); font-weight: 700; line-height: 1.12; margin: 10px 0 8px; color: var(--accent);
+  }
+  .grade-hero .big.peak { color: var(--up); }
+  .grade-hero .big.escape { color: var(--live); }
+  .grade-hero .nums { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink); font-size: 1.05rem; }
+  .grade-hero .sub { color: var(--muted); margin-top: 10px; }
+
+  .review { list-style: none; display: grid; gap: 10px; }
+  .review li {
+    border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; background: var(--bg-raise);
+    display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: start;
+  }
+  .review .tn { font-family: var(--mono); color: var(--accent); font-size: 12px; letter-spacing: 0.1em; padding-top: 3px; }
+  .review h4 { font-size: 0.98rem; margin-bottom: 4px; }
+  .review p { color: var(--muted); font-size: 0.86rem; }
+  .badge {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 4px 8px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--muted); white-space: nowrap;
+  }
+  .badge.miss { border-color: var(--up); color: var(--up); }
+  .badge.hit { border-color: var(--live); color: var(--live); }
+
+  .settle-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+  .restart-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    background: none; border: 1px solid var(--accent); color: var(--ink); padding: 12px 24px; cursor: pointer; border-radius: 999px;
+    transition: all .2s;
+  }
+  .restart-btn:hover { background: var(--accent); color: var(--bg); box-shadow: 0 0 24px var(--accent-glow); }
+  .ghost-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); color: var(--muted); padding: 12px 24px; cursor: pointer; border-radius: 999px;
+  }
+  .ghost-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+  .lesson {
+    margin-top: 22px; padding: 16px 18px; border: 1px dashed var(--line-strong); border-radius: 8px; color: var(--muted); font-size: 0.92rem;
+  }
+  .lesson strong { color: var(--ink); font-weight: 600; }
+
+  .disclaimer { margin-top: 16px; color: var(--muted); font-size: 0.9rem; }
+  .disclaimer + .disclaimer { margin-top: 6px; }
+  .share-lead { margin-top: 8px; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .share-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .noscript {
+    margin-top: 18px; padding: 12px 14px; border: 1px solid var(--delta); border-radius: 6px; color: var(--delta);
+  }
+
+  footer {
+    border-top: 1px solid var(--line); padding: 24px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (max-width: 800px) {
+    .how { grid-template-columns: 1fr; }
+    .scen-grid { grid-template-columns: 1fr; }
+    .dash { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav { gap: 8px; }
+    .nav-brand { font-size: 13px; }
+    .act span { font-size: 12px; }
+    .review li { grid-template-columns: auto 1fr; }
+    .review .badge { grid-column: 2; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .market-card.flip { animation: none; }
+    * { animation: none !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">TOPRUN<span>·033</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero" id="lobby">
+    <p class="mono eyebrow"><span class="tick">●</span> <span data-en="TOPRUN-033 · Mini game">TOPRUN-033 · 小游戏</span></p>
+    <h1 data-en="The peak at 110 is windy.">110 元的山顶，风很大。</h1>
+    <p data-en="You are the retail account. Research keeps a <strong>150</strong> target. The large holder is selling without a pre-notice. Eight to twelve turns. Read the tape. Leave with the principal — or stand on the peak.">
+      你是散户。研报还在吹<strong>目标价 150</strong>，大股东已经在卖、而且不用提前说。8 到 12 个回合。读信息卡，带着本金下山——或者站在山顶。
+    </p>
+    <p class="hook" data-en="A fictional AI-compute name. No real company. The mechanic is the information gap.">脱敏虚构的「AI 算力概念股」。没有真实公司。真正的机制是信息差。</p>
+    <div class="kline-wrap" aria-hidden="true">
+      <svg class="kline" viewBox="0 0 880 140" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="kfill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f59e0b" stop-opacity="0.32"/>
+            <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M0 118 L48 114 L96 108 L144 100 L192 96 L240 86 L288 80 L336 70 L384 62 L432 54 L480 48 L528 40 L576 34 L624 28 L672 24 L720 22 L752 58 L784 92 L816 112 L848 122 L880 128 L880 140 L0 140 Z" fill="url(#kfill)"/>
+        <path d="M0 118 L48 114 L96 108 L144 100 L192 96 L240 86 L288 80 L336 70 L384 62 L432 54 L480 48 L528 40 L576 34 L624 28 L672 24 L720 22 L752 58 L784 92 L816 112 L848 122 L880 128" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linejoin="round"/>
+        <g fill="#f87171" opacity="0.85">
+          <rect x="86" y="96" width="6" height="22"/>
+          <rect x="182" y="84" width="6" height="24"/>
+          <rect x="278" y="68" width="6" height="26"/>
+          <rect x="374" y="54" width="6" height="24"/>
+          <rect x="470" y="40" width="6" height="22"/>
+          <rect x="566" y="26" width="6" height="22"/>
+          <rect x="662" y="16" width="6" height="20"/>
+        </g>
+        <rect x="742" y="22" width="8" height="92" fill="#4ade80" opacity="0.9"/>
+      </svg>
+    </div>
+    <div class="how">
+      <article>
+        <div class="tag">01 · <span data-en="The card">信息卡</span></div>
+        <p data-en="Each turn one card: a note, a forum, a holder list, a discounted block, a volume tell.">每回合一张：研报、论坛、股东名单、大宗折价、成交量异动。</p>
+      </article>
+      <article>
+        <div class="tag">02 · <span data-en="Smoke vs signal">烟雾弹 / 信号</span></div>
+        <p data-en="Some cards are noise with a 150 target. Some are silent selling. You do not see the hidden bar.">有的是目标价 150 的噪音，有的是静默减持。进度条在后台，你看不见。</p>
+      </article>
+      <article>
+        <div class="tag">03 · <span data-en="Then the filing">然后是半年报</span></div>
+        <p data-en="When the bar fills and the interim report drops, the tape gaps 25–40%.">进度拉满，半年报落地，股价一次性跌 25–40%。</p>
+      </article>
+    </div>
+    <div class="field" style="border-top:none;padding-top:28px;padding-bottom:0">
+      <div class="field-head">
+        <span class="field-no">01</span>
+        <span class="field-title" data-en="Pick a script">选一个剧本</span>
+        <span class="field-hint" data-en="Same rules. Different story. You can switch after a round.">规则一样，故事不同。打完一局还能换。</span>
+      </div>
+      <div class="scen-grid" id="scenGrid" role="radiogroup" aria-label="scenario">
+        <button class="scen active" type="button" data-scenario="ai" role="radio" aria-checked="true">
+          <span class="sf" data-en="Script A">剧本 A</span>
+          <span class="sn" data-en="AI compute high-flyer">AI 算力妖股</span>
+          <span class="sh" data-en="Target 150 on the note. The cluster story sounds best.">研报目标价 150，训练集群的故事最好听。</span>
+        </button>
+        <button class="scen" type="button" data-scenario="consumer" role="radio" aria-checked="false">
+          <span class="sf" data-en="Script B">剧本 B</span>
+          <span class="sn" data-en="Consumer blue-chip value trap">消费白马价值陷阱</span>
+          <span class="sh" data-en="Moat, dividend, deep channels — the calmer the story, the faster the drop.">护城河、分红、渠道深耕——故事越稳，下山越快。</span>
+        </button>
+        <button class="scen" type="button" data-scenario="star" role="radio" aria-checked="false">
+          <span class="sf" data-en="Script C">剧本 C</span>
+          <span class="sn" data-en="Recently listed name">次新股</span>
+          <span class="sh" data-en="Listed under a year. Unlock approaching. People outside the lock go first.">上市不到一年，解禁临近，锁定期外的人先走。</span>
+        </button>
+      </div>
+      <button class="cta" id="startBtn" type="button" data-en="Start game">开始游戏</button>
+      <noscript><p class="noscript" data-en="This game needs JavaScript. It still does not call a network.">这局游戏需要 JavaScript。即便如此，也不会发任何外网请求。</p></noscript>
+    </div>
+  </header>
+
+  <section id="table" hidden>
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <h2 class="field-title" id="tableTitle">北境算力</h2>
+      <p class="field-hint" id="tableHint"></p>
+    </div>
+    <div class="dash" id="dash">
+      <div class="stat">
+        <div class="k" data-en="Cash">现金</div>
+        <div class="v" id="statCash">—</div>
+      </div>
+      <div class="stat">
+        <div class="k" data-en="Shares">持仓</div>
+        <div class="v" id="statShares">—</div>
+        <div class="sub" id="statEquity"></div>
+      </div>
+      <div class="stat">
+        <div class="k" data-en="Price">股价</div>
+        <div class="v" id="statPrice">—</div>
+        <div class="sub" id="statMove"></div>
+      </div>
+      <div class="stat">
+        <div class="k" data-en="Turn">回合</div>
+        <div class="v" id="statTurn">—</div>
+        <div class="sub" id="statSeed"></div>
+      </div>
+    </div>
+    <div class="spark-wrap" aria-hidden="true">
+      <svg class="spark" id="spark" viewBox="0 0 880 64" preserveAspectRatio="none"></svg>
+    </div>
+    <div class="crash-banner" id="crashBanner" role="status"></div>
+    <div class="card-wrap">
+      <article class="market-card" id="marketCard">
+        <div class="card-top">
+          <span class="card-tag" id="cardTag"></span>
+          <span class="card-move" id="cardMove"></span>
+        </div>
+        <h3 id="cardTitle"></h3>
+        <p class="body" id="cardBody"></p>
+      </article>
+    </div>
+    <div class="act-row">
+      <button class="act act-buy" id="btnBuy" type="button">
+        <span data-en="Buy">加仓</span>
+        <small id="buyHint"></small>
+      </button>
+      <button class="act act-hold" id="btnHold" type="button">
+        <span data-en="Hold">持有</span>
+        <small id="holdHint"></small>
+      </button>
+      <button class="act act-sell" id="btnSell" type="button">
+        <span data-en="Sell">减仓</span>
+        <small id="sellHint"></small>
+      </button>
+    </div>
+    <p class="sr" id="live" aria-live="polite"></p>
+    <details class="log-box" id="logBox">
+      <summary data-en="Event log">事件日志</summary>
+      <ol id="logList"></ol>
+    </details>
+  </section>
+
+  <section class="field" id="settle" hidden>
+    <div class="field-head">
+      <span class="field-no">03</span>
+      <h2 class="field-title" data-en="Settlement">结算与复盘</h2>
+      <p class="field-hint" data-en="Final cash, return, grade, and every sell signal this round.">终局资金、收益率、评级，以及本局每一条减持信号。</p>
+    </div>
+    <div class="grade-hero">
+      <div class="label" id="gradeLabel"></div>
+      <div class="big" id="gradeBig"></div>
+      <div class="nums" id="gradeNums"></div>
+      <p class="sub" id="gradeSub"></p>
+    </div>
+    <ol class="review" id="reviewList"></ol>
+    <p class="lesson" id="lesson"></p>
+    <div class="settle-actions">
+      <button class="restart-btn" id="replayBtn" type="button" data-en="Play again">再来一局</button>
+      <button class="ghost-btn" id="lobbyBtn" type="button" data-en="Switch script">换剧本</button>
+    </div>
+    <div class="scen-grid" id="scenGrid2" style="margin-top:16px">
+      <button class="scen" type="button" data-scenario="ai" role="radio">
+        <span class="sf" data-en="Script A">剧本 A</span>
+        <span class="sn" data-en="AI compute high-flyer">AI 算力妖股</span>
+      </button>
+      <button class="scen" type="button" data-scenario="consumer" role="radio">
+        <span class="sf" data-en="Script B">剧本 B</span>
+        <span class="sn" data-en="Consumer blue-chip value trap">消费白马价值陷阱</span>
+      </button>
+      <button class="scen" type="button" data-scenario="star" role="radio">
+        <span class="sf" data-en="Script C">剧本 C</span>
+        <span class="sn" data-en="Recently listed name">次新股</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="field" id="shareField">
+    <div class="field-head">
+      <span class="field-no">04</span>
+      <h2 class="field-title" data-en="Share &amp; disclaimer">分享与免责声明</h2>
+      <p class="field-hint" data-en="A short line for a post. The image is drawn on this device.">发帖用的短句。分享图在这台设备上画出来。</p>
+    </div>
+    <p class="disclaimer" data-en="Education demo only. Not investment advice. Names, filings, holder lists and prices are fictional. Do not map them onto a live ticker.">本游戏为教育演示，不构成投资建议。股票、研报、股东名单与价格路径全部虚构，请勿对号入座。</p>
+    <p class="disclaimer" data-en="No network calls. The silent-sell bar stays in this tab. Holding 5% or less needs no pre-notice — that is the gap the game is about.">无外网请求。静默减持进度只留在这个标签页里。持股 5% 以下无需预披露——这局要练的，就是这条信息差。</p>
+    <p class="field-hint share-lead" data-en="Short summary for a post. The image is drawn on this device.">发帖用的短句。分享图在这台设备上画出来。</p>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap">
+      <canvas id="shareCanvas" width="1200" height="628" aria-label="share card"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/" data-en="build-100.com">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="@JCheng557">@JCheng557</a></span>
+  <span class="mono" data-en="TOPRUN-033 · Retail survival mini-game">TOPRUN-033 · 散户生存小游戏</span>
+</footer>
+
+<script type="module">
+import {
+  SCENARIOS,
+  FEE_RATE,
+  createGame,
+  nextCard,
+  applyAction,
+  isCrashTriggered,
+  applyCrash,
+  quoteBuy,
+  quoteSell,
+  equityOf,
+  gradeResult,
+  reviewSignals,
+  buildShareText,
+} from "./engine.js";
+
+var lang = "zh";
+try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+
+var scenario = "ai";
+var game = null;
+var busy = false;
+var lastTurnSeen = -1;
+var crashTimer = null;
+
+function t(zh, en) { return lang === "en" ? en : zh; }
+function $(id) { return document.getElementById(id); }
+function prefersReduce() {
+  try { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; }
+}
+function yuan(n) {
+  var x = Number(n);
+  if (!Number.isFinite(x)) return "—";
+  var s = x.toFixed(2);
+  var parts = s.split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return parts.join(".");
+}
+function pct(n, digits) {
+  var d = digits == null ? 1 : digits;
+  var v = (Number(n) * 100).toFixed(d);
+  return (Number(n) >= 0 ? "+" : "") + v + "%";
+}
+function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); }
+
+function applyLang(l) {
+  lang = l === "en" ? "en" : "zh";
+  document.querySelectorAll("[data-en]").forEach(function (el) {
+    if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    el.innerHTML = lang === "en" ? el.dataset.en : el.dataset.zh;
+  });
+  document.documentElement.lang = lang === "en" ? "en" : "zh-CN";
+  $("langBtn").textContent = lang === "en" ? "中文" : "EN";
+  try { localStorage.setItem("lang", lang); } catch (e) {}
+  render();
+}
+
+function setScenario(id) {
+  if (!SCENARIOS[id]) return;
+  scenario = id;
+  document.querySelectorAll("[data-scenario]").forEach(function (btn) {
+    var on = btn.getAttribute("data-scenario") === id;
+    btn.classList.toggle("active", on);
+    btn.setAttribute("aria-checked", on ? "true" : "false");
+  });
+}
+
+function showLobby() {
+  busy = false;
+  if (crashTimer) { clearTimeout(crashTimer); crashTimer = null; }
+  $("lobby").hidden = false;
+  $("table").hidden = true;
+  $("settle").hidden = true;
+  window.scrollTo({ top: 0, behavior: prefersReduce() ? "auto" : "smooth" });
+}
+
+function startGame(seed) {
+  busy = false;
+  if (crashTimer) { clearTimeout(crashTimer); crashTimer = null; }
+  var s = seed == null ? Date.now() % 1000000000 : seed;
+  game = nextCard(createGame({ seed: s, scenario: scenario }));
+  lastTurnSeen = -1;
+  $("lobby").hidden = true;
+  $("table").hidden = false;
+  $("settle").hidden = true;
+  $("shareWrap").classList.remove("show");
+  render();
+  window.scrollTo({ top: 0, behavior: prefersReduce() ? "auto" : "smooth" });
+}
+
+function showSettle() {
+  $("table").hidden = false;
+  $("settle").hidden = false;
+  renderSettle();
+  $("settle").scrollIntoView({ behavior: prefersReduce() ? "auto" : "smooth", block: "start" });
+}
+
+function act(action) {
+  if (!game || game.over || busy) return;
+  if (!game.currentCard || game.actedThisTurn) return;
+  game = applyAction(game, action);
+  var crashedNow = false;
+  if (isCrashTriggered(game) && game.actedThisTurn) {
+    game = applyCrash(game);
+    crashedNow = true;
+  }
+  render();
+  if (game.over) {
+    showSettle();
+    return;
+  }
+  if (crashedNow && !prefersReduce()) {
+    busy = true;
+    crashTimer = setTimeout(function () {
+      busy = false;
+      crashTimer = null;
+      if (!game.over) game = nextCard(game);
+      render();
+      if (game.over) showSettle();
+    }, 900);
+    return;
+  }
+  game = nextCard(game);
+  render();
+  if (game.over) showSettle();
+}
+
+function sparkSvg(prices) {
+  if (!prices || prices.length < 2) {
+    return '<polyline fill="none" stroke="#f59e0b" stroke-width="2" points="0,32 880,32"/>';
+  }
+  var min = Math.min.apply(null, prices);
+  var max = Math.max.apply(null, prices);
+  var span = max - min || 1;
+  var w = 880;
+  var h = 64;
+  var pts = prices.map(function (p, i) {
+    var x = (i / (prices.length - 1)) * w;
+    var y = 8 + (1 - (p - min) / span) * (h - 16);
+    return x.toFixed(1) + "," + y.toFixed(1);
+  }).join(" ");
+  var last = prices[prices.length - 1];
+  var first = prices[0];
+  var color = last >= first ? "#f87171" : "#4ade80";
+  return '<polyline fill="none" stroke="' + color + '" stroke-width="2.2" stroke-linejoin="round" points="' + pts + '"/>';
+}
+
+function renderCard() {
+  if (!game || !game.currentCard) return;
+  var card = game.currentCard;
+  var el = $("marketCard");
+  el.classList.remove("signal", "disclosure", "aftermath", "flip");
+  if (card.kind === "signal") el.classList.add("signal");
+  if (card.kind === "disclosure") el.classList.add("disclosure");
+  if (card.kind === "aftermath") el.classList.add("aftermath");
+  if (game.turn !== lastTurnSeen) {
+    lastTurnSeen = game.turn;
+    void el.offsetWidth;
+    el.classList.add("flip");
+  }
+  $("cardTag").textContent = t(card.tagZh, card.tagEn);
+  $("cardTitle").textContent = t(card.titleZh, card.titleEn);
+  $("cardBody").textContent = t(card.bodyZh, card.bodyEn);
+  var mv = card.priceDelta;
+  var moveEl = $("cardMove");
+  moveEl.textContent = pct(mv, 2);
+  moveEl.className = "card-move " + (mv >= 0 ? "up" : "down");
+}
+
+function renderDash() {
+  if (!game) return;
+  $("statCash").textContent = yuan(game.cash);
+  $("statShares").textContent = String(game.shares);
+  $("statEquity").textContent = t("总资产 ", "Equity ") + yuan(equityOf(game));
+  var priceEl = $("statPrice");
+  priceEl.textContent = yuan(game.price);
+  var prev = game.priceHistory.length >= 2 ? game.priceHistory[game.priceHistory.length - 2] : 100;
+  var chg = prev ? (game.price - prev) / prev : 0;
+  priceEl.className = "v " + (chg > 0 ? "up" : chg < 0 ? "down" : "");
+  $("statMove").textContent = t("相对上回合 ", "vs last turn ") + pct(chg, 2);
+  $("statTurn").textContent = game.turn + " / " + game.maxTurns;
+  $("statSeed").textContent = t("种子 ", "Seed ") + String(game.seed);
+  $("tableTitle").textContent = t(game.nameZh, game.nameEn);
+  $("tableHint").textContent = t(
+    game.scenarioZh + " · 手续费 " + (FEE_RATE * 100).toFixed(1) + "% · 看不见的减持进度在后台走",
+    game.scenarioEn + " · fee " + (FEE_RATE * 100).toFixed(1) + "% · silent-sell progress stays hidden"
+  );
+  $("spark").innerHTML = sparkSvg(game.priceHistory);
+}
+
+function renderActions() {
+  if (!game) return;
+  var buy = quoteBuy(game);
+  var sell = quoteSell(game);
+  $("buyHint").textContent = buy.qty
+    ? t("约 " + buy.qty + " 股 · 费 " + yuan(buy.fee), "~" + buy.qty + " sh · fee " + yuan(buy.fee))
+    : t("现金不够一手", "Not enough cash");
+  $("sellHint").textContent = sell.qty
+    ? t("约 " + sell.qty + " 股 · 费 " + yuan(sell.fee), "~" + sell.qty + " sh · fee " + yuan(sell.fee))
+    : t("没有持仓", "No position");
+  $("holdHint").textContent = t("不交易，不收费", "No trade, no fee");
+  var locked = busy || game.over || game.actedThisTurn;
+  $("btnBuy").disabled = locked || !buy.qty;
+  $("btnSell").disabled = locked || !sell.qty;
+  $("btnHold").disabled = locked;
+}
+
+function renderLog() {
+  var ol = $("logList");
+  clear(ol);
+  if (!game) return;
+  game.history.forEach(function (h) {
+    var li = document.createElement("li");
+    if (h.type === "crash") {
+      li.className = "crash";
+      li.textContent = t(
+        "T" + h.turn + " 闪崩 " + pct(-h.drop, 1) + " · " + yuan(h.priceBefore) + " → " + yuan(h.priceAfter),
+        "T" + h.turn + " air pocket " + pct(-h.drop, 1) + " · " + yuan(h.priceBefore) + " → " + yuan(h.priceAfter)
+      );
+    } else {
+      var act =
+        h.action === "buy" ? t("加仓", "buy") :
+        h.action === "sell" ? t("减仓", "sell") : t("持有", "hold");
+      var extra = h.qty ? t(" " + h.qty + " 股", " " + h.qty + " sh") : "";
+      li.textContent = t(
+        "T" + h.turn + " " + act + extra + " @ " + yuan(h.price) + " · 资产 " + yuan(h.equity),
+        "T" + h.turn + " " + act + extra + " @ " + yuan(h.price) + " · equity " + yuan(h.equity)
+      );
+    }
+    ol.appendChild(li);
+  });
+}
+
+function renderCrash() {
+  var el = $("crashBanner");
+  if (game && game.justCrashed) {
+    el.classList.add("show");
+    el.innerHTML = t(
+      "<strong>闪崩。</strong> 半年报落地，股价一次跌去 " + pct(-game.crashDrop, 1) + "。山顶上的风，这回是真的。",
+      "<strong>Air pocket.</strong> The filing landed. The tape dropped " + pct(-game.crashDrop, 1) + " in one print."
+    );
+    $("live").textContent = t("闪崩已发生", "The air pocket just hit");
+  } else {
+    el.classList.remove("show");
+    el.textContent = "";
+  }
+}
+
+function renderSettle() {
+  if (!game) return;
+  var g = gradeResult(game);
+  $("gradeLabel").textContent = t("本局评级", "This round");
+  var big = $("gradeBig");
+  big.textContent = t(g.zh, g.en);
+  big.className = "big " + g.id;
+  $("gradeNums").textContent = t(
+    "终局 " + yuan(g.equity) + " 元 · 收益率 " + pct(g.rate, 1),
+    "Final ¥" + yuan(g.equity) + " · return " + pct(g.rate, 1)
+  );
+  $("gradeSub").textContent = g.crashed
+    ? t(
+      (game.nameZh + " 在第 " + g.crashTurn + " 回合闪崩 " + pct(-g.crashDrop, 1) + "。错过 " + g.missedSignals + " / " + g.signalCount + " 条减持信号。"),
+      (game.nameEn + " dropped " + pct(-g.crashDrop, 1) + " on turn " + g.crashTurn + ". Missed " + g.missedSignals + " / " + g.signalCount + " sell signals.")
+    )
+    : t("这一局还没走到半年报。", "This round never reached the filing.");
+  var ol = $("reviewList");
+  clear(ol);
+  reviewSignals(game).forEach(function (row) {
+    var li = document.createElement("li");
+    var tn = document.createElement("span");
+    tn.className = "tn";
+    tn.textContent = "T" + String(row.turn).padStart(2, "0");
+    var body = document.createElement("div");
+    var h4 = document.createElement("h4");
+    h4.textContent = t(row.titleZh, row.titleEn);
+    var p = document.createElement("p");
+    p.textContent = t(row.tagZh, row.tagEn) + " · " + (row.kind === "disclosure"
+      ? t("半年报把已经走完的路写出来", "The filing writes the road already walked")
+      : t("当时就能读到的减持线索", "A sell tell you could read in real time"));
+    body.appendChild(h4);
+    body.appendChild(p);
+    var badge = document.createElement("span");
+    badge.className = "badge " + (row.missed ? "miss" : "hit");
+    badge.textContent = row.missed ? t("错过减仓", "Did not sell") : t("本回合减仓", "Sold this turn");
+    li.appendChild(tn);
+    li.appendChild(body);
+    li.appendChild(badge);
+    ol.appendChild(li);
+  });
+  $("lesson").innerHTML = t(
+    "<strong>信息差不是情绪。</strong>持股 5% 以下的减持不用预披露。研报可以继续写 150，你的本金没有义务留在山顶。",
+    "<strong>The gap is not a mood.</strong> A holder under 5% owes you no pre-notice. A note can still print 150. Your principal does not have to stay on the peak."
+  );
+}
+
+function render() {
+  if (!game) return;
+  if (!$("table").hidden) {
+    renderDash();
+    renderCard();
+    renderActions();
+    renderLog();
+    renderCrash();
+  }
+  if (!$("settle").hidden) renderSettle();
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (e) {
+    try {
+      var area = document.createElement("textarea");
+      area.value = text;
+      document.body.appendChild(area);
+      area.select();
+      var ok = document.execCommand("copy");
+      document.body.removeChild(area);
+      return ok;
+    } catch (e2) { return false; }
+  }
+}
+
+function flashCopied(btn, ok) {
+  if (!ok) {
+    $("live").textContent = t("复制失败，请手动选择", "Copy failed. Select the text yourself.");
+    return;
+  }
+  btn.classList.add("copied");
+  btn.textContent = t("已复制", "Copied");
+  setTimeout(function () {
+    btn.classList.remove("copied");
+    var back = lang === "en" ? btn.dataset.en : btn.dataset.zh;
+    if (back) btn.innerHTML = back;
+  }, 1400);
+}
+
+function wrap(ctx, text, max) {
+  var out = [];
+  var line = "";
+  var chars = Array.from(text || "");
+  for (var i = 0; i < chars.length; i++) {
+    var trial = line + chars[i];
+    if (ctx.measureText(trial).width > max && line) {
+      out.push(line);
+      line = chars[i];
+    } else {
+      line = trial;
+    }
+  }
+  if (line) out.push(line);
+  return out.length ? out : [""];
+}
+
+function drawShare() {
+  var canvas = $("shareCanvas");
+  var ctx = canvas.getContext("2d");
+  var W = 1200;
+  var H = 628;
+  canvas.width = W;
+  canvas.height = H;
+  ctx.fillStyle = "#060709";
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "#f59e0b";
+  ctx.fillRect(0, 0, 12, H);
+  ctx.fillStyle = "rgba(237,239,241,0.05)";
+  var x;
+  var y;
+  for (x = 28; x < W; x += 36) {
+    for (y = 20; y < H; y += 36) {
+      ctx.beginPath();
+      ctx.arc(x, y, 1.15, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.strokeStyle = "rgba(245,158,11,0.55)";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(64, 250);
+  ctx.lineTo(180, 240);
+  ctx.lineTo(280, 200);
+  ctx.lineTo(400, 160);
+  ctx.lineTo(520, 120);
+  ctx.lineTo(640, 90);
+  ctx.lineTo(720, 80);
+  ctx.lineTo(820, 210);
+  ctx.lineTo(920, 300);
+  ctx.lineTo(1040, 360);
+  ctx.stroke();
+  ctx.fillStyle = "#f59e0b";
+  ctx.font = "600 22px ui-monospace, Menlo, Consolas, monospace";
+  ctx.fillText("TOPRUN · 033", 64, 78);
+  var g = game ? gradeResult(game) : null;
+  ctx.fillStyle = "#edeff1";
+  ctx.font = "700 52px Helvetica, Arial, sans-serif";
+  ctx.fillText(g ? t(g.zh, g.en) : t("110 元的山顶，风很大", "The peak at 110 is windy"), 64, 156);
+  ctx.fillStyle = "#7d848c";
+  ctx.font = "400 22px Helvetica, Arial, sans-serif";
+  if (g) {
+    ctx.fillText(
+      t("收益率 " + pct(g.rate, 1) + " · 终局 " + yuan(g.equity) + " 元", "Return " + pct(g.rate, 1) + " · final ¥" + yuan(g.equity)),
+      64,
+      208
+    );
+  } else {
+    ctx.fillText(t("研报写 150。大股东在卖。", "The note says 150. The holder is selling."), 64, 208);
+  }
+  var lines = buildShareText(game, lang).split("\n").slice(1, 5);
+  ctx.font = "500 26px Helvetica, Arial, sans-serif";
+  var cursor = 300;
+  lines.forEach(function (line) {
+    ctx.fillStyle = "#edeff1";
+    wrap(ctx, line, 1040).forEach(function (chunk) {
+      if (cursor > 540) return;
+      ctx.fillText(chunk, 64, cursor);
+      cursor += 42;
+    });
+  });
+  ctx.fillStyle = "#4a5057";
+  ctx.font = "500 20px ui-monospace, Menlo, Consolas, monospace";
+  ctx.fillText("build-100.com/033", 64, H - 52);
+  ctx.fillStyle = "#f59e0b";
+  ctx.fillText("033", W - 120, H - 52);
+}
+
+document.querySelectorAll("#scenGrid [data-scenario], #scenGrid2 [data-scenario]").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    setScenario(btn.getAttribute("data-scenario"));
+  });
+});
+$("startBtn").addEventListener("click", function () { startGame(); });
+$("replayBtn").addEventListener("click", function () { startGame(); });
+$("lobbyBtn").addEventListener("click", function () { showLobby(); });
+$("btnBuy").addEventListener("click", function () { act("buy"); });
+$("btnHold").addEventListener("click", function () { act("hold"); });
+$("btnSell").addEventListener("click", function () { act("sell"); });
+$("copyBtn").addEventListener("click", async function () {
+  flashCopied($("copyBtn"), await copyText(buildShareText(game, lang)));
+});
+$("shareImgBtn").addEventListener("click", function () {
+  drawShare();
+  $("shareWrap").classList.add("show");
+});
+$("langBtn").addEventListener("click", function () { applyLang(lang === "en" ? "zh" : "en"); });
+document.addEventListener("keydown", function (ev) {
+  if (!game || $("table").hidden || ev.metaKey || ev.ctrlKey || ev.altKey) return;
+  if (ev.key === "1") act("buy");
+  if (ev.key === "2") act("hold");
+  if (ev.key === "3") act("sell");
+});
+setScenario("ai");
+applyLang(lang);
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>
