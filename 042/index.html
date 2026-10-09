@@ -1,0 +1,1459 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SENT-042 · 情绪温度计：现金 9 年新低意味着什么</title>
+<meta name="description" content="AAII 9 月调查：美国散户股票仓位 71.8%、现金只剩 13.3%，都是 9 年极值。输入你自己的现金比例，一页互动课讲清「反向指标」，看看你站在历史的哪一端。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/042/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E042%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SENT-042 · 情绪温度计：现金 9 年新低意味着什么">
+<meta property="og:description" content="AAII 9 月调查：美国散户股票仓位 71.8%、现金只剩 13.3%，都是 9 年极值。输入你自己的现金比例，一页互动课讲清「反向指标」，看看你站在历史的哪一端。">
+<meta property="og:url" content="https://build-100.com/042/">
+<meta property="og:image" content="https://build-100.com/042/og-042.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="SENT-042 · 情绪温度计：现金 9 年新低意味着什么">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SENT-042 · 情绪温度计：现金 9 年新低意味着什么">
+<meta name="twitter:description" content="AAII September survey: US retail stock allocation is 71.8% and cash is 13.3%, both 9-year extremes. Enter your own cash share. A one-page lesson on the contrarian indicator, and which end you are on.">
+<meta name="twitter:image" content="https://build-100.com/042/og-042.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #22d3ee;
+    --accent-glow: rgba(34,211,238,0.35);
+    --warm: #fbbf24;
+    --hot: #f87171;
+    --cool: var(--accent);
+    --up: #f87171;
+    --down: #4ade80;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+    --you: var(--warm);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font-family: inherit; color: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  [hidden] { display: none !important; }
+  h1, h2, h3, p, td, th, li, .stat-k, .lede, .field-title, .lesson-title, .opt, .check span, .compare, .sim-sentence {
+    overflow-wrap: break-word;
+  }
+  img, canvas, svg, input { max-width: 100%; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; min-width: 0; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; text-align: center; flex: none; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+    flex: none;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 48px); position: relative; }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; letter-spacing: 0.04em; line-height: 1.45; text-wrap: balance; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; margin-bottom: 18px;
+  }
+  .hero p.lede { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); }
+  .hero p.lede strong { color: var(--ink); font-weight: 600; }
+
+  .stat-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    margin: 22px 0 12px;
+  }
+  .stat {
+    position: relative; min-width: 0;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: linear-gradient(180deg, rgba(237,239,241,0.035), rgba(237,239,241,0.015));
+    padding: 16px 14px 14px 16px; overflow: hidden;
+  }
+  .stat::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  }
+  .stat-hot::before { background: var(--hot); box-shadow: 0 0 16px rgba(248,113,113,0.45); }
+  .stat-cool::before { background: var(--accent); box-shadow: 0 0 16px var(--accent-glow); }
+  .stat-warm::before { background: var(--warm); box-shadow: 0 0 16px rgba(251,191,36,0.45); }
+  .stat-num {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(1.7rem, 7.2vw, 3.5rem); letter-spacing: -0.045em; line-height: 0.95;
+    white-space: nowrap;
+  }
+  .stat-hot .stat-num { color: var(--hot); }
+  .stat-cool .stat-num { color: var(--accent); }
+  .stat-k { margin-top: 8px; color: var(--muted); font-size: clamp(0.72rem, 2.6vw, 0.92rem); line-height: 1.35; }
+  .nowrap { white-space: nowrap; }
+  .stat-note { color: var(--faint); font-size: 0.82rem; margin: 2px 0 10px; }
+  .bear-bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin: 0 0 12px; padding: 9px 16px 9px 18px;
+  }
+  .bear-bar .stat-k { margin-top: 0; font-size: clamp(0.82rem, 2.4vw, 0.95rem); min-width: 0; }
+  .bear-bar .stat-num {
+    font-size: clamp(1.3rem, 2.8vw, 1.85rem); color: var(--warm); line-height: 1; flex: none;
+  }
+
+  .cta {
+    display: inline-block; margin-top: 20px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--accent); border-radius: 4px;
+    background: var(--accent); color: var(--bg); cursor: pointer; transition: all .2s;
+  }
+  .cta:hover { box-shadow: 0 0 24px var(--accent-glow); }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .sliders { display: grid; gap: 16px; }
+  .slider-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+  .slider-label { font-weight: 700; }
+  .slider-out {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    font-size: 1.35rem; letter-spacing: -0.03em; color: var(--ink);
+  }
+  .slider-out.is-hot { color: var(--hot); }
+  .slider-out.is-cool { color: var(--accent); }
+  .range-pad { padding: 0 11px; }
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 28px; background: transparent; margin: 0; display: block;
+  }
+  input[type="range"]:focus { outline: none; }
+  input[type="range"]:focus-visible { outline: 1px solid var(--ink); outline-offset: 3px; }
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 6px; border-radius: 99px; background: rgba(237,239,241,0.12);
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 22px; height: 22px; margin-top: -8px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  input[type="range"].range-hot::-webkit-slider-thumb {
+    background: var(--hot); box-shadow: 0 0 0 1px var(--hot);
+  }
+  input[type="range"]::-moz-range-track {
+    height: 6px; border-radius: 99px; background: rgba(237,239,241,0.12); border: none;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--bg);
+    background: var(--accent); box-shadow: 0 0 0 1px var(--accent);
+  }
+  input[type="range"].range-hot::-moz-range-thumb {
+    background: var(--hot); box-shadow: 0 0 0 1px var(--hot);
+  }
+  .other-line {
+    margin-top: 12px; font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em;
+    color: var(--muted); text-transform: none;
+  }
+  .other-line strong { color: var(--ink); font-weight: 700; }
+
+  .pos { margin-top: 22px; }
+  .pos-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; }
+  .pos-name { font-weight: 700; min-width: 0; }
+  .pos-scale { font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em; color: var(--faint); white-space: nowrap; text-transform: none; }
+  .pos-stage { position: relative; padding-top: 30px; }
+  .pos-rail { position: relative; padding-bottom: 16px; }
+  .you-pill {
+    position: absolute; top: 0; left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em;
+    color: var(--bg); background: var(--you); border-radius: 999px;
+    padding: 2px 8px; white-space: nowrap; line-height: 1.4;
+    transition: left .35s ease, transform .35s ease, background-color .35s ease;
+  }
+  .pos-track {
+    position: relative; height: 16px; border-radius: 99px;
+    background: rgba(237,239,241,0.06); border: 1px solid var(--line); overflow: hidden;
+  }
+  .pos-band { position: absolute; top: 0; bottom: 0; }
+  .pos-band-cash {
+    left: 0; width: 42%;
+    background: linear-gradient(90deg, rgba(248,113,113,0.7), rgba(248,113,113,0));
+  }
+  .pos-band-stock {
+    right: 0; width: 38%;
+    background: linear-gradient(90deg, rgba(248,113,113,0), rgba(248,113,113,0.7));
+  }
+  .pos-tick {
+    position: absolute; top: 0; bottom: 0; width: 2px; background: var(--ink);
+    transform: translateX(-1px);
+  }
+  .tick-lab {
+    position: absolute; top: 18px; left: 0;
+    transform: translateX(-50%);
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0; line-height: 1;
+    font-variant-numeric: tabular-nums; white-space: nowrap; pointer-events: none;
+    color: var(--muted);
+  }
+  .tick-lab.is-hot { color: var(--hot); }
+  .tick-lab.is-warm { color: var(--warm); }
+  .pos-dot {
+    position: absolute; top: 50%; width: 14px; height: 14px; border-radius: 50%;
+    background: var(--you); border: 2px solid var(--bg);
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px var(--accent-glow);
+    transition: left .35s ease, transform .35s ease, background-color .35s ease;
+  }
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 6px 14px;
+    margin: 2px 0 0; padding: 0; list-style: none;
+    color: var(--muted); font-size: 0.8rem; line-height: 1.4;
+  }
+  .legend i {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    margin-right: 6px; vertical-align: 1px; background: var(--ink);
+  }
+  .legend i.lg-ext { background: var(--hot); }
+  .legend i.lg-avg { background: var(--warm); }
+  .legend i.is-you { background: var(--you); }
+  .illus { color: var(--faint); font-size: 0.8rem; margin-top: 10px; }
+
+  .tier-layout {
+    margin-top: 22px;
+    display: grid; gap: 14px;
+  }
+  .thermo {
+    display: flex; flex-direction: column; align-items: stretch; gap: 8px;
+  }
+  .thermo-tube {
+    position: relative; width: 100%; height: 16px; border-radius: 99px;
+    border: 1px solid var(--line-strong); background: rgba(237,239,241,0.04); overflow: hidden;
+    flex: none;
+  }
+  .thermo-fill {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 55%;
+    background: var(--warm);
+    transition: width .4s ease, height .4s ease, background-color .4s ease;
+  }
+  .thermo[data-tier="full"] .thermo-fill { width: 92%; background: var(--hot); }
+  .thermo[data-tier="neutral"] .thermo-fill { width: 55%; background: var(--warm); }
+  .thermo[data-tier="ample"] .thermo-fill { width: 28%; background: var(--cool); }
+  .thermo-label {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    text-transform: none; color: var(--you); line-height: 1.3;
+  }
+  .tier-cards { display: grid; gap: 8px; }
+  .tier-card {
+    border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+    background: var(--bg-raise); min-width: 0;
+  }
+  .tier-card header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .tier-name { font-weight: 700; }
+  .now {
+    display: none; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; border-radius: 999px; padding: 2px 8px;
+    border: 1px solid var(--line-strong); color: var(--bg); background: var(--you);
+  }
+  .tier-card.is-on .now { display: inline-block; }
+  .tier-card p { color: var(--muted); font-size: 0.9rem; }
+  .tier-card.is-on[data-tier="full"] { border-color: rgba(248,113,113,0.7); }
+  .tier-card.is-on[data-tier="neutral"] { border-color: rgba(251,191,36,0.7); }
+  .tier-card.is-on[data-tier="ample"] { border-color: rgba(34,211,238,0.7); }
+  .tier-card.is-on p { color: var(--ink); }
+  .compare {
+    margin-top: 14px; padding: 12px 14px; border-radius: 8px;
+    border: 1px solid var(--line); background: rgba(237,239,241,0.03);
+    color: var(--ink); font-size: 0.95rem;
+  }
+
+  .lesson {
+    border: 1px solid var(--line); border-radius: 12px; background: var(--bg-raise);
+    margin-top: 12px; min-width: 0;
+  }
+  .lesson summary {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 14px; cursor: pointer; list-style: none; min-width: 0;
+  }
+  .lesson summary::-webkit-details-marker { display: none; }
+  .lesson-no { font-family: var(--mono); color: var(--accent); font-size: 12px; letter-spacing: 0.12em; flex: none; }
+  .lesson-title { flex: 1; min-width: 0; font-size: clamp(1rem, 2.2vw, 1.12rem); line-height: 1.35; font-weight: 700; }
+  .lesson-min {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--faint); white-space: nowrap; flex: none;
+  }
+  .lesson-chev {
+    width: 8px; height: 8px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted);
+    transform: rotate(45deg); flex: none; margin-right: 2px;
+    transition: transform .2s;
+  }
+  .lesson[open] .lesson-chev { transform: rotate(-135deg); }
+  .lesson-body { padding: 0 14px 16px; color: var(--muted); font-size: 0.95rem; }
+  .lesson-body p { margin-top: 10px; }
+  .lesson-body strong { color: var(--ink); font-weight: 600; }
+
+  .chart {
+    margin-top: 14px; border: 1px solid var(--line); border-radius: 10px;
+    background: #07090c; padding: 10px 10px 6px; position: relative; min-width: 0;
+  }
+  .chart canvas { display: block; width: 100%; height: 210px; }
+  .badge {
+    position: absolute; top: 12px; right: 12px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--delta); border: 1px solid rgba(251,191,36,0.5);
+    padding: 3px 8px; border-radius: 999px; background: rgba(6,7,9,0.78);
+  }
+  .chart-read { color: var(--ink); font-size: 0.92rem; }
+  .chart-cap { color: var(--faint); font-size: 0.8rem; margin-top: 8px; }
+
+  .cmp-row { margin-top: 14px; }
+  .cmp-top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; font-size: 0.9rem; color: var(--ink); }
+  .cmp-top span:first-child { min-width: 0; }
+  .cmp-val { font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .cmp-val.is-warm { color: var(--warm); }
+  .cmp-val.is-hot { color: var(--hot); }
+  .cmp-track { margin-top: 6px; height: 10px; background: rgba(237,239,241,0.08); border-radius: 99px; overflow: hidden; }
+  .cmp-fill { height: 100%; border-radius: 99px; }
+  .cmp-fill.bear { width: 53.3%; background: var(--warm); }
+  .cmp-fill.stock { width: 71.8%; background: var(--hot); }
+  .stack { margin-top: 16px; }
+  .stack-bar {
+    display: flex; height: 22px; border-radius: 8px; overflow: hidden;
+    background: rgba(237,239,241,0.06); border: 1px solid var(--line);
+  }
+  .stack-funds { width: 38.35%; background: rgba(34,211,238,0.9); }
+  .stack-direct { width: 33.44%; background: rgba(248,113,113,0.9); }
+  .stack-key { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 0.82rem; color: var(--muted); }
+  .stack-key i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
+  .sw-funds { background: rgba(34,211,238,0.9); }
+  .sw-direct { background: rgba(248,113,113,0.9); }
+  .src-line { margin-top: 10px; color: var(--faint); font-size: 0.8rem; }
+
+  .sim {
+    margin-top: 14px; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+    background: rgba(6,7,9,0.35);
+  }
+  .sim-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; align-items: end; }
+  .sim-k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); line-height: 1.3; overflow-wrap: anywhere; }
+  .sim-v {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    font-size: clamp(0.7rem, 3.2vw, 1.45rem); color: var(--ink); letter-spacing: -0.04em;
+    white-space: nowrap;
+  }
+  .sim-sentence { margin-top: 12px; color: var(--ink); }
+  .macro {
+    margin-top: 12px; color: var(--faint); font-size: 0.8rem; line-height: 1.5;
+  }
+  .macro-k { color: var(--muted); font-family: var(--mono); letter-spacing: 0.08em; font-size: 10px; text-transform: uppercase; }
+
+  .checks { margin-top: 8px; }
+  .check {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 0; border-top: 1px solid var(--line); color: var(--ink); font-size: 0.95rem;
+  }
+  .check input { margin-top: 4px; width: 18px; height: 18px; accent-color: #22d3ee; flex: none; }
+  .check-progress {
+    margin-top: 12px; font-family: var(--mono); color: var(--accent);
+    letter-spacing: 0.06em; font-size: 13px; text-transform: none;
+  }
+  .discipline {
+    margin-top: 12px; color: var(--accent); font-weight: 700;
+  }
+
+  .q { margin-top: 16px; border: 0; min-width: 0; }
+  .q-title { font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .opt {
+    display: block; width: 100%; text-align: left;
+    padding: 12px 14px; margin-top: 8px;
+    border: 1px solid var(--line); border-radius: 8px;
+    background: var(--bg-raise); color: var(--ink); cursor: pointer;
+    font-size: 0.92rem; line-height: 1.45; transition: border-color .2s, background .2s;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--ink); }
+  .opt:disabled { cursor: default; opacity: 1; }
+  .opt.is-right { border-color: var(--live); background: rgba(74,222,128,0.1); }
+  .opt.is-wrong { border-color: var(--hot); background: rgba(248,113,113,0.08); }
+  .q-explain { margin-top: 8px; color: var(--muted); font-size: 0.9rem; }
+  .quiz-score {
+    margin-top: 16px; font-family: var(--mono); font-size: 1.05rem; letter-spacing: 0.04em;
+    color: var(--accent); text-transform: none;
+  }
+  .quiz-reset { margin-top: 10px; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { margin-top: 14px; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; display: block; }
+  .share-hint { color: var(--faint); font-size: 0.82rem; margin-top: 8px; }
+
+  .src-block { color: var(--muted); font-size: 0.88rem; }
+  .disclaimer { color: var(--faint); font-size: 0.86rem; margin-top: 14px; }
+
+  footer {
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 28px var(--pad) 40px; border-top: 1px solid var(--line);
+    max-width: 880px; margin: 0 auto;
+  }
+  footer a:hover { color: var(--ink); }
+  footer .mono { color: var(--faint); }
+
+  @media (min-width: 720px) {
+    .stat-row { margin: 16px 0 10px; }
+    .stat-row .stat { padding: 8px 16px 10px 18px; }
+    .stat-row .stat-num { font-size: clamp(3.2rem, 7vw, 5rem); line-height: 0.9; }
+    .stat-row .stat-k {
+      white-space: nowrap; margin-top: 4px;
+      font-size: clamp(0.75rem, 1.2vw, 0.95rem);
+    }
+    .tier-layout { grid-template-columns: 92px minmax(0, 1fr); align-items: stretch; }
+    .thermo { align-items: center; height: 100%; }
+    .thermo-tube { width: 28px; height: 100%; min-height: 180px; flex: 1; }
+    .thermo-fill { top: auto; right: 0; bottom: 0; left: 0; width: 100%; height: 55%; }
+    .thermo[data-tier="full"] .thermo-fill { width: 100%; height: 92%; }
+    .thermo[data-tier="neutral"] .thermo-fill { width: 100%; height: 55%; }
+    .thermo[data-tier="ample"] .thermo-fill { width: 100%; height: 28%; }
+    .thermo-label { max-width: 84px; white-space: normal; text-align: center; font-size: 11px; letter-spacing: 0.02em; }
+    .sim-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .tier-cards { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 0 14px; gap: 8px; }
+    .nav-back { font-size: 11px; letter-spacing: 0; }
+    .nav-brand { font-size: 13px; }
+    .nav-lang { padding: 6px 10px; letter-spacing: 0.12em; }
+    .stat-row { gap: 8px; }
+    .stat { padding: 12px 10px 12px 12px; }
+    .bear-bar { padding: 8px 12px 8px 14px; }
+    .sim { padding: 12px 8px; }
+    .sim-grid { gap: 6px; }
+    .sim-k { font-size: 9px; letter-spacing: 0.02em; }
+    .sim-v { font-size: clamp(0.68rem, 3.1vw, 0.95rem); }
+    .pos-head { flex-direction: column; align-items: flex-start; gap: 2px; }
+    .pos-scale { white-space: normal; letter-spacing: 0.02em; }
+  }
+  @media (max-width: 360px) {
+    .stat-row { gap: 6px; }
+    .stat-k { font-size: 11px; }
+    .lesson summary { gap: 8px; padding: 12px 10px; }
+    .lesson-body { padding: 0 10px 14px; }
+    .share-btn { padding: 12px 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* 禁用所有动画 */
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">SENT<span>·042</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="2026-10-08 · AAII September asset allocation survey">2026-10-08 · AAII 9 月散户资产配置调查</p>
+    <h1 data-en="Fearful words,<br>fully invested.">嘴上恐惧，<br>身体满仓。</h1>
+    <div class="stat-row">
+      <article class="stat stat-hot">
+        <p class="stat-num" data-en="71.8%">71.8%</p>
+        <p class="stat-k" data-en="Stock allocation · Highest since Dec 2017">股票配置 · 2017 年<span class="nowrap">12 月</span>以来最高</p>
+      </article>
+      <article class="stat stat-cool">
+        <p class="stat-num" data-en="13.3%">13.3%</p>
+        <p class="stat-k" data-en="Cash allocation · <span class='nowrap'>9-year low</span> <span class='nowrap'>(avg 22.5%)</span>">现金配置 · 9 年新低<span class="nowrap">（均值 22.5%）</span></p>
+      </article>
+    </div>
+    <article class="stat stat-warm bear-bar">
+      <p class="stat-k" data-en="Bearish, week of Sep 19">9 月 19 日当周看跌</p>
+      <p class="stat-num" data-en="53.3%">53.3%</p>
+    </article>
+    <p class="stat-note" data-en="The Kobeissi Letter calls 71.8% the second-highest stock allocation since July 2000.">The Kobeissi Letter 称 71.8% 是 2000 年 7 月以来第二高的股票配置。</p>
+    <p class="lede" data-en="US retail stock allocation hit <strong>71.8%</strong>, and cash is down to <strong>13.3%</strong> — both 9-year extremes. Over the same stretch, bearish sentiment the week of September 19 was <strong>53.3%</strong>. Enter your own mix and see which end of the range you are on.">美国散户的股票仓位干到 <strong>71.8%</strong>，现金只剩 <strong>13.3%</strong>——都是 9 年极值。同一时期，9 月 19 日当周看跌情绪却高达 <strong>53.3%</strong>。输入你自己的仓位，看看你站在历史的哪一端。</p>
+    <a class="cta" href="#self" data-en="Check my allocation">测测我的仓位</a>
+  </header>
+
+  <section class="field" id="self">
+    <div class="field-head">
+      <span class="field-no" data-en="01">01</span>
+      <h2 class="field-title" data-en="Where do you sit?">仓位自测</h2>
+      <p class="field-hint" data-en="Stocks + cash stay at or under 100%. The rest is bonds / other. Drag one side past the limit and the other side gives way.">股票 + 现金不超过 100%，剩下的记为<span class="nowrap">债券/其它</span>。拖一边超出时，另一边会自动让出。</p>
+    </div>
+
+    <div class="sliders">
+      <div class="slider">
+        <div class="slider-top">
+          <label class="slider-label" for="stockRange" data-en="Stocks %">股票 %</label>
+          <output class="slider-out is-hot" id="stockOut" for="stockRange">60%</output>
+        </div>
+        <div class="range-pad">
+          <input class="range-hot" id="stockRange" type="range" min="0" max="100" step="0.1" value="60" aria-valuemin="0" aria-valuemax="100" aria-label="Stocks percent">
+        </div>
+      </div>
+      <div class="slider">
+        <div class="slider-top">
+          <label class="slider-label" for="cashRange" data-en="Cash %">现金 %</label>
+          <output class="slider-out is-cool" id="cashOut" for="cashRange">20%</output>
+        </div>
+        <div class="range-pad">
+          <input id="cashRange" type="range" min="0" max="100" step="0.1" value="20" aria-valuemin="0" aria-valuemax="100" aria-label="Cash percent">
+        </div>
+      </div>
+    </div>
+    <p class="other-line" id="otherLine"></p>
+
+    <div class="pos" id="cashPos">
+      <div class="pos-head">
+        <span class="pos-name" data-en="Cash">现金</span>
+        <span class="pos-scale" data-en="Scale <span class='nowrap'>0–40%</span> · illustrative band">刻度 <span class="nowrap">0–40%</span> · 极值带（示意）</span>
+      </div>
+      <div class="pos-stage">
+        <span class="you-pill" id="cashYou"></span>
+        <div class="pos-rail">
+          <div class="pos-track" id="cashTrack">
+            <div class="pos-band pos-band-cash"></div>
+            <i class="pos-tick" id="tickCashLow"></i>
+            <i class="pos-tick" id="tickCashAvg"></i>
+            <i class="pos-dot" id="cashDot"></i>
+          </div>
+          <span class="tick-lab is-hot" id="labCashLow">13.3%</span>
+          <span class="tick-lab is-warm" id="labCashAvg">22.5%</span>
+        </div>
+      </div>
+      <ul class="legend">
+        <li><i class="lg-ext"></i><span data-en="13.3% · 9-year low · Sep 2026">13.3% · 9 年低点 · 2026 年 9 月</span></li>
+        <li><i class="lg-avg"></i><span data-en="22.5% · historical average">22.5% · 历史均值</span></li>
+        <li><i class="is-you"></i><span data-en="You">你</span></li>
+      </ul>
+    </div>
+
+    <div class="pos" id="stockPos">
+      <div class="pos-head">
+        <span class="pos-name" data-en="Stocks">股票</span>
+        <span class="pos-scale" data-en="Scale <span class='nowrap'>30–90%</span> · illustrative band">刻度 <span class="nowrap">30–90%</span> · 极值带（示意）</span>
+      </div>
+      <div class="pos-stage">
+        <span class="you-pill" id="stockYou"></span>
+        <div class="pos-rail">
+          <div class="pos-track" id="stockTrack">
+            <div class="pos-band pos-band-stock"></div>
+            <i class="pos-tick" id="tickStockHi"></i>
+            <i class="pos-dot" id="stockDot"></i>
+          </div>
+          <span class="tick-lab is-hot" id="labStockHi">71.8%</span>
+        </div>
+      </div>
+      <ul class="legend">
+        <li><i class="lg-ext"></i><span data-en="71.8% · 9-year high · Sep 2026">71.8% · 9 年高点 · 2026 年 9 月</span></li>
+        <li><i class="is-you"></i><span data-en="You">你</span></li>
+      </ul>
+    </div>
+    <p class="illus" data-en="Illustrative: the extreme band is a schematic range. Tick marks come from the AAII September survey.">示意：极值带为示意区间，刻度标记来自 AAII 9 月调查。</p>
+
+    <div class="tier-layout">
+      <div class="thermo" id="thermo" data-tier="neutral" role="img">
+        <div class="thermo-tube" aria-hidden="true"><div class="thermo-fill" id="thermoFill"></div></div>
+        <p class="thermo-label" id="thermoLabel"></p>
+      </div>
+      <div class="tier-cards">
+        <article class="tier-card" data-tier="full" id="cardFull">
+          <header>
+            <span class="tier-name" data-en="Fully loaded, no cushion">满仓无缓冲</span>
+            <span class="now" data-en="Now">当前</span>
+          </header>
+          <p data-en="You are at least as fully invested as the September US retail print: cash at or below 13.3%, or stocks at or above 71.8%. In a decline you have no dry powder and no cushion. Read it as a thermometer, not a precise sell signal.">你比 9 月的美国散户平均还满：现金不高于 13.3%，或股票不低于 71.8%。下跌时没有弹药，也没有缓冲。这是体温计，不是精确的卖出信号。</p>
+        </article>
+        <article class="tier-card" data-tier="neutral" id="cardNeutral">
+          <header>
+            <span class="tier-name" data-en="Neutral">中性</span>
+            <span class="now" data-en="Now">当前</span>
+          </header>
+          <p data-en="Your cash sits between the 9-year low of 13.3% and the historical average of 22.5%, and stocks are still under 71.8%. This is the middle band: not fully loaded, and not ample dry powder. Write down a target mix before you chase an extreme.">你的现金介于 9 年低点 13.3% 与历史均值 22.5% 之间，股票也低于 71.8%。这是中间地带：不算满仓无缓冲，也谈不上弹药充足。先写下目标比例，比追逐极值有用。</p>
+        </article>
+        <article class="tier-card" data-tier="ample" id="cardAmple">
+          <header>
+            <span class="tier-name" data-en="Ample dry powder">弹药充足</span>
+            <span class="now" data-en="Now">当前</span>
+          </header>
+          <p data-en="Your cash is at least the 22.5% historical average, and stocks are below 71.8%. In a decline you hold the option to buy at your own pace. Ample dry powder is not an order to spend it today.">你的现金不低于 22.5% 的历史均值，股票也低于 71.8%。下跌时手里有选择权，可以按自己的节奏买。弹药充足不是今天必须花掉的命令。</p>
+        </article>
+      </div>
+    </div>
+    <p class="compare" id="compare" aria-live="polite"></p>
+  </section>
+
+  <section class="field" id="lessons">
+    <div class="field-head">
+      <span class="field-no" data-en="02">02</span>
+      <h2 class="field-title" data-en="Four short lessons">四节短课</h2>
+      <p class="field-hint" data-en="About a minute each. Open a title to read it. The first chart is a sketch, not a history.">每节大约 1 分钟。点标题展开。第一节的曲线是示意，不是历史。</p>
+    </div>
+
+    <details class="lesson" id="lesson1" open>
+      <summary>
+        <span class="lesson-no" data-en="01">01</span>
+        <span class="lesson-title" data-en="Why a full retail book is a contrarian indicator">为什么散户满仓是反向指标</span>
+        <span class="lesson-min" data-en="1 min">1 分钟</span>
+        <i class="lesson-chev" aria-hidden="true"></i>
+      </summary>
+      <div class="lesson-body">
+        <p data-en="When most people have already bought what they can buy, less new money is left to come in. Prices need a next buyer. A fully invested crowd is the last buyer, not an endless supply of fuel.">当大多数人已经把能买的股票买完，能继续推高价格的新增资金就变少了。价格要再涨，得有下一个买家。满仓的人是「最后的买家」，不是源源不断的燃料。</p>
+        <p data-en="That is why an extreme retail allocation is treated as a contrarian indicator. It measures crowding, not next week's direction. A thermometer can say the temperature is high. It does not tell you the hour to leave the house.">所以散户仓位走到极端，常被当成反向指标。它量的是拥挤，不是下一周的方向。体温计告诉你温度高了，并不告诉你几点该出门。</p>
+        <div class="chart" id="curveBox">
+          <span class="badge" data-en="Illustrative">示意</span>
+          <canvas id="curveCanvas" width="640" height="210" aria-label="Illustrative curves"></canvas>
+        </div>
+        <p class="chart-read" data-en="The fuller the positioning, the less fresh money is left on the sidelines — past the cross, there is less fuel to push prices higher.">仓位越满，场外还能进来的新增资金越少——交叉之后，推高价格的燃料变少。</p>
+        <p class="chart-cap" data-en="Illustrative diagram. Not real historical data, and not a backtest result.">示意图，非真实历史数据，不代表回测结论。</p>
+      </div>
+    </details>
+
+    <details class="lesson" id="lesson2">
+      <summary>
+        <span class="lesson-no" data-en="02">02</span>
+        <span class="lesson-title" data-en="Fearful words, honest positions">嘴上恐惧，身体诚实</span>
+        <span class="lesson-min" data-en="1 min">1 分钟</span>
+        <i class="lesson-chev" aria-hidden="true"></i>
+      </summary>
+      <div class="lesson-body">
+        <p data-en="The sentiment survey asks what you think. The allocation survey records where the money sits. The week of September 19, bearish sentiment was 53.3%. The same month, stock allocation was 71.8%.">情绪调查问的是「你怎么看」，资产配置记的是「钱放在哪」。9 月 19 日当周看跌情绪 53.3%，同月股票仓位却到 71.8%。</p>
+        <div class="cmp-row">
+          <div class="cmp-top">
+            <span data-en="Bearish sentiment, week of Sep 19">9 月 19 日当周看跌情绪</span>
+            <span class="cmp-val is-warm" data-en="53.3%">53.3%</span>
+          </div>
+          <div class="cmp-track"><div class="cmp-fill bear"></div></div>
+        </div>
+        <div class="cmp-row">
+          <div class="cmp-top">
+            <span data-en="Stock allocation, September">9 月股票配置</span>
+            <span class="cmp-val is-hot" data-en="71.8%">71.8%</span>
+          </div>
+          <div class="cmp-track"><div class="cmp-fill stock"></div></div>
+        </div>
+        <div class="stack">
+          <div class="stack-bar" role="img" aria-label="71.8 percent split">
+            <div class="stack-funds"></div>
+            <div class="stack-direct"></div>
+          </div>
+          <p class="stack-key">
+            <span><i class="sw-funds"></i><span data-en="Stock funds 38.35%">股票基金 38.35%</span></span>
+            <span><i class="sw-direct"></i><span data-en="Direct stocks 33.44%">直接持股 33.44%</span></span>
+            <span data-en="38.35 + 33.44 = 71.79, which rounds to 71.8%">38.35 + 33.44 = 71.79，四舍五入即 71.8%</span>
+          </p>
+        </div>
+        <p data-en="Words and positions diverge because saying &quot;I am bearish&quot; costs nothing, while a full book is already spent. When the two disagree, the allocation is the one worth reading. It is still a temperature, not a timing signal. The rest of the portfolio is cash and bonds; the cash slice of that survey is 13.3%.">说「我看跌」几乎没有成本，仓位却已经把钱放进去了，所以「说的」和「做的」会背离。两者不一致时，资产配置更值得看。它仍然只是温度，不是择时信号。其余是现金和债券，这笔调查里的现金是 13.3%。</p>
+        <p class="src-line" data-en="Source: AAII September asset-allocation survey; bearish reading is the week of September 19.">来源：AAII 9 月资产配置调查；看跌情绪为 9 月 19 日当周。</p>
+      </div>
+    </details>
+
+    <details class="lesson" id="lesson3">
+      <summary>
+        <span class="lesson-no" data-en="03">03</span>
+        <span class="lesson-title" data-en="Cash is an option">现金是期权</span>
+        <span class="lesson-min" data-en="1 min">1 分钟</span>
+        <i class="lesson-chev" aria-hidden="true"></i>
+      </summary>
+      <div class="lesson-body">
+        <p data-en="The value of cash is not the interest. It is buying power when prices fall. The exercise below uses your cash share on a $100,000 portfolio. After a drop, the same dollars buy more of what used to cost more.">现金的价值不在那一点利息，在下跌时的购买力。下面用你刚才的现金比例，按 $100,000 的组合做一道演算。跌完之后，同样的现金能买到更多「下跌前的资产」。</p>
+        <div class="sim">
+          <div class="slider-top">
+            <label class="slider-label" for="dropRange" data-en="Assume the market drops <span class='nowrap'>0–40%</span>">假设市场下跌 <span class="nowrap">0–40%</span></label>
+            <output class="slider-out" id="dropOut" for="dropRange">20%</output>
+          </div>
+          <div class="range-pad">
+            <input id="dropRange" type="range" min="0" max="40" step="1" value="20" aria-valuemin="0" aria-valuemax="40">
+          </div>
+          <div class="sim-grid">
+            <div>
+              <p class="sim-k" data-en="Your cash">你的现金</p>
+              <p class="sim-v" id="simCash"></p>
+            </div>
+            <div>
+              <p class="sim-k" data-en="Pre-drop assets it can buy">可买下跌前的资产</p>
+              <p class="sim-v" id="simPower"></p>
+            </div>
+            <div>
+              <p class="sim-k" data-en="Someone with 13.3% cash">现金 13.3% 的人</p>
+              <p class="sim-v" id="simAaii"></p>
+            </div>
+          </div>
+          <p class="sim-sentence" id="simSentence"></p>
+          <p class="chart-cap" data-en="Hypothetical exercise, not a forecast.<br>Buying power = cash / (1 − drop).">假设演算，非预测。<br>购买力 = 现金 /（1 − 跌幅）。</p>
+        </div>
+        <p class="macro"><span class="macro-k" data-en="Macro backdrop">宏观背景</span> <span data-en="The 10-year Treasury yield broke 5.3% (a high since 2002), gold is $4,130, and bitcoin is $82,000. Citadel Securities expects retail to return in Q4, and the buyback window reopens on 10/15.">10 年期美债收益率破 5.3%（2002 年以来高位），金价 4,130 美元，比特币 8.2 万美元。Citadel Securities 预计散户 Q4 回归，回购窗口 10/15 重开。</span></p>
+      </div>
+    </details>
+
+    <details class="lesson" id="lesson4">
+      <summary>
+        <span class="lesson-no" data-en="04">04</span>
+        <span class="lesson-title" data-en="What to do after you are fully invested">满仓之后怎么办</span>
+        <span class="lesson-min" data-en="1 min">1 分钟</span>
+        <i class="lesson-chev" aria-hidden="true"></i>
+      </summary>
+      <div class="lesson-body">
+        <p data-en="After a full book, the job is not to guess the top. It is to walk the mix back to a target you wrote down beforehand. Check the list. Checking a box does not make the market fall. It means you have a rule.">满仓之后要做的不是猜顶，是把比例拉回你事先写好的目标。勾完不等于市场会跌，只说明你有一条事先说好的规则。</p>
+        <div class="checks" id="checks">
+          <label class="check"><input type="checkbox"><span data-en="Write down your target stock / cash mix.">写下你的目标股票 / 现金比例。</span></label>
+          <label class="check"><input type="checkbox"><span data-en="Move only when you are more than 5 percentage points off target.">偏离超过 5 个百分点才动。</span></label>
+          <label class="check"><input type="checkbox"><span data-en="Use new money to fill the underweight sleeve before you sell.">先用新增资金补低配，再考虑卖出。</span></label>
+          <label class="check"><input type="checkbox"><span data-en="Check on a calendar: once a quarter, or twice a year.">按日历检查：每季度或每半年一次。</span></label>
+          <label class="check"><input type="checkbox"><span data-en="Do not add leverage, and do not go all-in.">不加杠杆，也不 All in。</span></label>
+          <label class="check"><input type="checkbox"><span data-en="Write down why you made this decision.">写下这次决定的理由。</span></label>
+        </div>
+        <p class="check-progress" id="checkProgress"></p>
+        <p class="discipline" data-en="Not timing. Discipline.">不是择时，是纪律。</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="field" id="quiz">
+    <div class="field-head">
+      <span class="field-no" data-en="03">03</span>
+      <h2 class="field-title" data-en="Three questions">小测验</h2>
+      <p class="field-hint" data-en="One tap locks the choice and shows why. Three questions, then a score.">点一下就锁定，并显示原因。三题之后给出成绩。</p>
+    </div>
+    <div id="quizList"></div>
+    <p class="quiz-score" id="quizScore" hidden></p>
+    <button class="share-btn quiz-reset" id="quizReset" type="button" hidden data-en="Try again">重做</button>
+  </section>
+
+  <section class="field" id="share">
+    <div class="field-head">
+      <span class="field-no" data-en="04">04</span>
+      <h2 class="field-title" data-en="Share your reading">分享你的读数</h2>
+      <p class="field-hint" data-en="The line changes with your tier. The image is 1200×630.">文案随档位变化。分享图为 1200×630。</p>
+    </div>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap" hidden>
+      <canvas id="shareCanvas" width="1200" height="630"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+
+  <section class="field" id="sources">
+    <p class="src-block" data-en="Source: AAII (American Association of Individual Investors) September asset-allocation survey, as reported by Blockonomi and The Kobeissi Letter on 2026-10-08. Bearish sentiment of 53.3% is the AAII sentiment survey for the week of September 19. The survey reflects US retail investors and is for reference only.">数据来源：AAII（美国散户投资者协会）9 月资产配置调查，经 Blockonomi、The Kobeissi Letter 2026-10-08 报道；看跌情绪 53.3% 为 AAII 情绪调查 9 月 19 日当周数据。调查反映美国散户，仅供参考。</p>
+    <p class="disclaimer" data-en="Educational content, not investment advice. Illustrative charts are not real historical data and do not represent backtest results. A contrarian indicator cannot be used for precise market timing.">教育内容，不构成投资建议。示意图表非真实历史数据，不代表回测结论；反向指标不能用于精确择时。</p>
+  </section>
+</main>
+
+<footer>
+  <span class="mono" data-en='<a href="https://build-100.com/">build-100.com</a>'><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono" data-en='<a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a>'><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="SENT-042 · Sentiment Thermometer">SENT-042 · 情绪温度计</span>
+</footer>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  "use strict";
+  var E = window.SentEngine;
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  var state = {
+    stock: 60,
+    cash: 20,
+    other: 20,
+    tier: "neutral",
+    answers: [null, null, null]
+  };
+  var copyTimer = null;
+  var curveProgress = 0;
+  var curveAnimating = false;
+  var reduceMotion = false;
+  try {
+    reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch (e) {}
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+  function $(id) { return document.getElementById(id); }
+
+  function stampZh() {
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    });
+  }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    document.getElementById("langBtn").textContent = l === "en" ? "中文" : "EN";
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    renderAll();
+  }
+
+  function tierName(kind) {
+    if (kind === "full") return t("满仓无缓冲", "fully loaded, no cushion");
+    if (kind === "ample") return t("弹药充足", "ample dry powder");
+    return t("中性", "neutral");
+  }
+
+  function pp(v) {
+    return E.fmtPct(Math.abs(v)).replace("%", "");
+  }
+
+  function clampPct100(p) {
+    if (!isFinite(p)) return 0;
+    if (p < 0) return 0;
+    if (p > 100) return 100;
+    return p;
+  }
+
+  function shiftInside(el, pct, host) {
+    var p = clampPct100(pct);
+    el.style.left = p + "%";
+    var box = host || el.parentElement;
+    var hostW = box ? box.getBoundingClientRect().width : 0;
+    var w = Math.ceil(el.getBoundingClientRect().width);
+    if (!(hostW > 0) || !(w > 0)) return 0;
+    var center = (p / 100) * hostW;
+    var left = center - w / 2;
+    if (left < 0) left = 0;
+    if (left + w > hostW) left = hostW - w;
+    return left - center;
+  }
+
+  function placeYou(el, pct) {
+    var shift = shiftInside(el, pct, el.parentElement);
+    el.style.transform = "translateX(" + shift + "px)";
+  }
+
+  function placeDot(el, pct) {
+    var shift = shiftInside(el, pct, el.parentElement);
+    el.style.transform = "translate(" + shift + "px, -50%)";
+  }
+
+  function layoutTicks(items) {
+    if (!items.length || !items[0].lab) return;
+    var host = items[0].lab.parentElement;
+    var hostW = host ? host.clientWidth : 0;
+    var i;
+    for (i = 0; i < items.length; i++) {
+      var p = clampPct100(items[i].pct);
+      items[i].tick.style.left = p + "%";
+      items[i].lab.style.left = p + "%";
+      items[i].lab.style.transform = "translateX(-50%)";
+    }
+    if (!(hostW > 0)) return;
+    var boxes = [];
+    for (i = 0; i < items.length; i++) {
+      var w = items[i].lab.offsetWidth;
+      var center = (clampPct100(items[i].pct) / 100) * hostW;
+      var left = center - w / 2;
+      if (left < 0) left = 0;
+      if (left + w > hostW) left = Math.max(0, hostW - w);
+      boxes.push({ lab: items[i].lab, w: w, center: center, left: left });
+    }
+    var gap = 6;
+    for (i = 1; i < boxes.length; i++) {
+      if (boxes[i].left < boxes[i - 1].left + boxes[i - 1].w + gap) {
+        boxes[i].left = boxes[i - 1].left + boxes[i - 1].w + gap;
+      }
+    }
+    var last = boxes[boxes.length - 1];
+    if (last.left + last.w > hostW) {
+      var over = last.left + last.w - hostW;
+      for (i = boxes.length - 1; i >= 0; i--) {
+        boxes[i].left -= over;
+        if (boxes[i].left < 0) {
+          over = -boxes[i].left;
+          boxes[i].left = 0;
+        } else {
+          over = 0;
+        }
+      }
+    }
+    for (i = 0; i < boxes.length; i++) {
+      boxes[i].lab.style.transform = "translateX(" + (boxes[i].left - boxes[i].center) + "px)";
+    }
+  }
+
+  function syncFrom(changed) {
+    var n = E.normalize(Number($("stockRange").value), Number($("cashRange").value), changed);
+    state.stock = n.stock;
+    state.cash = n.cash;
+    state.other = n.other;
+    state.tier = E.tier(n.stock, n.cash);
+    $("stockRange").value = String(n.stock);
+    $("cashRange").value = String(n.cash);
+    renderLive();
+  }
+
+  function renderBars() {
+    var cashPct = E.barPos(state.cash, 0, 40);
+    var stockPct = E.barPos(state.stock, 30, 90);
+    $("cashYou").textContent = t("你 ", "You ") + E.fmtPct(state.cash);
+    $("stockYou").textContent = t("你 ", "You ") + E.fmtPct(state.stock);
+    $("self").setAttribute("data-tier", state.tier);
+    document.documentElement.style.setProperty(
+      "--you",
+      state.tier === "full" ? "var(--hot)" : state.tier === "ample" ? "var(--cool)" : "var(--warm)"
+    );
+    layoutTicks([
+      { tick: $("tickCashLow"), lab: $("labCashLow"), pct: E.barPos(E.DATA.cash, 0, 40) },
+      { tick: $("tickCashAvg"), lab: $("labCashAvg"), pct: E.barPos(E.DATA.cashAvg, 0, 40) }
+    ]);
+    layoutTicks([
+      { tick: $("tickStockHi"), lab: $("labStockHi"), pct: E.barPos(E.DATA.stock, 30, 90) }
+    ]);
+    placeYou($("cashYou"), cashPct);
+    placeYou($("stockYou"), stockPct);
+    placeDot($("cashDot"), cashPct);
+    placeDot($("stockDot"), stockPct);
+  }
+
+  function renderThermo() {
+    var thermo = $("thermo");
+    thermo.setAttribute("data-tier", state.tier);
+    $("thermoLabel").textContent = tierName(state.tier);
+    thermo.setAttribute("aria-label", tierName(state.tier));
+    ["cardFull", "cardNeutral", "cardAmple"].forEach(function (id) {
+      var card = $(id);
+      var on = card.getAttribute("data-tier") === state.tier;
+      card.classList.toggle("is-on", on);
+    });
+  }
+
+  function renderCompare() {
+    var cmp = E.compare(state.cash);
+    var zhA = cmp.vsAaii === 0 ? "持平" : (cmp.vsAaii > 0 ? "高 " : "低 ") + pp(cmp.vsAaii) + " 个百分点";
+    var zhB = cmp.vsAvg === 0 ? "持平" : (cmp.vsAvg > 0 ? "高 " : "低 ") + pp(cmp.vsAvg) + " 个百分点";
+    function enDelta(v, noun) {
+      if (v === 0) return "in line with " + noun;
+      if (v > 0) return pp(v) + " percentage points above " + noun;
+      return pp(v) + " percentage points below " + noun;
+    }
+    $("compare").textContent = t(
+      "你的现金比 AAII 散户均值（13.3%）" + zhA + "；比历史均值（22.5%）" + zhB + "。",
+      "Your cash is " + enDelta(cmp.vsAaii, "the AAII retail reading (13.3%)") + ", and " + enDelta(cmp.vsAvg, "the historical average (22.5%)") + "."
+    );
+  }
+
+  function renderLesson3() {
+    var dropPct = Number($("dropRange").value);
+    if (!isFinite(dropPct)) dropPct = 0;
+    var r = E.cashOption({ total: 100000, cashPct: state.cash, drop: dropPct / 100 });
+    $("dropOut").textContent = dropPct + "%";
+    $("simCash").textContent = E.fmtUSD(r.cash);
+    $("simPower").textContent = E.fmtUSD(r.buyingPower);
+    $("simAaii").textContent = E.fmtUSD(r.aaiiBuyingPower);
+    $("simSentence").textContent = t(
+      "假设组合 $100,000，市场下跌 " + dropPct + "%。你的现金 " + E.fmtUSD(r.cash) + " 可以按折扣价买入相当于下跌前 " + E.fmtUSD(r.buyingPower) + " 的资产。现金 13.3% 的人，同样跌幅下大约能买到 " + E.fmtUSD(r.aaiiBuyingPower) + "。",
+      "Assume a $100,000 portfolio and a " + dropPct + "% drop. Your cash of " + E.fmtUSD(r.cash) + " can buy what used to be " + E.fmtUSD(r.buyingPower) + " of assets. Someone holding 13.3% cash could buy about " + E.fmtUSD(r.aaiiBuyingPower) + " on the same drop."
+    );
+  }
+
+  function renderChecks() {
+    var boxes = document.querySelectorAll("#checks input");
+    var n = 0;
+    var i;
+    for (i = 0; i < boxes.length; i++) if (boxes[i].checked) n += 1;
+    $("checkProgress").textContent = t("已勾选 " + n + " / " + boxes.length, "Checked " + n + " / " + boxes.length);
+  }
+
+  function renderQuiz() {
+    var root = $("quizList");
+    root.innerHTML = "";
+    E.QUIZ.forEach(function (q, qi) {
+      var block = document.createElement("div");
+      block.className = "q";
+      block.setAttribute("role", "group");
+      var title = document.createElement("p");
+      title.className = "q-title";
+      title.textContent = (qi + 1) + ". " + t(q.q.zh, q.q.en);
+      block.appendChild(title);
+      var picked = state.answers[qi];
+      var locked = typeof picked === "number";
+      q.options.forEach(function (op, oi) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "opt";
+        btn.textContent = t(op.zh, op.en);
+        if (locked) {
+          btn.disabled = true;
+          if (oi === q.correct) btn.classList.add("is-right");
+          if (oi === picked && oi !== q.correct) btn.classList.add("is-wrong");
+        }
+        btn.addEventListener("click", function () {
+          if (typeof state.answers[qi] === "number") return;
+          state.answers[qi] = oi;
+          renderQuiz();
+        });
+        block.appendChild(btn);
+      });
+      if (locked) {
+        var ex = document.createElement("p");
+        ex.className = "q-explain";
+        var ok = picked === q.correct;
+        ex.textContent = (ok ? t("答对。", "Correct. ") : t("答错。", "Not quite. ")) + t(q.explain.zh, q.explain.en);
+        block.appendChild(ex);
+      }
+      root.appendChild(block);
+    });
+    var done = state.answers.every(function (a) { return typeof a === "number"; });
+    var g = E.grade(state.answers);
+    if (done) {
+      $("quizScore").hidden = false;
+      $("quizReset").hidden = false;
+      $("quizScore").textContent = t("答对 " + g.correct + " / " + g.total, g.correct + " / " + g.total + " correct");
+    } else {
+      $("quizScore").hidden = true;
+      $("quizReset").hidden = true;
+      $("quizScore").textContent = "";
+    }
+  }
+
+  function shareText() {
+    var c = E.fmtPct(state.cash);
+    var s = E.fmtPct(state.stock);
+    var name = tierName(state.tier);
+    return t(
+      "我的现金比例 " + c + "，股票 " + s + "——在情绪温度计里是「" + name + "」。美国散户 9 月股票仓位 71.8%、现金 13.3%，9 年极值。你站在哪一端？https://build-100.com/042/",
+      "My cash is " + c + " and stocks are " + s + " — " + name + " on the sentiment thermometer. US retail stock allocation was 71.8% in September and cash was 13.3%, both 9-year extremes. Which end are you on? https://build-100.com/042/"
+    );
+  }
+
+  function fontStack() {
+    return '"Noto Sans CJK SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+  }
+
+  function fitCanvas(canvas, cssH) {
+    var parent = canvas.parentElement;
+    var w = parent ? parent.clientWidth : 320;
+    if (canvas.id === "curveCanvas") w = Math.max(0, w - 20);
+    if (!(w > 20)) return null;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.style.width = w + "px";
+    canvas.style.height = cssH + "px";
+    canvas.width = Math.max(1, Math.round(w * dpr));
+    canvas.height = Math.max(1, Math.round(cssH * dpr));
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return null;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx: ctx, w: w, h: cssH };
+  }
+
+  function curvePoints(w, h, kind, top) {
+    var pts = [];
+    var left = 16;
+    var right = w - 12;
+    var topY = top || 36;
+    var bot = h - 28;
+    var n = 40;
+    var i;
+    for (i = 0; i <= n; i++) {
+      var u = i / n;
+      var yv = kind === "alloc" ? Math.pow(u, 1.55) : 1 - Math.pow(u, 1.05);
+      pts.push({ x: left + u * (right - left), y: bot - yv * (bot - topY) });
+    }
+    return pts;
+  }
+
+  function strokePartial(ctx, pts, progress) {
+    if (!pts.length) return;
+    var total = pts.length - 1;
+    var f = Math.max(0, Math.min(1, progress)) * total;
+    var n = Math.floor(f);
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    var i;
+    for (i = 1; i <= n && i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+    if (n < total) {
+      var a = pts[n];
+      var b = pts[n + 1];
+      var u = f - n;
+      ctx.lineTo(a.x + (b.x - a.x) * u, a.y + (b.y - a.y) * u);
+    }
+    ctx.stroke();
+  }
+
+  function drawCurve() {
+    var canvas = $("curveCanvas");
+    if (!canvas) return;
+    var box = fitCanvas(canvas, 210);
+    if (!box) return;
+    var ctx = box.ctx;
+    var w = box.w;
+    var h = box.h;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = "#07090c";
+    ctx.fillRect(0, 0, w, h);
+    ctx.strokeStyle = "rgba(237,239,241,0.08)";
+    ctx.lineWidth = 1;
+    var g;
+    for (g = 1; g <= 3; g++) {
+      var gy = 36 + ((h - 64) * g) / 4;
+      ctx.beginPath();
+      ctx.moveTo(16, gy);
+      ctx.lineTo(w - 12, gy);
+      ctx.stroke();
+    }
+    ctx.fillStyle = "rgba(251,191,36,0.16)";
+    ctx.font = "700 42px " + fontStack();
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(t("示意", "ILLUSTRATIVE"), w / 2, h / 2);
+    ctx.textAlign = "left";
+    ctx.textBaseline = "alphabetic";
+    ctx.font = "12px " + fontStack();
+    var label1 = t("散户仓位（示意）", "Retail book (sketch)");
+    var label2 = t("新增资金（示意）", "New money (sketch)");
+    ctx.font = "12px " + fontStack();
+    ctx.fillStyle = "#f87171";
+    ctx.fillText(label1, 16, 16);
+    ctx.fillStyle = "#22d3ee";
+    var tw = ctx.measureText(label2).width;
+    if (w < 460) ctx.fillText(label2, 16, 32);
+    else ctx.fillText(label2, Math.max(16 + ctx.measureText(label1).width + 16, w - tw - 72), 16);
+    ctx.lineWidth = 2.4;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    var topY = w < 460 ? 52 : 40;
+    ctx.strokeStyle = "#f87171";
+    strokePartial(ctx, curvePoints(w, h, "alloc", topY), curveProgress);
+    ctx.strokeStyle = "#22d3ee";
+    strokePartial(ctx, curvePoints(w, h, "dry", topY), curveProgress);
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "11px " + fontStack();
+    ctx.fillText(t("时间（示意）", "Time (sketch)"), 16, h - 8);
+  }
+
+  function startCurve() {
+    if (reduceMotion) {
+      curveProgress = 1;
+      drawCurve();
+      return;
+    }
+    if (curveAnimating) return;
+    if (curveProgress >= 1) {
+      drawCurve();
+      return;
+    }
+    curveAnimating = true;
+    var t0 = null;
+    function frame(now) {
+      if (t0 == null) t0 = now;
+      var p = (now - t0) / 1100;
+      if (p > 1) p = 1;
+      curveProgress = p;
+      drawCurve();
+      if (p < 1 && !reduceMotion) requestAnimationFrame(frame);
+      else {
+        curveProgress = 1;
+        curveAnimating = false;
+        drawCurve();
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    var rr = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + rr, y);
+    ctx.arcTo(x + w, y, x + w, y + h, rr);
+    ctx.arcTo(x + w, y + h, x, y + h, rr);
+    ctx.arcTo(x, y + h, x, y, rr);
+    ctx.arcTo(x, y, x + w, y, rr);
+    ctx.closePath();
+  }
+
+  function drawShareBar(ctx, x, y, w, h, spec) {
+    ctx.textAlign = "left";
+    ctx.textBaseline = "alphabetic";
+    ctx.font = "600 18px " + fontStack();
+    ctx.fillStyle = "#7d848c";
+    ctx.fillText(spec.title, x, y - 14);
+    ctx.textAlign = "right";
+    ctx.fillStyle = spec.color;
+    ctx.font = "700 18px " + fontStack();
+    ctx.fillText(t("你 ", "You ") + E.fmtPct(spec.you), x + w, y - 14);
+    ctx.textAlign = "left";
+    roundRect(ctx, x, y, w, h, h / 2);
+    ctx.fillStyle = "rgba(237,239,241,0.08)";
+    ctx.fill();
+    ctx.save();
+    roundRect(ctx, x, y, w, h, h / 2);
+    ctx.clip();
+    var grd = ctx.createLinearGradient(x, y, x + w, y);
+    if (spec.band === "low") {
+      grd.addColorStop(0, "rgba(248,113,113,0.72)");
+      grd.addColorStop(0.42, "rgba(248,113,113,0)");
+    } else {
+      grd.addColorStop(0.58, "rgba(248,113,113,0)");
+      grd.addColorStop(1, "rgba(248,113,113,0.72)");
+    }
+    ctx.fillStyle = grd;
+    ctx.fillRect(x, y, w, h);
+    ctx.restore();
+    spec.ticks.forEach(function (tk) {
+      var p = E.barPos(tk.v, spec.min, spec.max) / 100;
+      var tx = x + p * w;
+      ctx.fillStyle = "#edeff1";
+      ctx.fillRect(tx - 1, y - 4, 2, h + 8);
+      ctx.font = "15px " + fontStack();
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#edeff1";
+      ctx.fillText(tk.label, tx, y + h + 22);
+    });
+    var yp = E.barPos(spec.you, spec.min, spec.max) / 100;
+    var yx = x + yp * w;
+    if (yx < x + 9) yx = x + 9;
+    if (yx > x + w - 9) yx = x + w - 9;
+    ctx.beginPath();
+    ctx.fillStyle = spec.color;
+    ctx.arc(yx, y + h / 2, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.textAlign = "left";
+  }
+
+  function drawShare() {
+    var c = $("shareCanvas");
+    var ctx = c.getContext("2d");
+    if (!ctx) return;
+    var W = 1200;
+    var H = 630;
+    c.width = W;
+    c.height = H;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.045)";
+    var gx;
+    var gy;
+    for (gx = 18; gx < W; gx += 36) {
+      for (gy = 18; gy < H; gy += 36) ctx.fillRect(gx, gy, 1.4, 1.4);
+    }
+    ctx.fillStyle = "#22d3ee";
+    ctx.fillRect(0, 0, 10, H);
+    ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#22d3ee";
+    ctx.font = "700 22px " + fontStack();
+    var brand = "SENT-042";
+    ctx.fillText(brand, 56, 64);
+    var brandW = ctx.measureText(brand).width;
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "400 22px " + fontStack();
+    ctx.fillText(t(" · 情绪温度计", " · Sentiment Thermometer"), 56 + brandW, 64);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 48px " + fontStack();
+    ctx.fillText(t("嘴上恐惧，身体满仓。", "Fearful words, fully invested."), 56, 132);
+    var tierColor = state.tier === "full" ? "#f87171" : state.tier === "ample" ? "#22d3ee" : "#fbbf24";
+    ctx.font = "700 78px " + fontStack();
+    ctx.fillStyle = "#f87171";
+    ctx.fillText(E.fmtPct(state.stock), 56, 250);
+    ctx.fillStyle = "#22d3ee";
+    ctx.fillText(E.fmtPct(state.cash), 400, 250);
+    ctx.fillStyle = tierColor;
+    ctx.font = "700 36px " + fontStack();
+    ctx.fillText(tierName(state.tier), 760, 236);
+    ctx.font = "400 20px " + fontStack();
+    ctx.fillStyle = "#7d848c";
+    ctx.fillText(t("股票", "Stocks"), 56, 286);
+    ctx.fillText(t("现金", "Cash"), 400, 286);
+    ctx.fillStyle = "#9aa1a8";
+    ctx.font = "400 18px " + fontStack();
+    ctx.textAlign = "left";
+    ctx.fillText(t("AAII 9 月：股票 71.8% · 现金 13.3%", "AAII Sept: stocks 71.8% · cash 13.3%"), 56, 318);
+    drawShareBar(ctx, 56, 388, 1088, 18, {
+      title: t("现金 0–40% · 刻度 13.3 / 22.5", "Cash 0–40% · ticks 13.3 / 22.5"),
+      min: 0,
+      max: 40,
+      you: state.cash,
+      color: "#22d3ee",
+      band: "low",
+      ticks: [{ v: 13.3, label: "13.3" }, { v: 22.5, label: "22.5" }]
+    });
+    drawShareBar(ctx, 56, 508, 1088, 18, {
+      title: t("股票 30–90% · 刻度 71.8", "Stocks 30–90% · tick 71.8"),
+      min: 30,
+      max: 90,
+      you: state.stock,
+      color: "#f87171",
+      band: "high",
+      ticks: [{ v: 71.8, label: "71.8" }]
+    });
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "400 20px " + fontStack();
+    ctx.fillText("build-100.com/042", 56, 590);
+    ctx.textAlign = "right";
+    ctx.fillText(t("极值带为示意", "Extreme band is illustrative"), 1144, 590);
+    $("shareWrap").hidden = false;
+  }
+
+  function renderLive() {
+    $("stockOut").textContent = E.fmtPct(state.stock);
+    $("cashOut").textContent = E.fmtPct(state.cash);
+    $("stockRange").setAttribute("aria-valuenow", String(state.stock));
+    $("cashRange").setAttribute("aria-valuenow", String(state.cash));
+    $("stockRange").setAttribute("aria-valuetext", E.fmtPct(state.stock));
+    $("cashRange").setAttribute("aria-valuetext", E.fmtPct(state.cash));
+    $("otherLine").innerHTML = t(
+      "债券/其它 <strong>" + E.fmtPct(state.other) + "</strong>",
+      "Bonds / other <strong>" + E.fmtPct(state.other) + "</strong>"
+    );
+    renderBars();
+    renderThermo();
+    renderCompare();
+    renderLesson3();
+    if (!$("shareWrap").hidden) drawShare();
+  }
+
+  function renderAll() {
+    renderLive();
+    renderChecks();
+    renderQuiz();
+    drawCurve();
+  }
+
+  document.getElementById("langBtn").addEventListener("click", function () {
+    applyLang(lang === "en" ? "zh" : "en");
+  });
+
+  $("stockRange").addEventListener("input", function () { syncFrom("stock"); });
+  $("cashRange").addEventListener("input", function () { syncFrom("cash"); });
+  $("dropRange").addEventListener("input", renderLesson3);
+
+  document.querySelectorAll("#checks input").forEach(function (box) {
+    box.addEventListener("change", renderChecks);
+  });
+
+  $("quizReset").addEventListener("click", function () {
+    state.answers = [null, null, null];
+    renderQuiz();
+  });
+
+  function markCopied() {
+    var btn = $("copyBtn");
+    btn.classList.add("copied");
+    btn.textContent = t("已复制", "Copied");
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () {
+      btn.classList.remove("copied");
+      btn.innerHTML = lang === "en" ? btn.dataset.en : btn.dataset.zh;
+    }, 1600);
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  $("copyBtn").addEventListener("click", function () {
+    var text = shareText();
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      markCopied();
+    }
+    var clip = (navigator.clipboard && navigator.clipboard.writeText)
+      ? navigator.clipboard.writeText(text)
+      : Promise.reject();
+    var timed = new Promise(function (_, reject) {
+      setTimeout(function () { reject(new Error("copy-timeout")); }, 400);
+    });
+    Promise.race([clip, timed]).then(finish, function () {
+      fallbackCopy(text);
+      finish();
+    });
+  });
+
+  $("shareImgBtn").addEventListener("click", drawShare);
+
+  function onResize() {
+    drawCurve();
+    renderBars();
+  }
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(onResize);
+    ro.observe($("curveBox"));
+    ro.observe($("cashPos"));
+  } else {
+    window.addEventListener("resize", onResize);
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { renderBars(); drawCurve(); });
+  }
+
+  try {
+    var mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var onReduce = function () {
+      reduceMotion = mq.matches;
+      if (reduceMotion) {
+        curveProgress = 1;
+        drawCurve();
+      }
+    };
+    if (mq.addEventListener) mq.addEventListener("change", onReduce);
+  } catch (e) {}
+
+  stampZh();
+  syncFrom("stock");
+  if (lang === "en") applyLang("en");
+  else renderAll();
+  startCurve();
+})();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>
