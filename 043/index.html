@@ -1,0 +1,2054 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EARN-043 · 财报夜预期波动计算器</title>
+<meta name="description" content="财报前夜，输入股价与隐含波动率，算出市场已经定价的预期涨跌幅（±% 与 ±美元），再用 IV crush 模拟看懂为什么方向看对了期权仍可能亏钱。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/043/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E043%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="EARN-043 · 财报夜预期波动计算器">
+<meta property="og:description" content="财报前夜，输入股价与隐含波动率，算出市场已经定价的预期涨跌幅（±% 与 ±美元），再用 IV crush 模拟看懂为什么方向看对了期权仍可能亏钱。">
+<meta property="og:url" content="https://build-100.com/043/">
+<meta property="og:image" content="https://build-100.com/043/og-043.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="EARN-043 · 财报夜预期波动计算器">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="EARN-043 · 财报夜预期波动计算器">
+<meta name="twitter:description" content="The night before earnings, enter price and implied volatility to read the move the market has already priced, then simulate IV crush and see why a correct direction can still lose money.">
+<meta name="twitter:image" content="https://build-100.com/043/og-043.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #818cf8;
+    --accent-glow: rgba(129,140,248,0.35);
+    --warm: #fbbf24;
+    --hot: #f87171;
+    --cool: var(--accent);
+    --up: #f87171;
+    --down: #4ade80;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+    --you: var(--warm);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font-family: inherit; color: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  [hidden] { display: none !important; }
+  h1, h2, h3, p, td, th, li, label, .stat-k, .lede, .field-title, .count-k, .agenda-row, .rule-live, .crush-line {
+    overflow-wrap: break-word;
+  }
+  img, canvas, svg, input { max-width: 100%; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; min-width: 0; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; text-align: center; flex: none; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+    flex: none;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 48px); position: relative; }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; letter-spacing: 0.04em; line-height: 1.45; text-wrap: balance; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; margin-bottom: 18px;
+  }
+  .hero p.lede { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); }
+  .hero p.lede strong { color: var(--ink); font-weight: 600; }
+
+  .count {
+    border: 1px solid var(--line); border-radius: 12px; padding: 14px;
+    margin: 18px 0 12px;
+    background: linear-gradient(180deg, rgba(129,140,248,0.1), rgba(129,140,248,0.02));
+  }
+  .count-k { font-weight: 700; margin-bottom: 10px; }
+  .count-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .count-cell {
+    background: rgba(6,7,9,0.45); border: 1px solid var(--line); border-radius: 10px;
+    padding: 8px 4px 6px; text-align: center; min-width: 0;
+  }
+  .count-cell b {
+    display: block; font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    font-size: clamp(1.35rem, 6.5vw, 2.2rem); letter-spacing: -0.04em; line-height: 1; color: var(--accent);
+  }
+  .count-cell span {
+    display: block; margin-top: 4px; font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+  }
+  .count-done { font-family: var(--mono); font-size: clamp(1.2rem, 4vw, 1.6rem); color: var(--live); font-weight: 700; }
+  .count-note { color: var(--faint); font-size: 0.82rem; margin-top: 8px; }
+  .agenda { display: grid; gap: 6px; margin-top: 10px; }
+  .agenda-row { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; min-width: 0; }
+  .agenda-names { font-family: var(--mono); letter-spacing: 0.04em; font-size: 0.92rem; }
+  .when { color: var(--muted); font-size: 0.85rem; }
+
+  .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0 8px; }
+  .stat {
+    position: relative; min-width: 0;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: linear-gradient(180deg, rgba(237,239,241,0.035), rgba(237,239,241,0.015));
+    padding: 14px 12px 12px 14px; overflow: hidden;
+  }
+  .stat::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .stat-cool::before { background: var(--accent); box-shadow: 0 0 16px var(--accent-glow); }
+  .stat-ink::before { background: var(--ink); }
+  .stat-down::before { background: var(--down); box-shadow: 0 0 16px rgba(74,222,128,0.35); }
+  .stat-up::before { background: var(--up); box-shadow: 0 0 16px rgba(248,113,113,0.4); }
+  .stat-num {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(1.35rem, 6.2vw, 2.4rem); letter-spacing: -0.04em; line-height: 1;
+  }
+  .stat-cool .stat-num { color: var(--accent); }
+  .stat-ink .stat-num { color: var(--ink); }
+  .stat-down .stat-num { color: var(--down); }
+  .stat-up .stat-num { color: var(--up); }
+  .stat-k { margin-top: 6px; color: var(--muted); font-size: clamp(0.75rem, 2.5vw, 0.9rem); line-height: 1.35; }
+
+  .cta {
+    display: inline-block; margin-top: 18px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--accent); border-radius: 4px;
+    background: var(--accent); color: var(--bg); cursor: pointer; transition: all .2s;
+  }
+  .cta:hover { box-shadow: 0 0 24px var(--accent-glow); }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .seg {
+    display: flex; border: 1px solid var(--line-strong); border-radius: 999px; overflow: hidden; margin: 4px 0 16px;
+  }
+  .seg button {
+    flex: 1; min-height: 48px; background: none; border: 0; color: var(--muted);
+    font-weight: 700; cursor: pointer; padding: 10px 8px;
+  }
+  .seg button[aria-selected="true"] { background: var(--accent); color: var(--bg); }
+
+  .grid-2, .grid-3 { display: grid; gap: 12px; }
+  .ctrl-label {
+    display: flex; justify-content: space-between; gap: 8px; align-items: baseline;
+    font-weight: 700; margin-bottom: 6px; min-width: 0;
+  }
+  .ctrl-label em { font-style: normal; font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; }
+  em.is-up { color: var(--up); }
+  em.is-down { color: var(--down); }
+  .num {
+    width: 100%; min-height: 48px; font-size: 16px; padding: 12px 14px;
+    border-radius: 8px; border: 1px solid var(--line-strong); background: #07090c;
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+  }
+  .help { color: var(--faint); font-size: 0.78rem; margin-top: 6px; }
+  .range-pad { padding: 6px 11px 0; }
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 28px; background: transparent; margin: 0; display: block;
+  }
+  input[type="range"]:focus { outline: none; }
+  input[type="range"]:focus-visible { outline: 1px solid var(--ink); outline-offset: 3px; }
+  input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 99px; background: rgba(237,239,241,0.12); }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 22px; height: 22px; margin-top: -8px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--bg); box-shadow: 0 0 0 1px var(--accent);
+  }
+  input[type="range"].range-up::-webkit-slider-thumb { background: var(--up); box-shadow: 0 0 0 1px var(--up); }
+  input[type="range"].range-down::-webkit-slider-thumb { background: var(--down); box-shadow: 0 0 0 1px var(--down); }
+  input[type="range"]::-moz-range-track { height: 6px; border-radius: 99px; background: rgba(237,239,241,0.12); border: none; }
+  input[type="range"]::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--bg);
+    background: var(--accent); box-shadow: 0 0 0 1px var(--accent);
+  }
+  input[type="range"].range-up::-moz-range-thumb { background: var(--up); box-shadow: 0 0 0 1px var(--up); }
+  input[type="range"].range-down::-moz-range-thumb { background: var(--down); box-shadow: 0 0 0 1px var(--down); }
+
+  .err { color: var(--hot); font-size: 0.9rem; margin-top: 10px; }
+  .err:empty, .dyn:empty { display: none; }
+  .note { color: var(--muted); font-size: 0.9rem; margin-top: 12px; }
+  .illus { color: var(--faint); font-size: 0.8rem; margin-top: 10px; }
+
+  .result { margin-top: 18px; }
+  .result-pct {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(2.4rem, 10vw, 4.6rem); letter-spacing: -0.05em; line-height: 0.95; color: var(--accent);
+  }
+  .result-usd {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(1.15rem, 4vw, 1.7rem); margin-top: 6px;
+  }
+  .worked { font-family: var(--mono); color: var(--faint); font-size: 12px; letter-spacing: 0.02em; margin-top: 6px; text-transform: none; }
+  .band-nums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+  .band-nums .k { display: block; color: var(--muted); font-size: 0.78rem; }
+  .band-nums .k.down, .band-nums b.down { color: var(--down); }
+  .band-nums .k.up, .band-nums b.up { color: var(--up); }
+  .band-nums b {
+    display: block; font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(0.95rem, 3.8vw, 1.3rem); letter-spacing: -0.03em; overflow-wrap: anywhere;
+  }
+
+  .pos-stage { position: relative; padding-top: 34px; margin-top: 8px; }
+  .you-pill {
+    position: absolute; top: 0; left: 50%; max-width: calc(100% - 8px);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em;
+    color: var(--bg); background: var(--accent); border-radius: 999px;
+    padding: 2px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.5;
+  }
+  .you-pill.is-out { background: var(--hot); }
+  .pos-track {
+    position: relative; height: 18px; border-radius: 99px;
+    background: rgba(237,239,241,0.06); border: 1px solid var(--line); overflow: hidden;
+  }
+  .zone { position: absolute; top: 0; bottom: 0; }
+  .zone2 { background: rgba(129,140,248,0.2); }
+  .zone1 { background: rgba(129,140,248,0.72); }
+  .pos-tick { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--ink); transform: translateX(-1px); }
+  .pos-dot {
+    position: absolute; top: 50%; width: 14px; height: 14px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--bg);
+  }
+  .pos-dot.is-out { background: var(--hot); }
+  .pos-scale { position: relative; height: 36px; margin-top: 8px; }
+  .scale-tick {
+    position: absolute; top: 0; left: 0;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.02em; line-height: 1.2;
+    color: var(--muted); white-space: nowrap; text-align: center;
+  }
+  .scale-tick .tick-k { display: block; }
+  .scale-tick b {
+    display: block; color: var(--ink); font-weight: 700; font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+  .scale-tick.is-spot .tick-k { color: var(--ink); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 10px 0 0; padding: 0; list-style: none; color: var(--muted); font-size: 0.8rem; }
+  .legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+  .lg-1 { background: rgba(129,140,248,0.9); }
+  .lg-2 { background: rgba(129,140,248,0.35); }
+  .lg-spot { background: var(--ink); }
+  .lg-you { background: var(--accent); }
+  .lg-crush { background: var(--accent); }
+  .lg-flat { background: var(--warm); }
+  .lg-now { background: var(--ink); }
+  .guess-row { display: flex; gap: 8px; align-items: center; }
+  .guess-row .num { flex: 1; min-width: 0; }
+  .text-btn {
+    flex: none; min-height: 48px; padding: 0 12px;
+    background: none; border: 1px solid var(--line-strong); border-radius: 8px;
+    color: var(--muted); cursor: pointer; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  }
+  .text-btn:hover { color: var(--ink); border-color: var(--ink); }
+  .guess-read { margin-top: 8px; color: var(--ink); }
+
+  .pnl-row { display: grid; gap: 12px; margin-top: 14px; }
+  .pnl-card { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-raise); padding: 14px; min-width: 0; }
+  .pnl-card h3 { font-size: 1.02rem; margin-bottom: 4px; }
+  .pnl-unit { color: var(--faint); font-size: 0.8rem; margin-bottom: 8px; }
+  .pnl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pnl-span { grid-column: 1 / -1; }
+  .sim-k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
+  .pnl-v {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(0.95rem, 3.4vw, 1.25rem); letter-spacing: -0.03em; overflow-wrap: anywhere;
+  }
+  .is-win { color: var(--live); }
+  .is-loss { color: var(--hot); }
+  .is-flat { color: var(--muted); }
+  .crush-line { margin-top: 12px; color: var(--ink); }
+  .check { display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; }
+  .check input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+
+  .chart {
+    margin-top: 14px; border: 1px solid var(--line); border-radius: 10px;
+    background: #07090c; padding: 8px; min-width: 0;
+  }
+  .pnl-svg { display: block; width: 100%; height: 230px; }
+  .chart-cap { color: var(--faint); font-size: 0.8rem; margin-top: 8px; }
+
+  .sample-flag {
+    border: 1px solid rgba(251,191,36,0.45); background: rgba(251,191,36,0.08);
+    color: var(--ink); border-radius: 8px; padding: 10px 12px; font-size: 0.9rem; margin-bottom: 10px;
+  }
+  .table-scroll { width: 100%; max-width: 100%; }
+  table.hist { width: 100%; border-collapse: collapse; }
+  table.hist th, table.hist td { border-bottom: 1px solid var(--line); padding: 8px 6px; text-align: left; vertical-align: middle; }
+  table.hist th { font-size: 0.78rem; color: var(--muted); font-weight: 700; }
+  table.hist .num { min-height: 44px; padding: 10px 8px; }
+  .card-k { display: none; }
+  .tag { font-family: var(--mono); font-size: 12px; letter-spacing: 0.02em; white-space: nowrap; }
+  .tag-over { color: var(--hot); }
+  .tag-under { color: var(--down); }
+  .tag-empty { color: var(--faint); }
+  .hist-foot { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-top: 12px; }
+  .hist-sum { font-family: var(--mono); color: var(--accent); letter-spacing: 0.03em; text-transform: none; font-size: 13px; }
+
+  .rules { list-style: none; display: grid; gap: 12px; }
+  .rules li { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-raise); padding: 14px 14px 16px; min-width: 0; }
+  .rules h3 { font-size: 1.05rem; margin-bottom: 6px; }
+  .rules p { color: var(--muted); font-size: 0.95rem; }
+  .rule-live { color: var(--ink); margin-top: 8px; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { margin-top: 14px; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; display: block; }
+  .share-hint { color: var(--faint); font-size: 0.82rem; margin-top: 8px; }
+
+  .src-block { color: var(--muted); font-size: 0.88rem; }
+  .disclaimer { color: var(--faint); font-size: 0.86rem; margin-top: 14px; }
+
+  footer {
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 28px var(--pad) 40px; border-top: 1px solid var(--line);
+    max-width: 880px; margin: 0 auto;
+  }
+  footer a:hover { color: var(--ink); }
+  footer .mono { color: var(--faint); }
+
+  @media (min-width: 720px) {
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pnl-row { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .table-scroll { overflow: visible; }
+    table.hist, table.hist tbody { display: block; width: 100%; }
+    table.hist thead { display: none; }
+    table.hist tr {
+      display: block;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--bg-raise);
+      padding: 12px;
+      margin: 0 0 10px;
+    }
+    table.hist td {
+      display: block;
+      border-bottom: none;
+      padding: 0;
+      margin-top: 10px;
+    }
+    table.hist tr td:first-child { margin-top: 0; }
+    .card-k {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    table.hist .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line-strong);
+      background: rgba(237,239,241,0.05);
+      line-height: 1.5;
+    }
+    .scale-tick.is-outer { display: none !important; }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 0 14px; gap: 8px; }
+    .nav-back { font-size: 11px; letter-spacing: 0; }
+    .nav-brand { font-size: 13px; }
+    .nav-lang { padding: 6px 10px; letter-spacing: 0.12em; }
+    .stat { padding: 12px 10px 12px 12px; }
+    .share-btn { padding: 12px 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* 禁用所有动画 */
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">EARN<span>·043</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="2026-10-13 · Q3 bank earnings open">2026-10-13 · Q3 银行财报季开幕</p>
+    <h1 data-en="Earnings night,<br>the move is already priced.">财报夜，<br>市场早把涨跌幅写好了。</h1>
+
+    <div class="count" id="countBox">
+      <p class="count-k" data-en="JPMorgan leads Tuesday, Oct 13, before the open.">JPMorgan 10-13（周二）盘前打头阵</p>
+      <div class="count-grid" id="countLive">
+        <div class="count-cell"><b id="cdD">–</b><span data-en="days">天</span></div>
+        <div class="count-cell"><b id="cdH">–</b><span data-en="hours">时</span></div>
+        <div class="count-cell"><b id="cdM">–</b><span data-en="min">分</span></div>
+        <div class="count-cell"><b id="cdS">–</b><span data-en="sec">秒</span></div>
+      </div>
+      <p class="count-done" id="countDone" hidden data-en="Released">已发布</p>
+      <p class="count-note" data-en="Premarket, about 6:45 a.m. Eastern. The time follows the company announcement.">盘前，约美东 06:45，时间以公司公告为准</p>
+      <div class="agenda">
+        <p class="agenda-row">
+          <span class="mono" data-en="10-13">10-13</span>
+          <span class="agenda-names" data-en="JPM / GS / C / WFC">JPM / GS / C / WFC</span>
+          <span class="when" data-en="Tuesday, premarket">周二盘前</span>
+        </p>
+        <p class="agenda-row">
+          <span class="mono" data-en="10-14">10-14</span>
+          <span class="agenda-names" data-en="MS / BAC">MS / BAC</span>
+          <span class="when" data-en="Wednesday">周三</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <article class="stat stat-cool">
+        <p class="stat-num" data-en="$5.93">$5.93</p>
+        <p class="stat-k" data-en="Consensus EPS · revenue $51.19B">一致预期 EPS · 营收 $51.19B</p>
+      </article>
+      <article class="stat stat-ink">
+        <p class="stat-num" data-en="$332.83">$332.83</p>
+        <p class="stat-k" data-en="Approximate close on Oct 5">10-05 收盘约值</p>
+      </article>
+      <article class="stat stat-down">
+        <p class="stat-num" data-en="−13%">−13%</p>
+        <p class="stat-k" data-en="KBW Bank Index, down from the August high">KBW 银行指数较 8 月高点下跌</p>
+      </article>
+      <article class="stat stat-up">
+        <p class="stat-num" data-en="+29.5%">+29.5%</p>
+        <p class="stat-k" data-en="S&amp;P 500 Q3 earnings expected, up year over year · FactSet">S&amp;P 500 三季度盈利预期同比上升 · FactSet</p>
+      </article>
+    </div>
+
+    <p class="lede" data-en="People like to buy options before the print and bet the direction. The usual result is <strong>the direction was right, and the option still lost</strong>. The premium includes the event. When the numbers land, implied volatility collapses and time value goes with it. Read the ±% the market has already priced.">散户爱在财报前买期权赌方向，结果常常是<strong>方向看对了，期权却亏了</strong>。权利金里写着事件溢价，数字一落地，隐含波动率坍塌，时间价值跟着蒸发。先把市场已经定价的 ±% 算出来。</p>
+    <a class="cta" href="#calc" data-en="Calculate the expected move">算预期波动</a>
+  </header>
+
+  <section class="field" id="calc">
+    <div class="field-head">
+      <span class="field-no" data-en="01">01</span>
+      <h2 class="field-title" data-en="Expected move">预期波动计算器</h2>
+      <p class="field-hint" data-en="Two readings of the same thing: the move already written into the options, not your forecast.">两种口径，都是市场已经写进期权的幅度，不是你的预测。</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="ctrl">
+        <label class="ctrl-label" for="spotInput" data-en="Spot price">现价</label>
+        <input class="num" id="spotInput" type="text" inputmode="decimal" autocomplete="off" value="332.83">
+      </div>
+      <div class="ctrl">
+        <label class="ctrl-label" for="daysInput" data-en="Days to expiry (calendar)">到期天数（日历日）</label>
+        <input class="num" id="daysInput" type="text" inputmode="decimal" autocomplete="off" value="7">
+        <div class="range-pad"><input id="daysRange" type="range" min="0" max="60" step="0.5" value="7"></div>
+      </div>
+    </div>
+
+    <div class="seg" role="tablist" id="methodTabs">
+      <button type="button" role="tab" id="tabIv" aria-selected="true" aria-controls="panelIv" data-en="IV method">IV 法</button>
+      <button type="button" role="tab" id="tabStr" aria-selected="false" aria-controls="panelStr" data-en="Straddle">跨式法</button>
+    </div>
+
+    <div id="panelIv" role="tabpanel" aria-labelledby="tabIv">
+      <div class="ctrl">
+        <label class="ctrl-label" for="ivInput" data-en="Implied volatility %">隐含波动率 IV %</label>
+        <input class="num" id="ivInput" type="text" inputmode="decimal" autocomplete="off" value="40">
+        <div class="range-pad"><input id="ivRange" type="range" min="0" max="200" step="0.1" value="40"></div>
+      </div>
+      <p class="note" data-en="Dollar move = price × IV × √(days / 365). Percent move = IV × √(days / 365). Days are calendar days.">美元波动 = 现价 × IV × √(天数 / 365)。百分比 = IV × √(天数 / 365)。天数按日历日。</p>
+    </div>
+
+    <div id="panelStr" role="tabpanel" aria-labelledby="tabStr" hidden>
+      <div class="grid-2">
+        <div class="ctrl">
+          <label class="ctrl-label" for="callInput" data-en="At-the-money call">平值 call 价</label>
+          <input class="num" id="callInput" type="text" inputmode="decimal" autocomplete="off" value="7.35">
+        </div>
+        <div class="ctrl">
+          <label class="ctrl-label" for="putInput" data-en="At-the-money put">平值 put 价</label>
+          <input class="num" id="putInput" type="text" inputmode="decimal" autocomplete="off" value="7.35">
+        </div>
+      </div>
+      <p class="note" data-en="Dollar move = at-the-money call + put. Percent = (call + put) / price.">美元波动 = 平值 call + 平值 put。百分比 = (call + put) / 现价。</p>
+    </div>
+
+    <p class="err" id="calcErr"></p>
+    <div class="result" id="resultBox">
+      <p class="result-pct" id="resPct"></p>
+      <p class="result-usd" id="resUsd"></p>
+      <p class="worked" id="worked"></p>
+      <div class="band-nums">
+        <div>
+          <span class="k down" data-en="Low · down">下沿 · 跌</span>
+          <b id="resLow" class="down"></b>
+        </div>
+        <div>
+          <span class="k" data-en="Spot">现价</span>
+          <b id="resSpot"></b>
+        </div>
+        <div>
+          <span class="k up" data-en="High · up">上沿 · 涨</span>
+          <b id="resHigh" class="up"></b>
+        </div>
+      </div>
+    </div>
+    <p class="note" id="straddleNote" hidden data-en="A straddle is about 0.8 of a standard deviation (√(2/π)), so it prints a bit smaller than the IV method. Both are the market's price, not your forecast.">跨式价格约等于 0.8 个标准差（√(2/π)），所以比 IV 法略小，二者都是「市场定价」的口径。</p>
+    <p class="dyn note" id="methodCmp"></p>
+  </section>
+
+  <section class="field" id="range">
+    <div class="field-head">
+      <span class="field-no" data-en="02">02</span>
+      <h2 class="field-title" data-en="Where the price can land">区间可视化</h2>
+      <p class="field-hint" data-en="The deep band is ±1σ, the expected move. The pale band is ±2σ. Drag a guessed price and see if it lands inside.">深色带是 ±1σ，也就是预期波动。浅色带是 ±2σ。拖一个你猜的财报后价格，看它落在带内还是带外。</p>
+    </div>
+    <p class="dyn illus" id="rangeSrc"></p>
+    <p class="err" id="rangeEmpty"></p>
+    <div id="rangeBox">
+      <div class="pos-stage" id="rangeStage">
+        <span class="you-pill" id="guessPill"></span>
+        <div class="pos-track" id="rangeTrack">
+          <div class="zone zone2" id="zone2"></div>
+          <div class="zone zone1" id="zone1"></div>
+          <i class="pos-tick" id="spotNeedle"></i>
+          <i class="pos-dot" id="guessDot"></i>
+        </div>
+      </div>
+      <div class="pos-scale" id="rangeScale">
+        <span class="scale-tick is-outer" id="tickM2"></span>
+        <span class="scale-tick" id="tickM1"></span>
+        <span class="scale-tick is-spot" id="tick0"></span>
+        <span class="scale-tick" id="tickP1"></span>
+        <span class="scale-tick is-outer" id="tickP2"></span>
+      </div>
+      <ul class="legend">
+        <li><i class="lg-1"></i><span data-en="±1σ expected move">±1σ 预期波动</span></li>
+        <li><i class="lg-2"></i><span data-en="±2σ pale band">±2σ 淡色带</span></li>
+        <li><i class="lg-spot"></i><span data-en="Spot">现价</span></li>
+        <li><i class="lg-you"></i><span data-en="Your guess">你的猜测</span></li>
+      </ul>
+      <p class="dyn note" id="rangePrices"></p>
+      <div class="ctrl" style="margin-top:14px">
+        <label class="ctrl-label" for="guessInput" data-en="Your guessed price after the print">你猜的财报后价格</label>
+        <div class="guess-row">
+          <input class="num" id="guessInput" type="text" inputmode="decimal" autocomplete="off" value="332.83">
+          <button class="text-btn" id="guessReset" type="button" data-en="Back to spot">回到现价</button>
+        </div>
+        <div class="range-pad"><input id="guessRange" type="range" min="280" max="390" step="0.1" value="332.83"></div>
+      </div>
+      <p class="guess-read" id="guessRead"></p>
+    </div>
+    <p class="illus" data-en="About 68% of the outcomes land inside the ±1 band (lognormal sketch, illustrative).">约 68% 概率落在 ±1 区间内（对数正态近似，示意）。</p>
+  </section>
+
+  <section class="field" id="crush">
+    <div class="field-head">
+      <span class="field-no" data-en="03">03</span>
+      <h2 class="field-title" data-en="IV crush simulator">IV crush 模拟器</h2>
+      <p class="field-hint" data-en="At the money, r = 0, no dividend. Defaults: IV 40% to 20%, the stock +1.5%, and 7 days become 6.">平值，r = 0，无股息。默认：IV 从 40% 到 20%，股价 +1.5%，到期 7 天变成 6 天。</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="ctrl">
+        <label class="ctrl-label" for="ivBeforeInput" data-en="IV before the print %">财报前 IV %</label>
+        <input class="num" id="ivBeforeInput" type="text" inputmode="decimal" autocomplete="off" value="40">
+        <div class="range-pad"><input id="ivBeforeRange" type="range" min="0" max="200" step="0.1" value="40"></div>
+        <p class="help" data-en="Same number as the calculator IV. Edit either one.">和上面的 IV 是同一个数，改一处另一处会跟着变。</p>
+      </div>
+      <div class="ctrl">
+        <label class="ctrl-label" for="ivAfterInput" data-en="IV after the print %">财报后 IV %</label>
+        <input class="num" id="ivAfterInput" type="text" inputmode="decimal" autocomplete="off" value="20">
+        <div class="range-pad"><input id="ivAfterRange" type="range" min="5" max="40" step="0.1" value="20"></div>
+        <p class="help" data-en="Slider runs from 5% up to the pre-earnings IV.">滑杆从 5% 到财报前 IV。</p>
+      </div>
+      <div class="ctrl">
+        <label class="ctrl-label" for="moveInput">
+          <span data-en="Stock move after the print %">财报后股价变动 %</span>
+          <em id="moveWord"></em>
+        </label>
+        <input class="num" id="moveInput" type="text" inputmode="decimal" autocomplete="off" value="1.5">
+        <div class="range-pad"><input id="moveRange" type="range" min="-15" max="15" step="0.1" value="1.5"></div>
+      </div>
+      <div class="ctrl">
+        <label class="ctrl-label" for="daysCrushInput" data-en="Days before the print">财报前到期天数</label>
+        <input class="num" id="daysCrushInput" type="text" inputmode="decimal" autocomplete="off" value="7">
+        <div class="range-pad"><input id="daysCrushRange" type="range" min="0" max="60" step="0.5" value="7"></div>
+        <p class="help dyn" id="daysFlow"></p>
+      </div>
+    </div>
+
+    <label class="check" for="perContract">
+      <input id="perContract" type="checkbox">
+      <span data-en="Show one contract (×100). Percents stay the same. Dollars scale.">按 1 张合约显示（×100）。百分比不变，美元金额放大。</span>
+    </label>
+    <p class="err" id="crushErr"></p>
+    <p class="dyn note" id="crushSetup"></p>
+
+    <div class="pnl-row" id="pnlRow">
+      <article class="pnl-card">
+        <h3 data-en="Buy the at-the-money call">买平值 call</h3>
+        <p class="pnl-unit" id="callUnit"></p>
+        <div class="pnl-grid">
+          <div>
+            <p class="sim-k" data-en="Buy price">买入价</p>
+            <p class="pnl-v" id="callBuy"></p>
+          </div>
+          <div>
+            <p class="sim-k" data-en="Value after the print">财报后价值</p>
+            <p class="pnl-v" id="callAfter"></p>
+          </div>
+          <div class="pnl-span">
+            <p class="sim-k" data-en="P/L">盈亏</p>
+            <p class="pnl-v" id="callPnl"></p>
+          </div>
+        </div>
+      </article>
+      <article class="pnl-card">
+        <h3 data-en="Buy the at-the-money straddle">买平值跨式</h3>
+        <p class="pnl-unit" id="strUnit"></p>
+        <div class="pnl-grid">
+          <div>
+            <p class="sim-k" data-en="Buy price">买入价</p>
+            <p class="pnl-v" id="strBuy"></p>
+          </div>
+          <div>
+            <p class="sim-k" data-en="Value after the print">财报后价值</p>
+            <p class="pnl-v" id="strAfter"></p>
+          </div>
+          <div class="pnl-span">
+            <p class="sim-k" data-en="P/L">盈亏</p>
+            <p class="pnl-v" id="strPnl"></p>
+          </div>
+        </div>
+      </article>
+    </div>
+    <p class="crush-line" id="crushLine"></p>
+    <p class="crush-line" id="beLine"></p>
+
+    <div class="chart" id="chartBox">
+      <svg id="pnlSvg" class="pnl-svg" role="img"></svg>
+    </div>
+    <ul class="legend">
+      <li><i class="lg-crush"></i><span data-en="Indigo: after IV crush">靛线：IV 坍塌后</span></li>
+      <li><i class="lg-flat"></i><span data-en="Amber: IV unchanged, one day passes">黄线：IV 不变（仍过 1 天）</span></li>
+      <li><i class="lg-now"></i><span data-en="White: slider now">白线：当前滑杆</span></li>
+    </ul>
+    <p class="dyn chart-cap" id="chartCap"></p>
+    <p class="illus" data-en="Black-Scholes, r = 0, no dividend, European. The strike equals the spot you enter with. Days left after the print = days before minus 1. The amber line lets that day pass with IV unchanged. The indigo line uses the same day count with IV crushed. The gap is the IV crush.">Black-Scholes，r = 0，无股息，欧式。行权价等于进入模拟时的现价。财报后剩余天数 = 财报前天数减 1。黄线只过这一天、IV 不变；靛线用同一天数、IV 坍塌。两条线的缺口就是 IV crush。</p>
+  </section>
+
+  <section class="field" id="history">
+    <div class="field-head">
+      <span class="field-no" data-en="04">04</span>
+      <h2 class="field-title" data-en="History check">历史对照表</h2>
+      <p class="field-hint" data-en="Four rows. If the absolute actual move is larger than the implied move, it is marked as a bigger move. A tie counts as inside.">四行。实际涨跌的绝对值大于隐含预期波动，记为超预期波动。刚好相等算不及预期。</p>
+    </div>
+    <p class="sample-flag" data-en="Sample data, not real history. Replace the rows with the stock you follow.">示例数据，非真实历史，请替换成你关注股票的真实记录。</p>
+    <div class="table-scroll">
+      <table class="hist">
+        <thead>
+          <tr>
+            <th scope="col" data-en="Earnings date">财报日期</th>
+            <th scope="col" data-en="Implied move ±%">隐含预期波动 ±%</th>
+            <th scope="col" data-en="Actual move %">实际涨跌幅 %</th>
+            <th scope="col" data-en="Read">对照</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="card-k" data-en="Earnings date">财报日期</span><input class="num" id="hDate0" type="text" autocomplete="off" spellcheck="false"></td>
+            <td><span class="card-k" data-en="Implied move ±%">隐含预期波动 ±%</span><input class="num" id="hImp0" type="text" inputmode="decimal" autocomplete="off"></td>
+            <td><span class="card-k" data-en="Actual move %">实际涨跌幅 %</span><input class="num" id="hAct0" type="text" inputmode="decimal" autocomplete="off"></td>
+            <td><span class="card-k" data-en="Read">对照</span><span class="tag tag-empty" id="hTag0">—</span></td>
+          </tr>
+          <tr>
+            <td><span class="card-k" data-en="Earnings date">财报日期</span><input class="num" id="hDate1" type="text" autocomplete="off" spellcheck="false"></td>
+            <td><span class="card-k" data-en="Implied move ±%">隐含预期波动 ±%</span><input class="num" id="hImp1" type="text" inputmode="decimal" autocomplete="off"></td>
+            <td><span class="card-k" data-en="Actual move %">实际涨跌幅 %</span><input class="num" id="hAct1" type="text" inputmode="decimal" autocomplete="off"></td>
+            <td><span class="card-k" data-en="Read">对照</span><span class="tag tag-empty" id="hTag1">—</span></td>
+          </tr>
+          <tr>
+            <td><span class="card-k" data-en="Earnings date">财报日期</span><input class="num" id="hDate2" type="text" autocomplete="off" spellcheck="false"></td>
+            <td><span class="card-k" data-en="Implied move ±%">隐含预期波动 ±%</span><input class="num" id="hImp2" type="text" inputmode="decimal" autocomplete="off"></td>
+            <td><span class="card-k" data-en="Actual move %">实际涨跌幅 %</span><input class="num" id="hAct2" type="text" inputmode="decimal" autocomplete="off"></td>
+            <td><span class="card-k" data-en="Read">对照</span><span class="tag tag-empty" id="hTag2">—</span></td>
+          </tr>
+          <tr>
+            <td><span class="card-k" data-en="Earnings date">财报日期</span><input class="num" id="hDate3" type="text" autocomplete="off" spellcheck="false"></td>
+            <td><span class="card-k" data-en="Implied move ±%">隐含预期波动 ±%</span><input class="num" id="hImp3" type="text" inputmode="decimal" autocomplete="off"></td>
+            <td><span class="card-k" data-en="Actual move %">实际涨跌幅 %</span><input class="num" id="hAct3" type="text" inputmode="decimal" autocomplete="off"></td>
+            <td><span class="card-k" data-en="Read">对照</span><span class="tag tag-empty" id="hTag3">—</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="err" id="histErr"></p>
+    <div class="hist-foot">
+      <p class="hist-sum" id="histSum"></p>
+      <button class="share-btn" id="restoreBtn" type="button" data-en="Restore sample">恢复示例</button>
+    </div>
+  </section>
+
+  <section class="field" id="rules">
+    <div class="field-head">
+      <span class="field-no" data-en="05">05</span>
+      <h2 class="field-title" data-en="Three rules for earnings night">三条铁律</h2>
+      <p class="field-hint" data-en="Read them after the two tools above. The numbers follow your inputs.">算完上面两步再读。数字会跟着你的输入变。</p>
+    </div>
+    <ol class="rules">
+      <li>
+        <h3 data-en="1 · Check the expected move first">① 先查预期波动</h3>
+        <p data-en="Your view has to be more extreme than the move already priced, or a long option has no edge. Feeling that it will &quot;rise a bit&quot; is not enough when that bit is already in the premium.">你的判断要比市场已经定价的幅度更极端，买期权才有优势。只是觉得「会涨一点」，而这点幅度已经在权利金里，那就不该为它付钱。</p>
+        <p class="rule-live" id="ruleLive1"></p>
+      </li>
+      <li>
+        <h3 data-en="2 · Price the IV crush">② 买期权要算上 IV crush</h3>
+        <p data-en="Right direction is not the same as making money. IV before the print includes the event, and it usually collapses after. If the move does not cover that collapse, the call still loses.">方向对，不等于这张期权赚钱。财报前的 IV 含着事件溢价，公布后往往坍塌。涨幅若盖不住坍塌，call 照样亏。</p>
+        <p class="rule-live" id="ruleLive2"></p>
+      </li>
+      <li>
+        <h3 data-en="3 · Size it so a total loss still lets you sleep">③ 仓位按「全亏也睡得着」来定</h3>
+        <p data-en="Earnings are not a lottery. One print has a wide range of outcomes. Lose the whole premium and it should not touch your life. Write the dollar limit down before you pick a direction.">财报不是抽奖。单次财报的结果分布很宽，权利金亏光也不该影响生活。先写下能接受的亏损金额，再谈方向。</p>
+        <p class="rule-live" id="ruleLive3"></p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="field" id="share">
+    <div class="field-head">
+      <span class="field-no" data-en="06">06</span>
+      <h2 class="field-title" data-en="Share this expected move">分享这组预期波动</h2>
+      <p class="field-hint" data-en="The line and the image use the move on screen. The image is 1200×630.">文案和图片都用当前这组预期波动。图片为 1200×630。</p>
+    </div>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap" hidden>
+      <canvas id="shareCanvas" width="1200" height="630"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+
+  <section class="field" id="sources">
+    <p class="src-block" data-en="Sources: JPM expected EPS of $5.93 and revenue of $51.19B are consensus estimates. The $332.83 price is the approximate close on 2026-10-05. The KBW Bank Index is down 13% from its August high. S&amp;P 500 Q3 earnings are expected up 29.5% year over year (FactSet). Checked on 2026-10-10.">数据来源：JPM 预期 EPS $5.93、营收 $51.19B 为市场一致预期；价格 $332.83 为 2026-10-05 收盘约值；KBW 银行指数较 8 月高点下跌 13%；S&amp;P 500 三季度盈利预期同比 +29.5%（FactSet）。2026-10-10 核实。</p>
+    <p class="disclaimer" data-en="This page is an educational tool, not investment advice. The Black-Scholes model is a simplified sketch (r = 0, no dividend, European). Real option prices also depend on the bid-ask spread, skew, and early exercise.">本页为教育工具，不构成投资建议。BS 模型为简化示意（r=0、无股息、欧式），真实期权价格受买卖价差、偏度、提前行权等影响。</p>
+  </section>
+</main>
+
+<footer>
+  <span class="mono" data-en='<a href="https://build-100.com/">build-100.com</a>'><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono" data-en='<a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a>'><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="EARN-043 · Earnings Expected Move">EARN-043 · 财报夜预期波动</span>
+</footer>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  "use strict";
+  var E = window.EarnEngine;
+  if (!E) return;
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  var method = "iv";
+  var guessTouched = false;
+  var shareOpen = false;
+  var copyTimer = null;
+  var rendering = false;
+  var lastW = -1;
+  var pack = null;
+  var crushPack = null;
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+  function $(id) { return document.getElementById(id); }
+
+  function stampZh() {
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    });
+  }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    $("langBtn").setAttribute("aria-label", l === "en" ? "切换到中文" : "Switch language");
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    renderAll();
+  }
+
+  function parseNum(raw) {
+    var s = String(raw == null ? "" : raw).trim().replace(/,/g, "").replace(/%/g, "");
+    if (s === "") return { state: "empty" };
+    if (/^[+-]?$/.test(s) || /^[+-]?\.$/.test(s)) return { state: "partial" };
+    if (!/^[+-]?(\d+(\.\d*)?|\.\d+)$/.test(s)) return { state: "bad" };
+    var n = Number(s);
+    if (!isFinite(n)) return { state: "bad" };
+    return { state: "ok", value: n };
+  }
+
+  function trimNum(n) {
+    var x = typeof n === "number" ? n : Number(n);
+    if (!isFinite(x)) return "";
+    var r = Math.round((x + Number.EPSILON) * 10000) / 10000;
+    var s = r.toFixed(4).replace(/0+$/, "").replace(/\.$/, "");
+    if (s === "-0") s = "0";
+    return s;
+  }
+
+  function trimPct(n) {
+    return trimNum(n) + "%";
+  }
+
+  function pm(move) { return "±" + E.fmtUSD(move); }
+  function pd(pct) { return "±" + E.fmtPct(pct, 2); }
+
+  function setRange(el, value) {
+    if (!el || !isFinite(value)) return;
+    var min = Number(el.min);
+    var max = Number(el.max);
+    var v = value;
+    if (isFinite(min) && v < min) v = min;
+    if (isFinite(max) && v > max) v = max;
+    var s = String(v);
+    if (el.value !== s) el.value = s;
+  }
+
+  function bindNumberGroup(textIds, rangeIds) {
+    function pushText(srcId) {
+      var raw = $(srcId).value;
+      textIds.forEach(function (id) {
+        if (id !== srcId && $(id).value !== raw) $(id).value = raw;
+      });
+      var parsed = parseNum(raw);
+      if (parsed.state === "ok") {
+        rangeIds.forEach(function (id) { setRange($(id), parsed.value); });
+      }
+      renderAll();
+    }
+    function pushRange(srcId) {
+      var raw = $(srcId).value;
+      var shown = trimNum(raw);
+      textIds.forEach(function (id) {
+        if (document.activeElement === $(id)) return;
+        if ($(id).value !== shown) $(id).value = shown;
+      });
+      rangeIds.forEach(function (id) {
+        if (id !== srcId && $(id).value !== raw) $(id).value = raw;
+      });
+      renderAll();
+    }
+    textIds.forEach(function (id) {
+      $(id).addEventListener("input", function () { pushText(id); });
+    });
+    rangeIds.forEach(function (id) {
+      $(id).addEventListener("input", function () { pushRange(id); });
+    });
+  }
+
+  function msgFor(parsed, kind) {
+    var copy = {
+      spot: {
+        empty: ["请填写现价。", "Enter the price."],
+        partial: ["现价还没写完。", "Finish the price."],
+        bad: ["现价要写成数字。", "Price has to be a number."],
+        range: ["现价要大于 0。", "Price has to be above 0."]
+      },
+      iv: {
+        empty: ["请填写隐含波动率。", "Enter implied volatility."],
+        partial: ["隐含波动率还没写完。", "Finish the implied volatility."],
+        bad: ["隐含波动率要写成数字。", "Implied volatility has to be a number."],
+        range: ["隐含波动率不能为负。", "Implied volatility cannot be negative."]
+      },
+      days: {
+        empty: ["请填写到期天数。", "Enter the days to expiry."],
+        partial: ["到期天数还没写完。", "Finish the days to expiry."],
+        bad: ["到期天数要写成数字。", "Days to expiry have to be a number."],
+        range: ["到期天数不能为负。", "Days to expiry cannot be negative."]
+      },
+      premium: {
+        empty: ["请填写期权价格。", "Enter the option price."],
+        partial: ["期权价格还没写完。", "Finish the option price."],
+        bad: ["期权价格要写成数字。", "Option price has to be a number."],
+        range: ["期权价格不能为负。", "Option price cannot be negative."]
+      },
+      move: {
+        empty: ["请填写股价变动。", "Enter the stock move."],
+        partial: ["股价变动还没写完。", "Finish the stock move."],
+        bad: ["股价变动要写成数字。", "The stock move has to be a number."],
+        range: ["股价变动要大于 -100%。", "The stock move has to be above -100%."]
+      }
+    }[kind];
+    if (!copy || !parsed) return null;
+    if (parsed.state === "empty" || parsed.state === "partial" || parsed.state === "bad") {
+      return t(copy[parsed.state][0], copy[parsed.state][1]);
+    }
+    if (kind === "spot" && parsed.value <= 0) return t(copy.range[0], copy.range[1]);
+    if ((kind === "iv" || kind === "days" || kind === "premium") && parsed.value < 0) return t(copy.range[0], copy.range[1]);
+    if (kind === "move" && parsed.value <= -100) return t(copy.range[0], copy.range[1]);
+    return null;
+  }
+
+  function firstErr(list) {
+    var i;
+    for (i = 0; i < list.length; i++) if (list[i]) return list[i];
+    return "";
+  }
+
+  function syncAfterBounds() {
+    var before = parseNum($("ivInput").value);
+    var range = $("ivAfterRange");
+    var text = $("ivAfterInput");
+    if (before.state === "ok" && before.value >= 5) {
+      range.min = "5";
+      range.max = String(before.value);
+    } else if (before.state === "ok" && before.value >= 0) {
+      range.min = "0";
+      range.max = String(before.value);
+    }
+    var after = parseNum(text.value);
+    if (before.state === "ok" && after.state === "ok" && after.value > before.value && document.activeElement !== text) {
+      text.value = trimNum(before.value);
+    }
+    after = parseNum(text.value);
+    if (after.state === "ok") setRange(range, after.value);
+  }
+
+  function readInputs() {
+    return {
+      spot: parseNum($("spotInput").value),
+      iv: parseNum($("ivInput").value),
+      days: parseNum($("daysInput").value),
+      call: parseNum($("callInput").value),
+      put: parseNum($("putInput").value),
+      after: parseNum($("ivAfterInput").value),
+      move: parseNum($("moveInput").value),
+      guess: parseNum($("guessInput").value)
+    };
+  }
+
+  function paintMoney(el, n) {
+    el.className = "pnl-v";
+    el.textContent = n == null ? "—" : E.fmtUSD(n);
+  }
+
+  function paintPnl(el, dollars, pct) {
+    if (dollars == null || !isFinite(dollars)) {
+      el.className = "pnl-v";
+      el.textContent = "—";
+      return;
+    }
+    var word;
+    var cls;
+    if (dollars > 0.005) { word = t("盈利", "Profit"); cls = "is-win"; }
+    else if (dollars < -0.005) { word = t("亏损", "Loss"); cls = "is-loss"; }
+    else { word = t("持平", "Flat"); cls = "is-flat"; }
+    var pctTxt = pct == null ? "—" : E.fmtPct(pct, { sign: true, digits: 2 });
+    el.className = "pnl-v " + cls;
+    el.textContent = word + " " + E.fmtUSD(dollars) + "（" + pctTxt + "）";
+  }
+
+  function clearCrush() {
+    ["callBuy", "callAfter", "strBuy", "strAfter"].forEach(function (id) { paintMoney($(id), null); });
+    paintPnl($("callPnl"), null, null);
+    paintPnl($("strPnl"), null, null);
+    $("callUnit").textContent = "";
+    $("strUnit").textContent = "";
+    $("crushLine").textContent = "";
+    $("beLine").textContent = "";
+    $("crushSetup").textContent = "";
+    $("chartCap").textContent = "";
+  }
+
+  function sentence(model, r) {
+    if (r.callPnlPct == null) {
+      return t("权利金为 0，百分比盈亏没有意义。美元盈亏见上方。", "The premium is 0, so a percent P&L is meaningless. See the dollar P&L above.");
+    }
+    var moveTxt = E.fmtPct(model.movePct, { sign: true, digits: 2 });
+    var lossAbs = E.fmtPct(Math.abs(r.callPnlPct), 2);
+    var ivB = trimPct(model.ivBefore);
+    var ivA = trimPct(model.ivAfter);
+    var lost = r.callPnl < -0.005;
+    var won = r.callPnl > 0.005;
+    if (model.movePct > 0 && lost) {
+      return t(
+        "股价涨了 " + moveTxt + "，你看对了方向，但 call 仍亏 " + lossAbs + "——IV 从 " + ivB + " 坍塌到 " + ivA + "，时间价值蒸发。",
+        "The stock rose " + moveTxt + ". You got the direction right, and the call still lost " + lossAbs + " — IV collapsed from " + ivB + " to " + ivA + ", and time value evaporated."
+      );
+    }
+    if (model.movePct > 0 && won) {
+      return t(
+        "股价涨了 " + moveTxt + "，涨幅盖过了 IV 从 " + ivB + " 到 " + ivA + " 的坍塌，这张 call 盈利 " + lossAbs + "。",
+        "The stock rose " + moveTxt + ". The move cleared the IV collapse from " + ivB + " to " + ivA + ", and the call gained " + lossAbs + "."
+      );
+    }
+    if (model.movePct > 0) {
+      return t(
+        "股价涨了 " + moveTxt + "，这张 call 大致打平。IV 从 " + ivB + " 到 " + ivA + "。",
+        "The stock rose " + moveTxt + " and the call is about flat. IV went from " + ivB + " to " + ivA + "."
+      );
+    }
+    var dropTxt = E.fmtPct(Math.abs(model.movePct), 2);
+    if (model.movePct < 0 && won) {
+      return t(
+        "股价跌了 " + dropTxt + "，方向相反，但这张 call 因为波动率变化仍盈利 " + lossAbs + "。",
+        "The stock fell " + dropTxt + ". Direction was wrong, and the call still gained " + lossAbs + " because volatility moved."
+      );
+    }
+    if (model.movePct < 0) {
+      return t(
+        "股价跌了 " + dropTxt + "，方向看反了，call " + (lost ? "亏了 " + lossAbs : "大致打平") + "。IV 从 " + ivB + " 到 " + ivA + "。",
+        "The stock fell " + dropTxt + ". Direction was wrong, and the call " + (lost ? "lost " + lossAbs : "was about flat") + ". IV went from " + ivB + " to " + ivA + "."
+      );
+    }
+    if (lost) {
+      return t(
+        "股价没动。call 亏了 " + lossAbs + "，因为 IV 从 " + ivB + " 掉到 " + ivA + "，时间也往前走了。",
+        "The stock did not move. The call lost " + lossAbs + " because IV fell from " + ivB + " to " + ivA + " and time passed."
+      );
+    }
+    if (won) {
+      return t(
+        "股价没动，call 仍盈利 " + lossAbs + "。IV 从 " + ivB + " 到 " + ivA + "。",
+        "The stock did not move and the call still gained " + lossAbs + ". IV went from " + ivB + " to " + ivA + "."
+      );
+    }
+    return t("股价没动，call 大致打平。", "The stock did not move and the call is about flat.");
+  }
+
+  function beSentence(model, r) {
+    var ivA = trimPct(model.ivAfter);
+    var daysTxt = trimNum(model.daysAfter);
+    var callBe = E.fmtPct(r.breakevenCallPct, { sign: true, digits: 2 });
+    var strBe = E.fmtPct(r.breakevenStrPct, { sign: true, digits: 2 });
+    if (r.breakevenCallPct > 0.005) {
+      return t(
+        "在财报后 IV " + ivA + "、剩余 " + daysTxt + " 天的条件下，这张平值 call 大约要涨 " + callBe + " 才回本。跨式向上大约要 " + strBe + " 才回本。",
+        "With post-earnings IV at " + ivA + " and " + daysTxt + " days left, the at-the-money call needs about " + callBe + " to break even. The straddle needs about " + strBe + " to the upside."
+      );
+    }
+    if (r.breakevenCallPct < -0.005) {
+      return t(
+        "按财报后 IV " + ivA + "，这张 call 在现价已经不低于买入价。要跌过 " + E.fmtPct(Math.abs(r.breakevenCallPct), 2) + " 才会回到亏损。跨式向上的盈亏平衡约在 " + strBe + "。",
+        "At the post-earnings IV of " + ivA + ", this call is already worth at least its cost if the stock does not move. It falls back to a loss only past a drop of " + E.fmtPct(Math.abs(r.breakevenCallPct), 2) + ". The straddle's upside breakeven is about " + strBe + "."
+      );
+    }
+    return t(
+      "按财报后 IV " + ivA + "、剩余 " + daysTxt + " 天，现价附近这张 call 已经大致回本。跨式向上大约 " + strBe + "。",
+      "At post-earnings IV " + ivA + " with " + daysTxt + " days left, the call is about flat if the stock does not move. The straddle's upside breakeven is about " + strBe + "."
+    );
+  }
+
+  function renderCalc(inp) {
+    var err = "";
+    var move = null;
+    if (method === "iv") {
+      err = firstErr([
+        msgFor(inp.spot, "spot"),
+        msgFor(inp.iv, "iv"),
+        msgFor(inp.days, "days")
+      ]);
+      if (!err) move = E.expectedMoveIV(inp.spot.value, inp.iv.value, inp.days.value);
+    } else {
+      err = firstErr([
+        msgFor(inp.spot, "spot"),
+        msgFor(inp.call, "premium"),
+        msgFor(inp.put, "premium")
+      ]);
+      if (!err) move = E.expectedMoveStraddle(inp.spot.value, inp.call.value, inp.put.value);
+    }
+    $("calcErr").textContent = err || (move ? "" : t("这组输入算不出预期波动。", "These inputs do not produce an expected move."));
+    if (!move) {
+      pack = null;
+      $("resPct").textContent = "—";
+      $("resUsd").textContent = "";
+      $("worked").textContent = "";
+      $("resLow").textContent = "—";
+      $("resSpot").textContent = "—";
+      $("resHigh").textContent = "—";
+    } else {
+      pack = {
+        S: inp.spot.value,
+        move: move.move,
+        pct: move.pct,
+        low: move.low,
+        high: move.high,
+        method: method,
+        iv: inp.iv.state === "ok" ? inp.iv.value : null,
+        days: inp.days.state === "ok" ? inp.days.value : null,
+        call: inp.call.state === "ok" ? inp.call.value : null,
+        put: inp.put.state === "ok" ? inp.put.value : null
+      };
+      $("resPct").textContent = pd(move.pct);
+      $("resUsd").textContent = pm(move.move);
+      $("resLow").textContent = E.fmtUSD(move.low);
+      $("resSpot").textContent = E.fmtUSD(inp.spot.value);
+      $("resHigh").textContent = E.fmtUSD(move.high);
+      $("worked").textContent = method === "iv"
+        ? trimNum(inp.spot.value) + " × " + trimPct(inp.iv.value) + " × √(" + trimNum(inp.days.value) + "/365)"
+        : E.fmtUSD(inp.call.value) + " + " + E.fmtUSD(inp.put.value);
+    }
+
+    var ivMove = null;
+    var stMove = null;
+    if (!msgFor(inp.spot, "spot") && !msgFor(inp.iv, "iv") && !msgFor(inp.days, "days")) {
+      ivMove = E.expectedMoveIV(inp.spot.value, inp.iv.value, inp.days.value);
+    }
+    if (!msgFor(inp.spot, "spot") && !msgFor(inp.call, "premium") && !msgFor(inp.put, "premium")) {
+      stMove = E.expectedMoveStraddle(inp.spot.value, inp.call.value, inp.put.value);
+    }
+    $("straddleNote").hidden = method !== "str";
+    if (method === "iv" && ivMove && stMove && ivMove.move > 0) {
+      var ratio = stMove.move / ivMove.move;
+      $("methodCmp").textContent = t(
+        "同一现价：IV 法 " + pd(ivMove.pct) + "（" + pm(ivMove.move) + "），跨式法 " + pd(stMove.pct) + "（" + pm(stMove.move) + "）。比值 " + ratio.toFixed(2) + "，接近 √(2/π) ≈ 0.80。",
+        "Same price: IV method " + pd(ivMove.pct) + " (" + pm(ivMove.move) + "), straddle " + pd(stMove.pct) + " (" + pm(stMove.move) + "). Ratio " + ratio.toFixed(2) + ", close to √(2/π) ≈ 0.80."
+      );
+    } else {
+      $("methodCmp").textContent = "";
+    }
+  }
+
+  function placePinned(el, pct, host, dot) {
+    var p = pct;
+    if (p < 0) p = 0;
+    if (p > 100) p = 100;
+    el.style.left = p + "%";
+    var hostW = host ? host.clientWidth : 0;
+    var w = el.offsetWidth;
+    if (!(hostW > 0) || !(w > 0)) {
+      el.style.transform = dot ? "translate(-50%, -50%)" : "translateX(-50%)";
+      return;
+    }
+    var center = (p / 100) * hostW;
+    var left = center - w / 2;
+    if (left < 0) left = 0;
+    if (left + w > hostW) left = hostW - w;
+    var shift = left - center;
+    el.style.transform = dot ? "translate(" + shift + "px, -50%)" : "translateX(" + shift + "px)";
+  }
+
+  function renderRange(inp) {
+    if (!pack) {
+      $("rangeBox").hidden = true;
+      $("rangeSrc").textContent = "";
+      $("rangeEmpty").textContent = t("先把上方的计算器填对，区间才会画出来。", "Fix the calculator above and the range will draw.");
+      return;
+    }
+    $("rangeBox").hidden = false;
+    $("rangeEmpty").textContent = "";
+    $("rangeSrc").textContent = pack.method === "str"
+      ? t("当前区间来自跨式法。", "This band uses the straddle method.")
+      : t("当前区间来自 IV 法。", "This band uses the IV method.");
+    var S = pack.S;
+    var m = pack.move;
+    var half = m > 0 ? m * 2.5 : Math.max(S * 0.02, 1);
+    var domLo = S - half;
+    var domHi = S + half;
+    function pos(price) {
+      var p = ((price - domLo) / (domHi - domLo)) * 100;
+      if (p < 0) p = 0;
+      if (p > 100) p = 100;
+      return p;
+    }
+    var p2l = pos(S - 2 * m);
+    var p2h = pos(S + 2 * m);
+    var p1l = pos(S - m);
+    var p1h = pos(S + m);
+    var ps = pos(S);
+    $("zone2").style.left = p2l + "%";
+    $("zone2").style.width = Math.max(0, p2h - p2l) + "%";
+    $("zone1").style.left = p1l + "%";
+    $("zone1").style.width = Math.max(0, p1h - p1l) + "%";
+    $("spotNeedle").style.left = ps + "%";
+    var low2 = S - 2 * m;
+    var high2 = S + 2 * m;
+    $("rangePrices").textContent = t(
+      "±1σ " + E.fmtUSD(pack.low) + " – " + E.fmtUSD(pack.high) + " · ±2σ " + E.fmtUSD(low2) + " – " + E.fmtUSD(high2),
+      "±1σ " + E.fmtUSD(pack.low) + " – " + E.fmtUSD(pack.high) + " · ±2σ " + E.fmtUSD(low2) + " – " + E.fmtUSD(high2)
+    );
+    function setTick(id, pct, name, price) {
+      var el = $(id);
+      el.textContent = "";
+      var nameEl = document.createElement("span");
+      nameEl.className = "tick-k";
+      nameEl.textContent = name;
+      var priceEl = document.createElement("b");
+      priceEl.textContent = E.fmtUSD(price);
+      el.appendChild(nameEl);
+      el.appendChild(priceEl);
+      placePinned(el, pct, $("rangeScale"), false);
+    }
+    setTick("tickM2", p2l, "−2σ", low2);
+    setTick("tickM1", p1l, "−1σ", pack.low);
+    setTick("tick0", ps, t("现价", "Spot"), S);
+    setTick("tickP1", p1h, "+1σ", pack.high);
+    setTick("tickP2", p2h, "+2σ", high2);
+
+    var gr = $("guessRange");
+    gr.min = String(domLo);
+    gr.max = String(domHi);
+    gr.step = String(m > 0 ? Math.max(m / 80, 0.01) : 0.01);
+    var g = inp.guess;
+    var guessPrice = null;
+    if (g.state === "ok" && g.value > 0) {
+      guessPrice = g.value;
+      setRange(gr, guessPrice);
+    }
+    var inside1 = guessPrice != null && guessPrice >= pack.low && guessPrice <= pack.high;
+    var inside2 = guessPrice != null && guessPrice >= low2 && guessPrice <= high2;
+    var pill = $("guessPill");
+    var dot = $("guessDot");
+    if (guessPrice == null) {
+      pill.hidden = true;
+      dot.hidden = true;
+      if (g.state === "empty") {
+        $("guessRead").textContent = t("填一个财报后的价格，看它落在区间内还是外。", "Enter a post-earnings price to see if it lands inside the band.");
+      } else if (g.state === "ok" && g.value <= 0) {
+        $("guessRead").textContent = t("猜测价格要大于 0。", "The guessed price has to be above 0.");
+      } else if (g.state === "partial") {
+        $("guessRead").textContent = t("猜测价格还没写完。", "Finish the guessed price.");
+      } else {
+        $("guessRead").textContent = t("猜测价格要写成数字。", "The guessed price has to be a number.");
+      }
+    } else {
+      pill.hidden = false;
+      dot.hidden = false;
+      pill.textContent = t("你 ", "You ") + E.fmtUSD(guessPrice);
+      pill.classList.toggle("is-out", !inside1);
+      dot.classList.toggle("is-out", !inside1);
+      var gp = pos(guessPrice);
+      placePinned(pill, gp, $("rangeStage"), false);
+      placePinned(dot, gp, $("rangeTrack"), true);
+      var where;
+      if (inside1) where = t("落在 ±1σ 区间内。", "lands inside the ±1σ band.");
+      else if (inside2) where = t("落在 ±1σ 之外，仍在 ±2σ 里。", "sits outside ±1σ and still inside ±2σ.");
+      else where = t("落在 ±2σ 之外。", "sits outside ±2σ.");
+      $("guessRead").textContent = t("你猜的 ", "Your guess of ") + E.fmtUSD(guessPrice) + " " + where;
+    }
+    $("rangeTrack").setAttribute("aria-label", t(
+      "价格区间，现价 " + E.fmtUSD(S) + "，±1σ " + E.fmtUSD(pack.low) + " 到 " + E.fmtUSD(pack.high),
+      "Price band, spot " + E.fmtUSD(S) + ", ±1σ " + E.fmtUSD(pack.low) + " to " + E.fmtUSD(pack.high)
+    ));
+  }
+
+  function renderCrush(inp) {
+    var moveEl = $("moveRange");
+    moveEl.classList.toggle("range-up", inp.move.state === "ok" && inp.move.value > 0);
+    moveEl.classList.toggle("range-down", inp.move.state === "ok" && inp.move.value < 0);
+    var word = $("moveWord");
+    word.className = "";
+    if (inp.move.state !== "ok") word.textContent = "";
+    else if (inp.move.value > 0) { word.textContent = t("上涨", "Up"); word.className = "is-up"; }
+    else if (inp.move.value < 0) { word.textContent = t("下跌", "Down"); word.className = "is-down"; }
+    else word.textContent = t("平盘", "Flat");
+
+    var daysAfter = null;
+    if (inp.days.state === "ok" && inp.days.value >= 0) daysAfter = Math.max(0, inp.days.value - 1);
+    if (daysAfter == null) {
+      $("daysFlow").textContent = "";
+    } else if (inp.days.value >= 1) {
+      $("daysFlow").textContent = t(
+        "财报前 " + trimNum(inp.days.value) + " 天 → 财报后 " + trimNum(daysAfter) + " 天（过 1 个日历日）。",
+        trimNum(inp.days.value) + " days before → " + trimNum(daysAfter) + " days after (one calendar day passes)."
+      );
+    } else {
+      $("daysFlow").textContent = t(
+        "剩余期限不足 1 天，财报后按 0 天、只留内在价值。",
+        "Less than a day is left, so after the print the model uses 0 days and intrinsic value only."
+      );
+    }
+
+    var afterMsg = null;
+    if (inp.after.state === "empty") afterMsg = t("请填写财报后 IV。", "Enter the IV after the print.");
+    else if (inp.after.state === "partial") afterMsg = t("财报后 IV 还没写完。", "Finish the IV after the print.");
+    else if (inp.after.state === "bad") afterMsg = t("财报后 IV 要写成数字。", "IV after the print has to be a number.");
+    else if (inp.after.state === "ok" && inp.iv.state === "ok" && (inp.after.value < 0 || inp.after.value > inp.iv.value)) {
+      afterMsg = t("财报后 IV 要在 0 和财报前 IV 之间。", "IV after has to sit between 0 and the IV before the print.");
+    } else if (inp.after.state === "ok" && inp.after.value < 0) {
+      afterMsg = t("财报后 IV 不能为负。", "IV after the print cannot be negative.");
+    }
+    var err = firstErr([
+      msgFor(inp.spot, "spot"),
+      msgFor(inp.iv, "iv"),
+      msgFor(inp.days, "days"),
+      afterMsg,
+      msgFor(inp.move, "move")
+    ]);
+    if (err || daysAfter == null) {
+      crushPack = null;
+      $("crushErr").textContent = err || t("这组输入算不出期权价格。", "These inputs do not price the option.");
+      clearCrush();
+      drawChart(null);
+      return;
+    }
+    var model = {
+      S: inp.spot.value,
+      ivBefore: inp.iv.value,
+      ivAfter: inp.after.value,
+      daysBefore: inp.days.value,
+      daysAfter: daysAfter,
+      movePct: inp.move.value
+    };
+    var r = E.ivCrush(model);
+    if (!r) {
+      crushPack = null;
+      $("crushErr").textContent = t("这组输入算不出期权价格。", "These inputs do not price the option.");
+      clearCrush();
+      drawChart(null);
+      return;
+    }
+    crushPack = { model: model, result: r };
+    $("crushErr").textContent = "";
+    var mult = $("perContract").checked ? 100 : 1;
+    var unit = mult === 100
+      ? t("按 1 张合约（×100 股）", "One contract (×100 shares)")
+      : t("按每股", "Per share");
+    $("callUnit").textContent = unit;
+    $("strUnit").textContent = unit;
+    paintMoney($("callBuy"), r.callBefore * mult);
+    paintMoney($("callAfter"), r.callAfter * mult);
+    paintPnl($("callPnl"), r.callPnl * mult, r.callPnlPct);
+    paintMoney($("strBuy"), r.strBefore * mult);
+    paintMoney($("strAfter"), r.strAfter * mult);
+    paintPnl($("strPnl"), r.strPnl * mult, r.strPnlPct);
+    $("crushSetup").textContent = t(
+      "这笔模拟：现价 " + E.fmtUSD(model.S) + "，行权价 " + E.fmtUSD(model.S) + "，IV " + trimPct(model.ivBefore) + " → " + trimPct(model.ivAfter) + "，到期 " + trimNum(model.daysBefore) + " → " + trimNum(model.daysAfter) + " 天。",
+      "This run: spot " + E.fmtUSD(model.S) + ", strike " + E.fmtUSD(model.S) + ", IV " + trimPct(model.ivBefore) + " → " + trimPct(model.ivAfter) + ", days " + trimNum(model.daysBefore) + " → " + trimNum(model.daysAfter) + "."
+    );
+    $("crushLine").textContent = sentence(model, r);
+    $("beLine").textContent = beSentence(model, r);
+    $("chartCap").textContent = mult === 100
+      ? t("纵轴：每张合约的 call 盈亏（×100）。", "Vertical axis: call P&L per contract (×100).")
+      : t("纵轴：每股 call 盈亏。", "Vertical axis: call P&L per share.");
+    drawChart({
+      S: model.S,
+      entry: r.callBefore,
+      ivBefore: model.ivBefore,
+      ivAfter: model.ivAfter,
+      daysAfter: model.daysAfter,
+      movePct: model.movePct,
+      mult: mult
+    });
+  }
+
+  function svgEl(name, attrs) {
+    var node = document.createElementNS("http://www.w3.org/2000/svg", name);
+    Object.keys(attrs).forEach(function (k) { node.setAttribute(k, String(attrs[k])); });
+    return node;
+  }
+
+  function seriesPoints(S, entry, iv, daysAfter, mult) {
+    var pts = [];
+    var m;
+    for (m = -15; m <= 15; m += 1) {
+      var spot = S * (1 + m / 100);
+      var px = E.bsPrice("call", spot, S, iv, daysAfter);
+      if (px == null) continue;
+      pts.push({ m: m, pnl: (px - entry) * mult });
+    }
+    return pts;
+  }
+
+  function drawChart(spec) {
+    var svg = $("pnlSvg");
+    var w = svg.clientWidth || svg.parentElement.clientWidth || 320;
+    if (!(w > 40)) w = 320;
+    var h = 230;
+    svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    if (!spec) {
+      var msg = svgEl("text", { x: 16, y: 36, fill: "#7d848c", "font-size": 14 });
+      msg.textContent = t("先把模拟器的输入填对，图才会画出来。", "Fix the simulator inputs and the chart will draw.");
+      svg.appendChild(msg);
+      svg.setAttribute("aria-label", msg.textContent);
+      return;
+    }
+    var flat = seriesPoints(spec.S, spec.entry, spec.ivBefore, spec.daysAfter, spec.mult);
+    var crush = seriesPoints(spec.S, spec.entry, spec.ivAfter, spec.daysAfter, spec.mult);
+    var dataMin = Infinity;
+    var dataMax = -Infinity;
+    function eat(pts) {
+      pts.forEach(function (p) {
+        if (p.pnl < dataMin) dataMin = p.pnl;
+        if (p.pnl > dataMax) dataMax = p.pnl;
+      });
+    }
+    eat(flat);
+    eat(crush);
+    var curPx = E.bsPrice("call", spec.S * (1 + spec.movePct / 100), spec.S, spec.ivAfter, spec.daysAfter);
+    var curPnl = curPx == null ? null : (curPx - spec.entry) * spec.mult;
+    if (curPnl != null) {
+      if (curPnl < dataMin) dataMin = curPnl;
+      if (curPnl > dataMax) dataMax = curPnl;
+    }
+    if (!isFinite(dataMin) || !isFinite(dataMax)) { dataMin = -1; dataMax = 1; }
+    if (dataMax - dataMin < 1e-6) { dataMin -= 1; dataMax += 1; }
+    var span = dataMax - dataMin;
+    var padY = span * 0.08;
+    var min = dataMin - padY;
+    var max = dataMax + padY;
+    var left = 78;
+    var right = w - 14;
+    var top = 18;
+    var bottom = h - 28;
+    function xOf(m) { return left + ((m + 15) / 30) * (right - left); }
+    function yOf(v) { return top + ((max - v) / (max - min)) * (bottom - top); }
+    svg.appendChild(svgEl("rect", { x: 0, y: 0, width: w, height: h, fill: "#07090c" }));
+    var grid = [-15, -10, -5, 0, 5, 10, 15];
+    if (w < 460) grid = [-15, 0, 15];
+    grid.forEach(function (g) {
+      var x = xOf(g);
+      svg.appendChild(svgEl("line", { x1: x, y1: top, x2: x, y2: bottom, stroke: "rgba(237,239,241,0.08)" }));
+    });
+    if (dataMin < 0 && dataMax > 0) {
+      var y0 = yOf(0);
+      svg.appendChild(svgEl("line", { x1: left, y1: y0, x2: right, y2: y0, stroke: "rgba(237,239,241,0.35)" }));
+    }
+    var crushByM = {};
+    crush.forEach(function (p) { crushByM[p.m] = p.pnl; });
+    var bandTop = [];
+    var bandBot = [];
+    flat.forEach(function (p) {
+      if (crushByM[p.m] == null) return;
+      bandTop.push(p);
+      bandBot.push({ m: p.m, pnl: crushByM[p.m] });
+    });
+    if (bandTop.length >= 2) {
+      var dBand = bandTop.map(function (p, i) {
+        return (i ? "L" : "M") + xOf(p.m).toFixed(2) + " " + yOf(p.pnl).toFixed(2);
+      }).join(" ");
+      var bi;
+      for (bi = bandBot.length - 1; bi >= 0; bi--) {
+        dBand += "L" + xOf(bandBot[bi].m).toFixed(2) + " " + yOf(bandBot[bi].pnl).toFixed(2);
+      }
+      dBand += "Z";
+      svg.appendChild(svgEl("path", { d: dBand, fill: "rgba(129,140,248,0.38)", stroke: "none" }));
+    }
+    function poly(pts, color) {
+      if (pts.length < 2) return;
+      var d = pts.map(function (p, i) {
+        return (i ? "L" : "M") + xOf(p.m).toFixed(2) + " " + yOf(p.pnl).toFixed(2);
+      }).join(" ");
+      svg.appendChild(svgEl("path", {
+        d: d, fill: "none", stroke: color, "stroke-width": 2.4, "stroke-linejoin": "round", "stroke-linecap": "round"
+      }));
+    }
+    poly(flat, "#fbbf24");
+    poly(crush, "#818cf8");
+    if (spec.movePct >= -15 && spec.movePct <= 15) {
+      var cx = xOf(spec.movePct);
+      svg.appendChild(svgEl("line", { x1: cx, y1: top, x2: cx, y2: bottom, stroke: "#edeff1", "stroke-dasharray": "3 4" }));
+      if (curPnl != null) {
+        svg.appendChild(svgEl("circle", { cx: cx, cy: yOf(curPnl), r: 4, fill: "#818cf8", stroke: "#edeff1" }));
+      }
+    }
+    function yLabel(v, y) {
+      if (y < top - 2 || y > bottom + 2) return;
+      var lab = svgEl("text", { x: left - 8, y: y + 4, fill: "#7d848c", "font-size": 11, "text-anchor": "end" });
+      lab.textContent = E.fmtUSD(v);
+      svg.appendChild(lab);
+    }
+    var labeledY = [];
+    function tryLabel(v) {
+      var y = yOf(v);
+      var i;
+      for (i = 0; i < labeledY.length; i++) {
+        if (Math.abs(labeledY[i] - y) < 16) return;
+      }
+      yLabel(v, y);
+      labeledY.push(y);
+    }
+    tryLabel(dataMax);
+    tryLabel(dataMin);
+    if (dataMin < 0 && dataMax > 0) tryLabel(0);
+    grid.forEach(function (g) {
+      var lab = svgEl("text", { x: xOf(g), y: h - 8, fill: "#7d848c", "font-size": 11, "text-anchor": "middle" });
+      lab.textContent = E.fmtPct(g, { sign: true, digits: 0 });
+      svg.appendChild(lab);
+    });
+    if (bandTop.length >= 2) {
+      function pickGap(limit) {
+        var i;
+        var localI = -1;
+        var localGap = 0;
+        for (i = 0; i < bandTop.length; i++) {
+          if (limit != null && Math.abs(bandTop[i].m) > limit) continue;
+          var gap = Math.abs(bandTop[i].pnl - bandBot[i].pnl);
+          if (gap > localGap) { localGap = gap; localI = i; }
+        }
+        return { i: localI, gap: localGap };
+      }
+      var picked = pickGap(6);
+      if (!(picked.gap >= 0.05)) picked = pickGap(null);
+      var bestI = picked.i;
+      var bestGap = picked.gap;
+      if (bestI >= 0 && bestGap >= 0.05) {
+        var label = t("IV crush 蒸发的价值", "Value lost to IV crush");
+        var fs = w < 480 ? 11 : 12;
+        var yHi = Math.min(yOf(bandTop[bestI].pnl), yOf(bandBot[bestI].pnl));
+        var yLo = Math.max(yOf(bandTop[bestI].pnl), yOf(bandBot[bestI].pnl));
+        var ty = (yHi + yLo) / 2;
+        if (yLo - yHi < fs + 8) {
+          ty = yHi - fs;
+          if (ty < top + fs) ty = Math.min(bottom - 4, yLo + fs);
+        }
+        var tx = xOf(bandTop[bestI].m);
+        if (Math.abs(bandTop[bestI].m - spec.movePct) < 5) {
+          var alt = bandTop[bestI].m <= spec.movePct ? bandTop[bestI].m - 8 : bandTop[bestI].m + 8;
+          if (alt < -12) alt = bandTop[bestI].m + 8;
+          if (alt > 12) alt = bandTop[bestI].m - 8;
+          tx = xOf(alt);
+        }
+        var text = svgEl("text", {
+          x: tx,
+          y: ty,
+          fill: "#e0e7ff",
+          "font-size": fs,
+          "text-anchor": "middle",
+          "dominant-baseline": "middle"
+        });
+        text.textContent = label;
+        svg.appendChild(text);
+        try {
+          var bb = text.getBBox();
+          var dx = 0;
+          if (bb.x < left + 2) dx = left + 2 - bb.x;
+          if (bb.x + bb.width > right - 2) dx = right - 2 - (bb.x + bb.width);
+          if (dx) text.setAttribute("x", (tx + dx).toFixed(2));
+          bb = text.getBBox();
+          var bg = svgEl("rect", {
+            x: (bb.x - 5).toFixed(2),
+            y: (bb.y - 3).toFixed(2),
+            width: (bb.width + 10).toFixed(2),
+            height: (bb.height + 6).toFixed(2),
+            rx: 4,
+            fill: "#07090c",
+            "fill-opacity": "0.82",
+            stroke: "rgba(129,140,248,0.55)"
+          });
+          svg.insertBefore(bg, text);
+        } catch (e) {}
+      }
+    }
+    svg.setAttribute("aria-label", t(
+      "call 盈亏曲线。黄线是 IV 不变，靛线是 IV 坍塌，中间色块是 IV crush 蒸发的价值。横轴财报后股价变动，纵轴盈亏。当前 " + E.fmtPct(spec.movePct, { sign: true, digits: 2 }) + "。",
+      "Call P&L curves. Amber is IV unchanged, indigo is after the crush, and the shaded band is value lost to IV crush. Horizontal axis is the post-earnings move, vertical axis is P&L. Now " + E.fmtPct(spec.movePct, { sign: true, digits: 2 }) + "."
+    ));
+  }
+
+  function renderRules() {
+    if (!pack) {
+      $("ruleLive1").textContent = t("先把计算器填完整，这里会带上你的 ±%。", "Finish the calculator and this line will carry your ±%.");
+    } else {
+      $("ruleLive1").textContent = t(
+        "按你现在的输入，预期波动是 " + pd(pack.pct) + "（" + pm(pack.move) + "）。你的目标价要落在 " + E.fmtUSD(pack.low) + " 到 " + E.fmtUSD(pack.high) + " 的外面，才算和市场定价不一致。",
+        "On your inputs the expected move is " + pd(pack.pct) + " (" + pm(pack.move) + "). Your target has to land outside " + E.fmtUSD(pack.low) + " to " + E.fmtUSD(pack.high) + " before it disagrees with the market's price."
+      );
+    }
+    if (!crushPack) {
+      $("ruleLive2").textContent = t("先把模拟器填完整，这里会带上这笔 call 的盈亏。", "Finish the simulator and this line will carry the call's P&L.");
+      $("ruleLive3").textContent = t("先把模拟器填完整，这里会带上权利金金额。", "Finish the simulator and this line will carry the premium.");
+      return;
+    }
+    var r = crushPack.result;
+    var model = crushPack.model;
+    var pnlWord = r.callPnl < -0.005 ? t("亏损", "a loss of") : r.callPnl > 0.005 ? t("盈利", "a gain of") : t("大致打平", "about flat at");
+    $("ruleLive2").textContent = t(
+      "用你现在的滑杆：股价 " + E.fmtPct(model.movePct, { sign: true, digits: 2 }) + "，这张 call " + pnlWord + " " + E.fmtUSD(r.callPnl) + "（" + (r.callPnlPct == null ? "—" : E.fmtPct(r.callPnlPct, { sign: true, digits: 2 })) + "）。回本大约要到 " + E.fmtPct(r.breakevenCallPct, { sign: true, digits: 2 }) + "。",
+      "On your sliders: stock " + E.fmtPct(model.movePct, { sign: true, digits: 2 }) + ", this call is " + pnlWord + " " + E.fmtUSD(r.callPnl) + " (" + (r.callPnlPct == null ? "—" : E.fmtPct(r.callPnlPct, { sign: true, digits: 2 })) + "). Breakeven is about " + E.fmtPct(r.breakevenCallPct, { sign: true, digits: 2 }) + "."
+    );
+    $("ruleLive3").textContent = t(
+      "按现在的报价，每股权利金 " + E.fmtUSD(r.callBefore) + "，1 张（×100）是 " + E.fmtUSD(r.callBefore * 100) + "。先问自己这笔亏光能不能睡。",
+      "At this quote the premium is " + E.fmtUSD(r.callBefore) + " per share, or " + E.fmtUSD(r.callBefore * 100) + " for one contract (×100). Ask whether you can sleep if that sum goes to zero."
+    );
+  }
+
+  function rowEls(i) {
+    return { date: $("hDate" + i), implied: $("hImp" + i), actual: $("hAct" + i), tag: $("hTag" + i) };
+  }
+
+  function readRows() {
+    var rows = [];
+    var i;
+    for (i = 0; i < 4; i++) {
+      var el = rowEls(i);
+      rows.push({ date: el.date.value, implied: el.implied.value, actual: el.actual.value });
+    }
+    return rows;
+  }
+
+  function writeRows(rows) {
+    var i;
+    for (i = 0; i < 4; i++) {
+      var src = rows[i] || { date: "", implied: "", actual: "" };
+      var el = rowEls(i);
+      el.date.value = src.date || "";
+      el.implied.value = src.implied == null ? "" : String(src.implied);
+      el.actual.value = src.actual == null ? "" : String(src.actual);
+    }
+  }
+
+  function sampleRows() {
+    return E.DATA.sampleHistory.map(function (r) {
+      return { date: r.date, implied: String(r.impliedPct), actual: String(r.actualPct) };
+    });
+  }
+
+  function saveHistory() {
+    try {
+      localStorage.setItem(E.DATA.historyKey, JSON.stringify({ rows: readRows() }));
+    } catch (e) {}
+  }
+
+  function loadHistory() {
+    var raw = null;
+    try { raw = localStorage.getItem(E.DATA.historyKey); } catch (e) {}
+    if (!raw) { writeRows(sampleRows()); return; }
+    try {
+      var data = JSON.parse(raw);
+      if (!data || !Array.isArray(data.rows)) throw new Error("bad");
+      var rows = [];
+      var i;
+      for (i = 0; i < 4; i++) {
+        var r = data.rows[i] || {};
+        rows.push({
+          date: typeof r.date === "string" ? r.date : "",
+          implied: r.implied == null ? "" : String(r.implied),
+          actual: r.actual == null ? "" : String(r.actual)
+        });
+      }
+      writeRows(rows);
+    } catch (e2) {
+      writeRows(sampleRows());
+    }
+  }
+
+  function renderHistory() {
+    var engineRows = [];
+    var bad = false;
+    var negImplied = false;
+    var i;
+    for (i = 0; i < 4; i++) {
+      var el = rowEls(i);
+      el.date.setAttribute("aria-label", t("第 " + (i + 1) + " 行财报日期", "Row " + (i + 1) + " earnings date"));
+      el.implied.setAttribute("aria-label", t("第 " + (i + 1) + " 行隐含预期波动", "Row " + (i + 1) + " implied move"));
+      el.actual.setAttribute("aria-label", t("第 " + (i + 1) + " 行实际涨跌幅", "Row " + (i + 1) + " actual move"));
+      var imp = parseNum(el.implied.value);
+      var act = parseNum(el.actual.value);
+      var tag = el.tag;
+      tag.classList.remove("tag-over", "tag-under", "tag-empty");
+      var usable = imp.state === "ok" && act.state === "ok";
+      if (!usable) {
+        tag.textContent = "—";
+        tag.classList.add("tag-empty");
+        if (imp.state === "bad" || act.state === "bad") bad = true;
+        engineRows.push({ impliedPct: null, actualPct: null });
+        continue;
+      }
+      if (imp.value < 0) negImplied = true;
+      var kind = E.classifyRow(imp.value, act.value);
+      engineRows.push({ impliedPct: imp.value, actualPct: act.value });
+      if (kind === "over") {
+        tag.textContent = t("超预期波动", "Bigger than implied");
+        tag.classList.add("tag-over");
+      } else if (kind === "under") {
+        tag.textContent = t("不及预期", "Inside the band");
+        tag.classList.add("tag-under");
+      } else {
+        tag.textContent = "—";
+        tag.classList.add("tag-empty");
+      }
+    }
+    var sum = E.summarizeHistory(engineRows);
+    var extra = "";
+    if (sum && sum.blank) {
+      extra = t("，" + sum.blank + " 行未计入", ", " + sum.blank + " not counted");
+    }
+    $("histSum").textContent = sum
+      ? t(sum.count + " 次中 " + sum.over + " 次超预期波动" + extra, sum.over + " of " + sum.count + " exceeded the implied move" + extra)
+      : "";
+    if (bad) {
+      $("histErr").textContent = t("有格子不是数字，这一行先记为 —。", "A cell is not a number. That row stays —.");
+    } else if (negImplied) {
+      $("histErr").textContent = t("隐含预期波动一般填正数。比较仍按你填的原数。", "The implied move is usually a positive number. The comparison still uses what you typed.");
+    } else {
+      $("histErr").textContent = "";
+    }
+  }
+
+  function shareText() {
+    if (!pack) {
+      return t(
+        "财报夜预期波动还没算出来。先填现价。https://build-100.com/043/",
+        "The earnings expected move is not ready yet. Enter a price first. https://build-100.com/043/"
+      );
+    }
+    var name = pack.method === "str" ? t("跨式法", "Straddle") : t("IV 法", "IV method");
+    return t(
+      "财报夜预期波动 " + pm(pack.move) + "（" + pd(pack.pct) + "），区间 " + E.fmtUSD(pack.low) + " – " + E.fmtUSD(pack.high) + "。" + name + "。方向看对，也可能亏在 IV crush。https://build-100.com/043/",
+      "Earnings expected move " + pm(pack.move) + " (" + pd(pack.pct) + "), band " + E.fmtUSD(pack.low) + " – " + E.fmtUSD(pack.high) + ". " + name + ". Right on direction can still lose to IV crush. https://build-100.com/043/"
+    );
+  }
+
+  function fontStack() {
+    return '"Noto Sans CJK SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+  }
+
+  function cssColor(name, fallback) {
+    var v = "";
+    try { v = getComputedStyle(document.documentElement).getPropertyValue(name).trim(); } catch (e) {}
+    return v || fallback;
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    var rr = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + rr, y);
+    ctx.arcTo(x + w, y, x + w, y + h, rr);
+    ctx.arcTo(x + w, y + h, x, y + h, rr);
+    ctx.arcTo(x, y + h, x, y, rr);
+    ctx.arcTo(x, y, x + w, y, rr);
+    ctx.closePath();
+  }
+
+  function fitSize(ctx, text, maxW, size, weight) {
+    var s = size;
+    while (s > 28) {
+      ctx.font = weight + " " + s + "px " + fontStack();
+      if (ctx.measureText(text).width <= maxW) return s;
+      s -= 4;
+    }
+    ctx.font = weight + " " + s + "px " + fontStack();
+    return s;
+  }
+
+  function drawShare() {
+    var canvas = $("shareCanvas");
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    var W = 1200;
+    var H = 630;
+    canvas.width = W;
+    canvas.height = H;
+    var accent = cssColor("--accent", "#818cf8");
+    var up = cssColor("--up", "#f87171");
+    var down = cssColor("--down", "#4ade80");
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.045)";
+    var gx;
+    var gy;
+    for (gx = 18; gx < W; gx += 36) {
+      for (gy = 18; gy < H; gy += 36) ctx.fillRect(gx, gy, 1.4, 1.4);
+    }
+    ctx.fillStyle = accent;
+    ctx.fillRect(0, 0, 10, H);
+    ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
+    ctx.fillStyle = accent;
+    ctx.font = "700 26px " + fontStack();
+    var brand = "EARN-043";
+    var brandW = ctx.measureText(brand).width;
+    ctx.fillText(brand, 56, 72);
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "400 26px " + fontStack();
+    ctx.fillText(t(" · 财报夜预期波动", " · Earnings Expected Move"), 56 + brandW, 72);
+
+    var sub = t("先把计算器填完整。", "Finish the calculator first.");
+    var pctLine = "—";
+    var usdLine = "";
+    if (pack) {
+      pctLine = pd(pack.pct);
+      usdLine = pm(pack.move);
+      if (pack.method === "str") {
+        sub = t("跨式法 · 现价 ", "Straddle · spot ") + E.fmtUSD(pack.S) + " · call " + E.fmtUSD(pack.call) + " + put " + E.fmtUSD(pack.put);
+      } else {
+        sub = t("IV 法 · 现价 ", "IV method · spot ") + E.fmtUSD(pack.S) + " · IV " + trimPct(pack.iv) + t(" · ", " · ") + trimNum(pack.days) + t(" 天", " days");
+      }
+    }
+    ctx.fillStyle = "#9aa1a8";
+    ctx.font = "400 24px " + fontStack();
+    ctx.fillText(sub, 56, 124);
+
+    ctx.fillStyle = accent;
+    fitSize(ctx, pctLine, 1080, 132, "700");
+    ctx.fillText(pctLine, 56, 280);
+    ctx.fillStyle = "#edeff1";
+    fitSize(ctx, usdLine || "—", 1080, 54, "700");
+    ctx.fillText(usdLine || "—", 56, 350);
+
+    var lowTxt = pack ? E.fmtUSD(pack.low) : "—";
+    var spotTxt = pack ? E.fmtUSD(pack.S) : "—";
+    var highTxt = pack ? E.fmtUSD(pack.high) : "—";
+    ctx.font = "400 20px " + fontStack();
+    ctx.fillStyle = down;
+    ctx.fillText(t("下沿 · 跌", "Low · down"), 56, 430);
+    ctx.fillStyle = "#9aa1a8";
+    ctx.fillText(t("现价", "Spot"), 460, 430);
+    ctx.fillStyle = up;
+    ctx.fillText(t("上沿 · 涨", "High · up"), 820, 430);
+    ctx.font = "700 36px " + fontStack();
+    ctx.fillStyle = down;
+    ctx.fillText(lowTxt, 56, 478);
+    ctx.fillStyle = "#edeff1";
+    ctx.fillText(spotTxt, 460, 478);
+    ctx.fillStyle = up;
+    ctx.fillText(highTxt, 820, 478);
+
+    if (pack && pack.move > 0) {
+      var x0 = 56;
+      var barW = 1088;
+      var yb = 520;
+      roundRect(ctx, x0, yb, barW, 16, 8);
+      ctx.fillStyle = "rgba(129,140,248,0.22)";
+      ctx.fill();
+      var innerL = x0 + barW * (0.5 - 1 / 5);
+      var innerW = barW * (2 / 5);
+      roundRect(ctx, innerL, yb, innerW, 16, 8);
+      ctx.fillStyle = "rgba(129,140,248,0.85)";
+      ctx.fill();
+      ctx.fillStyle = "#edeff1";
+      ctx.fillRect(x0 + barW / 2 - 1, yb - 4, 2, 24);
+    }
+
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "400 22px " + fontStack();
+    ctx.textAlign = "left";
+    ctx.fillText("build-100.com/043", 56, 590);
+    ctx.textAlign = "right";
+    ctx.fillText(t("教育工具，不是投资建议", "Educational, not advice"), 1144, 590);
+    $("shareWrap").hidden = false;
+    shareOpen = true;
+  }
+
+  function renderAll() {
+    if (rendering) return;
+    rendering = true;
+    try {
+      syncAfterBounds();
+      var inp = readInputs();
+      $("methodTabs").setAttribute("aria-label", t("预期波动算法", "Expected move method"));
+      renderCalc(inp);
+      renderRange(inp);
+      renderCrush(inp);
+      renderRules();
+      renderHistory();
+      if (shareOpen) drawShare();
+      lastW = $("chartBox").clientWidth;
+    } finally {
+      rendering = false;
+    }
+  }
+
+  function setMethod(next) {
+    method = next === "str" ? "str" : "iv";
+    var iv = method === "iv";
+    $("tabIv").setAttribute("aria-selected", iv ? "true" : "false");
+    $("tabStr").setAttribute("aria-selected", iv ? "false" : "true");
+    $("panelIv").hidden = !iv;
+    $("panelStr").hidden = iv;
+    renderAll();
+  }
+
+  function bootValues() {
+    var D = E.DATA;
+    $("spotInput").value = String(D.close);
+    $("ivInput").value = String(D.defaultIv);
+    $("ivBeforeInput").value = String(D.defaultIv);
+    $("daysInput").value = String(D.defaultDays);
+    $("daysCrushInput").value = String(D.defaultDays);
+    $("callInput").value = String(D.defaultCall);
+    $("putInput").value = String(D.defaultPut);
+    $("ivAfterInput").value = String(D.defaultIvAfter);
+    $("moveInput").value = String(D.defaultMovePct);
+    $("guessInput").value = String(D.close);
+    $("ivRange").value = String(D.defaultIv);
+    $("ivBeforeRange").value = String(D.defaultIv);
+    $("daysRange").value = String(D.defaultDays);
+    $("daysCrushRange").value = String(D.defaultDays);
+    $("ivAfterRange").max = String(D.defaultIv);
+    $("ivAfterRange").value = String(D.defaultIvAfter);
+    $("moveRange").value = String(D.defaultMovePct);
+    $("guessRange").value = String(D.close);
+  }
+
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+
+  function renderClock() {
+    var target = Date.parse(E.DATA.earningsAt);
+    var diff = target - Date.now();
+    if (!isFinite(target) || diff <= 0) {
+      $("countLive").hidden = true;
+      $("countDone").hidden = false;
+      return;
+    }
+    $("countLive").hidden = false;
+    $("countDone").hidden = true;
+    var sec = Math.floor(diff / 1000);
+    $("cdD").textContent = String(Math.floor(sec / 86400));
+    $("cdH").textContent = pad(Math.floor((sec % 86400) / 3600));
+    $("cdM").textContent = pad(Math.floor((sec % 3600) / 60));
+    $("cdS").textContent = pad(sec % 60);
+  }
+
+  function markCopied() {
+    var btn = $("copyBtn");
+    btn.classList.add("copied");
+    btn.textContent = t("已复制", "Copied");
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () {
+      btn.classList.remove("copied");
+      btn.innerHTML = lang === "en" ? btn.dataset.en : btn.dataset.zh;
+    }, 1600);
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  stampZh();
+  bootValues();
+  loadHistory();
+
+  $("langBtn").addEventListener("click", function () { applyLang(lang === "en" ? "zh" : "en"); });
+  $("tabIv").addEventListener("click", function () { setMethod("iv"); });
+  $("tabStr").addEventListener("click", function () { setMethod("str"); });
+  $("spotInput").addEventListener("input", function () {
+    if (!guessTouched) $("guessInput").value = $("spotInput").value;
+    renderAll();
+  });
+  ["callInput", "putInput"].forEach(function (id) {
+    $(id).addEventListener("input", renderAll);
+  });
+  bindNumberGroup(["ivInput", "ivBeforeInput"], ["ivRange", "ivBeforeRange"]);
+  bindNumberGroup(["daysInput", "daysCrushInput"], ["daysRange", "daysCrushRange"]);
+  bindNumberGroup(["ivAfterInput"], ["ivAfterRange"]);
+  bindNumberGroup(["moveInput"], ["moveRange"]);
+  $("perContract").addEventListener("change", renderAll);
+  $("guessInput").addEventListener("input", function () { guessTouched = true; renderAll(); });
+  $("guessRange").addEventListener("input", function () {
+    guessTouched = true;
+    $("guessInput").value = trimNum($("guessRange").value);
+    renderAll();
+  });
+  $("guessReset").addEventListener("click", function () {
+    guessTouched = false;
+    $("guessInput").value = $("spotInput").value;
+    renderAll();
+  });
+
+  var hi;
+  for (hi = 0; hi < 4; hi++) {
+    ["hDate", "hImp", "hAct"].forEach(function (prefix) {
+      $(prefix + hi).addEventListener("input", function () {
+        saveHistory();
+        renderHistory();
+      });
+    });
+  }
+  $("restoreBtn").addEventListener("click", function () {
+    writeRows(sampleRows());
+    saveHistory();
+    renderHistory();
+  });
+
+  $("copyBtn").addEventListener("click", function () {
+    var text = shareText();
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      markCopied();
+    }
+    var clip = (navigator.clipboard && navigator.clipboard.writeText)
+      ? navigator.clipboard.writeText(text)
+      : Promise.reject();
+    var timed = new Promise(function (_, reject) {
+      setTimeout(function () { reject(new Error("copy-timeout")); }, 400);
+    });
+    Promise.race([clip, timed]).then(finish, function () {
+      fallbackCopy(text);
+      finish();
+    });
+  });
+  $("shareImgBtn").addEventListener("click", drawShare);
+
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(function () {
+      var w = $("chartBox").clientWidth;
+      if (w === lastW) return;
+      renderAll();
+    });
+    ro.observe($("chartBox"));
+    ro.observe($("rangeStage"));
+  } else {
+    window.addEventListener("resize", renderAll);
+  }
+
+  if (lang === "en") applyLang("en");
+  else renderAll();
+  renderClock();
+  setInterval(renderClock, 1000);
+})();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>
