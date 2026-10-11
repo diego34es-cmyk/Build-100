@@ -1,0 +1,1211 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WMARK-044 · 水印自查：你的 AI 文字被“盖章”了吗</title>
+<meta name="description" content="OpenAI 于 2026-10-05 宣布：为遵守欧盟《AI 法案》透明度条款（2026-08-02 生效），未来几周内将在欧盟区给符合条件的 ChatGPT 与 Codex 文本加上隐形统计水印 textGrain。30 秒自查你会不会被盖章。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/044/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E044%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="WMARK-044 · 水印自查：你的 AI 文字被“盖章”了吗">
+<meta property="og:description" content="OpenAI 于 2026-10-05 宣布：为遵守欧盟《AI 法案》透明度条款（2026-08-02 生效），未来几周内将在欧盟区给符合条件的 ChatGPT 与 Codex 文本加上隐形统计水印 textGrain。30 秒自查你会不会被盖章。">
+<meta property="og:url" content="https://build-100.com/044/">
+<meta property="og:image" content="https://build-100.com/044/og-044.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="WMARK-044 · 水印自查：你的 AI 文字被“盖章”了吗">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WMARK-044 · 水印自查：你的 AI 文字被“盖章”了吗">
+<meta name="twitter:description" content="On 2026-10-05 OpenAI said that in the coming weeks, eligible ChatGPT and Codex text in the EU will carry an invisible statistical watermark called textGrain, to meet the EU AI Act transparency rules in force since 2026-08-02. Check in 30 seconds whether your AI text will be stamped.">
+<meta name="twitter:image" content="https://build-100.com/044/og-044.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #f472b6;
+    --accent-glow: rgba(244,114,182,0.35);
+    --warm: #fbbf24;
+    --hot: #f87171;
+    --cool: var(--accent);
+    --up: #f87171;
+    --down: #4ade80;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+    --you: var(--warm);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font-family: inherit; color: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  [hidden] { display: none !important; }
+  h1, h2, h3, p, td, th, li, label, .stat-k, .lede, .field-title, .choice, .fact-card, .person-card, .result-card, .quiz-opt {
+    overflow-wrap: break-word;
+  }
+  img, canvas, svg, input, button { max-width: 100%; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; min-width: 0; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; text-align: center; flex: none; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+    flex: none;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 48px); position: relative; }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; letter-spacing: 0.04em; line-height: 1.45; text-wrap: balance; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; margin-bottom: 18px;
+  }
+  .hero p.lede { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); }
+  .hero p.lede strong { color: var(--ink); font-weight: 600; }
+
+  .stat-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 16px 0 8px; }
+  .stat {
+    position: relative; min-width: 0;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: linear-gradient(180deg, rgba(237,239,241,0.035), rgba(237,239,241,0.015));
+    padding: 14px 12px 12px 14px; overflow: hidden;
+  }
+  .stat::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .stat-cool::before { background: var(--accent); box-shadow: 0 0 16px var(--accent-glow); }
+  .stat-ink::before { background: var(--ink); }
+  .stat-down::before { background: var(--down); box-shadow: 0 0 16px rgba(74,222,128,0.35); }
+  .stat-num {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(1.35rem, 6.2vw, 2.4rem); letter-spacing: -0.04em; line-height: 1;
+  }
+  .stat-cool .stat-num { color: var(--accent); }
+  .stat-ink .stat-num { color: var(--ink); }
+  .stat-down .stat-num { color: var(--down); }
+  .stat-num.stat-fit {
+    font-size: clamp(1.45rem, 5.6vw, 2.05rem);
+    letter-spacing: -0.05em;
+    line-height: 1.05;
+  }
+  html[lang="en"] .stat-num.stat-fit {
+    font-size: clamp(0.95rem, 2.4vw, 1.15rem);
+    letter-spacing: -0.045em;
+  }
+  .stat-k { margin-top: 6px; color: var(--muted); font-size: clamp(0.75rem, 2.5vw, 0.9rem); line-height: 1.35; }
+
+  .cta {
+    display: inline-block; margin-top: 18px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--accent); border-radius: 4px;
+    background: var(--accent); color: var(--bg); cursor: pointer; transition: all .2s;
+    min-height: 44px; line-height: 1.4;
+  }
+  .cta:hover { box-shadow: 0 0 24px var(--accent-glow); }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .q-block { margin-top: 16px; }
+  .q-label { font-weight: 700; margin-bottom: 8px; }
+  .choices { display: grid; gap: 8px; align-items: stretch; }
+  .choice {
+    display: flex; flex-direction: column; justify-content: center; gap: 2px;
+    width: 100%; height: 100%; min-height: 48px; text-align: left; cursor: pointer;
+    padding: 12px 14px; border-radius: 12px;
+    border: 1px solid var(--line-strong); background: var(--bg-raise);
+    color: var(--ink); transition: border-color .2s, background .2s, color .2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .choice-title { font-weight: 700; line-height: 1.3; }
+  .choice-sub { color: var(--muted); font-size: 0.82rem; font-family: var(--mono); letter-spacing: 0.04em; text-transform: none; }
+  .choice[aria-pressed="true"] {
+    border-color: var(--accent); background: var(--accent); color: var(--bg);
+  }
+  .choice[aria-pressed="true"] .choice-sub { color: rgba(6, 7, 9, 0.72); }
+
+  .note { color: var(--muted); font-size: 0.9rem; margin-top: 12px; }
+  .illus { color: var(--faint); font-size: 0.8rem; margin-top: 10px; }
+  .dyn:empty { display: none; }
+
+  .result-card {
+    margin-top: 18px; border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); padding: 18px 16px 16px; min-width: 0;
+  }
+  .result-card.is-will { border-color: var(--accent); box-shadow: 0 0 28px var(--accent-glow); }
+  .result-card.is-wont { border-color: var(--live); }
+  .result-card.is-depends { border-color: var(--warm); }
+  .result-top { display: flex; gap: 12px; align-items: flex-start; }
+  .result-icon {
+    flex: none; width: 44px; height: 44px; border-radius: 50%;
+    display: grid; place-items: center; border: 1px solid var(--line-strong);
+  }
+  .is-will .result-icon { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .is-wont .result-icon { background: var(--live); color: var(--bg); border-color: var(--live); }
+  .is-depends .result-icon { background: var(--warm); color: var(--bg); border-color: var(--warm); }
+  .result-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .is-will .result-kicker { color: var(--accent); }
+  .is-wont .result-kicker { color: var(--live); }
+  .is-depends .result-kicker { color: var(--warm); }
+  .result-title { font-size: clamp(1.25rem, 3vw, 1.7rem); font-weight: 700; line-height: 1.2; margin-top: 2px; }
+  .result-path { color: var(--muted); font-size: 0.86rem; margin-top: 8px; }
+  .result-body { margin-top: 10px; color: var(--ink); }
+  .result-meaning {
+    margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 0.92rem;
+  }
+  .result-meaning b { color: var(--ink); font-weight: 700; }
+  .result-meaning .meaning-line { display: block; margin-top: 4px; color: var(--ink); font-weight: 400; }
+  .result-facts {
+    margin: 10px 0 0; padding: 0; list-style: none;
+    display: grid; gap: 6px;
+    color: var(--ink); font-family: var(--sans); letter-spacing: 0; font-size: 0.92rem;
+  }
+  .result-facts li { display: flex; gap: 8px; align-items: flex-start; }
+  .result-facts .fn { font-family: var(--mono); color: var(--accent); flex: none; letter-spacing: 0.04em; }
+
+  .text-btn {
+    min-height: 48px; padding: 0 16px; margin-top: 12px;
+    background: none; border: 1px solid var(--line-strong); border-radius: 8px;
+    color: var(--muted); cursor: pointer; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  }
+  .text-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+  .diagram-block {
+    position: relative; margin-top: 14px; border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); padding: 16px 14px 14px; min-width: 0;
+  }
+  .illus-tag {
+    display: inline-block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--bg); background: var(--delta);
+    border-radius: 999px; padding: 3px 8px; margin-bottom: 10px;
+  }
+  .diagram-split { display: grid; gap: 12px; }
+  .diagram-panel {
+    border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: rgba(6,7,9,0.45); min-width: 0;
+  }
+  .diagram-panel h3 { font-size: 1.02rem; margin: 8px 0 4px; }
+  .diagram-panel p { color: var(--muted); font-size: 0.9rem; }
+  .verdict { margin-top: 8px; font-weight: 700; color: var(--ink); }
+  .panel-no .verdict { color: var(--hot); }
+  .panel-yes .verdict { color: var(--live); }
+  .id-card {
+    display: flex; gap: 10px; align-items: center;
+    border: 1px dashed var(--line-strong); border-radius: 10px; padding: 10px;
+  }
+  .id-photo {
+    width: 44px; height: 44px; border-radius: 50%; flex: none;
+    background: #2a2e33;
+    box-shadow: inset 0 -14px 0 #4a5057;
+    position: relative;
+  }
+  .id-photo::before {
+    content: ""; position: absolute; left: 50%; top: 10px; width: 16px; height: 16px;
+    margin-left: -8px; border-radius: 50%; background: #9aa1a8;
+  }
+  .id-meta { min-width: 0; }
+  .id-meta .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
+  .id-meta .n { font-weight: 700; }
+  .grain-sample {
+    font-size: 0.95rem; line-height: 1.7; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+    background: #07090c;
+  }
+  .grain-sample mark {
+    background: var(--accent-glow); color: inherit; padding: 0 3px; border-radius: 3px;
+  }
+  .cmp-mark { margin: 0; display: grid; place-items: center; align-self: center; }
+  .cmp-mark span {
+    display: grid; place-items: center; min-width: 36px; height: 36px; padding: 0 8px;
+    border-radius: 999px; border: 1px solid var(--line-strong);
+    color: var(--accent); font-family: var(--mono); font-weight: 700; font-size: 1rem; line-height: 1;
+  }
+  .flow { list-style: none; display: grid; gap: 8px; margin-top: 8px; }
+  .flow li {
+    border: 1px solid var(--line); border-radius: 10px; padding: 12px 12px;
+    background: #07090c; min-height: 44px; min-width: 0;
+  }
+  .flow .step-no { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 4px; }
+  .rewrite-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; }
+  .rewrite-k { font-size: 0.82rem; color: var(--muted); min-width: 7.5em; }
+  .dots { display: flex; flex-wrap: wrap; gap: 5px; }
+  .dot {
+    display: inline-block; font-style: normal;
+    width: 12px; height: 12px; border-radius: 50%; background: rgba(237,239,241,0.12);
+    border: 1px solid var(--line-strong);
+  }
+  .dot.on { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+
+  .fact-grid, .people-grid { display: grid; gap: 12px; margin-top: 14px; }
+  .fact-card, .person-card {
+    border: 1px solid var(--line); border-radius: 12px; background: var(--bg-raise);
+    padding: 14px 14px 16px; min-width: 0;
+  }
+  .fact-no { font-family: var(--mono); color: var(--accent); letter-spacing: 0.08em; font-size: 14px; }
+  .fact-card h3, .person-card h3 { font-size: 1.05rem; margin: 4px 0 6px; }
+  .fact-card p, .person-card p { color: var(--muted); font-size: 0.95rem; }
+  .person-tag { margin-bottom: 4px; color: var(--accent); }
+  .person-card .bit { margin-top: 10px; }
+  .person-card .bit b { display: block; color: var(--ink); font-size: 0.82rem; margin-bottom: 2px; }
+
+  .quiz-q {
+    margin-top: 16px; border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); padding: 14px; min-width: 0;
+  }
+  .quiz-q h3 { font-size: 1.02rem; margin-bottom: 10px; }
+  .quiz-opts { display: grid; gap: 8px; }
+  .quiz-opt {
+    width: 100%; min-height: 48px; text-align: left; cursor: pointer;
+    padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--line-strong); background: #07090c;
+    transition: border-color .2s, background .2s;
+  }
+  .quiz-opt.is-right { border-color: var(--live); background: rgba(74,222,128,0.1); }
+  .quiz-opt.is-wrong { border-color: var(--hot); background: rgba(248,113,113,0.1); }
+  .quiz-opt:disabled { cursor: default; opacity: 1; color: var(--ink); }
+  .quiz-fb { margin-top: 10px; font-size: 0.92rem; }
+  .quiz-fb.is-right { color: var(--live); }
+  .quiz-fb.is-wrong { color: var(--hot); }
+  .quiz-score {
+    margin-top: 16px; font-family: var(--mono); font-weight: 700;
+    font-size: clamp(1.4rem, 4vw, 2rem); letter-spacing: -0.03em; color: var(--accent);
+  }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s; min-height: 44px;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { margin-top: 14px; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; display: block; }
+  .share-hint { color: var(--faint); font-size: 0.82rem; margin-top: 8px; }
+
+  .src-block { color: var(--muted); font-size: 0.88rem; }
+  .disclaimer {
+    margin-top: 14px; border: 1px solid rgba(251,191,36,0.45);
+    background: rgba(251,191,36,0.08); color: var(--ink);
+    border-radius: 12px; padding: 14px 16px; font-size: 0.95rem; font-weight: 700;
+  }
+
+  footer {
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 28px var(--pad) 40px; border-top: 1px solid var(--line);
+    max-width: 880px; margin: 0 auto;
+  }
+  footer a:hover { color: var(--ink); }
+  footer .mono { color: var(--faint); }
+
+  @media (min-width: 720px) {
+    .stat-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .choices.cols-2 { grid-template-columns: 1fr 1fr; }
+    .choices.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .diagram-split { grid-template-columns: 1fr auto 1fr; align-items: stretch; }
+    .flow { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .fact-grid, .people-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 0 14px; gap: 8px; }
+    .nav-back { font-size: 11px; letter-spacing: 0; }
+    .nav-brand { font-size: 13px; }
+    .nav-lang { padding: 6px 10px; letter-spacing: 0.12em; }
+    .stat { padding: 12px 10px 12px 12px; }
+    .share-btn { padding: 12px 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* 禁用所有动画 */
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">WMARK<span>·044</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="2026-10-05 · OpenAI announcement">2026-10-05 · OpenAI 公告</p>
+    <h1 data-en="Is your AI text getting stamped?">你和 AI 的文字要被盖章了？</h1>
+    <p class="lede" data-en="In the coming weeks, eligible ChatGPT / Codex text in the EU will carry an invisible watermark called <strong>textGrain</strong>. Take 30 seconds to see whether you will be stamped.">未来几周内，欧盟区符合条件的 ChatGPT / Codex 文字会带上隐形水印 <strong>textGrain</strong>。花 30 秒查清你会不会被“盖章”。</p>
+
+    <div class="stat-row">
+      <article class="stat stat-cool">
+        <p class="stat-num">2026-10-05</p>
+        <p class="stat-k" data-en="Announcement day">公告日</p>
+      </article>
+      <article class="stat stat-ink">
+        <p class="stat-num">2026-08-02</p>
+        <p class="stat-k" data-en="EU AI Act transparency rules take effect">《AI 法案》透明度条款生效</p>
+      </article>
+      <article class="stat stat-down">
+        <p class="stat-num stat-fit" data-en="Off by default">默认关闭</p>
+        <p class="stat-k" data-en="API · manual opt-in">API · 需手动 opt-in</p>
+      </article>
+    </div>
+
+    <a class="cta" href="#check" data-en="Start the check">开始自查</a>
+  </header>
+
+  <section class="field" id="check">
+    <div class="field-head">
+      <span class="field-no" data-en="01">01</span>
+      <h2 class="field-title" data-en="30-second self-check">30 秒自查</h2>
+      <p class="field-hint" data-en="Three questions. The third appears only if you use the API. Eligible text follows the OpenAI announcement.">三问。第三问只在你用 API 时出现。符合条件的文本，以 OpenAI 公告为准。</p>
+    </div>
+
+    <div class="q-block" id="qRegion">
+      <p class="q-label" data-en="Q1 · Where do you use it?">Q1 · 你在哪里用？</p>
+      <div class="choices cols-2" role="group" aria-labelledby="qRegion">
+        <button type="button" class="choice" data-field="region" data-value="eu" aria-pressed="false">
+          <span class="choice-title" data-en="EU">欧盟</span>
+          <span class="choice-sub" data-en="Using it in the EU">在欧盟区使用</span>
+        </button>
+        <button type="button" class="choice" data-field="region" data-value="non_eu" aria-pressed="false">
+          <span class="choice-title" data-en="Outside EU">非欧盟</span>
+          <span class="choice-sub" data-en="Anywhere else">欧盟以外地区</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="q-block" id="qProduct">
+      <p class="q-label" data-en="Q2 · What do you use?">Q2 · 你用什么？</p>
+      <div class="choices cols-3" role="group" aria-labelledby="qProduct">
+        <button type="button" class="choice" data-field="product" data-value="chatgpt" aria-pressed="false">
+          <span class="choice-title" data-en="ChatGPT web / app">ChatGPT 网页/App</span>
+        </button>
+        <button type="button" class="choice" data-field="product" data-value="codex" aria-pressed="false">
+          <span class="choice-title" data-en="Codex">Codex</span>
+        </button>
+        <button type="button" class="choice" data-field="product" data-value="api" aria-pressed="false">
+          <span class="choice-title" data-en="API">API</span>
+          <span class="choice-sub" data-en="Developer API">开发者接口</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="q-block" id="qOptIn" hidden>
+      <p class="q-label" data-en="Q3 · Did you turn on the textGrain opt-in?">Q3 · 你开了 textGrain opt-in 吗？</p>
+      <div class="choices cols-3" role="group" aria-labelledby="qOptIn">
+        <button type="button" class="choice" data-field="optIn" data-value="on" aria-pressed="false">
+          <span class="choice-title" data-en="On">已开启</span>
+        </button>
+        <button type="button" class="choice" data-field="optIn" data-value="off" aria-pressed="false">
+          <span class="choice-title" data-en="Off (default)">没开（默认）</span>
+        </button>
+        <button type="button" class="choice" data-field="optIn" data-value="unsure" aria-pressed="false">
+          <span class="choice-title" data-en="Not sure">不确定</span>
+          <span class="choice-sub" data-en="Check your settings">去设置里看</span>
+        </button>
+      </div>
+    </div>
+
+    <p class="note dyn" id="checkHint"></p>
+    <div class="result-card" id="resultCard" hidden></div>
+    <button class="text-btn" id="resetBtn" type="button" data-en="Start over">重新测</button>
+  </section>
+
+  <section class="field" id="what">
+    <div class="field-head">
+      <span class="field-no" data-en="02">02</span>
+      <h2 class="field-title" data-en="What the watermark is">水印是什么</h2>
+      <p class="field-hint" data-en="textGrain is an invisible statistical watermark: word choice carries a statistical pattern the eye cannot see.">textGrain 是不可见的统计水印：用词选择上带有统计规律，肉眼看不见。</p>
+    </div>
+
+    <div class="diagram-block">
+      <span class="illus-tag" data-en="Illustrative">示意</span>
+      <div class="diagram-split">
+        <article class="diagram-panel panel-no">
+          <div class="id-card" aria-hidden="true">
+            <span class="id-photo"></span>
+            <div class="id-meta">
+              <p class="k" data-en="Name / account">姓名 / 账号</p>
+              <p class="n" data-en="Alex · @alex">阿乐 · @alex</p>
+            </div>
+          </div>
+          <h3 data-en="A name tag">实名标签</h3>
+          <p data-en="A badge with your name or account.">写着姓名、账号的名牌。</p>
+          <p class="verdict" data-en="❌ textGrain is not this">❌ textGrain 不是这个</p>
+        </article>
+        <p class="cmp-mark" aria-hidden="true"><span>≠</span></p>
+        <article class="diagram-panel panel-yes">
+          <p class="grain-sample" data-en="Today the <mark>weather</mark> is clear, a <mark>good</mark> day for a walk; bring a coat <mark>in case</mark> it turns cold.">今天<mark>天气</mark>晴朗，<mark>适合</mark>出门散步，把外套带上<mark>以免</mark>着凉。</p>
+          <h3 data-en="A statistical watermark">统计水印</h3>
+          <p data-en="Some word choices carry a statistical pattern. Invisible to the eye.">部分用词带着统计规律，肉眼看不见。</p>
+          <p class="verdict" data-en='✅ It only marks “this text looks AI-written”'>✅ 只标记“这段文字像 AI 写的”</p>
+        </article>
+      </div>
+      <p class="illus" data-en="Illustrative only. Not a real watermark sample, and not a detection tool.">示意图，不是真实水印样本，也不是检测工具。</p>
+    </div>
+
+    <div class="diagram-block">
+      <span class="illus-tag" data-en="Illustrative">示意</span>
+      <p class="q-label" data-en="How detection is described">检测怎么走</p>
+      <ol class="flow">
+        <li>
+          <span class="step-no" data-en="1">1</span>
+          <span data-en="AI writes the text">AI 生成文字</span>
+        </li>
+        <li>
+          <span class="step-no" data-en="2">2</span>
+          <span data-en="An invisible statistical pattern is carried">带隐形统计规律</span>
+        </li>
+        <li>
+          <span class="step-no" data-en="3">3</span>
+          <span data-en="An authorized institution checks">授权机构检测</span>
+        </li>
+        <li>
+          <span class="step-no" data-en="4">4</span>
+          <span data-en="“Looks AI-generated”">“像 AI 生成”</span>
+        </li>
+      </ol>
+    </div>
+
+    <div class="diagram-block">
+      <span class="illus-tag" data-en="Illustrative">示意</span>
+      <p class="q-label" data-en="After rewriting / polishing, the pattern gets weaker">改写 / 润色后，规律变弱</p>
+      <div class="rewrite-row">
+        <span class="rewrite-k" data-en="Before">改写前</span>
+        <div class="dots" aria-hidden="true">
+          <i class="dot on"></i><i class="dot on"></i><i class="dot on"></i><i class="dot on"></i><i class="dot on"></i><i class="dot on"></i><i class="dot on"></i><i class="dot"></i><i class="dot on"></i><i class="dot on"></i><i class="dot"></i><i class="dot on"></i>
+        </div>
+      </div>
+      <div class="rewrite-row">
+        <span class="rewrite-k" data-en="After">改写 / 润色后</span>
+        <div class="dots" aria-hidden="true">
+          <i class="dot on"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot on"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot on"></i><i class="dot"></i><i class="dot"></i>
+        </div>
+      </div>
+      <p class="illus" data-en="Fewer highlights mean a weaker statistical pattern. Illustrative. Rewriting or polishing weakens watermark detection.">高亮点变少，表示统计规律变弱。示意。改写或润色会削弱水印检测。</p>
+    </div>
+
+    <div class="fact-grid">
+      <article class="fact-card">
+        <p class="fact-no">①</p>
+        <h3 data-en="Does not identify you">不识别用户身份</h3>
+        <p data-en="OpenAI says the watermark does not identify the user.">OpenAI 表示水印不识别用户身份。</p>
+      </article>
+      <article class="fact-card">
+        <p class="fact-no">②</p>
+        <h3 data-en="Only authorized institutions can detect">只有授权机构能检测</h3>
+        <p data-en="Only authorized institutions can detect whether the content is AI-generated.">只有授权机构能检测内容是否为 AI 生成。</p>
+      </article>
+      <article class="fact-card">
+        <p class="fact-no">③</p>
+        <h3 data-en="Rewriting weakens detection">改写会削弱检测</h3>
+        <p data-en="Rewriting or polishing weakens watermark detection.">改写或润色会削弱水印检测。</p>
+      </article>
+      <article class="fact-card">
+        <p class="fact-no">④</p>
+        <h3 data-en="API is off by default">API 默认关闭</h3>
+        <p data-en="From 2026-10-05, global API users may opt in themselves. It is off by default and must be turned on manually.">全球 API 用户从 2026-10-05 起可自行 opt-in，默认关闭，需手动开启。</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="field" id="means">
+    <div class="field-head">
+      <span class="field-no" data-en="03">03</span>
+      <h2 class="field-title" data-en="What it means for you">对你意味着什么</h2>
+      <p class="field-hint" data-en="From 10-05 to 10-09, IG / X / Threads filled with discussion in many languages: students worried homework would be checked, creators worried work would get an AI label, and ordinary users realized for the first time that ‘what I asked AI to write already carries an invisible signature.’">10-05–10-09，IG / X / Threads 上出现多语言讨论：学生担心作业被查，创作者担心作品被打上 AI 标签，普通用户第一次意识到“我让 AI 写的东西自带隐形签名”。</p>
+    </div>
+
+    <div class="people-grid">
+      <article class="person-card">
+        <p class="mono person-tag" data-en="Student">学生</p>
+        <h3 data-en="Homework integrity">作业诚信</h3>
+        <p class="bit"><b data-en="The worry">担心什么</b><span data-en="That homework written with AI will be checked.">作业被查出来是 AI 写的。</span></p>
+        <p class="bit"><b data-en="The fact">事实是什么</b><span data-en="OpenAI says the watermark does not identify you. Authorized institutions can still detect whether the content is AI-generated.">OpenAI 表示水印不识别你是谁；授权机构仍可检测内容是否为 AI 生成。</span></p>
+        <p class="bit"><b data-en="What you can do">你可以做什么</b><span data-en="The steady path is to disclose AI use as your school requires.">最稳的是按学校规定如实披露 AI 使用。</span></p>
+      </article>
+      <article class="person-card">
+        <p class="mono person-tag" data-en="Creator">创作者</p>
+        <h3 data-en="Platform AI labels">平台 AI 标签</h3>
+        <p class="bit"><b data-en="The worry">担心什么</b><span data-en="That finished work will be tagged as AI.">作品被打上 AI 标签。</span></p>
+        <p class="bit"><b data-en="The fact">事实是什么</b><span data-en="Only authorized institutions can detect whether the text is AI-generated. The watermark does not identify you.">只有授权机构能检测文字是否为 AI 生成；水印不识别你是谁。</span></p>
+        <p class="bit"><b data-en="What you can do">你可以做什么</b><span data-en="Run the check above to see if your scenario is in scope. If you need to say whether AI was used, say so honestly.">先做上面的自查，看你的场景会不会被盖章。需要说明是否用了 AI 时，如实说。</span></p>
+      </article>
+      <article class="person-card">
+        <p class="mono person-tag" data-en="Office worker">打工人</p>
+        <h3 data-en="Work documents leaving the building">工作文档外流</h3>
+        <p class="bit"><b data-en="The worry">担心什么</b><span data-en="That a work document written with AI will be recognized if it leaks.">工作文档外流后，被认出是 AI 写的。</span></p>
+        <p class="bit"><b data-en="The fact">事实是什么</b><span data-en="The watermark marks that the text looks AI-written. It does not identify you. Only authorized institutions can detect it.">水印标记的是“这段文字像 AI 写的”，不识别你是谁；只有授权机构能检测。</span></p>
+        <p class="bit"><b data-en="What you can do">你可以做什么</b><span data-en="Check your region and product. On the API it is off by default. How you handle work documents follows your organization's rules.">先确认你的地区和产品。API 默认关闭。工作文档怎么用，按你所在机构的规定来。</span></p>
+      </article>
+      <article class="person-card">
+        <p class="mono person-tag" data-en="Developer">开发者</p>
+        <h3 data-en="API opt-in is your call">API opt-in 自己决定</h3>
+        <p class="bit"><b data-en="The worry">担心什么</b><span data-en="Whether to turn textGrain on.">要不要开 textGrain。</span></p>
+        <p class="bit"><b data-en="The fact">事实是什么</b><span data-en="From 2026-10-05, global API users may opt in. It is off by default and must be turned on manually.">全球 API 用户从 2026-10-05 起可自行 opt-in，默认关闭，需手动开启。</span></p>
+        <p class="bit"><b data-en="What you can do">你可以做什么</b><span data-en="Turning it on or leaving it off is your decision.">开不开由你决定。</span></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="field" id="quiz">
+    <div class="field-head">
+      <span class="field-no" data-en="04">04</span>
+      <h2 class="field-title" data-en="3 quick questions">3 道小测验</h2>
+      <p class="field-hint" data-en="Tap an answer to grade it. Feedback is instant.">点选即判分，立刻给反馈。</p>
+    </div>
+    <div id="quizList"></div>
+    <p class="quiz-score dyn" id="quizScore"></p>
+    <button class="text-btn" id="quizReset" type="button" data-en="Try again">重做</button>
+  </section>
+
+  <section class="field" id="share">
+    <div class="field-head">
+      <span class="field-no" data-en="05">05</span>
+      <h2 class="field-title" data-en="Share this result">分享这条结论</h2>
+      <p class="field-hint" data-en="The copy and the image use your current self-check.">文案和图片都用当前自查结论。</p>
+    </div>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap" hidden>
+      <canvas id="shareCanvas" width="1200" height="630"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+
+  <section class="field" id="sources">
+    <p class="src-block" data-en="Sources: compiled from OpenAI’s public announcement on 2026-10-05; EU AI Act transparency rules in force since 2026-08-02; social discussion 10-05–10-09 on IG / X / Threads. Compiled 2026-10-11. Policy may change.">基于 2026-10-05 OpenAI 公开公告整理；欧盟《AI 法案》透明度条款 2026-08-02 生效；社交反响 10-05–10-09 IG / X / Threads；整理于 2026-10-11，政策可能调整。</p>
+    <p class="disclaimer" data-en="Educational content, not legal advice.">教育内容，不构成法律建议。</p>
+  </section>
+</main>
+
+<footer>
+  <span class="mono" data-en='<a href="https://build-100.com/">build-100.com</a>'><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono" data-en='<a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a>'><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="WMARK-044 · AI text watermark check">WMARK-044 · 文字水印自查</span>
+</footer>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  "use strict";
+  var E = window.WmarkEngine;
+  if (!E) return;
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  var state = { region: null, product: null, optIn: null };
+  var quizPicks = [null, null, null];
+  var shareOpen = false;
+  var copyTimer = null;
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+  function $(id) { return document.getElementById(id); }
+
+  function stampZh() {
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    });
+  }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    $("langBtn").setAttribute("aria-label", l === "en" ? "切换到中文" : "Switch language");
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    renderCheck();
+    renderQuiz();
+    if (shareOpen) drawShare();
+  }
+
+  var FACT_MARK = { identity: "①", detect: "②", rewrite: "③", api: "④" };
+
+  function meaningLine(status) {
+    if (status === "will") {
+      return t(
+        "你的文字会带上隐形统计规律，但它不带你的名字。",
+        "Your text will carry an invisible statistical pattern, but not your name."
+      );
+    }
+    if (status === "wont") {
+      return t(
+        "按目前公告不会；政策可能调整，留意后续。",
+        "Not under the current announcement; policy may change, so keep an eye on it."
+      );
+    }
+    if (status === "depends") {
+      return t(
+        "去 API 设置里确认 opt-in 状态：没开就不加。",
+        "Check your API settings for the opt-in: if it is off, nothing is added."
+      );
+    }
+    return "";
+  }
+
+  function factsHtml(ids) {
+    var want = {};
+    if (ids) ids.forEach(function (id) { want[id] = true; });
+    var html = "";
+    var any = false;
+    E.FACTS.forEach(function (f) {
+      if (!want[f.id]) return;
+      any = true;
+      html += '<li><span class="fn">' + (FACT_MARK[f.id] || "") + "</span><span>" + t(f.zh, f.en) + "</span></li>";
+    });
+    return any ? '<ul class="result-facts">' + html + "</ul>" : "";
+  }
+
+  function factShortLine() {
+    return t(
+      "① 不识别身份 ② 授权机构检测 ③ 改写削弱 ④ API 默认关闭",
+      "① No identity ② Authorized detection ③ Rewrite weakens ④ API off by default"
+    );
+  }
+
+  function pathLine() {
+    var bits = [];
+    if (state.region === "eu") bits.push(t("欧盟", "EU"));
+    if (state.region === "non_eu") bits.push(t("非欧盟", "Outside EU"));
+    if (state.product === "chatgpt") bits.push(t("ChatGPT 网页/App", "ChatGPT web / app"));
+    if (state.product === "codex") bits.push("Codex");
+    if (state.product === "api") bits.push("API");
+    if (state.product === "api" && state.optIn === "on") bits.push(t("已开启 opt-in", "opt-in on"));
+    if (state.product === "api" && state.optIn === "off") bits.push(t("没开（默认）", "off (default)"));
+    if (state.product === "api" && state.optIn === "unsure") bits.push(t("不确定", "not sure"));
+    return bits.join(" · ");
+  }
+
+  function iconSvg(kind) {
+    if (kind === "will") {
+      return '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10h8M8 14h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    }
+    if (kind === "wont") {
+      return '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 12h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    }
+    return '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M12 11.2v5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
+  }
+
+  function verdictCopy(result) {
+    var reason = result && result.reason;
+    if (reason === "eu_consumer") {
+      return {
+        title: t("会被加水印", "Will be watermarked"),
+        body: t(
+          "未来几周内，符合条件的文本（以 OpenAI 公告为准）将带上 textGrain。OpenAI 表示水印不识别你是谁；只有授权机构能检测。",
+          "In the coming weeks, eligible text (as defined in the OpenAI announcement) will carry textGrain. OpenAI says the watermark does not identify you. Only authorized institutions can detect it."
+        )
+      };
+    }
+    if (reason === "api_on") {
+      return {
+        title: t("会被加水印", "Will be watermarked"),
+        body: t(
+          "你主动开启了 opt-in，输出会带水印。OpenAI 表示水印不识别你是谁。",
+          "You turned the opt-in on, so the output will carry a watermark. OpenAI says the watermark does not identify you."
+        )
+      };
+    }
+    if (reason === "non_eu_consumer") {
+      return {
+        title: t("不会", "Will not"),
+        body: t(
+          "按 2026-10-05 公告，ChatGPT / Codex 文本水印针对的是欧盟区；政策可能调整。",
+          "Under the 2026-10-05 announcement, the ChatGPT / Codex text watermark targets the EU; policy may change."
+        )
+      };
+    }
+    if (reason === "api_off") {
+      return {
+        title: t("不会", "Will not"),
+        body: t("API 默认关闭，不开就不加。", "The API watermark is off by default. Leave it off and it is not added.")
+      };
+    }
+    if (reason === "api_unsure") {
+      return {
+        title: t("取决于你的设置", "Depends on your settings"),
+        body: t(
+          "API 默认关闭，去你的设置里确认是否 opt-in。",
+          "The API watermark is off by default. Check your settings to see whether you opted in."
+        )
+      };
+    }
+    return {
+      title: t("还没出结论", "No result yet"),
+      body: t("答完题目才会出结论。", "Finish the questions to see the result.")
+    };
+  }
+
+  function renderCheck() {
+    document.querySelectorAll(".choice").forEach(function (btn) {
+      var field = btn.getAttribute("data-field");
+      var value = btn.getAttribute("data-value");
+      btn.setAttribute("aria-pressed", state[field] === value ? "true" : "false");
+    });
+    $("qOptIn").hidden = !E.needsOptIn(state.product);
+
+    var result = E.assess(state);
+    var hint = $("checkHint");
+    var card = $("resultCard");
+    if (result.status === "incomplete") {
+      card.hidden = true;
+      card.innerHTML = "";
+      var n = result.missing.length;
+      if (n <= 0) {
+        hint.textContent = "";
+      } else {
+        hint.textContent = t(
+          "还差 " + n + " 题，答完才出结论。",
+          n === 1 ? "1 question left before the result." : n + " questions left before the result."
+        );
+      }
+      if (shareOpen) drawShare();
+      return;
+    }
+
+    hint.textContent = "";
+    var copy = verdictCopy(result);
+    var kicker = t("自查结论", "Result");
+    var meaning = t("这意味着什么", "What this means");
+    card.hidden = false;
+    card.className = "result-card is-" + result.status;
+    card.innerHTML =
+      '<div class="result-top">' +
+        '<span class="result-icon">' + iconSvg(result.status) + "</span>" +
+        "<div>" +
+          '<p class="result-kicker">' + kicker + "</p>" +
+          '<p class="result-title">' + copy.title + "</p>" +
+        "</div>" +
+      "</div>" +
+      '<p class="result-path">' + pathLine() + "</p>" +
+      '<p class="result-body">' + copy.body + "</p>" +
+      '<p class="result-meaning"><b>' + meaning + '</b><span class="meaning-line">' + meaningLine(result.status) + "</span></p>" +
+      factsHtml(result.facts);
+    if (shareOpen) drawShare();
+  }
+
+  function optText(opt) {
+    if (!opt) return "";
+    if (typeof opt === "string") return opt;
+    return t(opt.zh, opt.en);
+  }
+
+  function qText(q) {
+    if (q.question) return t(q.question.zh, q.question.en);
+    return t(q.zh, q.en);
+  }
+
+  function qExplain(q) {
+    if (q.explain) return t(q.explain.zh, q.explain.en);
+    return t(q.explainZh, q.explainEn);
+  }
+
+  function qCorrect(q) {
+    if (typeof q.correct === "number") return q.correct;
+    return q.answer;
+  }
+
+  function renderQuiz() {
+    var host = $("quizList");
+    var html = "";
+    var i;
+    for (i = 0; i < E.QUIZ.length; i++) {
+      (function (idx) {
+        var q = E.QUIZ[idx];
+        var picked = quizPicks[idx];
+        var correct = qCorrect(q);
+        var fb = "";
+        html += '<article class="quiz-q"><h3>' + (idx + 1) + " · " + qText(q) + "</h3>";
+        html += '<div class="quiz-opts">';
+        q.options.forEach(function (opt, oi) {
+          var cls = "quiz-opt";
+          if (picked != null) {
+            if (oi === correct) cls += " is-right";
+            else if (oi === picked) cls += " is-wrong";
+          }
+          html += '<button type="button" class="' + cls + '" data-q="' + idx + '" data-choice="' + oi + '"' +
+            (picked != null ? " disabled" : "") + ">" +
+            optText(opt) + "</button>";
+        });
+        html += "</div>";
+        if (picked != null) {
+          var ok = picked === correct;
+          fb = (ok ? t("对。", "Correct. ") : t("错。", "Not quite. ")) + qExplain(q);
+          html += '<p class="quiz-fb ' + (ok ? "is-right" : "is-wrong") + '">' + fb + "</p>";
+        }
+        html += "</article>";
+      })(i);
+    }
+    host.innerHTML = html;
+    host.querySelectorAll(".quiz-opt").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var qi = Number(btn.getAttribute("data-q"));
+        var choice = Number(btn.getAttribute("data-choice"));
+        if (quizPicks[qi] != null) return;
+        quizPicks[qi] = choice;
+        renderQuiz();
+      });
+    });
+
+    var graded = E.gradeQuiz(quizPicks);
+    var answered = 0;
+    graded.results.forEach(function (x) { if (x !== null) answered += 1; });
+    if (answered === 3) {
+      $("quizScore").textContent = t("总分 " + graded.score + "/3", "Score " + graded.score + "/3");
+    } else {
+      $("quizScore").textContent = t("已答 " + answered + "/3", "Answered " + answered + "/3");
+    }
+  }
+
+  function fontStack() {
+    return '"Noto Sans CJK SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+  }
+
+  function cssColor(name, fallback) {
+    var v = "";
+    try { v = getComputedStyle(document.documentElement).getPropertyValue(name).trim(); } catch (e) {}
+    return v || fallback;
+  }
+
+  function wrapLine(ctx, text, maxW) {
+    var lines = [];
+    var current = "";
+    var words = String(text).split(" ");
+    var i;
+    for (i = 0; i < words.length; i++) {
+      var word = words[i];
+      var trial = current ? current + " " + word : word;
+      if (current && ctx.measureText(trial).width <= maxW) {
+        current = trial;
+        continue;
+      }
+      if (current) lines.push(current);
+      if (ctx.measureText(word).width <= maxW) {
+        current = word;
+        continue;
+      }
+      var chunk = "";
+      var j;
+      for (j = 0; j < word.length; j++) {
+        var nxt = chunk + word.charAt(j);
+        if (chunk && ctx.measureText(nxt).width > maxW) {
+          lines.push(chunk);
+          chunk = word.charAt(j);
+        } else {
+          chunk = nxt;
+        }
+      }
+      current = chunk;
+    }
+    if (current) lines.push(current);
+    return lines;
+  }
+
+  function setFont(ctx, weight, px) {
+    ctx.font = weight + " " + px + "px " + fontStack();
+  }
+
+  function fitSize(ctx, text, maxW, weight, px, minPx) {
+    var size = px;
+    setFont(ctx, weight, size);
+    while (size > minPx && ctx.measureText(text).width > maxW) {
+      size -= 1;
+      setFont(ctx, weight, size);
+    }
+    return size;
+  }
+
+  function drawWrappedFit(ctx, text, x, y, maxW, weight, px, minPx, lineRatio, maxLines) {
+    var size = px;
+    var lines;
+    var guard = 0;
+    while (guard < 48) {
+      setFont(ctx, weight, size);
+      lines = wrapLine(ctx, text, maxW);
+      if (lines.length <= maxLines || size <= minPx) break;
+      size -= 2;
+      guard += 1;
+    }
+    var lineH = Math.max(size + 8, Math.round(size * lineRatio));
+    var i;
+    for (i = 0; i < lines.length && i < maxLines; i++) {
+      ctx.fillText(lines[i], x, y);
+      y += lineH;
+    }
+    return y;
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function factShorts() {
+    return lang === "en"
+      ? [["①", "No identity"], ["②", "Authorized detection"], ["③", "Rewrite weakens"], ["④", "API off by default"]]
+      : [["①", "不识别身份"], ["②", "授权机构检测"], ["③", "改写削弱"], ["④", "API 默认关闭"]];
+  }
+
+  function drawInviteFacts(ctx, y, maxW, accent) {
+    var rows = factShorts();
+    var gap = 14;
+    var colW = (maxW - gap * 3) / 4;
+    var h = 118;
+    var i;
+    for (i = 0; i < rows.length; i++) {
+      var x = 64 + i * (colW + gap);
+      ctx.fillStyle = "rgba(237,239,241,0.045)";
+      roundRect(ctx, x, y, colW, h, 14);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(237,239,241,0.14)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.fillStyle = accent;
+      ctx.textAlign = "left";
+      setFont(ctx, "700", 28);
+      ctx.fillText(rows[i][0], x + 16, y + 46);
+      ctx.fillStyle = "#edeff1";
+      fitSize(ctx, rows[i][1], colW - 32, "400", 20, 13);
+      ctx.fillText(rows[i][1], x + 16, y + 88);
+    }
+    return y + h;
+  }
+
+  function drawShareFooter(ctx, W, maxW) {
+    var url = "build-100.com/044";
+    var disc = t("教育内容，不构成法律建议", "Educational content, not legal advice");
+    var y = 596;
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#9aa1a8";
+    fitSize(ctx, url, 460, "400", 20, 14);
+    var urlW = ctx.measureText(url).width;
+    ctx.fillText(url, 64, y);
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#d5d9de";
+    fitSize(ctx, disc, Math.max(280, maxW - urlW - 32), "400", 20, 13);
+    ctx.fillText(disc, W - 64, y);
+    ctx.textAlign = "left";
+  }
+
+  function drawShare() {
+    var canvas = $("shareCanvas");
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    var W = 1200;
+    var H = 630;
+    var padL = 64;
+    var maxW = W - padL - 64;
+    canvas.width = W;
+    canvas.height = H;
+    var accent = cssColor("--accent", "#f472b6");
+    var result = E.assess(state);
+    var done = result.status !== "incomplete";
+
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.045)";
+    var gx;
+    var gy;
+    for (gx = 18; gx < W; gx += 36) {
+      for (gy = 18; gy < H; gy += 36) ctx.fillRect(gx, gy, 1.4, 1.4);
+    }
+    ctx.fillStyle = accent;
+    ctx.fillRect(0, 0, 10, H);
+    ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
+
+    ctx.fillStyle = accent;
+    setFont(ctx, "700", 24);
+    var brand = "WMARK-044";
+    ctx.fillText(brand, padL, 72);
+    var brandW = ctx.measureText(brand).width;
+    ctx.fillStyle = "#7d848c";
+    var brandRest = t(" · 文字水印自查", " · AI text watermark check");
+    fitSize(ctx, brandRest, maxW - brandW - 8, "400", 24, 16);
+    ctx.fillText(brandRest, padL + brandW, 72);
+
+    if (!done) {
+      ctx.fillStyle = accent;
+      var inviteEnd = drawWrappedFit(
+        ctx,
+        t(
+          "30 秒查清你的 AI 文字会不会被盖章",
+          "See in 30 seconds whether your AI text will be stamped"
+        ),
+        padL,
+        200,
+        maxW,
+        "700",
+        52,
+        32,
+        1.25,
+        3
+      );
+      var cardH = 118;
+      var cardY = Math.max(inviteEnd + 28, 540 - cardH);
+      if (cardY + cardH > 548) cardY = 548 - cardH;
+      drawInviteFacts(ctx, cardY, maxW, accent);
+    } else {
+      var copy = verdictCopy(result);
+      ctx.fillStyle = accent;
+      var titleEnd = drawWrappedFit(ctx, copy.title, padL, 168, maxW, "700", 56, 32, 1.2, 2);
+      ctx.fillStyle = "#edeff1";
+      drawWrappedFit(ctx, copy.body, padL, titleEnd + 18, maxW, "400", 26, 18, 1.45, 4);
+
+      ctx.fillStyle = "#7d848c";
+      setFont(ctx, "400", 16);
+      ctx.fillText(t("你的选择", "Your choice"), padL, 456);
+      ctx.fillStyle = "#edeff1";
+      var pick = pathLine();
+      fitSize(ctx, pick, maxW, "700", 30, 16);
+      ctx.fillText(pick, padL, 498);
+    }
+
+    if (done) {
+      ctx.fillStyle = "#c5cad0";
+      var facts = factShortLine();
+      fitSize(ctx, facts, maxW, "400", 20, 14);
+      ctx.fillText(facts, padL, 548);
+    }
+
+    ctx.strokeStyle = "rgba(237,239,241,0.14)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padL, 572);
+    ctx.lineTo(W - 64, 572);
+    ctx.stroke();
+
+    drawShareFooter(ctx, W, maxW);
+
+    $("shareWrap").hidden = false;
+    shareOpen = true;
+  }
+
+  function markCopied() {
+    var btn = $("copyBtn");
+    btn.classList.add("copied");
+    btn.textContent = t("已复制", "Copied");
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () {
+      btn.classList.remove("copied");
+      btn.innerHTML = lang === "en" ? btn.dataset.en : btn.dataset.zh;
+    }, 1600);
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  stampZh();
+
+  $("langBtn").addEventListener("click", function () {
+    applyLang(lang === "en" ? "zh" : "en");
+  });
+
+  document.querySelectorAll(".choice").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var field = btn.getAttribute("data-field");
+      var value = btn.getAttribute("data-value");
+      state[field] = value;
+      renderCheck();
+    });
+  });
+
+  $("resetBtn").addEventListener("click", function () {
+    state.region = null;
+    state.product = null;
+    state.optIn = null;
+    renderCheck();
+  });
+
+  $("quizReset").addEventListener("click", function () {
+    quizPicks = [null, null, null];
+    renderQuiz();
+  });
+
+  $("copyBtn").addEventListener("click", function () {
+    var text = E.shareText(E.assess(state), lang);
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      markCopied();
+    }
+    var clip = (navigator.clipboard && navigator.clipboard.writeText)
+      ? navigator.clipboard.writeText(text)
+      : Promise.reject();
+    var timed = new Promise(function (_, reject) {
+      setTimeout(function () { reject(new Error("copy-timeout")); }, 400);
+    });
+    Promise.race([clip, timed]).then(finish, function () {
+      fallbackCopy(text);
+      finish();
+    });
+  });
+  $("shareImgBtn").addEventListener("click", drawShare);
+
+  if (lang === "en") applyLang("en");
+  else {
+    renderCheck();
+    renderQuiz();
+  }
+})();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>
