@@ -1,0 +1,1135 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BURN-045 · AI 烧钱自查：你的 token 账单去哪了</title>
+<meta name="description" content="过去两周 GPT-6、Claude 5.5 全家桶密集上新降价。输入用量，算清每个模型一个月烧多少钱，一眼看出最划算的。价格整理自 2026-10-12 公开报道，以官网为准。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/045/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E045%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="BURN-045 · AI 烧钱自查：你的 token 账单去哪了">
+<meta property="og:description" content="过去两周 GPT-6、Claude 5.5 全家桶密集上新降价。输入用量，算清每个模型一个月烧多少钱，一眼看出最划算的。价格整理自 2026-10-12 公开报道，以官网为准。">
+<meta property="og:url" content="https://build-100.com/045/">
+<meta property="og:image" content="https://build-100.com/045/og-045.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="BURN-045 · AI 烧钱自查：你的 token 账单去哪了">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="BURN-045 · AI 烧钱自查：你的 token 账单去哪了">
+<meta name="twitter:description" content="GPT-6 and the Claude 5.5 family shipped new models and lower prices in the past two weeks. Enter your usage, see what each model burns in a month, and spot the cheapest. Compiled 2026-10-12 from public reports; official pricing prevails.">
+<meta name="twitter:image" content="https://build-100.com/045/og-045.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #f97316;
+    --accent-glow: rgba(249,115,22,0.35);
+    --warm: #fbbf24;
+    --hot: #f87171;
+    --cool: var(--accent);
+    --up: #f87171;
+    --down: #4ade80;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+    --you: var(--warm);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font-family: inherit; color: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  [hidden] { display: none !important; }
+  h1, h2, h3, p, td, th, li, label, .stat-k, .lede, .field-title, .choice, .fact-card, .price-card, .result-card, .tip-card {
+    overflow-wrap: break-word;
+  }
+  img, canvas, svg, input, button { max-width: 100%; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; min-width: 0; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; text-align: center; flex: none; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+    flex: none; min-height: 44px; min-width: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 48px); position: relative; }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; letter-spacing: 0.04em; line-height: 1.45; text-wrap: balance; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; margin-bottom: 18px;
+  }
+  .hero p.lede { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); }
+  .hero p.lede strong { color: var(--ink); font-weight: 600; }
+
+  .stat-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 16px 0 8px; }
+  .stat {
+    position: relative; min-width: 0;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: linear-gradient(180deg, rgba(237,239,241,0.035), rgba(237,239,241,0.015));
+    padding: 14px 12px 12px 14px; overflow: hidden;
+  }
+  .stat::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .stat-cool::before { background: var(--accent); box-shadow: 0 0 16px var(--accent-glow); }
+  .stat-ink::before { background: var(--ink); }
+  .stat-down::before { background: var(--down); box-shadow: 0 0 16px rgba(74,222,128,0.35); }
+  .stat-num {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(1.35rem, 6.2vw, 2.4rem); letter-spacing: -0.04em; line-height: 1;
+  }
+  .stat-cool .stat-num { color: var(--accent); }
+  .stat-ink .stat-num { color: var(--ink); }
+  .stat-down .stat-num { color: var(--down); }
+  .stat-num.stat-fit {
+    font-size: clamp(1.05rem, 4.8vw, 1.55rem);
+    letter-spacing: -0.04em;
+    line-height: 1.15;
+    word-break: break-word;
+  }
+  .stat-k { margin-top: 6px; color: var(--muted); font-size: clamp(0.75rem, 2.5vw, 0.9rem); line-height: 1.35; }
+  .price-cap {
+    color: var(--faint); font-size: 0.8rem; margin: 4px 0 0; line-height: 1.45;
+  }
+
+  .cta {
+    display: inline-block; margin-top: 18px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--accent); border-radius: 4px;
+    background: var(--accent); color: var(--bg); cursor: pointer; transition: all .2s;
+    min-height: 44px; line-height: 1.4;
+  }
+  .cta:hover { box-shadow: 0 0 24px var(--accent-glow); }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .q-block { margin-top: 16px; }
+  .q-label { font-weight: 700; margin-bottom: 8px; }
+  .choices { display: grid; gap: 8px; align-items: stretch; }
+  .choice {
+    display: flex; flex-direction: column; justify-content: center; gap: 2px;
+    width: 100%; height: 100%; min-height: 48px; text-align: left; cursor: pointer;
+    padding: 12px 14px; border-radius: 12px;
+    border: 1px solid var(--line-strong); background: var(--bg-raise);
+    color: var(--ink); transition: border-color .2s, background .2s, color .2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .choice-title { font-weight: 700; line-height: 1.3; }
+  .choice-sub { color: var(--muted); font-size: 0.82rem; font-family: var(--mono); letter-spacing: 0.04em; text-transform: none; }
+  .choice[aria-pressed="true"] {
+    border-color: var(--accent); background: var(--accent); color: var(--bg);
+  }
+  .choice[aria-pressed="true"] .choice-sub { color: rgba(6, 7, 9, 0.72); }
+
+  .note { color: var(--muted); font-size: 0.9rem; margin-top: 12px; }
+  .illus { color: var(--faint); font-size: 0.8rem; margin-top: 10px; }
+  .dyn:empty { display: none; }
+
+  .usage-fields, .price-fields {
+    display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px;
+  }
+  .field-input {
+    display: flex; flex-direction: column; gap: 6px; min-width: 0;
+    color: var(--muted); font-size: 0.82rem;
+  }
+  .field-input input {
+    min-height: 44px; width: 100%; min-width: 0;
+    padding: 8px 12px; border: 1px solid var(--line-strong); border-radius: 8px;
+    background: #07090c; font-family: var(--mono); font-size: 15px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .price-grid { display: grid; gap: 10px; margin-top: 12px; }
+  .price-card {
+    border: 1px solid var(--line); border-radius: 12px; background: var(--bg-raise);
+    padding: 14px; min-width: 0;
+  }
+  .price-card.is-need {
+    border-color: rgba(251,191,36,0.55);
+    box-shadow: 0 0 0 1px rgba(251,191,36,0.18);
+  }
+  .price-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .price-card h3 { font-size: 1.02rem; line-height: 1.3; }
+    .price-card:not(.is-need) .need-badge { display: none; }
+.need-badge {
+    flex: none; font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--bg); background: var(--delta); border-radius: 999px; padding: 4px 8px; line-height: 1.3;
+  }
+  .price-note { color: var(--muted); font-size: 0.86rem; margin-top: 6px; }
+
+  .result-card {
+    margin-top: 18px; border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); padding: 18px 16px 16px; min-width: 0;
+  }
+  .result-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+  .result-title { font-size: clamp(1.15rem, 3vw, 1.55rem); font-weight: 700; line-height: 1.25; margin-top: 4px; }
+  .result-body { margin-top: 10px; color: var(--ink); }
+  .result-extra { margin-top: 8px; color: var(--muted); font-size: 0.9rem; }
+
+  .diagram-block {
+    position: relative; margin-top: 14px; border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); padding: 16px 14px 14px; min-width: 0;
+  }
+  .illus-tag {
+    display: inline-block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--bg); background: var(--delta);
+    border-radius: 999px; padding: 3px 8px; margin-bottom: 10px;
+  }
+
+  .bars { display: grid; gap: 12px; }
+  .bar-item { min-width: 0; }
+  .bar-meta {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+    gap: 4px 10px; margin-bottom: 6px;
+  }
+  .bar-name { font-weight: 700; font-size: 0.88rem; min-width: 0; }
+  .bar-usd { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: 0; font-size: 0.82rem; color: var(--muted); text-transform: none; }
+  .bar-tag {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .bar-item.is-cheap .bar-usd { color: var(--accent); }
+  .bar-track {
+    height: 12px; width: 100%;
+    background: rgba(237,239,241,0.08); border-radius: 999px; overflow: hidden;
+    display: flex; flex-direction: row; align-items: stretch; justify-content: flex-start;
+  }
+  .bar-fill {
+    height: 100%; width: var(--pct, 0%);
+    flex: 0 0 var(--pct, 0%);
+    background: rgba(237,239,241,0.32); border-radius: 999px;
+    min-width: 6px; transition: width .25s ease, flex-basis .25s ease;
+  }
+  .bar-item.is-cheap .bar-fill {
+    background: var(--accent); box-shadow: 0 0 12px var(--accent-glow);
+  }
+  .bar-item.is-miss .bar-track {
+    background: transparent; border: 1px dashed rgba(251,191,36,0.55); height: 12px;
+  }
+  .bar-item.is-miss .bar-fill { width: 0; flex-basis: 0; min-width: 0; min-height: 0; height: 0; background: transparent; }
+
+  .bill-list { list-style: none; display: grid; gap: 8px; margin-top: 14px; }
+  .bill-list li {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 6px 12px; min-height: 44px; padding: 10px 12px;
+    border: 1px solid var(--line); border-radius: 10px; background: #07090c; min-width: 0;
+  }
+  .bill-list li.is-cheap { border-color: var(--accent); }
+  .bill-name { font-weight: 600; min-width: 0; }
+  .bill-amt { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: 0; text-transform: none; color: var(--muted); }
+  .bill-list li.is-cheap .bill-amt { color: var(--accent); }
+
+  .fact-grid { display: grid; gap: 12px; margin-top: 14px; }
+  .fact-card, .tip-card {
+    border: 1px solid var(--line); border-radius: 12px; background: var(--bg-raise);
+    padding: 14px 14px 16px; min-width: 0;
+  }
+  .fact-no { font-family: var(--mono); color: var(--accent); letter-spacing: 0.08em; font-size: 14px; }
+  .tip-card h3, .fact-card h3 { font-size: 1.05rem; margin: 4px 0 6px; }
+  .tip-card p, .fact-card p { color: var(--muted); font-size: 0.95rem; }
+  .tip-tag {
+    display: inline-block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent); border: 1px solid var(--line-strong);
+    border-radius: 999px; padding: 3px 8px; margin-bottom: 8px;
+  }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s; min-height: 44px;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { margin-top: 14px; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; display: block; }
+  .share-hint { color: var(--faint); font-size: 0.82rem; margin-top: 8px; }
+
+  .src-block { color: var(--muted); font-size: 0.88rem; }
+  .disclaimer {
+    margin-top: 14px; border: 1px solid rgba(251,191,36,0.45);
+    background: rgba(251,191,36,0.08); color: var(--ink);
+    border-radius: 12px; padding: 14px 16px; font-size: 0.95rem; font-weight: 700;
+  }
+
+  footer {
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 28px var(--pad) 40px; border-top: 1px solid var(--line);
+    max-width: 880px; margin: 0 auto;
+  }
+  footer a:hover { color: var(--ink); }
+  footer .mono { color: var(--faint); }
+
+  @media (min-width: 720px) {
+    .stat-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .choices.cols-2 { grid-template-columns: 1fr 1fr; }
+    .choices.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .usage-fields, .price-fields { grid-template-columns: 1fr 1fr; }
+    .fact-grid { grid-template-columns: 1fr 1fr; }
+    .bars {
+      display: flex; align-items: flex-end; gap: 10px; min-height: 248px;
+    }
+    .bar-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      min-width: 0;
+    }
+    .bar-meta {
+      flex-direction: column; align-items: center; text-align: center;
+      margin: 0 0 8px; width: 100%;
+    }
+    .bar-track {
+      flex: none; width: 100%; max-width: 52px; height: 180px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      align-items: stretch; overflow: hidden; border-radius: 8px;
+    }
+    .bar-fill {
+      position: static; left: auto; right: auto; bottom: auto;
+      width: 100%; height: var(--pct, 0%);
+      flex: 0 0 var(--pct, 0%);
+      min-height: 8px; min-width: 0;
+      border-radius: 8px 8px 4px 4px;
+      transition: height .25s ease, flex-basis .25s ease;
+    }
+    .bar-item.is-miss .bar-track { height: 180px; }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 0 14px; gap: 8px; }
+    .nav-back { font-size: 11px; letter-spacing: 0; }
+    .nav-brand { font-size: 13px; }
+    .nav-lang { padding: 6px 10px; letter-spacing: 0.12em; }
+    .stat { padding: 12px 10px 12px 12px; }
+    .share-btn { padding: 12px 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* 禁用所有动画 */
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">BURN<span>·045</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="2026-10-12 · token bill check">2026-10-12 · token 账单自查</p>
+    <h1 data-en="How much does your AI burn a month?">你的 AI 一个月烧多少钱？</h1>
+    <p class="lede" data-en="Over the past two weeks the GPT-6 and Claude 5.5 families shipped new models and lower prices. Enter your usage, see what each model burns in a month, and spot the cheapest.">过去两周 GPT-6、Claude 5.5 全家桶密集上新降价——输入用量，算清每个模型一个月烧多少，一眼看出最划算的。</p>
+
+    <div class="stat-row">
+      <article class="stat stat-cool">
+        <p class="stat-num stat-fit">$0.10/$0.50</p>
+        <p class="stat-k" data-en="Haiku 5.5">Haiku 5.5</p>
+      </article>
+      <article class="stat stat-ink">
+        <p class="stat-num stat-fit">~$2/$10</p>
+        <p class="stat-k" data-en="GPT-6 family">GPT-6 全家桶</p>
+      </article>
+      <article class="stat stat-down">
+        <p class="stat-num stat-fit">$0.10/1M in</p>
+        <p class="stat-k" data-en="Decisions">Decisions</p>
+      </article>
+    </div>
+    <p class="price-cap" data-en="Per million tokens, input / output. Compiled from public reports; official pricing prevails.">每百万 token 的 input / output 价。整理自公开报道，以官网为准。</p>
+
+    <a class="cta" href="#usage" data-en="Enter usage and calculate">输入用量，开始算</a>
+  </header>
+
+  <section class="field" id="usage">
+    <div class="field-head">
+      <span class="field-no" data-en="01">01</span>
+      <h2 class="field-title" data-en="Usage">用量输入</h2>
+      <p class="field-hint" data-en="On 2026-10-02 Microsoft Copilot added an “AI cost visibility” tool. In the community: a night of vibe coding can burn tens of dollars, token bills are hard to read, and a new model can cost more. Preset volumes below are illustrative — edit them.">10-02 微软 Copilot 新增「AI 成本可见性」工具。社区在抱怨：vibe coding 一晚上烧掉几十美元、token 账单看不懂、换了新模型反而更贵。下面预设用量是示意数字，可改。</p>
+    </div>
+
+    <div class="q-block">
+      <p class="q-label" data-en="Scene presets">场景预设</p>
+      <div class="choices cols-3" role="group">
+        <button type="button" class="choice" data-preset="light" aria-pressed="true">
+          <span class="choice-title" data-en="Light chat">轻度聊天</span>
+          <span class="choice-sub" data-en="50k in / 50k out · illustrative, editable">50k in / 50k out · 示意用量，可改</span>
+        </button>
+        <button type="button" class="choice" data-preset="vibe" aria-pressed="false">
+          <span class="choice-title" data-en="Heavy vibe coding">重度 vibe coding</span>
+          <span class="choice-sub" data-en="2M in / 500k out · illustrative, editable">2M in / 500k out · 示意用量，可改</span>
+        </button>
+        <button type="button" class="choice" data-preset="agent" aria-pressed="false">
+          <span class="choice-title" data-en="Agent batch runs">Agent 跑批</span>
+          <span class="choice-sub" data-en="5M in / 1M out · illustrative, editable">5M in / 1M out · 示意用量，可改</span>
+        </button>
+      </div>
+      <div class="choices" style="margin-top:8px" role="group">
+        <button type="button" class="choice" data-preset="decisions" aria-pressed="false">
+          <span class="choice-title" data-en="Structured verdicts">结构化判定</span>
+          <span class="choice-sub" data-en="Keeps your token counts · recommends the Decisions API (typed verdicts)">不改用量，推荐 Decisions API（typed verdicts）</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <p class="q-label" data-en="Daily tokens">每日 token</p>
+      <div class="usage-fields">
+        <label class="field-input">
+          <span data-en="Daily input tokens">每日 input tokens</span>
+          <input id="dailyIn" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="50000">
+        </label>
+        <label class="field-input">
+          <span data-en="Daily output tokens">每日 output tokens</span>
+          <input id="dailyOut" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="50000">
+        </label>
+      </div>
+      <p class="illus" data-en="Illustrative usage; you can edit it. Monthly cost uses 30 days — illustrative / estimate.">示意用量，可改。月成本按 30 天估算——示意 / 估算。</p>
+    </div>
+
+    <div class="q-block">
+      <p class="q-label" data-en="Editable price table ($ per million tokens)">可编辑价格表（$ / 百万 tokens）</p>
+      <p class="note" data-en="Compiled from public reports; official pricing prevails. Every figure here is editable.">整理自公开报道，以官网为准。表内数字均可手改。</p>
+      <div class="price-grid">
+        <article class="price-card" data-model="haiku">
+          <div class="price-top">
+            <h3 data-en="Claude Haiku 5.5">Claude Haiku 5.5</h3>
+          </div>
+          <p class="price-note" data-en="Launched 2026-10-07; about 75% cheaper than Haiku 4.5; first Haiku with effort tiers.">2026-10-07 上线；比 Haiku 4.5 便宜约 75%；首个支持 effort 档位的 Haiku。</p>
+          <div class="price-fields">
+            <label class="field-input">
+              <span data-en="input $/M">input $/M</span>
+              <input id="in-haiku" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="0.10">
+            </label>
+            <label class="field-input">
+              <span data-en="output $/M">output $/M</span>
+              <input id="out-haiku" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="0.50">
+            </label>
+          </div>
+        </article>
+        <article class="price-card" data-model="sol">
+          <div class="price-top">
+            <h3 data-en="GPT-6.1 Sol">GPT-6.1 Sol</h3>
+          </div>
+          <p class="price-note" data-en="GPT-6 family-bucket price. GPT-6 ships Intelligent UI (charts, buttons, and bill-split widgets inside the answer).">GPT-6 全家桶报价。GPT-6 带 Intelligent UI（回答里直接嵌图表、按钮、账单分摊小工具）。</p>
+          <div class="price-fields">
+            <label class="field-input">
+              <span data-en="input $/M">input $/M</span>
+              <input id="in-sol" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="2">
+            </label>
+            <label class="field-input">
+              <span data-en="output $/M">output $/M</span>
+              <input id="out-sol" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="10">
+            </label>
+          </div>
+        </article>
+        <article class="price-card" data-model="luna">
+          <div class="price-top">
+            <h3 data-en="GPT-6 Luna">GPT-6 Luna</h3>
+          </div>
+          <p class="price-note" data-en="Family-bucket price (no separate quote in reports; uses the GPT-6 family ~$2 / $10).">全家桶报价（报道未给单独价，沿用 GPT-6 全家桶约 $2 / $10）。</p>
+          <div class="price-fields">
+            <label class="field-input">
+              <span data-en="input $/M">input $/M</span>
+              <input id="in-luna" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="2">
+            </label>
+            <label class="field-input">
+              <span data-en="output $/M">output $/M</span>
+              <input id="out-luna" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="10">
+            </label>
+          </div>
+        </article>
+        <article class="price-card is-need" data-model="sonnet" id="sonnetCard">
+          <div class="price-top">
+            <h3 data-en="Claude Sonnet 5.5">Claude Sonnet 5.5</h3>
+            <span class="need-badge" data-en="Enter a price">需手填价格</span>
+          </div>
+          <p class="price-note" data-en="2026-09-28: 30% faster, about 30% cheaper on most work; Cowork tasks can run in the cloud from 2026-10-06. Reports only say about 30% cheaper — no absolute price. Enter the official price to include it.">2026-09-28：快 30%，多数工作便宜 30%；Cowork 任务 10-06 起可跑在云端。报道仅称约便宜 30%，没有绝对价，请按官网手填后才能进对比。</p>
+          <div class="price-fields">
+            <label class="field-input">
+              <span data-en="input $/M">input $/M</span>
+              <input id="in-sonnet" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="" placeholder="官网价" data-en-placeholder="official">
+            </label>
+            <label class="field-input">
+              <span data-en="output $/M">output $/M</span>
+              <input id="out-sonnet" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="" placeholder="官网价" data-en-placeholder="official">
+            </label>
+          </div>
+        </article>
+        <article class="price-card" data-model="decisions">
+          <div class="price-top">
+            <h3 data-en="OpenAI Decisions API">OpenAI Decisions API</h3>
+          </div>
+          <p class="price-note" data-en="Public test 2026-10-06; returns typed verdicts. Output price unpublished — estimated as 0, editable.">2026-10-06 公开测试；返回 typed verdicts。output 价未公布，按 0 估算，可手改。</p>
+          <div class="price-fields">
+            <label class="field-input">
+              <span data-en="input $/M">input $/M</span>
+              <input id="in-decisions" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="0.10">
+            </label>
+            <label class="field-input">
+              <span data-en="output $/M">output $/M</span>
+              <input id="out-decisions" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="0">
+            </label>
+          </div>
+        </article>
+      </div>
+      <p class="price-cap" data-en="Compiled from public reports; official pricing prevails.">整理自公开报道，以官网为准。</p>
+    </div>
+  </section>
+
+  <section class="field" id="compare">
+    <div class="field-head">
+      <span class="field-no" data-en="02">02</span>
+      <h2 class="field-title" data-en="Monthly bill comparison">月账单对比</h2>
+      <p class="field-hint" data-en="Monthly cost = (daily input / 1M × input price + daily output / 1M × output price) × 30. Sonnet is skipped in the ranking until you enter a price. Chart is illustrative / estimate.">月成本 =（每日 input / 100 万 × input 单价 + 每日 output / 100 万 × output 单价）× 30。Sonnet 在手填价格前不进排名。图表为示意 / 估算。</p>
+    </div>
+
+    <div class="result-card" id="compareHead"></div>
+
+    <div class="diagram-block">
+      <span class="illus-tag" data-en="Illustrative / estimate">示意 / 估算</span>
+      <div class="bars" id="barChart"></div>
+      <p class="illus" data-en="Illustrative / estimate. Bar length follows monthly cost among models with a usable price.">示意 / 估算。柱长按有可用价格的模型月成本比例。</p>
+    </div>
+
+    <ul class="bill-list" id="billList"></ul>
+  </section>
+
+  <section class="field" id="rec">
+    <div class="field-head">
+      <span class="field-no" data-en="03">03</span>
+      <h2 class="field-title" data-en="Scene pick">场景推荐</h2>
+      <p class="field-hint" data-en="One sentence, based on your usage. Light → Haiku 5.5 / Luna. Code-heavy → Sonnet 5.5. Structured verdicts → Decisions API.">按用量给一句话。小用量 → Haiku 5.5 / Luna。代码多 → Sonnet 5.5。结构化判定 → Decisions API。</p>
+    </div>
+    <div class="result-card" id="recCard"></div>
+  </section>
+
+  <section class="field" id="tips">
+    <div class="field-head">
+      <span class="field-no" data-en="04">04</span>
+      <h2 class="field-title" data-en="Ways to spend less">省钱小贴士</h2>
+      <p class="field-hint" data-en="Generic advice. No specific discount figures.">通用建议。没有具体折扣数字。</p>
+    </div>
+    <div class="fact-grid">
+      <article class="tip-card">
+        <span class="tip-tag" data-en="Generic advice">通用建议</span>
+        <h3 data-en="Effort tiers">effort 档位</h3>
+        <p data-en="Haiku 5.5 is the first Haiku with effort (cost / compute) tiers. Match the tier to the job instead of always running the heaviest setting.">Haiku 5.5 是首个支持 effort（成本 / 算力）档位的 Haiku。按任务选档，不必每件事都开最高档。</p>
+      </article>
+      <article class="tip-card">
+        <span class="tip-tag" data-en="Generic advice">通用建议</span>
+        <h3 data-en="Prompt cache">prompt 缓存</h3>
+        <p data-en="If the same long prefix comes back again and again, use prompt caching when the product offers it.">同一大段前缀反复出现时，产品若提供 prompt 缓存，就用缓存。</p>
+      </article>
+      <article class="tip-card">
+        <span class="tip-tag" data-en="Generic advice">通用建议</span>
+        <h3 data-en="Batch API">批量 API</h3>
+        <p data-en="If a job can wait, send it through a batch API when one exists.">能等的任务，有批量 API 就走批量。</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="field" id="share">
+    <div class="field-head">
+      <span class="field-no" data-en="05">05</span>
+      <h2 class="field-title" data-en="Share this bill">分享这份账单</h2>
+      <p class="field-hint" data-en="The copy and the image use your current monthly comparison.">文案和图片都用当前月账单结论。</p>
+    </div>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap" hidden>
+      <canvas id="shareCanvas" width="1200" height="630"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+
+  <section class="field" id="sources">
+    <p class="src-block" data-en="Sources: compiled on 2026-10-12 from public reports in the 2026-09-28 ~ 2026-10-12 window — Claude Haiku 5.5 (2026-10-07), Claude Sonnet 5.5 (2026-09-28; Cowork in the cloud from 2026-10-06), the GPT-6 family + GPT-6.1 Sol, OpenAI Decisions API public test (2026-10-06), Microsoft Copilot “AI cost visibility” (2026-10-02). Prices are per million tokens. Official pricing on each vendor’s site prevails.">来源：整理于 2026-10-12，取自 2026-09-28 ~ 2026-10-12 窗口的公开报道——Claude Haiku 5.5（2026-10-07）、Claude Sonnet 5.5（2026-09-28；Cowork 任务 10-06 起可跑在云端）、GPT-6 全家桶 + GPT-6.1 Sol、OpenAI Decisions API 公开测试（2026-10-06）、微软 Copilot「AI 成本可见性」（2026-10-02）。价格为每百万 token。实际以各官网为准。</p>
+    <p class="disclaimer" data-en="Educational tool; prices may change.">教育工具，价格可能调整。</p>
+  </section>
+</main>
+
+<footer>
+  <span class="mono" data-en='<a href="https://build-100.com/">build-100.com</a>'><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono" data-en='<a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a>'><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="BURN-045 · AI burn-rate check">BURN-045 · AI 烧钱自查</span>
+</footer>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  "use strict";
+  var E = window.BurnEngine;
+  if (!E) return;
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  var presetId = "light";
+  var shareOpen = false;
+  var copyTimer = null;
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+  function $(id) { return document.getElementById(id); }
+
+  function esc(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function stampZh() {
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    });
+  }
+
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    $("langBtn").setAttribute("aria-label", l === "en" ? "切换到中文" : "Switch language");
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    document.querySelectorAll("[data-en-placeholder]").forEach(function (el) {
+      if (el.dataset.zhPlaceholder === undefined) el.dataset.zhPlaceholder = el.getAttribute("placeholder") || "";
+      el.setAttribute("placeholder", l === "en" ? el.dataset.enPlaceholder : el.dataset.zhPlaceholder);
+    });
+    renderAll();
+    if (shareOpen) drawShare();
+  }
+
+  function readNum(id) {
+    var el = $(id);
+    if (!el) return null;
+    var v = String(el.value || "").trim().replace(/,/g, "");
+    if (v === "") return null;
+    var n = Number(v);
+    return isFinite(n) ? n : null;
+  }
+
+  function currentModels() {
+    return E.MODELS.map(function (m) {
+      return {
+        id: m.id,
+        nameZh: m.nameZh,
+        nameEn: m.nameEn,
+        inPerM: readNum("in-" + m.id),
+        outPerM: readNum("out-" + m.id),
+        requiresPrice: m.requiresPrice
+      };
+    });
+  }
+
+  function usage() {
+    var dailyIn = readNum("dailyIn");
+    var dailyOut = readNum("dailyOut");
+    return {
+      dailyIn: dailyIn == null ? 0 : dailyIn,
+      dailyOut: dailyOut == null ? 0 : dailyOut
+    };
+  }
+
+  function snapshot() {
+    var models = currentModels();
+    var u = usage();
+    var cmp = E.compare(models, u);
+    var rec = E.recommend({
+      dailyIn: u.dailyIn,
+      dailyOut: u.dailyOut,
+      presetId: presetId,
+      cheapestId: cmp.cheapestId
+    });
+    return { models: models, usage: u, cmp: cmp, rec: rec };
+  }
+
+  function modelName(id) {
+    var m = E.MODELS.filter(function (x) { return x.id === id; })[0];
+    if (!m) return id || "";
+    return t(m.nameZh, m.nameEn);
+  }
+
+  function shortName(id) {
+    var map = {
+      haiku: "Haiku 5.5",
+      sol: "GPT-6.1 Sol",
+      luna: "GPT-6 Luna",
+      sonnet: "Sonnet 5.5",
+      decisions: "Decisions"
+    };
+    return map[id] || modelName(id);
+  }
+
+  function findRow(rows, id) {
+    var i;
+    for (i = 0; i < rows.length; i++) if (rows[i].id === id) return rows[i];
+    return null;
+  }
+
+  function renderPresets() {
+    document.querySelectorAll("[data-preset]").forEach(function (btn) {
+      btn.setAttribute("aria-pressed", btn.getAttribute("data-preset") === presetId ? "true" : "false");
+    });
+  }
+
+  function renderSonnetCard() {
+    var card = $("sonnetCard");
+    if (!card) return;
+    var filled = readNum("in-sonnet") != null && readNum("out-sonnet") != null;
+    if (filled) card.classList.remove("is-need");
+    else card.classList.add("is-need");
+  }
+
+  function renderHead(snap) {
+    var el = $("compareHead");
+    var cmp = snap.cmp;
+    var cheap = cmp.cheapestId;
+    if (!cheap) {
+      el.innerHTML =
+        '<p class="result-kicker">' + esc(t("月账单", "Monthly bill")) + "</p>" +
+        '<p class="result-title">' + esc(t("还没有可对比的价格", "No comparable prices yet")) + "</p>" +
+        '<p class="result-body">' + esc(t("至少填好两个模型的 input / output 单价，才能比出最便宜和倍数。", "Enter input / output prices for at least two models to rank cheapest and the multiple.")) + "</p>";
+      return;
+    }
+    var cheapRow = findRow(cmp.rows, cheap);
+    var costStr = cheapRow && cheapRow.valid ? E.formatUsd(cheapRow.cost) : "—";
+    var html =
+      '<p class="result-kicker">' + esc(t("月账单", "Monthly bill")) + "</p>" +
+      '<p class="result-title">' + esc(t("最便宜", "Cheapest") + " · " + modelName(cheap) + " · " + costStr + t("/月", "/mo")) + "</p>";
+    if (cmp.ratio != null && isFinite(cmp.ratio)) {
+      html += '<p class="result-body">' +
+        esc(t("最贵是最便宜的 " + cmp.ratio.toFixed(1) + " 倍。", "The costliest is " + cmp.ratio.toFixed(1) + "× the cheapest.")) +
+        "</p>";
+    } else {
+      html += '<p class="result-body">' + esc(t("有效价格的模型不足两个，不显示倍数。", "Fewer than two models have a usable price, so no multiple is shown.")) + "</p>";
+    }
+    if (cheap === "decisions") {
+      html += '<p class="result-extra">' +
+        esc(t("Decisions 的 output 价未公布，按 0 估算，可手改。整理自公开报道，以官网为准。", "Decisions output price is unpublished and estimated as 0 — editable. Compiled from public reports; official pricing prevails.")) +
+        "</p>";
+    } else {
+      html += '<p class="result-extra">' +
+        esc(t("整理自公开报道，以官网为准。图表为示意 / 估算。", "Compiled from public reports; official pricing prevails. Chart is illustrative / estimate.")) +
+        "</p>";
+    }
+    el.innerHTML = html;
+  }
+
+  function renderBars(snap) {
+    var host = $("barChart");
+    var rows = snap.cmp.rows;
+    var max = 0;
+    rows.forEach(function (r) {
+      if (r.valid && r.cost > max) max = r.cost;
+    });
+    var html = "";
+    E.MODELS.forEach(function (m) {
+      var r = findRow(rows, m.id);
+      var cls = "bar-item";
+      var usd;
+      var tag = "";
+      var pct = 0;
+      if (!r || !r.valid) {
+        cls += " is-miss";
+        usd = t("需手填价格", "Enter a price");
+      } else {
+        usd = E.formatUsd(r.cost) + t("/月", "/mo");
+        pct = max > 0 ? (r.cost / max * 100) : 0;
+        if (m.id === snap.cmp.cheapestId) {
+          cls += " is-cheap";
+          tag = '<span class="bar-tag">' + esc(t("最便宜", "Cheapest")) + "</span>";
+        } else if (m.id === snap.cmp.costliestId && snap.cmp.cheapestId !== snap.cmp.costliestId) {
+          tag = '<span class="bar-tag" style="color:var(--muted)">' + esc(t("最贵", "Costliest")) + "</span>";
+        }
+      }
+      html +=
+        '<div class="' + cls + '" style="--pct:' + pct.toFixed(2) + '%">' +
+          '<div class="bar-meta">' +
+            '<span class="bar-name">' + esc(shortName(m.id)) + "</span>" +
+            '<span class="bar-usd">' + esc(usd) + "</span>" +
+            tag +
+          "</div>" +
+          '<div class="bar-track"><div class="bar-fill"></div></div>' +
+        "</div>";
+    });
+    host.innerHTML = html;
+  }
+
+  function renderBills(snap) {
+    var host = $("billList");
+    var html = "";
+    E.MODELS.forEach(function (m) {
+      var r = findRow(snap.cmp.rows, m.id);
+      var cls = "";
+      var amt;
+      var extra = "";
+      if (!r || !r.valid) {
+        amt = t("需手填价格", "Enter a price");
+      } else {
+        amt = E.formatUsd(r.cost) + t("/月", "/mo");
+        if (m.id === snap.cmp.cheapestId) {
+          cls = " is-cheap";
+          extra = " · " + t("最便宜", "cheapest");
+        }
+      }
+      html +=
+        "<li class='" + cls + "'>" +
+          '<span class="bill-name">' + esc(modelName(m.id)) + extra + "</span>" +
+          '<span class="bill-amt">' + esc(amt) + "</span>" +
+        "</li>";
+    });
+    host.innerHTML = html;
+  }
+
+  function renderRec(snap) {
+    var el = $("recCard");
+    var rec = snap.rec;
+    var title = rec && rec.id ? modelName(rec.id) : t("先填用量", "Enter usage first");
+    var body = rec ? t(rec.reasonZh, rec.reasonEn) : "";
+    el.innerHTML =
+      '<p class="result-kicker">' + esc(t("一句话", "One sentence")) + "</p>" +
+      '<p class="result-title">' + esc(title) + "</p>" +
+      '<p class="result-body">' + esc(body) + "</p>";
+  }
+
+  function renderAll() {
+    renderPresets();
+    renderSonnetCard();
+    var snap = snapshot();
+    renderHead(snap);
+    renderBars(snap);
+    renderBills(snap);
+    renderRec(snap);
+  }
+
+  function fontStack() {
+    return '"Noto Sans CJK SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+  }
+
+  function cssColor(name, fallback) {
+    var v = "";
+    try { v = getComputedStyle(document.documentElement).getPropertyValue(name).trim(); } catch (e) {}
+    return v || fallback;
+  }
+
+  function wrapLine(ctx, text, maxW) {
+    var lines = [];
+    var current = "";
+    var words = String(text).split(" ");
+    var i;
+    for (i = 0; i < words.length; i++) {
+      var word = words[i];
+      var trial = current ? current + " " + word : word;
+      if (current && ctx.measureText(trial).width <= maxW) {
+        current = trial;
+        continue;
+      }
+      if (current) lines.push(current);
+      if (ctx.measureText(word).width <= maxW) {
+        current = word;
+        continue;
+      }
+      var chunk = "";
+      var j;
+      for (j = 0; j < word.length; j++) {
+        var nxt = chunk + word.charAt(j);
+        if (chunk && ctx.measureText(nxt).width > maxW) {
+          lines.push(chunk);
+          chunk = word.charAt(j);
+        } else {
+          chunk = nxt;
+        }
+      }
+      current = chunk;
+    }
+    if (current) lines.push(current);
+    return lines;
+  }
+
+  function setFont(ctx, weight, px) {
+    ctx.font = weight + " " + px + "px " + fontStack();
+  }
+
+  function fitSize(ctx, text, maxW, weight, px, minPx) {
+    var size = px;
+    setFont(ctx, weight, size);
+    while (size > minPx && ctx.measureText(text).width > maxW) {
+      size -= 1;
+      setFont(ctx, weight, size);
+    }
+    return size;
+  }
+
+  function drawWrappedFit(ctx, text, x, y, maxW, weight, px, minPx, lineRatio, maxLines) {
+    var size = px;
+    var lines;
+    var guard = 0;
+    while (guard < 48) {
+      setFont(ctx, weight, size);
+      lines = wrapLine(ctx, text, maxW);
+      if (lines.length <= maxLines || size <= minPx) break;
+      size -= 2;
+      guard += 1;
+    }
+    var lineH = Math.max(size + 8, Math.round(size * lineRatio));
+    var i;
+    for (i = 0; i < lines.length && i < maxLines; i++) {
+      ctx.fillText(lines[i], x, y);
+      y += lineH;
+    }
+    return y;
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function drawShare() {
+    var canvas = $("shareCanvas");
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    var W = 1200;
+    var H = 630;
+    var padL = 64;
+    var maxW = W - padL - 64;
+    canvas.width = W;
+    canvas.height = H;
+    var accent = cssColor("--accent", "#f97316");
+    var snap = snapshot();
+    var cmp = snap.cmp;
+
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.045)";
+    var gx;
+    var gy;
+    for (gx = 18; gx < W; gx += 36) {
+      for (gy = 18; gy < H; gy += 36) ctx.fillRect(gx, gy, 1.4, 1.4);
+    }
+    ctx.fillStyle = accent;
+    ctx.fillRect(0, 0, 10, H);
+    ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
+
+    ctx.fillStyle = accent;
+    setFont(ctx, "700", 24);
+    var brand = "BURN-045";
+    ctx.fillText(brand, padL, 72);
+    var brandW = ctx.measureText(brand).width;
+    ctx.fillStyle = "#7d848c";
+    var brandRest = t(" · AI 烧钱自查", " · AI burn-rate check");
+    fitSize(ctx, brandRest, maxW - brandW - 8, "400", 24, 16);
+    ctx.fillText(brandRest, padL + brandW, 72);
+
+    if (!cmp.cheapestId) {
+      ctx.fillStyle = accent;
+      drawWrappedFit(
+        ctx,
+        t("查清你的 AI 一个月烧多少钱", "See how much your AI burns in a month"),
+        padL, 210, maxW, "700", 48, 30, 1.22, 3
+      );
+    } else {
+      var cheapName = modelName(cmp.cheapestId);
+      var cheapRow = findRow(cmp.rows, cmp.cheapestId);
+      var costStr = cheapRow && cheapRow.valid ? E.formatUsd(cheapRow.cost) : "";
+      ctx.fillStyle = accent;
+      var title = t("最便宜 · " + cheapName, "Cheapest · " + cheapName);
+      var titleEnd = drawWrappedFit(ctx, title, padL, 150, maxW, "700", 48, 28, 1.2, 2);
+      ctx.fillStyle = "#edeff1";
+      var body = costStr
+        ? t("月花费约 " + costStr, "About " + costStr + " / month")
+        : t("月账单已算出", "Monthly bill is in");
+      if (cmp.ratio != null && isFinite(cmp.ratio)) {
+        body += t(
+          "。最贵是最便宜的 " + cmp.ratio.toFixed(1) + " 倍。",
+          ". The costliest is " + cmp.ratio.toFixed(1) + "× the cheapest."
+        );
+      }
+      drawWrappedFit(ctx, body, padL, titleEnd + 12, maxW, "400", 26, 16, 1.4, 3);
+
+      var pills = [];
+      E.MODELS.forEach(function (m) {
+        var r = findRow(cmp.rows, m.id);
+        var label = shortName(m.id) + "  ";
+        if (!r || !r.valid) label += t("需手填", "enter price");
+        else label += E.formatUsd(r.cost);
+        pills.push({ id: m.id, label: label, cheap: m.id === cmp.cheapestId });
+      });
+      var gap = 12;
+      var colW = (maxW - gap * 4) / 5;
+      var y = 430;
+      var i;
+      for (i = 0; i < pills.length; i++) {
+        var x = padL + i * (colW + gap);
+        ctx.fillStyle = pills[i].cheap ? "rgba(249,115,22,0.18)" : "rgba(237,239,241,0.045)";
+        roundRect(ctx, x, y, colW, 96, 14);
+        ctx.fill();
+        ctx.strokeStyle = pills[i].cheap ? accent : "rgba(237,239,241,0.14)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.fillStyle = pills[i].cheap ? accent : "#edeff1";
+        ctx.textAlign = "left";
+        fitSize(ctx, pills[i].label, colW - 20, "600", 16, 11);
+        var lines = wrapLine(ctx, pills[i].label, colW - 20);
+        ctx.fillText(lines[0] || "", x + 12, y + 40);
+        if (lines[1]) ctx.fillText(lines[1], x + 12, y + 64);
+      }
+      ctx.textAlign = "left";
+    }
+
+    ctx.strokeStyle = "rgba(237,239,241,0.14)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padL, 572);
+    ctx.lineTo(W - 64, 572);
+    ctx.stroke();
+
+    var url = "build-100.com/045";
+    var disc = t("教育工具，价格可能调整", "Educational tool; prices may change");
+    ctx.fillStyle = "#9aa1a8";
+    fitSize(ctx, url, 460, "400", 20, 14);
+    ctx.fillText(url, padL, 596);
+    var urlW = ctx.measureText(url).width;
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#d5d9de";
+    fitSize(ctx, disc, Math.max(280, maxW - urlW - 32), "400", 20, 13);
+    ctx.fillText(disc, W - 64, 596);
+    ctx.textAlign = "left";
+
+    $("shareWrap").hidden = false;
+    shareOpen = true;
+  }
+
+  function markCopied() {
+    var btn = $("copyBtn");
+    btn.classList.add("copied");
+    btn.textContent = t("已复制", "Copied");
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () {
+      btn.classList.remove("copied");
+      btn.innerHTML = lang === "en" ? btn.dataset.en : btn.dataset.zh;
+    }, 1600);
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  stampZh();
+
+  $("langBtn").addEventListener("click", function () {
+    applyLang(lang === "en" ? "zh" : "en");
+  });
+
+  document.querySelectorAll("[data-preset]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var id = btn.getAttribute("data-preset");
+      presetId = id;
+      if (id !== "decisions" && E.PRESETS[id]) {
+        $("dailyIn").value = String(E.PRESETS[id].dailyIn);
+        $("dailyOut").value = String(E.PRESETS[id].dailyOut);
+      }
+      renderAll();
+      if (shareOpen) drawShare();
+    });
+  });
+
+  ["dailyIn", "dailyOut"].concat(
+    E.MODELS.map(function (m) { return "in-" + m.id; }),
+    E.MODELS.map(function (m) { return "out-" + m.id; })
+  ).forEach(function (id) {
+    var el = $(id);
+    if (!el) return;
+    el.addEventListener("input", function () {
+      renderAll();
+      if (shareOpen) drawShare();
+    });
+  });
+
+  $("copyBtn").addEventListener("click", function () {
+    var text = E.shareText(snapshot().cmp, lang);
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      markCopied();
+    }
+    var clip = (navigator.clipboard && navigator.clipboard.writeText)
+      ? navigator.clipboard.writeText(text)
+      : Promise.reject();
+    var timed = new Promise(function (_, reject) {
+      setTimeout(function () { reject(new Error("copy-timeout")); }, 400);
+    });
+    Promise.race([clip, timed]).then(finish, function () {
+      fallbackCopy(text);
+      finish();
+    });
+  });
+  $("shareImgBtn").addEventListener("click", drawShare);
+
+  if (lang === "en") applyLang("en");
+  else renderAll();
+})();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>
