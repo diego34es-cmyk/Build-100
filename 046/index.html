@@ -1,0 +1,1328 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CPI-046 · CPI 夜：通胀赌局</title>
+<meta name="description" content="10-14（周三）美东 8:30 公布 9 月 CPI。写下你的通胀预测、押多空，看公布瞬间你能拿几分。这是 10-27/28 FOMC 议息前最后一张通胀牌。教育游戏，非投资建议。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/046/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E046%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CPI-046 · CPI 夜：通胀赌局">
+<meta property="og:description" content="10-14（周三）美东 8:30 公布 9 月 CPI。写下你的通胀预测、押多空，看公布瞬间你能拿几分。这是 10-27/28 FOMC 议息前最后一张通胀牌。教育游戏，非投资建议。">
+<meta property="og:url" content="https://build-100.com/046/">
+<meta property="og:image" content="https://build-100.com/046/og-046.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="CPI-046 · CPI 夜：通胀赌局">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CPI-046 · CPI 夜：通胀赌局">
+<meta name="twitter:description" content="On Wed Oct 14 at 8:30 a.m. ET, September CPI prints. Write your inflation call, bet long or short, and see your score. The last inflation print before the Oct 27–28 FOMC. Educational game, not investment advice.">
+<meta name="twitter:image" content="https://build-100.com/046/og-046.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #e879f9;
+    --accent-glow: rgba(232,121,249,0.35);
+    --warm: #fbbf24;
+    --hot: #f87171;
+    --cool: var(--accent);
+    --up: #f87171;
+    --down: #4ade80;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+    --you: var(--warm);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font-family: inherit; color: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  [hidden] { display: none !important; }
+  h1, h2, h3, p, td, th, li, label, .stat-k, .lede, .field-title, .choice, .fact-card, .result-card, .countdown, .local-time {
+    overflow-wrap: break-word;
+  }
+  img, canvas, svg, input, button { max-width: 100%; }
+  button { white-space: normal; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; min-width: 0; min-height: 44px; display: inline-flex; align-items: center; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; text-align: center; flex: none; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+    flex: none; min-height: 44px; min-width: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 48px); position: relative; }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; letter-spacing: 0.04em; line-height: 1.45; text-wrap: balance; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; margin-bottom: 18px;
+  }
+  .hero p.lede { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); }
+  .hero p.lede strong { color: var(--ink); font-weight: 600; }
+
+  .countdown {
+    margin-top: 18px;
+    font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+    font-weight: 700;
+    line-height: 1.35;
+    font-variant-numeric: tabular-nums;
+  }
+  .local-time, .fomc-line { color: var(--muted); font-size: 0.92rem; margin-top: 6px; }
+
+  .stat-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 16px 0 8px; }
+  .stat {
+    position: relative; min-width: 0;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: linear-gradient(180deg, rgba(237,239,241,0.035), rgba(237,239,241,0.015));
+    padding: 14px 12px 12px 14px; overflow: hidden;
+  }
+  .stat::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .stat-cool::before { background: var(--accent); box-shadow: 0 0 16px var(--accent-glow); }
+  .stat-ink::before { background: var(--ink); }
+  .stat-down::before { background: var(--down); box-shadow: 0 0 16px rgba(74,222,128,0.35); }
+  .stat-num {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(1.25rem, 3.4vw, 2.15rem); letter-spacing: -0.04em; line-height: 1.1;
+  }
+  .stat-cool .stat-num { color: var(--accent); }
+  .stat-ink .stat-num { color: var(--ink); }
+  .stat-down .stat-num { color: var(--down); }
+  .stat-k { margin-top: 6px; color: var(--muted); font-size: clamp(0.75rem, 2.5vw, 0.9rem); line-height: 1.35; }
+  .price-cap {
+    color: var(--faint); font-size: 0.8rem; margin: 4px 0 0; line-height: 1.45;
+  }
+
+  .cta {
+    display: inline-flex; align-items: center; justify-content: center; margin-top: 18px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--accent); border-radius: 4px;
+    background: var(--accent); color: var(--bg); cursor: pointer; transition: all .2s;
+    min-height: 44px; line-height: 1.4; text-align: center;
+  }
+  .cta:hover { box-shadow: 0 0 24px var(--accent-glow); }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .q-block { margin-top: 16px; }
+  .q-label { font-weight: 700; margin-bottom: 8px; }
+  .readout-k { color: var(--muted); font-size: 0.86rem; }
+  .readout {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(3.2rem, 12vw, 5.4rem); letter-spacing: -0.05em; line-height: 0.95;
+    color: var(--accent); text-shadow: 0 0 28px var(--accent-glow); margin: 4px 0 8px;
+  }
+  .readout span { font-size: 0.42em; color: var(--muted); letter-spacing: 0; margin-left: 4px; }
+  .readout-cap { color: var(--muted); font-size: 0.9rem; min-height: 1.4em; }
+
+  .slider-block { --thumb: 44px; margin-top: 8px; }
+  .slider { position: relative; height: 58px; }
+  .slider-rail {
+    position: absolute; z-index: 0; pointer-events: none;
+    left: calc(var(--thumb) / 2); right: calc(var(--thumb) / 2);
+    bottom: 19px; height: 6px;
+    border-radius: 999px; background: rgba(237,239,241,0.16);
+  }
+  .slider-band {
+    position: absolute; left: 50%; width: 8.3333%; top: -28px; bottom: -4px;
+    background: var(--accent); border-radius: 6px;
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+  .slider-aug {
+    position: absolute; left: 33.3333%; width: 3px; top: -7px; bottom: -7px;
+    background: var(--delta); border-radius: 2px; transform: translateX(-50%);
+  }
+  .guess-range {
+    position: absolute; z-index: 1; left: 0; right: 0; bottom: 0;
+    -webkit-appearance: none; appearance: none;
+    display: block; width: 100%; height: var(--thumb);
+    background: transparent; margin: 0; padding: 0;
+    touch-action: none; cursor: pointer;
+  }
+  .guess-range:focus { outline: none; }
+  .guess-range:focus-visible { outline: 1px solid var(--ink); outline-offset: 3px; }
+  .guess-range::-webkit-slider-runnable-track {
+    height: 6px; background: transparent; border: none; border-radius: 999px;
+  }
+  .guess-range::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: var(--thumb); height: var(--thumb); margin-top: -19px; border-radius: 50%;
+    background: var(--accent); border: 3px solid #060709;
+    box-shadow: 0 0 0 2px var(--accent), 0 0 16px var(--accent-glow);
+    cursor: pointer;
+  }
+  .guess-range::-moz-range-track {
+    height: 6px; background: transparent; border: none; border-radius: 999px;
+  }
+  .guess-range::-moz-range-thumb {
+    width: var(--thumb); height: var(--thumb); border: 3px solid #060709; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 0 2px var(--accent); cursor: pointer;
+  }
+  .slider-ticks {
+    position: relative; height: 16px;
+    margin: 6px calc(var(--thumb) / 2) 0;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0; text-transform: none;
+    color: var(--faint); font-variant-numeric: tabular-nums;
+  }
+  .slider-ticks span {
+    position: absolute; top: 0; transform: translateX(-50%);
+    white-space: nowrap; line-height: 1.2;
+  }
+  .tick-min { left: 0; }
+  .tick-aug { left: 33.3333%; color: var(--delta); }
+  .tick-band { left: 54.1667%; color: var(--accent); }
+  .tick-max { left: 100%; }
+
+  .rules {
+    width: 100%; border: 1px solid var(--line); border-radius: 12px;
+    background: #07090c; padding: 10px 12px 12px;
+  }
+  .rules-label { margin-bottom: 8px; }
+  .rule-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .rule-chip {
+    display: inline-flex; align-items: center; min-height: 32px;
+    padding: 4px 10px; border-radius: 999px; border: 1px solid transparent;
+    font-size: 0.82rem; font-weight: 700; line-height: 1.35;
+  }
+  .rule-chip.hawk { color: #f87171; border-color: rgba(248,113,113,0.5); background: rgba(248,113,113,0.1); }
+  .rule-chip.dove { color: #4ade80; border-color: rgba(74,222,128,0.5); background: rgba(74,222,128,0.1); }
+  .rule-chip.inline { color: #c5c9ce; border-color: rgba(197,201,206,0.45); background: rgba(237,239,241,0.08); }
+  .rule-score {
+    margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0; text-transform: none;
+    color: var(--ink); line-height: 1.5;
+  }
+
+  .choices { display: grid; gap: 8px; align-items: stretch; }
+  .choice {
+    display: flex; flex-direction: column; justify-content: center; gap: 2px;
+    width: 100%; height: 100%; min-height: 56px; text-align: left; cursor: pointer;
+    padding: 12px 14px; border-radius: 12px;
+    border: 1px solid var(--line-strong); background: var(--bg-raise);
+    color: var(--ink); transition: border-color .2s, background .2s, color .2s, box-shadow .2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .choice-title { font-weight: 700; line-height: 1.3; }
+  .choice-sub { color: var(--muted); font-size: 0.82rem; line-height: 1.35; }
+  .choice[data-side="long"][aria-pressed="true"] {
+    border-color: #4ade80; background: rgba(74,222,128,0.12);
+    box-shadow: 0 0 0 1px #4ade80, 0 0 18px rgba(74,222,128,0.25);
+  }
+  .choice[data-side="short"][aria-pressed="true"] {
+    border-color: #f87171; background: rgba(248,113,113,0.12);
+    box-shadow: 0 0 0 1px #f87171, 0 0 18px rgba(248,113,113,0.25);
+  }
+  .choice[aria-pressed="true"] .choice-sub { color: var(--ink); }
+  .choices.is-need .choice { border-color: rgba(251,191,36,0.75); }
+
+  .field-input {
+    display: flex; flex-direction: column; gap: 6px; min-width: 0;
+    color: var(--muted); font-size: 0.82rem;
+  }
+  .field-input input {
+    min-height: 44px; width: 100%; min-width: 0;
+    padding: 8px 12px; border: 1px solid var(--line-strong); border-radius: 8px;
+    background: #07090c; font-family: var(--mono); font-size: 16px;
+    font-variant-numeric: tabular-nums;
+  }
+  .note { color: var(--muted); font-size: 0.9rem; margin-top: 12px; }
+  .need-side { color: var(--delta); font-weight: 700; margin-top: 10px; }
+
+  .reveal-btn {
+    width: 100%; min-height: 52px; margin-top: 16px;
+    font-family: var(--mono); font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase;
+    font-weight: 700; border: none; border-radius: 10px; cursor: pointer;
+    background: var(--accent); color: var(--bg);
+    box-shadow: 0 0 24px var(--accent-glow);
+  }
+  .reveal-btn:hover { filter: brightness(1.05); }
+  .reveal-btn:disabled { opacity: 0.65; cursor: progress; filter: none; }
+  .session { margin-top: 10px; color: var(--muted); font-family: var(--mono); letter-spacing: 0.04em; text-transform: none; font-size: 12px; }
+
+  .print-stage {
+    margin-top: 16px; border: 1px solid var(--line); border-radius: 16px;
+    background: #07090c; padding: 18px 16px 16px; min-width: 0;
+  }
+  .sim-tag {
+    display: inline-block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent);
+    border-radius: 999px; padding: 4px 8px;
+  }
+  .print-kicker { color: var(--muted); font-size: 0.82rem; margin-top: 12px; }
+  .print-num {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(3rem, 12vw, 5.2rem); letter-spacing: -0.05em; line-height: 0.95;
+    margin: 4px 0;
+  }
+  .print-num.hawk { color: #f87171; }
+  .print-num.dove { color: #4ade80; }
+  .print-num.inline { color: var(--ink); }
+  .print-num.spin { color: var(--muted); }
+  .print-core, .print-vs, .print-call { color: var(--muted); font-size: 0.92rem; margin-top: 4px; }
+  .verdict {
+    display: inline-flex; align-items: center; min-height: 36px; margin-top: 12px;
+    padding: 6px 12px; border-radius: 999px; font-weight: 700; border: 1px solid var(--line-strong);
+  }
+  .verdict.hawk { color: #f87171; border-color: rgba(248,113,113,0.5); background: rgba(248,113,113,0.1); }
+  .verdict.dove { color: #4ade80; border-color: rgba(74,222,128,0.5); background: rgba(74,222,128,0.1); }
+  .verdict.inline { color: #c5c9ce; border-color: rgba(197,201,206,0.45); background: rgba(237,239,241,0.08); }
+  .board {
+    margin-top: 14px; border: 1px dashed var(--line-strong); border-radius: 12px; padding: 12px 14px;
+  }
+  .board.hawk { border-color: rgba(248,113,113,0.75); }
+  .board.dove { border-color: rgba(74,222,128,0.75); }
+  .board.inline { border-color: rgba(197,201,206,0.7); }
+  .board p { margin-top: 8px; font-weight: 700; }
+  .illus-tag {
+    display: inline-block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--bg); background: var(--delta);
+    border-radius: 999px; padding: 3px 8px;
+  }
+  .print-wait { margin-top: 12px; color: var(--muted); }
+
+  .result-card {
+    margin-top: 4px; border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); padding: 18px 16px 16px; min-width: 0;
+  }
+  .result-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+  .score-num {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(3.2rem, 12vw, 5rem); letter-spacing: -0.05em; line-height: 0.9;
+    color: var(--accent); margin-top: 8px;
+  }
+  .score-title { font-size: clamp(1.2rem, 3vw, 1.7rem); font-weight: 700; margin-top: 6px; }
+  .result-title { font-size: clamp(1.15rem, 3vw, 1.45rem); font-weight: 700; line-height: 1.3; margin-top: 8px; }
+  .score-lines { list-style: none; display: grid; gap: 8px; margin-top: 14px; }
+  .score-lines li {
+    min-height: 44px; display: flex; align-items: center;
+    padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #07090c;
+  }
+
+  .fact-grid { display: grid; gap: 12px; margin-top: 14px; }
+  .fact-card {
+    border: 1px solid var(--line); border-radius: 12px; background: var(--bg-raise);
+    padding: 14px 14px 16px; min-width: 0;
+  }
+  .fact-no { font-family: var(--mono); color: var(--accent); letter-spacing: 0.08em; font-size: 14px; }
+  .fact-card h3 { font-size: 1.05rem; margin: 4px 0 6px; }
+  .fact-card p { color: var(--muted); font-size: 0.95rem; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s; min-height: 44px;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { margin-top: 14px; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; display: block; }
+  .share-hint { color: var(--faint); font-size: 0.82rem; margin-top: 8px; }
+
+  .src-list { list-style: none; display: grid; gap: 10px; }
+  .src-list li {
+    color: var(--muted); font-size: 0.9rem;
+    padding-left: 14px; border-left: 2px solid var(--line-strong);
+  }
+  .disclaimer {
+    margin-top: 14px; border: 1px solid rgba(251,191,36,0.45);
+    background: rgba(251,191,36,0.08); color: var(--ink);
+    border-radius: 12px; padding: 14px 16px; font-size: 0.95rem; font-weight: 700;
+  }
+  .hero .disclaimer { margin-top: 16px; }
+
+  footer {
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 28px var(--pad) 40px; border-top: 1px solid var(--line);
+    max-width: 880px; margin: 0 auto;
+  }
+  footer a:hover { color: var(--ink); }
+  footer .mono { color: var(--faint); }
+
+  @media (min-width: 720px) {
+    .stat-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .choices { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 0 14px; gap: 8px; }
+    .nav-back { font-size: 11px; letter-spacing: 0; }
+    .nav-brand { font-size: 13px; }
+    .nav-lang { padding: 6px 10px; letter-spacing: 0.12em; }
+    .stat { padding: 12px 10px 12px 12px; }
+    .share-btn { padding: 12px 12px; flex: 1 1 100%; }
+    .reveal-btn { letter-spacing: 0.08em; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* 禁用所有动画 */
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">CPI<span>·046</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="Oct 14, 2026 · 8:30 ET · September CPI">2026-10-14 · 美东 08:30 · 9 月 CPI</p>
+    <h1 data-en="CPI night: the inflation bet">CPI 夜：通胀赌局</h1>
+    <p class="lede" data-en="On Wed Oct 14 at 8:30 a.m. ET, September CPI prints — write down your inflation call, bet long or short, and see how many points you score the moment it hits.">10-14（周三）美东 8:30 公布 9 月 CPI——写下你的通胀预测、押多空，看公布瞬间你能拿几分。</p>
+    <p class="disclaimer" data-en="Educational game, not investment advice">教育游戏，非投资建议</p>
+    <p class="countdown dyn" id="countdown" aria-live="polite"></p>
+    <p class="local-time dyn" id="localTime"></p>
+    <p class="fomc-line" data-en="The last inflation print before the Oct 27–28 FOMC.">这是 10-27/28 FOMC 议息前最后一张通胀牌。</p>
+
+    <div class="stat-row">
+      <article class="stat stat-cool">
+        <p class="stat-num" data-en="3.6–3.7%">3.6–3.7%</p>
+        <p class="stat-k" data-en="Headline consensus · August was 3.4%">整体共识 · 8 月 3.4%</p>
+      </article>
+      <article class="stat stat-ink">
+        <p class="stat-num" data-en="2.4–2.5%">2.4–2.5%</p>
+        <p class="stat-k" data-en="Core consensus · August was 2.4%">核心共识 · 8 月 2.4%</p>
+      </article>
+      <article class="stat stat-down">
+        <p class="stat-num" data-en="3.75–4.00%">3.75–4.00%</p>
+        <p class="stat-k" data-en="Fed funds · FOMC Oct 27–28">联邦基金 · FOMC 10-27/28</p>
+      </article>
+    </div>
+    <p class="price-cap" data-en="Consensus as of Oct 13 (compiled from media reports); BLS release prevails">截至 10-13 的市场共识（多家媒体整理），实际以 BLS 公布为准</p>
+    <p class="price-cap" data-en="Cleveland Fed nowcast on Oct 7: headline 3.60%, core 2.39%.">克利夫兰联储 10-07 nowcast：整体 3.60%，核心 2.39%。</p>
+    <p class="price-cap" data-en="The Fed hiked to 3.75–4.00% on Sept 16 (12-0, the first hike since 2023).">美联储 9-16 加息至 3.75–4.00%（12-0 全票，2023 年来首次加息）。</p>
+    <a class="cta" href="#predict" data-en="Write your call">写下预测</a>
+  </header>
+
+  <section class="field" id="predict">
+    <div class="field-head">
+      <span class="field-no" data-en="01">01</span>
+      <h2 class="field-title" data-en="Your call">你的预测</h2>
+      <p class="field-hint" data-en="Headline CPI, year over year. The slider moves in steps of 0.1, from 3.0 to 4.2, and starts at 3.6. Pick long or short S&amp;P 500. Core can stay blank.">整体 CPI 同比。滑块从 3.0 到 4.2，一步 0.1，默认 3.6。做多或做空 S&amp;P 500 里选一个。核心可以空着。</p>
+    </div>
+
+    <p class="readout-k" data-en="Your headline call">你押的整体 CPI</p>
+    <p class="readout dyn" id="readout" aria-live="polite"></p>
+    <p class="readout-cap dyn" id="readoutCap"></p>
+    <div class="slider-block">
+      <div class="slider">
+        <div class="slider-rail" aria-hidden="true">
+          <div class="slider-band"></div>
+          <div class="slider-aug"></div>
+        </div>
+        <input id="guess" class="guess-range" type="range" min="3.0" max="4.2" step="0.1" value="3.6" aria-label="Headline CPI call">
+      </div>
+      <div class="slider-ticks" aria-hidden="true">
+        <span class="tick-min" data-en="3.0">3.0</span>
+        <span class="tick-aug" data-en="3.4">3.4</span>
+        <span class="tick-band" data-en="3.6–3.7">3.6–3.7</span>
+        <span class="tick-max" data-en="4.2">4.2</span>
+      </div>
+    </div>
+    <p class="price-cap" data-en="Consensus as of Oct 13 (compiled from media reports); BLS release prevails">截至 10-13 的市场共识（多家媒体整理），实际以 BLS 公布为准</p>
+
+    <div class="q-block">
+      <p class="q-label" id="sideLabel" data-en="Side">方向</p>
+      <div class="choices" id="sideChoices" role="group" aria-labelledby="sideLabel">
+        <button type="button" class="choice" data-side="long" aria-pressed="false">
+          <span class="choice-title" data-en="Long S&amp;P 500">做多 S&amp;P 500</span>
+          <span class="choice-sub" data-en="Full direction points if the print is dovish">偏鸽时，方向分拿满</span>
+        </button>
+        <button type="button" class="choice" data-side="short" aria-pressed="false">
+          <span class="choice-title" data-en="Short S&amp;P 500">做空 S&amp;P 500</span>
+          <span class="choice-sub" data-en="Full direction points if the print is hawkish">偏鹰时，方向分拿满</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <label class="field-input" for="coreGuess">
+        <span data-en="Optional core CPI call (2.0–2.9). Blank is not penalized.">可选核心 CPI 猜测（2.0–2.9）。不填不扣分。</span>
+        <input id="coreGuess" type="number" min="2.0" max="2.9" step="0.1" inputmode="decimal" placeholder="可空" data-en-placeholder="optional">
+      </label>
+      <p class="need-side dyn" id="coreHint" hidden></p>
+    </div>
+  </section>
+
+  <section class="field" id="reveal">
+    <div class="field-head">
+      <span class="field-no" data-en="02">02</span>
+      <h2 class="field-title" data-en="The print!">公布！</h2>
+    </div>
+    <div class="rules">
+      <p class="rules-label"><span class="sim-tag" data-en="Simulated">模拟</span></p>
+      <div class="rule-chips">
+        <span class="rule-chip hawk" data-en="≥3.8 Hawkish · headwind for equities">≥3.8 偏鹰·利空股指</span>
+        <span class="rule-chip inline" data-en="3.6–3.7 In line">3.6–3.7 符合预期</span>
+        <span class="rule-chip dove" data-en="≤3.5 Dovish · tailwind for equities">≤3.5 偏鸽·利多股指</span>
+      </div>
+      <p class="rule-score" data-en="Error ≤0.1 → 50 bullseye · ≤0.2 → 30 · ≤0.4 → 15 · right side +40 · in line +20 · core ±0.1 +10">误差 ≤0.1 → 50 神准 · ≤0.2 → 30 · ≤0.4 → 15 · 方向押对 +40 · 符合预期 +20 · 核心 ±0.1 +10</p>
+    </div>
+    <p class="note" data-en="Simulated draw; weights lean toward consensus; not a forecast.">模拟抽样，权重偏向共识，不是预测。</p>
+    <button class="reveal-btn" id="revealBtn" type="button" data-en="Print!">公布！</button>
+    <p class="need-side dyn" id="needSide" hidden></p>
+    <p class="session dyn" id="session"></p>
+    <div class="print-stage dyn" id="printStage" aria-live="polite"></div>
+  </section>
+
+  <section class="field" id="score">
+    <div class="field-head">
+      <span class="field-no" data-en="03">03</span>
+      <h2 class="field-title" data-en="Score card">战绩卡</h2>
+      <p class="field-hint" data-en="Points, title, and the three lines you can share. Simulated.">得分、称号，和能分享的三行明细。模拟。</p>
+    </div>
+    <div class="result-card dyn" id="result" aria-live="polite"></div>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap" hidden>
+      <canvas id="shareCanvas" width="1200" height="630"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+
+  <section class="field" id="cheat">
+    <div class="field-head">
+      <span class="field-no" data-en="04">04</span>
+      <h2 class="field-title" data-en="CPI night cheat sheet">CPI 夜速查表</h2>
+      <p class="field-hint" data-en="Three cards on how to read tonight's number.">三张卡，帮你读今晚的数字。</p>
+    </div>
+    <div class="fact-grid">
+      <article class="fact-card">
+        <span class="fact-no" data-en="01">01</span>
+        <h3 data-en="Why core matters more than the headline">为什么核心比整体更重要</h3>
+        <p data-en="Core CPI strips out food and energy, so it tracks sticky inflation more closely. The Fed watches it more than the headline. The headline moves with food and energy; core is the stickier one.">核心 CPI 剔除食品和能源，更能反映粘性通胀，美联储也更看重它。整体会跟着食品和能源走，核心更黏。</p>
+      </article>
+      <article class="fact-card">
+        <span class="fact-no" data-en="02">02</span>
+        <h3 data-en="Trade the surprise, not the level">方向看预期差，不看绝对值</h3>
+        <p data-en="What moves prices is the gap versus what was expected, not how high the number looks on its own. Consensus on this page is about 3.6–3.7% year over year, and August was 3.4%. A print can be above August and still be in line if it lands in that band — the shock stays limited.">涨跌看的是公布值和预期差多少，不是数字本身高不高。本页共识是整体同比约 3.6–3.7%，8 月实际是 3.4%。即便高于 8 月，只要落在这个区间里，就算符合预期，冲击有限。</p>
+      </article>
+      <article class="fact-card">
+        <span class="fact-no" data-en="03">03</span>
+        <h3 data-en="How to read CME FedWatch">CME FedWatch 怎么读</h3>
+        <p data-en="FedWatch is a futures-implied probability. Right now the odds of another hike are about 19% for October and about 70.6% for December. CME FedWatch prevails. The moment CPI prints, those odds reprice.">FedWatch 读的是期货隐含概率。当前 10 月再加息概率约 19%，12 月约 70.6%。以 CME 官网为准。CPI 一出来，这些概率会瞬间重定价。</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="field" id="sources">
+    <div class="field-head">
+      <span class="field-no" data-en="05">05</span>
+      <h2 class="field-title" data-en="Sources and disclaimer">数据来源与免责</h2>
+    </div>
+    <ul class="src-list">
+      <li data-en="Compiled on 2026-10-13.">整理日：2026-10-13。</li>
+      <li data-en="September CPI prints at 8:30 a.m. ET on Oct 14, 2026 (12:30 UTC the same day; 8:30 p.m. Beijing time on Oct 14). It is the last inflation print before the Oct 27–28 FOMC.">9 月 CPI 于美东时间 2026-10-14 08:30 公布（当日世界时 12:30；北京时间 10-14 20:30）。这是 10-27/28 FOMC 议息前最后一张通胀牌。</li>
+      <li data-en="Consensus as of Oct 13 (compiled from media reports): headline CPI about 3.6–3.7% year over year (August was 3.4%), core CPI about 2.4–2.5% (August was 2.4%). BLS release prevails.">市场共识（截至 10-13，多家媒体整理）：整体 CPI 同比约 3.6–3.7%（8 月实际 3.4%），核心 CPI 同比约 2.4–2.5%（8 月实际 2.4%）。实际以 BLS 公布为准。</li>
+      <li data-en="Cleveland Fed nowcast on Oct 7: headline 3.60%, core 2.39%.">克利夫兰联储 10-07 nowcast：整体 3.60%，核心 2.39%。</li>
+      <li data-en="The Fed hiked to 3.75–4.00% on Sept 16 (12-0, the first hike since 2023).">美联储 9-16 加息至 3.75–4.00%（12-0 全票，2023 年来首次加息）。</li>
+      <li data-en="CME FedWatch: odds of another hike are about 19% for October and about 70.6% for December. CME FedWatch prevails.">CME FedWatch：10 月再加息概率约 19%，12 月约 70.6%。以 CME 官网为准。</li>
+    </ul>
+    <p class="disclaimer" data-en="Educational game, not investment advice. The simulated draw is not a forecast.">教育游戏，非投资建议。模拟开奖不是预测。</p>
+  </section>
+</main>
+
+<footer>
+  <span class="mono" data-en='<a href="https://build-100.com/">build-100.com</a>'><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono" data-en='<a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a>'><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="CPI-046 · CPI night: inflation bet">CPI-046 · CPI 夜：通胀赌局</span>
+</footer>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  "use strict";
+  var E = window.CpiEngine;
+  if (!E) return;
+
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {} // 复用主站 key
+
+  var side = null;
+  var needPick = false;
+  var spinning = false;
+  var spinId = 0;
+  var rounds = 0;
+  var best = null;
+  var shareOpen = false;
+  var copyTimer = null;
+  var view = { phase: "idle", result: null, showHeadline: null, showCore: null };
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+  function $(id) { return document.getElementById(id); }
+
+  function esc(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function fmt(n) {
+    if (typeof n !== "number" || !isFinite(n)) return "—";
+    return (Math.round(n * 10) / 10).toFixed(1);
+  }
+
+  function stampZh() {
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    });
+  }
+
+  function readGuess() {
+    var el = $("guess");
+    return E.clampGuess(el ? el.value : 3.6);
+  }
+
+  function readCore() {
+    var el = $("coreGuess");
+    if (!el) return null;
+    var raw = String(el.value || "").trim();
+    if (raw === "") return null;
+    var n = Number(raw);
+    return isFinite(n) ? n : null;
+  }
+
+  function tierName(tier) {
+    if (tier === "bullseye") return t("神准", "Bullseye");
+    if (tier === "close") return t("接近", "Close");
+    if (tier === "off") return t("偏了", "Off");
+    return t("离谱", "Wild");
+  }
+
+  function verdictName(v) {
+    if (v === "hawk") return t("高于预期 · 偏鹰", "Above consensus · hawkish");
+    if (v === "dove") return t("低于预期 · 偏鸽", "Below consensus · dovish");
+    return t("符合预期", "In line with consensus");
+  }
+
+  function boardCopy(v) {
+    if (v === "hawk") {
+      return t("加息概率 ↑ · 美债收益率 ↑ · 股指承压", "Hike odds ↑ · Treasury yields ↑ · Equities under pressure");
+    }
+    if (v === "dove") {
+      return t("加息概率 ↓ · 美债收益率 ↓ · 利多股指", "Hike odds ↓ · Treasury yields ↓ · A tailwind for equities");
+    }
+    return t("波动有限", "Limited volatility");
+  }
+
+  function sideName(s) {
+    if (s === "long") return t("做多", "Long");
+    if (s === "short") return t("做空", "Short");
+    return t("未选方向", "No side");
+  }
+
+  function applyLang(l) {
+    lang = l;
+    if (copyTimer) { clearTimeout(copyTimer); copyTimer = null; }
+    var copyBtn = $("copyBtn");
+    if (copyBtn) copyBtn.classList.remove("copied");
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    $("langBtn").setAttribute("aria-label", l === "en" ? "切换到中文" : "Switch language");
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    document.querySelectorAll("[data-en-placeholder]").forEach(function (el) {
+      if (el.dataset.zhPlaceholder === undefined) el.dataset.zhPlaceholder = el.getAttribute("placeholder") || "";
+      el.setAttribute("placeholder", l === "en" ? el.dataset.enPlaceholder : el.dataset.zhPlaceholder);
+    });
+    var guess = $("guess");
+    if (guess) guess.setAttribute("aria-label", t("整体 CPI 同比预测", "Headline CPI call"));
+    var core = $("coreGuess");
+    if (core) core.setAttribute("aria-label", t("核心 CPI 猜测，可空", "Core CPI guess, optional"));
+    renderAll();
+    if (shareOpen) drawShare();
+  }
+
+  function renderCountdown() {
+    var el = $("countdown");
+    if (!el) return;
+    var c = E.countdown(Date.now());
+    if (c.released) {
+      el.textContent = t(
+        "9 月 CPI 已公布——真实数据以 BLS 为准，本页仍可练手",
+        "September CPI is out — the real print is the BLS release. This page is still for practice."
+      );
+      return;
+    }
+    if (c.hours === 0 && c.minutes === 0) {
+      el.textContent = t(
+        "距离 9 月 CPI 公布还有不到 1 分钟",
+        "Less than a minute until the September CPI release"
+      );
+      return;
+    }
+    el.textContent = t(
+      "距离 9 月 CPI 公布还有 " + c.hours + " 小时 " + c.minutes + " 分",
+      c.hours + " h " + c.minutes + " m until the September CPI release"
+    );
+  }
+
+  function renderLocal() {
+    var el = $("localTime");
+    if (!el) return;
+    var loc = "";
+    try {
+      var when = new Date(E.RELEASE_UTC_MS);
+      var locale = lang === "en" ? "en-US" : "zh-CN";
+      var datePart = new Intl.DateTimeFormat(locale, { month: "numeric", day: "numeric" }).format(when);
+      var timePart = new Intl.DateTimeFormat(locale, {
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23"
+      }).format(when);
+      var tz = "";
+      try {
+        tz = new Intl.DateTimeFormat(locale, { timeZoneName: "short" })
+          .formatToParts(when)
+          .filter(function (p) { return p.type === "timeZoneName"; })
+          .map(function (p) { return p.value; })
+          .join("");
+      } catch (e2) {}
+      loc = datePart + " " + timePart + (tz ? " " + tz : "");
+    } catch (e) {
+      loc = new Date(E.RELEASE_UTC_MS).toISOString();
+    }
+    el.textContent = t(
+      "换算到你的本地时间：" + loc + "（北京时间 10-14 20:30）",
+      "In your local time: " + loc + " (8:30 p.m. Beijing, Oct 14)"
+    );
+  }
+
+  function renderGuess() {
+    var g = readGuess();
+    var tenths = Math.round(g * 10);
+    var el = $("readout");
+    if (el) el.innerHTML = fmt(g) + "<span>%</span>";
+    var cap = $("readoutCap");
+    if (!cap) return;
+    var note;
+    if (tenths === 34) {
+      note = t("和 8 月实际 3.4% 一样，低于共识带", "Same as the August 3.4% print, below the consensus band");
+    } else if (tenths >= 36 && tenths <= 37) {
+      note = t("落在共识带 3.6–3.7% 里", "Inside the 3.6–3.7% consensus band");
+    } else if (tenths <= 35) {
+      note = t("低于共识带 3.6–3.7%", "Below the 3.6–3.7% consensus band");
+    } else {
+      note = t("高于共识带 3.6–3.7%", "Above the 3.6–3.7% consensus band");
+    }
+    cap.textContent = note;
+    var guess = $("guess");
+    if (guess) guess.setAttribute("aria-valuetext", fmt(g) + "%");
+  }
+
+  function renderChoices() {
+    document.querySelectorAll(".choice[data-side]").forEach(function (btn) {
+      btn.setAttribute("aria-pressed", btn.getAttribute("data-side") === side ? "true" : "false");
+    });
+    var box = $("sideChoices");
+    if (box) box.classList.toggle("is-need", needPick && side !== "long" && side !== "short");
+  }
+
+  function renderNeed() {
+    var el = $("needSide");
+    if (!el) return;
+    if (needPick && side !== "long" && side !== "short") {
+      el.hidden = false;
+      el.textContent = t("先选做多或做空，再开奖。", "Pick long or short before the print.");
+    } else {
+      el.hidden = true;
+      el.textContent = "";
+    }
+  }
+
+  function renderCoreHint() {
+    var el = $("coreHint");
+    if (!el) return;
+    var raw = String(($("coreGuess") && $("coreGuess").value) || "").trim();
+    if (raw === "") {
+      el.hidden = true;
+      el.textContent = "";
+      return;
+    }
+    var n = Number(raw);
+    var tenths = Math.round(n * 10);
+    if (!isFinite(n) || tenths < 20 || tenths > 29) {
+      el.hidden = false;
+      el.textContent = t("核心请填 2.0 到 2.9，或留空。", "Core is 2.0 to 2.9, or leave it blank.");
+      return;
+    }
+    el.hidden = true;
+    el.textContent = "";
+  }
+
+  function renderRevealBtn() {
+    var btn = $("revealBtn");
+    if (!btn) return;
+    btn.disabled = spinning;
+    if (spinning) btn.textContent = t("开奖中…", "Printing…");
+    else if (rounds > 0) btn.textContent = t("再开一次", "Run it again");
+    else btn.textContent = t("公布！", "Print!");
+  }
+
+  function sessionText() {
+    if (!rounds) return "";
+    return t(
+      "本场 " + rounds + " 局 · 最高 " + best + " 分",
+      rounds + (rounds === 1 ? " round" : " rounds") + " this session · best " + best
+    );
+  }
+
+  function renderSession() {
+    var el = $("session");
+    if (!el) return;
+    var text = sessionText();
+    el.textContent = text;
+    el.hidden = !text;
+  }
+
+  function idleHtml() {
+    return (
+      '<span class="sim-tag">' + esc(t("模拟", "Simulated")) + "</span>" +
+      '<p class="print-wait">' + esc(t("按下公布，这里抽出模拟的整体和核心。", "Hit print and a simulated headline and core land here.")) + "</p>"
+    );
+  }
+
+  function spinHtml() {
+    var h = view.showHeadline == null ? "—" : fmt(view.showHeadline) + "%";
+    var c = view.showCore == null ? "—" : fmt(view.showCore) + "%";
+    return (
+      '<span class="sim-tag">' + esc(t("模拟", "Simulated")) + "</span>" +
+      '<p class="print-kicker">' + esc(t("正在抽取模拟公布值", "Drawing a simulated print")) + "</p>" +
+      '<p class="print-num spin" id="spinHead">' + esc(h) + "</p>" +
+      '<p class="print-core" id="spinCore">' + esc(t("核心 ", "Core ") + c) + "</p>"
+    );
+  }
+
+  function doneHtml(r) {
+    var v = r.verdict || "inline";
+    var coreGuess = r.coreGuess;
+    var coreBit = t("模拟核心 ", "Simulated core ") + fmt(r.coreActual) + "% · " +
+      t("共识 2.4–2.5%", "consensus 2.4–2.5%");
+    if (coreGuess != null && String(coreGuess).trim() !== "") {
+      coreBit = t("你猜核心 ", "Your core ") + fmt(Number(coreGuess)) + "% · " + coreBit;
+    }
+    return (
+      '<span class="sim-tag">' + esc(t("模拟", "Simulated")) + "</span>" +
+      '<p class="print-kicker">' + esc(t("模拟整体 CPI", "Simulated headline CPI")) + "</p>" +
+      '<p class="print-num ' + v + '" id="printNum">' + esc(fmt(r.actual) + "%") + "</p>" +
+      '<p class="print-call">' + esc(t("你押 ", "You called ") + fmt(Number(r.guess)) + "% · " + sideName(r.side)) + "</p>" +
+      '<p class="verdict ' + v + '" id="verdict">' + esc(verdictName(v)) + "</p>" +
+      '<p class="print-vs">' + esc(t(
+        "对照共识 3.6–3.7%（8 月实际 3.4%）",
+        "Versus consensus 3.6–3.7% (August was 3.4%)"
+      )) + "</p>" +
+      '<p class="print-core" id="printCore">' + esc(coreBit) + "</p>" +
+      '<div class="board ' + v + '">' +
+        '<span class="illus-tag">' + esc(t("示意", "Illustrative")) + "</span>" +
+        '<p id="boardText">' + esc(boardCopy(v)) + "</p>" +
+      "</div>"
+    );
+  }
+
+  function renderPrint() {
+    var host = $("printStage");
+    if (!host) return;
+    if (view.phase === "spin") host.innerHTML = spinHtml();
+    else if (view.phase === "done" && view.result) host.innerHTML = doneHtml(view.result);
+    else host.innerHTML = idleHtml();
+  }
+
+  function accLine(r) {
+    return t(
+      "预测误差分 " + r.acc + " · " + tierName(r.tier),
+      "Accuracy " + r.acc + " · " + tierName(r.tier)
+    );
+  }
+
+  function dirLine(r) {
+    if (r.dir === 40 && r.side === "long") {
+      return t("方向分 40 · 做多遇上偏鸽", "Direction 40 · long into a dovish print");
+    }
+    if (r.dir === 40 && r.side === "short") {
+      return t("方向分 40 · 做空遇上偏鹰", "Direction 40 · short into a hawkish print");
+    }
+    if (r.dir === 20) {
+      return t("方向分 20 · 符合预期，多空都加", "Direction 20 · in line, both sides score");
+    }
+    return t("方向分 0 · 方向押反", "Direction 0 · wrong way");
+  }
+
+  function coreLine(r) {
+    var filled = r.coreGuess != null && String(r.coreGuess).trim() !== "" && isFinite(Number(r.coreGuess));
+    if (!filled) return t("核心加分 0 · 没填，不扣分", "Core bonus 0 · left blank, no penalty");
+    if (r.core === 10) {
+      return t(
+        "核心加分 10 · 差在 0.1 以内（你猜 " + fmt(Number(r.coreGuess)) + "%，模拟 " + fmt(r.coreActual) + "%）",
+        "Core bonus 10 · within 0.1 (you " + fmt(Number(r.coreGuess)) + "%, simulated " + fmt(r.coreActual) + "%)"
+      );
+    }
+    return t(
+      "核心加分 0 · 没进 0.1（你猜 " + fmt(Number(r.coreGuess)) + "%，模拟 " + fmt(r.coreActual) + "%）",
+      "Core bonus 0 · outside 0.1 (you " + fmt(Number(r.coreGuess)) + "%, simulated " + fmt(r.coreActual) + "%)"
+    );
+  }
+
+  function renderResult() {
+    var el = $("result");
+    if (!el) return;
+    if (!view.result || view.phase !== "done") {
+      el.innerHTML =
+        '<p class="result-kicker">' + esc(t("模拟战绩", "Simulated card")) + "</p>" +
+        '<p class="result-title">' + esc(t("开奖之后，分数和称号出现在这里。", "After the print, the score and title show up here.")) + "</p>";
+      return;
+    }
+    var r = view.result;
+    var title = r.title ? t(r.title.zh, r.title.en) : "";
+    var sess = sessionText();
+    el.innerHTML =
+      '<p class="result-kicker">' + esc(t("模拟战绩", "Simulated card")) + "</p>" +
+      (sess ? '<p class="session">' + esc(sess) + "</p>" : "") +
+      '<p class="score-num" id="scoreNum">' + esc(String(r.total)) + "</p>" +
+      '<p class="score-title" id="scoreTitle">' + esc(title) + "</p>" +
+      '<ul class="score-lines">' +
+        "<li>" + esc(accLine(r)) + "</li>" +
+        "<li>" + esc(dirLine(r)) + "</li>" +
+        "<li>" + esc(coreLine(r)) + "</li>" +
+      "</ul>";
+  }
+
+  function renderAll() {
+    renderCountdown();
+    renderLocal();
+    renderGuess();
+    renderChoices();
+    renderNeed();
+    renderCoreHint();
+    renderRevealBtn();
+    renderSession();
+    renderPrint();
+    renderResult();
+  }
+
+  function finishSpin(id) {
+    if (id !== spinId) return;
+    if (view.phase === "done") return;
+    spinning = false;
+    view.phase = "done";
+    rounds += 1;
+    if (best == null || view.result.total > best) best = view.result.total;
+    renderRevealBtn();
+    renderSession();
+    renderPrint();
+    renderResult();
+    if (shareOpen) drawShare();
+    var card = $("result");
+    if (card && card.scrollIntoView) {
+      try { card.scrollIntoView({ block: "nearest" }); } catch (e) {}
+    }
+  }
+
+  function startSpin(result) {
+    var id = ++spinId;
+    view.phase = "spin";
+    view.result = result;
+    view.showHeadline = null;
+    view.showCore = null;
+    spinning = true;
+    renderRevealBtn();
+    renderPrint();
+    var reduce = false;
+    try { reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+    if (reduce) {
+      finishSpin(id);
+      return;
+    }
+    var t0 = performance.now();
+    var dur = 1600;
+    function frame(now) {
+      if (id !== spinId || view.phase !== "spin") return;
+      var p = Math.min(1, (now - t0) / dur);
+      var hi = E.HEADLINE_POOL[Math.floor(now / 45) % E.HEADLINE_POOL.length].v;
+      var co = E.CORE_POOL[Math.floor(now / 55) % E.CORE_POOL.length].v;
+      view.showHeadline = hi;
+      view.showCore = co;
+      var hEl = $("spinHead");
+      var cEl = $("spinCore");
+      if (hEl) hEl.textContent = fmt(hi) + "%";
+      if (cEl) cEl.textContent = t("核心 ", "Core ") + fmt(co) + "%";
+      if (p < 1) requestAnimationFrame(frame);
+      else finishSpin(id);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function onReveal() {
+    if (spinning) return;
+    if (side !== "long" && side !== "short") {
+      needPick = true;
+      renderChoices();
+      renderNeed();
+      var box = $("sideChoices");
+      if (box && box.scrollIntoView) {
+        try { box.scrollIntoView({ block: "nearest" }); } catch (e) {}
+      }
+      return;
+    }
+    needPick = false;
+    renderChoices();
+    renderNeed();
+    var result = E.playRound({
+      guess: readGuess(),
+      side: side,
+      coreGuess: readCore()
+    });
+    startSpin(result);
+  }
+
+  function fontStack() {
+    return '"Noto Sans CJK SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+  }
+
+  function setFont(ctx, weight, px) {
+    ctx.font = weight + " " + px + "px " + fontStack();
+  }
+
+  function fitText(ctx, text, maxW, weight, px, minPx) {
+    var size = px;
+    setFont(ctx, weight, size);
+    while (size > minPx && ctx.measureText(text).width > maxW) {
+      size -= 2;
+      setFont(ctx, weight, size);
+    }
+    return size;
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    var rr = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + rr, y);
+    ctx.arcTo(x + w, y, x + w, y + h, rr);
+    ctx.arcTo(x + w, y + h, x, y + h, rr);
+    ctx.arcTo(x, y + h, x, y, rr);
+    ctx.arcTo(x, y, x + w, y, rr);
+    ctx.closePath();
+  }
+
+  function cssColor(name, fallback) {
+    var v = "";
+    try { v = getComputedStyle(document.documentElement).getPropertyValue(name).trim(); } catch (e) {}
+    return v || fallback;
+  }
+
+  function drawMeter(ctx, x, y, w, guess, actual, vColor, accent) {
+    var trackH = 10;
+    ctx.fillStyle = "rgba(237,239,241,0.18)";
+    roundRect(ctx, x, y, w, trackH, 5);
+    ctx.fill();
+    function xOf(v) {
+      var f = (Number(v) - 3) / 1.2;
+      if (!isFinite(f)) f = 0;
+      if (f < 0) f = 0;
+      if (f > 1) f = 1;
+      return x + f * w;
+    }
+    var b0 = xOf(3.6);
+    var b1 = xOf(3.7);
+    ctx.save();
+    ctx.globalAlpha = 0.4;
+    ctx.fillStyle = accent;
+    roundRect(ctx, b0, y - 4, Math.max(4, b1 - b0), trackH + 8, 5);
+    ctx.fill();
+    ctx.restore();
+    var gx = xOf(guess);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(Math.round(gx) - 1, y - 8, 3, trackH + 16);
+    var ax = xOf(actual);
+    ctx.beginPath();
+    ctx.arc(ax, y + trackH / 2, 8, 0, Math.PI * 2);
+    ctx.fillStyle = vColor;
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#060709";
+    ctx.stroke();
+    ctx.fillStyle = "#7d848c";
+    setFont(ctx, "400", 14);
+    ctx.textAlign = "left";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillText("3.0", x, y + trackH + 20);
+    ctx.textAlign = "right";
+    ctx.fillText("4.2", x + w, y + trackH + 20);
+    ctx.textAlign = "left";
+  }
+
+  function drawShare() {
+    var canvas = $("shareCanvas");
+    if (!canvas) return;
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    var W = 1200;
+    var H = 630;
+    var pad = 64;
+    var maxW = W - pad * 2;
+    canvas.width = W;
+    canvas.height = H;
+    var accent = cssColor("--accent", "#e879f9");
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.045)";
+    var gx;
+    var gy;
+    for (gx = 18; gx < W; gx += 36) {
+      for (gy = 18; gy < H; gy += 36) ctx.fillRect(gx, gy, 1.4, 1.4);
+    }
+    ctx.fillStyle = accent;
+    ctx.fillRect(0, 0, 10, H);
+    ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
+    ctx.fillStyle = accent;
+    setFont(ctx, "700", 22);
+    var brand = "CPI-046";
+    ctx.fillText(brand, pad, 68);
+    var brandW = ctx.measureText(brand).width;
+    ctx.fillStyle = "#9aa1a8";
+    var rest = t(" · CPI 夜：通胀赌局", " · CPI night: inflation bet");
+    fitText(ctx, rest, maxW - brandW - 8, "400", 22, 14);
+    ctx.fillText(rest, pad + brandW, 68);
+
+    var r = view.phase === "done" ? view.result : null;
+    if (!r) {
+      var g = readGuess();
+      ctx.fillStyle = accent;
+      setFont(ctx, "700", 18);
+      ctx.fillText(t("模拟 · 尚未开奖", "SIMULATED · NO PRINT YET"), pad, 140);
+      ctx.fillStyle = "#edeff1";
+      fitText(ctx, fmt(g) + "%", maxW, "700", 120, 64);
+      ctx.fillText(fmt(g) + "%", pad, 280);
+      ctx.fillStyle = "#edeff1";
+      var invite = t(
+        "我押 " + fmt(g) + "%，" + sideName(side) + " S&P 500",
+        "Calling " + fmt(g) + "%, " + sideName(side) + " S&P 500"
+      );
+      fitText(ctx, invite, maxW, "600", 32, 18);
+      ctx.fillText(invite, pad, 360);
+      ctx.fillStyle = "#9aa1a8";
+      var sub = t("模拟赌局，来押公布。", "Simulated bet. Come call the print.");
+      fitText(ctx, sub, maxW, "400", 24, 16);
+      ctx.fillText(sub, pad, 420);
+    } else {
+      var v = r.verdict;
+      var vColor = v === "hawk" ? "#f87171" : v === "dove" ? "#4ade80" : "#b7bec6";
+      ctx.fillStyle = accent;
+      setFont(ctx, "700", 18);
+      ctx.fillText(t("模拟战绩", "SIMULATED CARD"), pad, 118);
+      ctx.fillStyle = accent;
+      var score = String(r.total);
+      fitText(ctx, score, maxW, "700", 96, 64);
+      ctx.fillText(score, pad, 232);
+      ctx.fillStyle = "#edeff1";
+      var title = r.title ? t(r.title.zh, r.title.en) : "";
+      fitText(ctx, title, maxW, "700", 34, 20);
+      ctx.fillText(title, pad, 282);
+      var compare = t(
+        "预测 " + fmt(Number(r.guess)) + "%  →  模拟公布 " + fmt(r.actual) + "%",
+        "Call " + fmt(Number(r.guess)) + "%  →  simulated print " + fmt(r.actual) + "%"
+      );
+      ctx.fillStyle = "#edeff1";
+      fitText(ctx, compare, maxW, "600", 26, 16);
+      ctx.fillText(compare, pad, 332);
+
+      drawMeter(ctx, pad, 352, maxW, Number(r.guess), Number(r.actual), vColor, accent);
+
+      var pill = sideName(r.side) + " · " + (v === "hawk" ? t("偏鹰", "Hawkish") : v === "dove" ? t("偏鸽", "Dovish") : t("符合预期", "In line"));
+      ctx.fillStyle = vColor;
+      ctx.textAlign = "left";
+      fitText(ctx, pill, maxW, "700", 24, 16);
+      ctx.fillText(pill, pad, 424);
+
+      var bits = [
+        t("误差 " + r.acc, "Accuracy " + r.acc),
+        t("方向 " + r.dir, "Direction " + r.dir),
+        t("核心 +" + r.core, "Core +" + r.core)
+      ];
+      var gap = 16;
+      var boxW = (maxW - gap * 2) / 3;
+      var boxY = 448;
+      var i;
+      for (i = 0; i < bits.length; i++) {
+        var x = pad + i * (boxW + gap);
+        ctx.fillStyle = "rgba(237,239,241,0.04)";
+        roundRect(ctx, x, boxY, boxW, 78, 12);
+        ctx.fill();
+        ctx.strokeStyle = "rgba(237,239,241,0.14)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.fillStyle = "#edeff1";
+        ctx.textAlign = "left";
+        fitText(ctx, bits[i], boxW - 24, "600", 16, 11);
+        var shown = bits[i];
+        if (ctx.measureText(shown).width > boxW - 24) {
+          while (shown.length > 2 && ctx.measureText(shown + "…").width > boxW - 24) shown = shown.slice(0, -1);
+          shown += "…";
+        }
+        ctx.fillText(shown, x + 12, boxY + 46);
+      }
+      ctx.textAlign = "left";
+    }
+
+    ctx.strokeStyle = "rgba(237,239,241,0.14)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad, 566);
+    ctx.lineTo(W - pad, 566);
+    ctx.stroke();
+    var url = "build-100.com/046";
+    var disc = t("教育游戏，非投资建议 · 模拟", "Educational game, not investment advice · simulated");
+    ctx.fillStyle = "#9aa1a8";
+    fitText(ctx, url, 460, "400", 20, 14);
+    ctx.fillText(url, pad, 604);
+    var urlW = ctx.measureText(url).width;
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#d5d9de";
+    fitText(ctx, disc, Math.max(280, maxW - urlW - 24), "400", 18, 12);
+    ctx.fillText(disc, W - pad, 604);
+    ctx.textAlign = "left";
+
+    canvas.setAttribute("aria-label", t("战绩分享卡", "Share card"));
+    $("shareWrap").hidden = false;
+    shareOpen = true;
+  }
+
+  function markCopied() {
+    var btn = $("copyBtn");
+    if (!btn) return;
+    btn.classList.add("copied");
+    btn.textContent = t("已复制", "Copied");
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () {
+      btn.classList.remove("copied");
+      if (btn.dataset.zh === undefined) return;
+      btn.innerHTML = lang === "en" ? btn.dataset.en : btn.dataset.zh;
+    }, 1600);
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  function currentShareText() {
+    if (view.phase === "done" && view.result) return E.shareText(view.result, lang);
+    return E.inviteText(readGuess(), side, lang);
+  }
+
+  stampZh();
+
+  $("langBtn").addEventListener("click", function () {
+    applyLang(lang === "en" ? "zh" : "en");
+  });
+
+  document.querySelectorAll(".choice[data-side]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      side = btn.getAttribute("data-side");
+      needPick = false;
+      renderChoices();
+      renderNeed();
+      if (shareOpen && view.phase !== "done") drawShare();
+    });
+  });
+
+  $("guess").addEventListener("input", function () {
+    renderGuess();
+    if (shareOpen && view.phase !== "done") drawShare();
+  });
+  $("coreGuess").addEventListener("input", renderCoreHint);
+  $("revealBtn").addEventListener("click", onReveal);
+
+  $("copyBtn").addEventListener("click", function () {
+    var text = currentShareText();
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      markCopied();
+    }
+    var clip = (navigator.clipboard && navigator.clipboard.writeText)
+      ? navigator.clipboard.writeText(text)
+      : Promise.reject();
+    var timed = new Promise(function (_, reject) {
+      setTimeout(function () { reject(new Error("copy-timeout")); }, 400);
+    });
+    Promise.race([clip, timed]).then(finish, function () {
+      fallbackCopy(text);
+      finish();
+    });
+  });
+  $("shareImgBtn").addEventListener("click", drawShare);
+
+  if (lang === "en") applyLang("en");
+  else renderAll();
+  setInterval(function () {
+    renderCountdown();
+    renderLocal();
+  }, 30000);
+})();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>
