@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FLOW-047 · ETF 资金流向课</title>
+<meta name="description" content="5 分钟读懂 ETF 资金流向。2026 年 10 月第二周，美国比特币现货 ETF 单周净流出 6.79 亿美元（6 月以来最大），以太坊 ETF 十连流出 5.42 亿美元，比特币价格守在 8.3 万美元。教育内容，非投资建议。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/047/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E047%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="FLOW-047 · ETF 资金流向课">
+<meta property="og:description" content="5 分钟读懂 ETF 资金流向。2026 年 10 月第二周，美国比特币现货 ETF 单周净流出 6.79 亿美元（6 月以来最大），以太坊 ETF 十连流出 5.42 亿美元，比特币价格守在 8.3 万美元。教育内容，非投资建议。">
+<meta property="og:url" content="https://build-100.com/047/">
+<meta property="og:image" content="https://build-100.com/047/og-047.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="FLOW-047 · ETF 资金流向课">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FLOW-047 · ETF 资金流向课">
+<meta name="twitter:description" content="Five minutes to read ETF flows. In the second week of October 2026, US bitcoin spot ETFs had a weekly net outflow of $679 million, the largest since June. Ether ETFs had ten straight outflows of $542 million. Bitcoin held at $83,000. Educational content, not investment advice.">
+<meta name="twitter:image" content="https://build-100.com/047/og-047.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #60a5fa;
+    --accent-glow: rgba(96,165,250,0.35);
+    --warm: #fbbf24;
+    --hot: #f87171;
+    --cool: var(--accent);
+    --up: #f87171;
+    --down: #4ade80;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+    --you: var(--warm);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: "Noto Sans CJK SC", var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font-family: inherit; color: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  [hidden] { display: none !important; }
+  h2, h3, p, td, th, li, label, .stat-k, .lede, .field-title, .choice, .callout, .hsub, .hname, .explain, .badge-note {
+    overflow-wrap: anywhere;
+  }
+  h1, .stat-num, .hnum { overflow-wrap: normal; }
+  img, canvas, svg, input, button { max-width: 100%; }
+  button { white-space: normal; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; min-width: 0; min-height: 44px; display: inline-flex; align-items: center; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; text-align: center; flex: none; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+    flex: none; min-height: 44px; min-width: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 48px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; letter-spacing: 0.04em; line-height: 1.45; text-wrap: balance; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; margin-bottom: 18px;
+  }
+  .hero p.lede { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); }
+  .hero p.lede strong { color: var(--ink); font-weight: 600; }
+
+  .cta {
+    display: inline-flex; align-items: center; justify-content: center; margin-top: 18px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--accent); border-radius: 4px;
+    background: var(--accent); color: var(--bg); cursor: pointer; transition: all .2s;
+    min-height: 44px; line-height: 1.4; text-align: center;
+  }
+  .cta:hover { box-shadow: 0 0 24px var(--accent-glow); }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .concepts { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .flip-btn {
+    display: flex; flex-direction: column; width: 100%; min-height: 44px; padding: 0; text-align: left;
+    border-radius: 14px; border: 1px solid var(--line-strong); background: var(--bg-raise);
+    color: inherit; cursor: pointer; position: relative; overflow: hidden;
+  }
+  .flip-btn[aria-expanded="true"] { border-color: var(--accent); box-shadow: 0 0 24px var(--accent-glow); }
+  .flip-btn::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--accent); box-shadow: 0 0 16px var(--accent-glow);
+  }
+  .flip-face {
+    display: flex; flex-direction: column; gap: 8px; width: 100%;
+    padding: 16px 16px 18px 18px; min-height: 168px;
+  }
+  .flip-back { display: none; }
+  .flip-btn[aria-expanded="true"] .flip-front { display: none; }
+  .flip-btn[aria-expanded="true"] .flip-back { display: flex; }
+  .flip-kicker { font-family: var(--mono); color: var(--accent); letter-spacing: 0.14em; font-size: 12px; }
+  .flip-title { font-size: 1.12rem; font-weight: 700; line-height: 1.3; }
+  .flip-hint { margin-top: auto; color: var(--faint); font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .flip-back p { color: var(--muted); font-size: 0.95rem; }
+
+  .stat-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 4px 0 14px; }
+  .stat {
+    position: relative; min-width: 0;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: linear-gradient(180deg, rgba(237,239,241,0.035), rgba(237,239,241,0.015));
+    padding: 14px 12px 12px 14px; overflow: hidden;
+  }
+  .stat::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .stat-out::before { background: #f87171; box-shadow: 0 0 16px rgba(248,113,113,0.35); }
+  .stat-hold::before { background: var(--accent); box-shadow: 0 0 16px var(--accent-glow); }
+  .stat-num {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(1.7rem, 6vw, 2.5rem); letter-spacing: -0.04em; line-height: 1.1;
+  }
+  .stat-num span { font-size: 0.42em; margin-left: 4px; color: var(--muted); letter-spacing: 0; font-weight: 600; }
+  .stat-out .stat-num { color: #f87171; }
+  .stat-hold .stat-num { color: var(--accent); }
+  .stat-k { margin-top: 6px; color: var(--muted); font-size: clamp(0.78rem, 2.6vw, 0.9rem); line-height: 1.4; }
+
+  .axis-note { color: var(--faint); font-size: 0.82rem; margin: 0 0 10px; }
+  .chart { display: grid; gap: 10px; }
+  .hrow {
+    min-width: 0; border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); padding: 14px 14px 12px;
+  }
+  .hhead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
+  .ticker { font-family: var(--mono); font-weight: 700; letter-spacing: 0.08em; }
+  .hname { color: var(--muted); font-size: 0.85rem; }
+  .pill {
+    margin-left: auto; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--bg); background: var(--delta);
+    border-radius: 999px; padding: 4px 8px; white-space: nowrap;
+  }
+  .hval { margin: 8px 0; font-weight: 700; line-height: 1.15; }
+  .hnum {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: clamp(1.8rem, 6vw, 2.6rem); letter-spacing: -0.04em;
+  }
+  .hunit { font-size: 0.95rem; margin-left: 6px; color: var(--muted); font-weight: 600; }
+  .hval.is-out .hnum { color: #f87171; }
+  .hval.is-in .hnum { color: #4ade80; }
+  .hval.is-sketch { font-size: clamp(1.35rem, 4vw, 1.7rem); color: var(--ink); }
+  .hsvg { width: 100%; height: auto; display: block; }
+  .hsub { color: var(--muted); font-size: 0.85rem; margin-top: 8px; }
+  .chart-note { color: var(--muted); font-size: 0.86rem; margin-top: 12px; }
+
+  .callout {
+    margin-top: 12px; border: 1px solid var(--line-strong); border-radius: 12px;
+    padding: 14px 16px; background: rgba(96,165,250,0.07);
+  }
+  .callout p { color: var(--ink); font-size: 0.98rem; }
+  .callout.in { border-color: rgba(74,222,128,0.5); background: rgba(74,222,128,0.08); }
+
+  .progress {
+    height: 8px; border-radius: 999px; background: rgba(237,239,241,0.12); overflow: hidden; margin-top: 4px;
+  }
+  .progress > span {
+    display: block; height: 100%; width: 0; background: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow); transition: width .25s;
+  }
+  .progress-text { color: var(--muted); font-size: 0.86rem; margin: 8px 0 14px; }
+  .quiz-list { display: grid; gap: 12px; }
+  .q-card {
+    min-width: 0; border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px; background: rgba(11,13,16,0.65);
+  }
+  .q-title { font-size: 1.02rem; line-height: 1.4; margin-bottom: 4px; }
+  .choice {
+    display: flex; align-items: center; width: 100%; min-height: 44px; margin-top: 8px;
+    text-align: left; padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--line-strong); background: var(--bg-raise); cursor: pointer; line-height: 1.4;
+  }
+  .choice:disabled { cursor: default; opacity: 1; }
+  .choice.is-right { border-color: #4ade80; background: rgba(74,222,128,0.12); }
+  .choice.is-wrong { border-color: #f87171; background: rgba(248,113,113,0.12); }
+  .explain {
+    margin-top: 10px; padding-left: 10px; border-left: 3px solid var(--line-strong);
+    color: var(--muted); font-size: 0.92rem;
+  }
+  .explain.is-right { border-color: #4ade80; }
+  .explain.is-wrong { border-color: #f87171; }
+  .quiz-end { margin-top: 14px; font-weight: 700; }
+  .badge-inline {
+    margin-top: 12px; border: 1px solid var(--accent); border-radius: 12px;
+    padding: 14px 16px; background: rgba(96,165,250,0.1);
+    font-family: var(--mono); font-weight: 700; letter-spacing: 0.08em;
+    color: var(--accent); font-size: 1.05rem;
+  }
+  #retryBtn { margin-top: 12px; }
+
+  .summary { font-size: clamp(1.05rem, 2.4vw, 1.28rem); font-weight: 700; line-height: 1.45; }
+  .disclaimer {
+    margin-top: 14px; border: 1px solid rgba(251,191,36,0.45);
+    background: rgba(251,191,36,0.08); color: var(--ink);
+    border-radius: 12px; padding: 14px 16px; font-size: 0.95rem; font-weight: 700;
+  }
+  .hero .disclaimer { margin-top: 16px; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s; min-height: 44px;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { margin-top: 14px; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; display: block; }
+  .share-hint { color: var(--faint); font-size: 0.82rem; margin-top: 8px; }
+
+  .badge-dialog {
+    width: min(440px, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+    background: #0b0d10;
+    color: var(--ink);
+    padding: 22px 18px 18px;
+    box-shadow: 0 0 40px var(--accent-glow);
+  }
+  .badge-dialog::backdrop { background: rgba(6, 7, 9, 0.72); }
+  .badge-kicker { font-family: var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); font-size: 12px; }
+  .badge-mark {
+    font-size: clamp(2.2rem, 8vw, 3.2rem); font-weight: 700; line-height: 1.1;
+    color: var(--accent); margin: 8px 0;
+  }
+  .badge-score { font-family: var(--mono); font-size: 1.15rem; margin-bottom: 8px; }
+  .badge-note { color: var(--muted); font-size: 0.92rem; }
+  .badge-dialog .cta { width: 100%; margin-top: 16px; }
+
+  footer {
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 28px var(--pad) 40px; border-top: 1px solid var(--line);
+    max-width: 880px; margin: 0 auto;
+  }
+  footer a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 0; }
+  footer a:hover { color: var(--ink); }
+  footer .mono { color: var(--faint); }
+
+  @media (min-width: 800px) {
+    .concepts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .stat-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 0 14px; gap: 8px; }
+    .nav-back { font-size: 11px; letter-spacing: 0; }
+    .nav-brand { font-size: 13px; }
+    .nav-lang { padding: 6px 10px; letter-spacing: 0.12em; }
+    .stat { padding: 12px 10px 12px 12px; }
+    .share-btn { padding: 12px 12px; flex: 1 1 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* 禁用所有动画 */
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">FLOW<span>·047</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="Learning · FLOW-047">Learning · FLOW-047</p>
+    <h1 data-en="ETF flow lesson">ETF 资金流向课</h1>
+    <p class="lede" data-en='Five minutes to read ETF flows — and see where the "smart money" is running.'>5 分钟读懂 ETF 资金流向——知道“聪明钱”在往哪跑。</p>
+    <p class="disclaimer" data-en="Educational content, not investment advice">教育内容，非投资建议</p>
+    <a class="cta" href="#concepts" data-en="Start learning">开始学习</a>
+  </header>
+
+  <section class="field" id="concepts">
+    <div class="field-head">
+      <span class="field-no" data-en="01">01</span>
+      <h2 class="field-title" data-en="Three concept cards">三张概念卡</h2>
+      <p class="field-hint" data-en="Tap a card to flip it. Inflow and outflow first, then one line on creation and redemption, then what a divergence means.">点一下翻转。先分清流入和流出，再看申购赎回那一句，最后看流向和价格背离意味着什么。</p>
+    </div>
+    <div class="concepts">
+      <button class="flip-btn" type="button" aria-expanded="false">
+        <span class="flip-face flip-front">
+          <span class="flip-kicker" data-en="01">01</span>
+          <span class="flip-title" data-en="What a flow is">什么是资金流</span>
+          <span class="flip-hint" data-en="Tap to flip">点一下翻转</span>
+        </span>
+        <span class="flip-face flip-back">
+          <span class="flip-kicker" data-en="01 · inflow / outflow">01 · 流入 / 流出</span>
+          <p data-en="Inflow is net creation: money into the ETF. Outflow is net redemption: money out of the ETF. It is the direction of money, not the day's price move.">流入（inflow）是净申购，钱进 ETF。流出（outflow）是净赎回，钱出 ETF。看的是资金方向，不是当天涨跌。</p>
+          <span class="flip-hint" data-en="Tap to flip back">再点一下翻回</span>
+        </span>
+      </button>
+      <button class="flip-btn" type="button" aria-expanded="false">
+        <span class="flip-face flip-front">
+          <span class="flip-kicker" data-en="02">02</span>
+          <span class="flip-title" data-en="Creation and redemption, in one line">申购赎回，一句话</span>
+          <span class="flip-hint" data-en="Tap to flip">点一下翻转</span>
+        </span>
+        <span class="flip-face flip-back">
+          <span class="flip-kicker" data-en="02">02</span>
+          <p data-en="Creation mints new ETF shares and counts as inflow; redemption cancels shares and counts as outflow.">申购创造出新的 ETF 份额，记成流入；赎回注销份额，记成流出。</p>
+          <span class="flip-hint" data-en="Tap to flip back">再点一下翻回</span>
+        </span>
+      </button>
+      <button class="flip-btn" type="button" aria-expanded="false">
+        <span class="flip-face flip-front">
+          <span class="flip-kicker" data-en="03">03</span>
+          <span class="flip-title" data-en="When flow and price diverge">流向和价格背离</span>
+          <span class="flip-hint" data-en="Tap to flip">点一下翻转</span>
+        </span>
+        <span class="flip-face flip-back">
+          <span class="flip-kicker" data-en="03">03</span>
+          <p data-en="A large outflow while price holds means someone is taking the other side of the selling. Flow and price do not have to move together.">大额流出而价格守住，表示卖出的对面有人在接。流向和涨跌可以不同向。</p>
+          <span class="flip-hint" data-en="Tap to flip back">再点一下翻回</span>
+        </span>
+      </button>
+    </div>
+  </section>
+
+  <section class="field" id="corridor">
+    <div class="field-head">
+      <span class="field-no" data-en="02">02</span>
+      <h2 class="field-title" data-en="This week's reported flows">本周真实数据</h2>
+      <p class="field-hint" data-en="The second week of October 2026. Four groups: BTC, ETH, XRP, SOL.">2026 年 10 月第二周。BTC、ETH、XRP、SOL 四组。</p>
+    </div>
+    <div class="stat-row">
+      <article class="stat stat-out">
+        <p class="stat-num" data-en="−$679<span> million</span>">−6.79<span>亿美元</span></p>
+        <p class="stat-k" data-en="US bitcoin spot ETF · weekly net outflow · largest since June">美国比特币现货 ETF · 单周净流出 · 6 月以来最大</p>
+      </article>
+      <article class="stat stat-out">
+        <p class="stat-num" data-en="−$542<span> million</span>">−5.42<span>亿美元</span></p>
+        <p class="stat-k" data-en="Ether ETF · ten straight outflows">以太坊 ETF · 十连流出</p>
+      </article>
+      <article class="stat stat-hold">
+        <p class="stat-num" data-en="$83,000">8.3<span>万美元</span></p>
+        <p class="stat-k" data-en="Bitcoin price held and did not break">比特币价格守住，没崩</p>
+      </article>
+    </div>
+    <p class="axis-note" data-en="Left of the line is outflow. Right of the line is inflow.">中线左边是流出，右边是流入。</p>
+    <div class="chart dyn" id="chart"></div>
+    <p class="chart-note" data-en="BTC and ETH use reported figures. XRP and SOL bar heights are illustrative proportions and only emphasize direction.">BTC/ETH 为公开报道数字；XRP/SOL 柱高为示意比例，仅强调方向。</p>
+    <div class="callout in">
+      <p data-en="XRP is the only net inflow among these four — the counterexample. No specific dollar amount is given for it, so the bar height is illustrative.">XRP 是这四组里唯一净流入的反例。没有公开的具体亿美元数字，柱高只是示意。</p>
+    </div>
+    <div class="callout">
+      <p data-en="Bitcoin held at $83,000 and did not break. Price holding while the outflow is large means someone was taking the other side.">比特币价格守在 8.3 万美元没崩。价格守住，大额流出还在，等于有人在接。</p>
+    </div>
+  </section>
+
+  <section class="field" id="quiz">
+    <div class="field-head">
+      <span class="field-no" data-en="03">03</span>
+      <h2 class="field-title" data-en="Five-question check">五题自测</h2>
+      <p class="field-hint" data-en="Single choice. The note shows as soon as you tap. Four or more correct earns the badge.">单选。点下去立刻判分，并给出解析。答对 4 题及以上，弹出出师徽章。</p>
+    </div>
+    <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+    <p class="progress-text dyn" id="progressText" aria-live="polite"></p>
+    <div class="quiz-list dyn" id="quizList"></div>
+    <p class="badge-inline dyn" id="badgeInline" hidden></p>
+    <p class="quiz-end dyn" id="quizEnd" hidden></p>
+    <button class="share-btn" id="retryBtn" type="button" data-en="Try again" hidden>再测一次</button>
+  </section>
+
+  <section class="field" id="close">
+    <div class="field-head">
+      <span class="field-no" data-en="04">04</span>
+      <h2 class="field-title" data-en="One line">一句话</h2>
+    </div>
+    <p class="summary" data-en="US bitcoin spot ETFs had a weekly net outflow of $679 million while bitcoin held at $83,000, which means someone was taking the other side; XRP was the only net inflow among the four.">美国比特币现货 ETF 单周净流出 6.79 亿美元，比特币仍守在 8.3 万美元，说明有人在接；XRP 是这四组里唯一的净流入反例。</p>
+    <p class="disclaimer" data-en="Educational content, not investment advice">教育内容，非投资建议</p>
+  </section>
+
+  <section class="field" id="share">
+    <div class="field-head">
+      <span class="field-no" data-en="05">05</span>
+      <h2 class="field-title" data-en="Share your score">分享战绩</h2>
+      <p class="field-hint" data-en="It means more once you finish the quiz.">做完自测再分享，战绩更完整。</p>
+    </div>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap" hidden>
+      <canvas id="shareCanvas" width="1200" height="630"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span class="mono" data-en='<a href="https://build-100.com/">build-100.com</a>'><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono" data-en='<a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a>'><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="FLOW-047 · ETF flow lesson">FLOW-047 · ETF 资金流向课</span>
+</footer>
+
+<dialog class="badge-dialog" id="badgeDialog" aria-labelledby="badgeTitle">
+  <p class="badge-kicker" data-en="Lesson badge">出师徽章</p>
+  <p class="badge-mark" id="badgeTitle" data-en="Cleared">出师</p>
+  <p class="badge-score dyn" id="badgeScore"></p>
+  <p class="badge-note" data-en="Four or more correct. Educational content, not investment advice.">答对 4 题及以上。教育内容，非投资建议。</p>
+  <button class="cta" id="badgeClose" type="button" data-en="Close">收下</button>
+</dialog>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  "use strict";
+  var E = window.FlowEngine;
+  if (!E) return;
+
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+
+  var picks = {};
+  var badgeShown = false;
+  var shareOpen = false;
+  var copyTimer = null;
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+  function $(id) { return document.getElementById(id); }
+
+  function stampZh() {
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    });
+  }
+
+  function subFor(flow) {
+    if (flow.id === "BTC") return t("单周净流出 · 6 月以来最大", "Weekly net outflow · largest since June");
+    if (flow.id === "ETH") return t("十连流出", "Ten straight outflows");
+    if (flow.id === "XRP") return t("唯一净流入 · 柱高示意", "Only net inflow · illustrative height");
+    return t("仅方向", "Direction only");
+  }
+
+  function svgEl(name, attrs) {
+    var node = document.createElementNS("http://www.w3.org/2000/svg", name);
+    if (attrs) {
+      Object.keys(attrs).forEach(function (key) { node.setAttribute(key, attrs[key]); });
+    }
+    return node;
+  }
+
+  function renderChart() {
+    var host = $("chart");
+    if (!host) return;
+    host.textContent = "";
+    var flows = E.FLOWS;
+    var heights = E.barHeights(flows);
+    var max = 0;
+    var i;
+    for (i = 0; i < heights.length; i++) {
+      var abs = Math.abs(Number(heights[i].h));
+      if (isFinite(abs) && abs > max) max = abs;
+    }
+    if (!(max > 0)) max = 1;
+    var map = {};
+    for (i = 0; i < heights.length; i++) map[heights[i].id] = heights[i];
+
+    for (i = 0; i < flows.length; i++) {
+      var flow = flows[i];
+      var bar = map[flow.id] || { h: 0, direction: flow.direction === "in" ? "in" : "out" };
+      var row = document.createElement("article");
+      row.className = "hrow";
+
+      var head = document.createElement("div");
+      head.className = "hhead";
+      var tick = document.createElement("span");
+      tick.className = "ticker";
+      tick.textContent = t(flow.id, flow.id);
+      head.appendChild(tick);
+      var label = t(flow.label.zh, flow.label.en);
+      if (label !== flow.id) {
+        var name = document.createElement("span");
+        name.className = "hname";
+        name.textContent = label;
+        head.appendChild(name);
+      }
+      if (flow.netUsdBn == null) {
+        var pill = document.createElement("span");
+        pill.className = "pill";
+        pill.textContent = t("示意", "Illustrative");
+        head.appendChild(pill);
+      }
+
+      var val = document.createElement("p");
+      var h = Number(bar.h);
+      if (!isFinite(h)) h = 0;
+      if (typeof flow.netUsdBn === "number" && isFinite(flow.netUsdBn)) {
+        val.className = "hval " + (flow.netUsdBn < 0 ? "is-out" : "is-in");
+        var absTxt = (Math.round(Math.abs(flow.netUsdBn) * 100) / 100).toFixed(2);
+        var millions = String(Math.round(Math.abs(flow.netUsdBn) * 100));
+        var sign = flow.netUsdBn < 0 ? "−" : "+";
+        var num = document.createElement("span");
+        num.className = "hnum";
+        num.textContent = t(sign + absTxt, sign + "$" + millions + " million");
+        val.appendChild(num);
+        var unit = document.createElement("span");
+        unit.className = "hunit";
+        unit.textContent = t("亿美元", "");
+        if (lang !== "en") val.appendChild(unit);
+      } else if (flow.id === "XRP") {
+        val.className = "hval is-sketch is-in";
+        val.textContent = t("净流入", "Net inflow");
+      } else {
+        val.className = "hval is-sketch";
+        val.textContent = t("示意", "Illustrative");
+      }
+
+      var frac = Math.min(1, Math.abs(h) / max);
+      var w = frac * 100;
+      var inflow = h > 0;
+      var svg = svgEl("svg", { viewBox: "0 0 200 18", class: "hsvg", "aria-hidden": "true" });
+      svg.appendChild(svgEl("rect", { x: "0", y: "4", width: "200", height: "10", rx: "5", fill: "rgba(237,239,241,0.08)" }));
+      if (w > 0) {
+        var rectAttrs = {
+          x: String(h >= 0 ? 100 : 100 - w),
+          y: "4",
+          width: String(w),
+          height: "10",
+          rx: "5",
+          fill: inflow ? "#4ade80" : "#f87171"
+        };
+        if (flow.netUsdBn == null) {
+          rectAttrs.opacity = "0.72";
+          rectAttrs.stroke = inflow ? "#4ade80" : "#f87171";
+          rectAttrs["stroke-width"] = "0.7";
+          rectAttrs["stroke-dasharray"] = "1.6 1.2";
+        }
+        svg.appendChild(svgEl("rect", rectAttrs));
+      }
+      svg.appendChild(svgEl("line", {
+        x1: "100", x2: "100", y1: "0", y2: "18",
+        stroke: "rgba(237,239,241,0.9)", "stroke-width": "0.8"
+      }));
+
+      var sub = document.createElement("p");
+      sub.className = "hsub";
+      sub.textContent = subFor(flow);
+
+      row.appendChild(head);
+      row.appendChild(val);
+      row.appendChild(svg);
+      row.appendChild(sub);
+      host.appendChild(row);
+    }
+  }
+
+  function syncBadgeScore(result) {
+    var el = $("badgeScore");
+    if (!el) return;
+    el.textContent = t("得分 ", "Score ") + result.correct + "/" + result.total;
+  }
+
+  function openBadge(result) {
+    syncBadgeScore(result);
+    badgeShown = true;
+    var dlg = $("badgeDialog");
+    if (dlg && typeof dlg.showModal === "function" && !dlg.open) dlg.showModal();
+  }
+
+  function renderQuiz() {
+    var host = $("quizList");
+    if (!host) return;
+    var result = E.scoreQuiz(picks);
+    var answered = 0;
+    var i;
+    for (i = 0; i < E.QUESTIONS.length; i++) {
+      if (Object.prototype.hasOwnProperty.call(picks, E.QUESTIONS[i].id)) answered += 1;
+    }
+    var bar = $("progressBar");
+    if (bar) bar.style.width = (answered / E.QUESTIONS.length * 100) + "%";
+    var progress = $("progressText");
+    if (progress) {
+      progress.textContent = t(
+        "已答 " + answered + "/5 · 答对 " + result.correct,
+        "Answered " + answered + "/5 · " + result.correct + " correct"
+      );
+    }
+    host.textContent = "";
+    E.QUESTIONS.forEach(function (q, qi) {
+      var card = document.createElement("article");
+      card.className = "q-card";
+      card.setAttribute("data-qid", q.id);
+      var title = document.createElement("h3");
+      title.className = "q-title";
+      title.textContent = (qi + 1) + ". " + t(q.q.zh, q.q.en);
+      card.appendChild(title);
+      var picked = Object.prototype.hasOwnProperty.call(picks, q.id) ? picks[q.id] : null;
+      q.choices.forEach(function (choice) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "choice";
+        btn.setAttribute("data-choice", choice.id);
+        btn.textContent = t(choice.text.zh, choice.text.en);
+        if (picked) {
+          btn.disabled = true;
+          if (choice.id === q.answer) btn.classList.add("is-right");
+          if (choice.id === picked && picked !== q.answer) btn.classList.add("is-wrong");
+        }
+        btn.addEventListener("click", function () {
+          if (Object.prototype.hasOwnProperty.call(picks, q.id)) return;
+          picks[q.id] = choice.id;
+          var now = E.scoreQuiz(picks);
+          renderQuiz();
+          if (now.passed && !badgeShown) openBadge(now);
+          else {
+            var again = document.querySelector('.q-card[data-qid="' + q.id + '"] button[data-choice="' + choice.id + '"]');
+            if (again && again.focus) again.focus();
+          }
+          if (shareOpen) drawShare();
+        });
+        card.appendChild(btn);
+      });
+      if (picked) {
+        var note = document.createElement("p");
+        var right = picked === q.answer;
+        note.className = "explain " + (right ? "is-right" : "is-wrong");
+        note.textContent = (right ? t("答对。", "Correct. ") : t("不是这句。", "Not this one. ")) + t(q.explain.zh, q.explain.en);
+        card.appendChild(note);
+      }
+      host.appendChild(card);
+    });
+
+    var end = $("quizEnd");
+    var retry = $("retryBtn");
+    if (end) {
+      if (answered === E.QUESTIONS.length) {
+        end.hidden = false;
+        end.textContent = result.passed
+          ? t("本轮 " + result.correct + "/5，已出师。", "This round " + result.correct + "/5. You cleared the lesson.")
+          : t("本轮 " + result.correct + "/5，未出师。答对 4 题及以上才会出师。", "This round " + result.correct + "/5. Not cleared. Four or more correct clears the lesson.");
+      } else {
+        end.hidden = true;
+        end.textContent = "";
+      }
+    }
+    if (retry) retry.hidden = answered !== E.QUESTIONS.length;
+    var inline = $("badgeInline");
+    if (inline) {
+      if (result.passed) {
+        inline.hidden = false;
+        inline.textContent = t("出师", "Cleared") + " · " + result.correct + "/" + result.total;
+      } else {
+        inline.hidden = true;
+        inline.textContent = "";
+      }
+    }
+    syncBadgeScore(result);
+  }
+
+  function renderAll() {
+    renderChart();
+    renderQuiz();
+  }
+
+  function applyLang(l) {
+    lang = l;
+    if (copyTimer) { clearTimeout(copyTimer); copyTimer = null; }
+    var copyBtn = $("copyBtn");
+    if (copyBtn) copyBtn.classList.remove("copied");
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    $("langBtn").textContent = l === "en" ? "中文" : "EN";
+    $("langBtn").setAttribute("aria-label", l === "en" ? "切换到中文" : "Switch language");
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    renderAll();
+    if (shareOpen) drawShare();
+  }
+
+  function fontStack() {
+    return '"Noto Sans CJK SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+  }
+
+  function setFont(ctx, weight, px) {
+    ctx.font = weight + " " + px + "px " + fontStack();
+  }
+
+  function fitText(ctx, text, maxW, weight, px, minPx) {
+    var size = px;
+    setFont(ctx, weight, size);
+    while (size > minPx && ctx.measureText(text).width > maxW) {
+      size -= 2;
+      setFont(ctx, weight, size);
+    }
+    return size;
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    var rr = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + rr, y);
+    ctx.arcTo(x + w, y, x + w, y + h, rr);
+    ctx.arcTo(x + w, y + h, x, y + h, rr);
+    ctx.arcTo(x, y + h, x, y, rr);
+    ctx.arcTo(x, y, x + w, y, rr);
+    ctx.closePath();
+  }
+
+  function shortFlow(flow) {
+    if (typeof flow.netUsdBn === "number" && isFinite(flow.netUsdBn)) {
+      var absTxt = (Math.round(Math.abs(flow.netUsdBn) * 100) / 100).toFixed(2);
+      var millions = String(Math.round(Math.abs(flow.netUsdBn) * 100));
+      var sign = flow.netUsdBn < 0 ? "−" : "+";
+      return t(sign + absTxt + " 亿", sign + "$" + millions + "m");
+    }
+    if (flow.id === "XRP") return t("净流入·示意", "Inflow·sketch");
+    return t("示意", "Sketch");
+  }
+
+  function drawShare() {
+    var canvas = $("shareCanvas");
+    if (!canvas) return;
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    var W = 1200;
+    var H = 630;
+    var pad = 64;
+    var maxW = W - pad * 2;
+    canvas.width = W;
+    canvas.height = H;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.045)";
+    var gx;
+    var gy;
+    for (gx = 18; gx < W; gx += 36) {
+      for (gy = 18; gy < H; gy += 36) ctx.fillRect(gx, gy, 1.4, 1.4);
+    }
+    ctx.fillStyle = "#60a5fa";
+    ctx.fillRect(0, 0, 10, H);
+    ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#60a5fa";
+    setFont(ctx, "700", 22);
+    ctx.fillText("FLOW-047", pad, 72);
+    ctx.fillStyle = "#edeff1";
+    var title = t("ETF 资金流向课", "ETF flow lesson");
+    fitText(ctx, title, maxW, "700", 40, 24);
+    ctx.fillText(title, pad, 128);
+
+    var result = E.scoreQuiz(picks);
+    var score = result.correct + "/" + result.total;
+    ctx.fillStyle = "#60a5fa";
+    fitText(ctx, score, maxW, "700", 108, 64);
+    ctx.fillText(score, pad, 258);
+    var badge = result.passed ? t("出师", "Cleared") : t("未出师", "Not cleared");
+    ctx.fillStyle = result.passed ? "#4ade80" : "#f87171";
+    fitText(ctx, badge, maxW, "700", 36, 22);
+    ctx.fillText(badge, pad, 318);
+
+    var flows = E.FLOWS;
+    var heights = E.barHeights(flows);
+    var max = 0;
+    var i;
+    for (i = 0; i < heights.length; i++) {
+      var abs = Math.abs(Number(heights[i].h));
+      if (abs > max) max = abs;
+    }
+    if (!(max > 0)) max = 1;
+    var gap = 16;
+    var boxW = (maxW - gap * 3) / 4;
+    var boxY = 356;
+    for (i = 0; i < flows.length; i++) {
+      var flow = flows[i];
+      var bh = heights[i] ? Number(heights[i].h) : 0;
+      var x = pad + i * (boxW + gap);
+      ctx.fillStyle = "rgba(237,239,241,0.04)";
+      roundRect(ctx, x, boxY, boxW, 150, 12);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(237,239,241,0.14)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.fillStyle = "#edeff1";
+      ctx.textAlign = "left";
+      setFont(ctx, "700", 22);
+      ctx.fillText(flow.id, x + 16, boxY + 36);
+      var label = shortFlow(flow);
+      ctx.fillStyle = flow.netUsdBn == null ? "#fbbf24" : (bh < 0 ? "#f87171" : "#4ade80");
+      fitText(ctx, label, boxW - 32, "600", 20, 12);
+      ctx.fillText(label, x + 16, boxY + 68);
+      var trackX = x + 16;
+      var trackW = boxW - 32;
+      var mid = trackX + trackW / 2;
+      var barH = 14;
+      var barY = boxY + 96;
+      ctx.fillStyle = "rgba(237,239,241,0.12)";
+      roundRect(ctx, trackX, barY, trackW, barH, 7);
+      ctx.fill();
+      var frac = Math.min(1, Math.abs(bh) / max);
+      var bw = Math.max(frac > 0 ? 4 : 0, frac * (trackW / 2));
+      ctx.fillStyle = bh >= 0 ? "#4ade80" : "#f87171";
+      if (flow.netUsdBn == null) ctx.globalAlpha = 0.72;
+      roundRect(ctx, bh >= 0 ? mid : mid - bw, barY, bw, barH, 7);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = "#edeff1";
+      ctx.fillRect(mid - 1, barY - 4, 2, barH + 8);
+    }
+    ctx.textAlign = "left";
+
+    ctx.strokeStyle = "rgba(237,239,241,0.14)";
+    ctx.beginPath();
+    ctx.moveTo(pad, 548);
+    ctx.lineTo(W - pad, 548);
+    ctx.stroke();
+    var url = "build-100.com/047";
+    var disc = t("教育内容，非投资建议", "Educational content, not investment advice");
+    ctx.fillStyle = "#9aa1a8";
+    fitText(ctx, url, 460, "400", 22, 14);
+    ctx.fillText(url, pad, 596);
+    var urlW = ctx.measureText(url).width;
+    ctx.textAlign = "right";
+    fitText(ctx, disc, Math.max(240, maxW - urlW - 24), "400", 20, 12);
+    ctx.fillText(disc, W - pad, 596);
+    ctx.textAlign = "left";
+
+    canvas.setAttribute("aria-label", t("测验战绩卡", "Quiz score card"));
+    $("shareWrap").hidden = false;
+    shareOpen = true;
+  }
+
+  function markCopied() {
+    var btn = $("copyBtn");
+    if (!btn) return;
+    btn.classList.add("copied");
+    btn.textContent = t("已复制", "Copied");
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () {
+      btn.classList.remove("copied");
+      if (btn.dataset.zh === undefined) return;
+      btn.innerHTML = lang === "en" ? btn.dataset.en : btn.dataset.zh;
+    }, 1600);
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  stampZh();
+
+  function syncFlip(btn) {
+    var open = btn.getAttribute("aria-expanded") === "true";
+    var front = btn.querySelector(".flip-front");
+    var back = btn.querySelector(".flip-back");
+    if (front) front.setAttribute("aria-hidden", open ? "true" : "false");
+    if (back) back.setAttribute("aria-hidden", open ? "false" : "true");
+  }
+
+  document.querySelectorAll(".flip-btn").forEach(function (btn) {
+    syncFlip(btn);
+    btn.addEventListener("click", function () {
+      var open = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", open ? "false" : "true");
+      syncFlip(btn);
+    });
+  });
+
+  $("langBtn").addEventListener("click", function () {
+    applyLang(lang === "en" ? "zh" : "en");
+  });
+
+  $("retryBtn").addEventListener("click", function () {
+    picks = {};
+    badgeShown = false;
+    var dlg = $("badgeDialog");
+    if (dlg && dlg.open && dlg.close) dlg.close();
+    renderQuiz();
+    if (shareOpen) drawShare();
+    var quiz = $("quiz");
+    if (quiz && quiz.scrollIntoView) {
+      try { quiz.scrollIntoView({ block: "start" }); } catch (e) {}
+    }
+  });
+
+  $("badgeClose").addEventListener("click", function () {
+    var dlg = $("badgeDialog");
+    if (dlg && dlg.close) dlg.close();
+  });
+
+  $("copyBtn").addEventListener("click", function () {
+    var text = E.shareText(E.scoreQuiz(picks), lang);
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      markCopied();
+    }
+    var clip = (navigator.clipboard && navigator.clipboard.writeText)
+      ? navigator.clipboard.writeText(text)
+      : Promise.reject();
+    var timed = new Promise(function (_, reject) {
+      setTimeout(function () { reject(new Error("copy-timeout")); }, 400);
+    });
+    Promise.race([clip, timed]).then(finish, function () {
+      fallbackCopy(text);
+      finish();
+    });
+  });
+
+  $("shareImgBtn").addEventListener("click", drawShare);
+
+  if (lang === "en") applyLang("en");
+  else renderAll();
+})();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>
