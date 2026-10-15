@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-29",
+  "updated": "2026-10-15",
   "filters": [
     {
       "id": "all",
@@ -421,6 +421,211 @@
       ],
       "live": true,
       "url": "https://build-100.com/032/"
+    },
+    {
+      "id": "033",
+      "code": "TOPRUN",
+      "name": "TOPRUN-033",
+      "sub_zh": "散户生存小游戏——研报吹高、静默减持，闪崩前逃出山顶",
+      "sub_en": "Retail survival game — research hype vs silent dumps, escape before the crash",
+      "cats": [
+        "finance"
+      ],
+      "live": true,
+      "url": "https://build-100.com/033/"
+    },
+    {
+      "id": "034",
+      "code": "YIELD",
+      "name": "YIELD-034",
+      "sub_zh": "5.3% 时代利率课——拖动 10Y 收益率看房贷/债券/股票怎么动",
+      "sub_en": "5.3% era rate lesson — drag 10Y yield to see mortgage, bonds, stocks move",
+      "cats": [
+        "learn",
+        "finance"
+      ],
+      "live": true,
+      "url": "https://build-100.com/034/"
+    },
+    {
+      "id": "035",
+      "code": "SPLIT",
+      "name": "SPLIT-035",
+      "sub_zh": "分期陷阱——录入 BNPL 账单，算清手续费、实际年化与逾期雪球",
+      "sub_en": "Installment trap — BNPL fees, true APR, and late-fee snowball",
+      "cats": [
+        "finance",
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/035/"
+    },
+    {
+      "id": "036",
+      "code": "SCAM",
+      "name": "SCAM-036",
+      "sub_zh": "票务防骗自查——低价票/内部票情景测验 + 套路时间线 + 三条安全底线",
+      "sub_en": "Ticket-scam self-check — scenario quiz, playbook timeline, three hard rules",
+      "cats": [
+        "life",
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/036/"
+    },
+    {
+      "id": "037",
+      "code": "GRID",
+      "name": "GRID-037",
+      "sub_zh": "震荡收割机——设区间跑网格行情模拟，对照 HODL 与三条铁律",
+      "sub_en": "Range harvester — grid trading sim vs HODL with three hard rules",
+      "cats": [
+        "market",
+        "learn"
+      ],
+      "live": true,
+      "url": "https://build-100.com/037/"
+    },
+    {
+      "id": "038",
+      "code": "SHUTDOWN",
+      "name": "SHUTDOWN-038",
+      "sub_zh": "政府关门，你的钱怎么办——数据黑洞、停薪、联储盲飞议息 + 行动清单与小测",
+      "sub_en": "Government shutdown and your money — data blackout, unpaid wages, a blind Fed, checklist + quiz",
+      "cats": [
+        "learn",
+        "finance"
+      ],
+      "live": true,
+      "url": "https://build-100.com/038/"
+    },
+    {
+      "id": "039",
+      "code": "RECOVER",
+      "name": "RECOVER-039",
+      "sub_zh": "回本数学——跌了多少要涨多少才回本：秒算回本涨幅 + 不对称曲线 + 反向模式",
+      "sub_en": "Break-even math — the gain you need after a loss, the asymmetric curve, plus reverse mode",
+      "cats": [
+        "finance",
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/039/"
+    },
+    {
+      "id": "040",
+      "code": "CHIP",
+      "name": "CHIP-040",
+      "sub_zh": "存储荒——AI 抢光内存芯片，算你的下一台设备贵多少 + 买还是等",
+      "sub_en": "Memory crunch — what AI-driven DRAM prices mean for your next device, plus buy-or-wait",
+      "cats": [
+        "life",
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/040/"
+    },
+    {
+      "id": "041",
+      "code": "LIQ",
+      "name": "LIQ-041",
+      "sub_zh": "爆仓夜——选杠杆开一单合约，看插针来时你能活几轮 + 强平价数学",
+      "sub_en": "Liquidation Night — pick leverage, open a futures trade, see how many wicks you survive",
+      "cats": [
+        "market",
+        "learn"
+      ],
+      "live": true,
+      "url": "https://build-100.com/041/"
+    },
+    {
+      "id": "042",
+      "code": "SENT",
+      "name": "SENT-042",
+      "sub_zh": "情绪温度计——散户股票仓位 71.8%、现金 13.3%（9 年新低）：测你的仓位，一页互动课讲清反向指标",
+      "sub_en": "Sentiment thermometer — retail stocks 71.8%, cash 13.3% (9-year low): test your allocation and learn the contrarian signal",
+      "cats": [
+        "market",
+        "learn"
+      ],
+      "live": true,
+      "url": "https://build-100.com/042/"
+    },
+    {
+      "id": "043",
+      "code": "EARN",
+      "name": "EARN-043",
+      "sub_zh": "财报夜预期波动计算器——输入股价与 IV（或跨式价）算出 ±X%，再看懂 IV crush：方向看对也可能亏",
+      "sub_en": "Earnings-night expected move calculator — price + IV (or straddle) gives the ±X%, then see how IV crush can beat you even when you're right",
+      "cats": [
+        "finance",
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/043/"
+    },
+    {
+      "id": "044",
+      "code": "WMARK",
+      "name": "WMARK-044",
+      "sub_zh": "水印自查——OpenAI 给欧盟区 ChatGPT / Codex 文字加隐形水印 textGrain：三问 30 秒查清你会不会被“盖章”",
+      "sub_en": "AI text watermark check — OpenAI's invisible textGrain for EU ChatGPT / Codex text: three questions, 30 seconds, will yours be stamped?",
+      "cats": [
+        "life",
+        "learn"
+      ],
+      "live": true,
+      "url": "https://build-100.com/044/"
+    },
+    {
+      "id": "045",
+      "code": "BURN",
+      "name": "BURN-045",
+      "sub_zh": "AI 烧钱自查——过去两周 GPT-6、Claude 5.5 全家桶密集上新降价：输入用量，算清每个模型一个月烧多少钱",
+      "sub_en": "AI burn-rate check — GPT-6 and Claude 5.5 families just shipped new models and lower prices: enter usage, see monthly burn",
+      "cats": [
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/045/"
+    },
+    {
+      "id": "046",
+      "code": "CPI",
+      "name": "CPI-046",
+      "sub_zh": "CPI 夜：通胀赌局——10-14 美东 8:30 公布 9 月 CPI：写下通胀预测、押 S&P 多空，开奖打分",
+      "sub_en": "CPI night: the inflation bet — September CPI drops Oct 14, 8:30 ET: call the print, go long or short the S&P, get scored",
+      "cats": [
+        "market",
+        "learn"
+      ],
+      "live": true,
+      "url": "https://build-100.com/046/"
+    },
+    {
+      "id": "047",
+      "code": "FLOW",
+      "name": "FLOW-047",
+      "sub_zh": "ETF 资金流向课——5 分钟读懂 inflow/outflow：本周 BTC/ETH 大额流出、XRP 唯一流入示意，5 题自测出师",
+      "sub_en": "ETF flow lesson — five minutes on inflow/outflow: BTC/ETH outflows, XRP only inflow sketch, 5-question badge quiz",
+      "cats": [
+        "learn"
+      ],
+      "live": true,
+      "url": "https://build-100.com/047/"
+    },
+    {
+      "id": "048",
+      "code": "HEAT",
+      "name": "HEAT-048",
+      "sub_zh": "取暖账单估算器——输入房屋与取暖方式，算出这个冬天的账单，并看降 1°C、少开 1 小时等怎么省",
+      "sub_en": "Heating bill estimator — enter home and heating mode, get this winter's bill, and see savings levers",
+      "cats": [
+        "life",
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/048/"
     }
   ]
 }

@@ -1,0 +1,1220 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HEAT-048 · 取暖账单估算器</title>
+<meta name="description" content="选择天然气、电、集中供暖或燃油，填写面积、室温、每天小时和单价，估算 2026-11 至 2027-03 供暖季账单，并比较降低 1°C、少开 1 小时、门窗密封和暖气片反射板能省多少。估算值，非精确账单。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/048/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E048%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="HEAT-048 · 取暖账单估算器">
+<meta property="og:description" content="选择天然气、电、集中供暖或燃油，填写面积、室温、每天小时和单价，估算 2026-11 至 2027-03 供暖季账单，并比较降低 1°C、少开 1 小时、门窗密封和暖气片反射板能省多少。估算值，非精确账单。">
+<meta property="og:url" content="https://build-100.com/048/">
+<meta property="og:image" content="https://build-100.com/048/og-048.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="HEAT-048 · 取暖账单估算器">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HEAT-048 · 取暖账单估算器">
+<meta name="twitter:description" content="Choose gas, electric, district heat, or oil. Enter floor area, room temperature, hours a day, and the unit price to estimate the November 2026–March 2027 heating bill, and what you save by lowering 1°C, running one hour less, sealing draughts, or fitting radiator reflectors. Estimate only, not a precise bill.">
+<meta name="twitter:image" content="https://build-100.com/048/og-048.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #fbbf24;
+    --accent-glow: rgba(251,191,36,0.35);
+    --warm: #fbbf24;
+    --hot: #f87171;
+    --cool: var(--accent);
+    --up: #f87171;
+    --down: #4ade80;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+    --you: var(--warm);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: "Noto Sans CJK SC", var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font-family: inherit; color: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  [hidden] { display: none !important; }
+  h2, h3, p, td, th, li, label, .stat-k, .lede, .field-title, .note, .help, .mode-blurb, .lever-note, .source p {
+    overflow-wrap: anywhere;
+  }
+  h1, .stat-num, .result-euro, .lever-euro, .bar-val { overflow-wrap: normal; }
+  img, canvas, svg, input, button { max-width: 100%; }
+  button { white-space: normal; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; min-width: 0; min-height: 44px; display: inline-flex; align-items: center; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; text-align: center; flex: none; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+    flex: none; min-height: 44px; min-width: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 48px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; letter-spacing: 0.04em; line-height: 1.45; text-wrap: balance; text-transform: none; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; margin-bottom: 18px;
+  }
+  .hero p.lede { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); }
+  .hero p.lede strong { color: var(--ink); font-weight: 600; }
+  .season-chip {
+    display: inline-flex; align-items: center; min-height: 44px; max-width: 100%;
+    margin-top: 16px; padding: 8px 14px;
+    border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--ink); letter-spacing: 0.04em; text-transform: none; line-height: 1.4;
+  }
+
+  .cta {
+    display: inline-flex; align-items: center; justify-content: center; margin-top: 18px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--accent); border-radius: 4px;
+    background: var(--accent); color: var(--bg); cursor: pointer; transition: all .2s;
+    min-height: 44px; line-height: 1.4; text-align: center;
+  }
+  .cta:hover { box-shadow: 0 0 24px var(--accent-glow); }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .modes { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .mode-card {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+    width: 100%; min-height: 44px; text-align: left; position: relative;
+    padding: 16px 16px 16px 18px; border-radius: 14px;
+    border: 1px solid var(--line-strong); background: var(--bg-raise);
+    cursor: pointer; color: inherit;
+  }
+  .mode-card::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: transparent;
+  }
+  .mode-card[aria-checked="true"] {
+    border-color: var(--accent); box-shadow: 0 0 24px var(--accent-glow);
+  }
+  .mode-card[aria-checked="true"]::before { background: var(--accent); box-shadow: 0 0 16px var(--accent-glow); }
+  .mode-top { display: flex; align-items: center; gap: 8px; width: 100%; min-width: 0; }
+  .mode-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+  .mode-now {
+    margin-left: auto; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--bg); background: var(--accent);
+    border-radius: 999px; padding: 4px 8px; white-space: nowrap;
+  }
+  .mode-name { font-size: 1.2rem; font-weight: 700; line-height: 1.25; }
+  .mode-blurb { color: var(--muted); font-size: 0.9rem; }
+  .mode-price { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--ink); text-transform: none; }
+
+  .seg {
+    display: flex; border: 1px solid var(--line-strong); border-radius: 999px; overflow: hidden;
+  }
+  .seg button {
+    flex: 1; min-height: 48px; background: none; border: 0; color: var(--muted);
+    font-weight: 700; cursor: pointer; padding: 10px 8px; line-height: 1.3;
+  }
+  .seg button[aria-selected="true"] { background: var(--accent); color: var(--bg); }
+  #elecPanel { margin-top: 14px; }
+
+  .grid-2 { display: grid; gap: 14px; }
+  .span-2 { grid-column: 1 / -1; }
+  .ctrl { min-width: 0; }
+  .ctrl-label {
+    display: flex; justify-content: space-between; gap: 8px; align-items: baseline;
+    font-weight: 700; margin-bottom: 6px; min-width: 0;
+  }
+  .ctrl-label em {
+    font-style: normal; font-family: var(--mono); font-size: 12px; letter-spacing: 0.02em;
+    color: var(--accent); font-weight: 700; text-align: right;
+  }
+  .num {
+    width: 100%; min-height: 48px; font-size: 16px; padding: 12px 14px;
+    border-radius: 8px; border: 1px solid var(--line-strong); background: #07090c;
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+  }
+  .help, .note { color: var(--muted); font-size: 0.86rem; margin-top: 8px; }
+  .range-pad { padding: 6px 2px 0; }
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 44px; background: transparent; margin: 0; display: block; cursor: pointer;
+  }
+  input[type="range"]:focus { outline: none; }
+  input[type="range"]:focus-visible { outline: 1px solid var(--ink); outline-offset: 3px; }
+  input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 99px; background: rgba(237,239,241,0.12); }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 22px; height: 22px; margin-top: -8px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--bg); box-shadow: 0 0 0 1px var(--accent);
+  }
+  input[type="range"]::-moz-range-track { height: 6px; border-radius: 99px; background: rgba(237,239,241,0.12); border: none; }
+  input[type="range"]::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--bg);
+    background: var(--accent); box-shadow: 0 0 0 1px var(--accent);
+  }
+  .text-btn {
+    margin-top: 12px; min-height: 44px; padding: 10px 14px;
+    background: none; border: 1px solid var(--line-strong); border-radius: 8px;
+    color: var(--muted); cursor: pointer; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  }
+  .text-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+  .result-k { color: var(--accent); margin-bottom: 8px; letter-spacing: 0.14em; text-transform: none; }
+  .result-euro {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(2.6rem, 10vw, 4.8rem); letter-spacing: -0.05em; line-height: 0.95; color: var(--accent);
+  }
+  .result-meta { margin-top: 10px; color: var(--ink); font-size: 1rem; }
+  .disclaimer {
+    margin-top: 14px; border: 1px solid rgba(251,191,36,0.45);
+    background: rgba(251,191,36,0.08); color: var(--ink);
+    border-radius: 12px; padding: 14px 16px; font-size: 0.95rem; font-weight: 700;
+  }
+  .hero .disclaimer { margin-top: 16px; }
+
+  .stat-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
+  .stat {
+    position: relative; min-width: 0;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: linear-gradient(180deg, rgba(237,239,241,0.035), rgba(237,239,241,0.015));
+    padding: 14px 12px 12px 14px; overflow: hidden;
+  }
+  .stat::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); box-shadow: 0 0 16px var(--accent-glow); }
+  .stat-num {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(1.25rem, 5vw, 1.7rem); letter-spacing: -0.03em; line-height: 1.15;
+  }
+  .stat-k { margin-top: 6px; color: var(--muted); font-size: clamp(0.78rem, 2.6vw, 0.9rem); line-height: 1.4; }
+  .is-up { color: var(--up); }
+  .is-down { color: var(--down); }
+  .worked {
+    font-family: var(--mono); color: var(--faint); font-size: 12px; letter-spacing: 0.01em;
+    margin-top: 8px; text-transform: none; line-height: 1.5;
+  }
+
+  .compare { margin-top: 8px; }
+  .bar-row {
+    display: grid; grid-template-columns: minmax(4.2em, max-content) minmax(0, 1fr) auto;
+    gap: 8px 10px; align-items: center; margin-top: 10px; min-width: 0;
+  }
+  .bar-name { color: var(--muted); font-size: 0.9rem; }
+  .bar-track { height: 14px; border-radius: 99px; background: rgba(237,239,241,0.08); overflow: hidden; min-width: 0; }
+  .bar-fill { height: 100%; border-radius: 99px; width: 0; }
+  .bar-fill.was { background: rgba(237,239,241,0.38); }
+  .bar-fill.now { background: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+  .bar-val { font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums; font-size: 0.95rem; }
+
+  .levers { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
+  .lever {
+    min-width: 0; border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); padding: 14px 16px 16px;
+  }
+  .lever.is-max { border-color: var(--accent); box-shadow: 0 0 24px var(--accent-glow); }
+  .lever-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .lever h3 { font-size: 1.05rem; line-height: 1.35; }
+  .lever-euro {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(1.6rem, 5vw, 2.2rem); letter-spacing: -0.04em; color: var(--accent); margin: 6px 0;
+  }
+  .lever-note { color: var(--muted); font-size: 0.9rem; }
+  .pill {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--bg); background: var(--accent);
+    border-radius: 999px; padding: 4px 8px; white-space: nowrap;
+  }
+  .lever-lead { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+
+  .sources { list-style: none; display: grid; gap: 12px; }
+  .source {
+    min-width: 0; border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); padding: 14px 16px;
+  }
+  .source p { color: var(--muted); font-size: 0.95rem; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s; min-height: 44px;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { margin-top: 14px; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; display: block; }
+  .share-hint { color: var(--faint); font-size: 0.82rem; margin-top: 8px; }
+
+  footer {
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 28px var(--pad) 40px; border-top: 1px solid var(--line);
+    max-width: 880px; margin: 0 auto;
+  }
+  footer a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 0; }
+  footer a:hover { color: var(--ink); }
+  footer .mono { color: var(--faint); letter-spacing: 0.08em; white-space: normal; line-height: 1.5; max-width: 100%; }
+
+  @media (min-width: 800px) {
+    .modes { grid-template-columns: 1fr 1fr; }
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .stat-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .levers { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 0 14px; gap: 8px; }
+    .nav-back { font-size: 11px; letter-spacing: 0; }
+    .nav-brand { font-size: 13px; }
+    .nav-lang { padding: 6px 10px; letter-spacing: 0.12em; }
+    .share-btn, .text-btn { padding: 12px 12px; flex: 1 1 100%; width: 100%; }
+    .stat { padding: 12px 10px 12px 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* 禁用所有动画 */
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">HEAT<span>·048</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="Everyday · HEAT-048">Everyday · HEAT-048</p>
+    <h1 data-en="How much will heating cost this winter?">这个冬天，取暖要花多少？</h1>
+    <p class="lede" data-en="The heating season runs from 1 Nov 2026 to 31 Mar 2027. France's reference gas price rises another 6.6% on 1 November, the second month in a row. Enter your floor area, room temperature, and unit price to see what this season might cost.">供暖季从 2026-11-01 到 2027-03-31。法国参考气价 11 月 1 日起再涨 6.6%，连续第二个月上调。把你家的面积、室温和单价填进去，先看这一季大概要付多少。</p>
+    <p class="mono season-chip" data-en="1 Nov 2026 → 31 Mar 2027 · 151 days">2026-11-01 → 2027-03-31 · 151 天</p>
+    <p class="disclaimer" data-en="Estimate only, not a precise bill">估算值，非精确账单</p>
+    <a class="cta" href="#modes" data-en="Start the estimate">开始估算</a>
+  </header>
+
+  <section class="field" id="modes">
+    <div class="field-head">
+      <span class="field-no" data-en="01">01</span>
+      <h2 class="field-title" data-en="How you heat">你怎么取暖</h2>
+      <p class="field-hint" data-en="Pick one. The unit price switches to a European household preset for that fuel. You can edit it.">选一种。单价会换成这种能源的欧洲家庭预设，你可以再改。</p>
+    </div>
+    <div class="modes" id="modeList" role="radiogroup">
+      <button class="mode-card" type="button" role="radio" data-mode="gas" aria-checked="true">
+        <span class="mode-top"><span class="mode-kicker dyn">锅炉 90%</span><span class="mode-now dyn">在用</span></span>
+        <span class="mode-name dyn">天然气</span>
+        <span class="mode-blurb dyn">家用锅炉，效率按 90% 计。</span>
+        <span class="mode-price dyn"></span>
+      </button>
+      <button class="mode-card" type="button" role="radio" data-mode="electric" aria-checked="false">
+        <span class="mode-top"><span class="mode-kicker dyn">效率看下面</span><span class="mode-now dyn" hidden></span></span>
+        <span class="mode-name dyn">电</span>
+        <span class="mode-blurb dyn">直热效率按 100%。也可以改成热泵。</span>
+        <span class="mode-price dyn"></span>
+      </button>
+      <button class="mode-card" type="button" role="radio" data-mode="district" aria-checked="false">
+        <span class="mode-top"><span class="mode-kicker dyn">按热量计</span><span class="mode-now dyn" hidden></span></span>
+        <span class="mode-name dyn">集中供暖</span>
+        <span class="mode-blurb dyn">按送到屋里的热量计价，效率按 100%。</span>
+        <span class="mode-price dyn"></span>
+      </button>
+      <button class="mode-card" type="button" role="radio" data-mode="oil" aria-checked="false">
+        <span class="mode-top"><span class="mode-kicker dyn">锅炉 85%</span><span class="mode-now dyn" hidden></span></span>
+        <span class="mode-name dyn">燃油</span>
+        <span class="mode-blurb dyn">燃油锅炉，效率按 85% 计。</span>
+        <span class="mode-price dyn"></span>
+      </button>
+    </div>
+    <div id="elecPanel" hidden>
+      <div class="seg" id="elecSeg" role="radiogroup" aria-label="电取暖的效率">
+        <button type="button" id="kindResist" aria-selected="true" data-en="Resistance · efficiency 1">直热 · 效率 1</button>
+        <button type="button" id="kindPump" aria-selected="false" data-en="Heat pump · COP 2.5">热泵 · COP 2.5</button>
+      </div>
+      <p class="help" data-en="Resistance turns 1 kWh of electricity into 1 kWh of heat. A heat pump at COP 2.5 delivers the same heat with about two-fifths of the electricity.">直热是 1 度电换成 1 度热。热泵 COP 2.5 表示同样的热大约只用四成的电。</p>
+    </div>
+  </section>
+
+  <section class="field" id="inputs">
+    <div class="field-head">
+      <span class="field-no" data-en="02">02</span>
+      <h2 class="field-title" data-en="Your home">你家的数字</h2>
+      <p class="field-hint" data-en="Move a slider or type a number. The bill updates immediately. Outdoor average defaults to 5°C, a mild European winter. Turn it down for a colder city.">拖动滑杆或直接改数字，结果马上更新。室外均温默认 5°C，按欧洲温和城市的冬天来估，冷的城市把它调低。</p>
+    </div>
+    <div class="grid-2">
+      <div class="ctrl">
+        <div class="ctrl-label">
+          <label id="areaLabel" for="areaNum" data-en="Floor area">房屋面积</label>
+          <em id="areaEm" class="dyn">80 m²</em>
+        </div>
+        <input class="num" id="areaNum" type="text" inputmode="decimal" min="15" max="300" step="any" value="80" autocomplete="off">
+        <div class="range-pad"><input id="areaRange" type="range" min="15" max="300" step="1" value="80" aria-labelledby="areaLabel"></div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label">
+          <label id="indoorLabel" for="indoorNum" data-en="Room setpoint">室温设定</label>
+          <em id="indoorEm" class="dyn">20°C</em>
+        </div>
+        <input class="num" id="indoorNum" type="text" inputmode="decimal" min="12" max="28" step="any" value="20" autocomplete="off">
+        <div class="range-pad"><input id="indoorRange" type="range" min="12" max="28" step="0.5" value="20" aria-labelledby="indoorLabel"></div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label">
+          <label id="hoursLabel" for="hoursNum" data-en="Hours per day">每天取暖</label>
+          <em id="hoursEm" class="dyn">10 小时</em>
+        </div>
+        <input class="num" id="hoursNum" type="text" inputmode="decimal" min="0" max="24" step="any" value="10" autocomplete="off">
+        <div class="range-pad"><input id="hoursRange" type="range" min="0" max="24" step="0.5" value="10" aria-labelledby="hoursLabel"></div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label">
+          <label id="outdoorLabel" for="outdoorNum" data-en="Outdoor average">室外均温</label>
+          <em id="outdoorEm" class="dyn">5°C</em>
+        </div>
+        <input class="num" id="outdoorNum" type="text" inputmode="decimal" min="-8" max="16" step="any" value="5" autocomplete="off">
+        <div class="range-pad"><input id="outdoorRange" type="range" min="-8" max="16" step="0.5" value="5" aria-labelledby="outdoorLabel"></div>
+      </div>
+      <div class="ctrl span-2">
+        <div class="ctrl-label">
+          <label id="lossLabel" for="lossNum" data-en="Heat loss">热损失系数</label>
+          <em id="lossEm" class="dyn">5 W/m²·°C</em>
+        </div>
+        <input class="num" id="lossNum" type="text" inputmode="decimal" min="2" max="15" step="any" value="5" autocomplete="off">
+        <div class="range-pad"><input id="lossRange" type="range" min="2" max="15" step="0.5" value="5" aria-labelledby="lossLabel"></div>
+        <p class="help" data-en="This is the heat you replace for each 1°C gap, per square metre. 5 is a starting point for an ordinary home. A 10°C gap at 5 W/m²·°C is about 50 W/m². A bigger number means a leakier home.">这个数是室内外每差 1°C、每平方米大约要补多少瓦。5 是普通住宅的起点。差 10°C 时，5 W/m²·°C 大约等于 50 W/m²。数字越大，房子越费暖。</p>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label">
+          <label id="priceNowLabel" for="priceNowNum" data-en="This year's unit price">今年单价</label>
+          <em id="priceNowEm" class="dyn">€0.12/kWh</em>
+        </div>
+        <input class="num" id="priceNowNum" type="text" inputmode="decimal" min="0.02" max="1.2" step="any" value="0.12" autocomplete="off">
+        <div class="range-pad"><input id="priceNowRange" type="range" min="0.02" max="1.2" step="0.001" value="0.12" aria-labelledby="priceNowLabel"></div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label">
+          <label id="priceThenLabel" for="priceThenNum" data-en="Last year's unit price">去年单价</label>
+          <em id="priceThenEm" class="dyn">€0.1126/kWh</em>
+        </div>
+        <input class="num" id="priceThenNum" type="text" inputmode="decimal" min="0.02" max="1.2" step="any" value="0.1126" autocomplete="off">
+        <div class="range-pad"><input id="priceThenRange" type="range" min="0.02" max="1.2" step="0.001" value="0.1126" aria-labelledby="priceThenLabel"></div>
+      </div>
+    </div>
+    <button class="text-btn" id="resetPrices" type="button" data-en="Reset prices for this heating type">恢复这种取暖方式的预设单价</button>
+    <p class="note" data-en="This year's prices are European household presets, not your contract. Gas starts at €0.12/kWh, in the same range as the wholesale balance price of €105/MWh (that is €0.105/kWh); the price at the door is usually higher. Last year's prices are only there for comparison. Gas is rolled back from the further 6.6% rise. District heat and oil use the same 6.6% rollback so there is a starting point — not a claim that those fuels were announced at the same rise. Electricity is rolled back from the 4% price-cap rise. The UK figure, gas up about 27% year on year, is in the sources below and is not inside the default price.">今年单价是欧洲家庭量级的预设，不是合同价。天然气预设 €0.12/kWh，和批发平衡价 €105/MWh（也就是 €0.105/kWh）同一个量级，到户通常更高。去年单价只为对照：天然气按再涨 6.6% 回推；集中供暖和燃油也按 6.6% 回推，好有个起点，并不是说它们公布了同样的涨幅；电按价格上限上调 4% 回推。英国燃气同比约 27% 写在文末，没有放进默认单价。</p>
+  </section>
+
+  <section class="field" id="result">
+    <div class="field-head">
+      <span class="field-no" data-en="03">03</span>
+      <h2 class="field-title" data-en="What this season might cost">这一季大概要付</h2>
+      <p class="field-hint" data-en="Same home, two prices: last year's preset and this year's. The gap is the rise you can feel. It is still an estimate.">同一套房子，两档单价：去年的预设和今年的预设。差额是你能感到的涨幅。它仍然是估算。</p>
+    </div>
+    <p class="mono result-k" data-en="Heating season · estimate">供暖季 · 估算</p>
+    <p class="result-euro dyn" id="billEuro" aria-live="polite"></p>
+    <p class="result-meta dyn" id="billMeta"></p>
+    <p class="disclaimer" data-en="Estimate only, not a precise bill">估算值，非精确账单</p>
+    <p class="note dyn" id="effNote"></p>
+    <p class="note dyn" id="assume"></p>
+    <div class="stat-row">
+      <article class="stat">
+        <p class="stat-num dyn" id="kwhTotal"></p>
+        <p class="stat-k" data-en="Energy this season">本季用能</p>
+      </article>
+      <article class="stat">
+        <p class="stat-num dyn" id="kwhDaily"></p>
+        <p class="stat-k" data-en="Energy per day">日均用能</p>
+      </article>
+      <article class="stat">
+        <p class="stat-num dyn" id="kwhMonthly"></p>
+        <p class="stat-k" data-en="Energy per month">月均用能</p>
+      </article>
+    </div>
+    <div class="stat-row">
+      <article class="stat">
+        <p class="stat-num dyn" id="costDaily"></p>
+        <p class="stat-k" data-en="Cost per day">日均花费</p>
+      </article>
+      <article class="stat">
+        <p class="stat-num dyn" id="costMonthly"></p>
+        <p class="stat-k" data-en="Cost per month">月均花费</p>
+      </article>
+      <article class="stat">
+        <p class="stat-num dyn" id="costDelta"></p>
+        <p class="stat-k" data-en="Versus last year">比去年</p>
+      </article>
+    </div>
+    <p class="help" data-en="Per day uses 151 days. Per month spreads November 2026 through March 2027 across 5 months. Months are not equally cold; this just flattens them.">日均按 151 天。月均把 2026-11 到 2027-03 摊成 5 个月。各月冷暖不一样，这里只是摊平。</p>
+    <p class="help" data-en="Energy (kWh) ≈ area × heat loss × temperature gap × hours per day × days ÷ efficiency ÷ 1000. The 1000 turns watt-hours into kilowatt-hours.">用能（kWh）≈ 面积 × 热损失 × 温差 × 每天小时 × 天数 ÷ 效率 ÷ 1000。1000 是把瓦时换成千瓦时。</p>
+    <p class="worked dyn" id="worked"></p>
+    <div class="compare dyn" id="compare"></div>
+    <p class="note dyn" id="compareNote"></p>
+    <p class="help" data-en="Bars start at zero. When the rise is modest, the two bars stay close.">柱子从零画起。涨得不多的时候，两根会差不多长。</p>
+  </section>
+
+  <section class="field" id="levers">
+    <div class="field-head">
+      <span class="field-no" data-en="04">04</span>
+      <h2 class="field-title" data-en="Four ways to spend less">四件能省钱的事</h2>
+      <p class="field-hint" data-en="Each one is counted on its own. Do not add the four together. Estimate only, not a precise bill.">四项分开算，不要加在一起。估算值，非精确账单。</p>
+    </div>
+    <p class="lever-lead dyn" id="leverLead"></p>
+    <div class="levers dyn" id="leverList"></div>
+  </section>
+
+  <section class="field" id="sources">
+    <div class="field-head">
+      <span class="field-no" data-en="05">05</span>
+      <h2 class="field-title" data-en="Figures from the news">新闻里的数字</h2>
+      <p class="field-hint" data-en="Background for why this winter feels expensive. Your bill above is not these households.">用来说明这个冬天为什么让人紧张。上面的账单不是这些家庭的账单。</p>
+    </div>
+    <ul class="sources">
+      <li class="source">
+        <p data-en="On 12 Oct 2026, France's energy regulator (CRE) said the reference gas price rises another 6.6% from 1 November, the second month in a row.">法国能源监管委员会（CRE）2026-10-12 公布：11 月 1 日起天然气参考价格再涨 6.6%，连续第二个月上调。</p>
+      </li>
+      <li class="source">
+        <p data-en="On 14 Oct 2026, Goldman Sachs said the European winter gas peak would need to reach €105/MWh to balance supply and demand.">高盛（Goldman Sachs）2026-10-14：欧洲冬季天然气峰值需到 €105/MWh 才能平衡供需。</p>
+      </li>
+      <li class="source">
+        <p data-en="From 1 Oct 2026, the UK Ofgem cap is up 4%. A typical household's annual bill is £1,723, and the gas unit price is up about 27% year on year.">英国 Ofgem 自 2026-10-01 起上调 4%，典型家庭年账单 £1,723，燃气单价同比涨约 27%。</p>
+      </li>
+    </ul>
+    <p class="disclaimer" data-en="News figures are background only; bills are estimates">新闻数据仅作背景，账单为估算</p>
+  </section>
+
+  <section class="field" id="share">
+    <div class="field-head">
+      <span class="field-no" data-en="06">06</span>
+      <h2 class="field-title" data-en="Share this estimate">把估算分享出去</h2>
+      <p class="field-hint" data-en="The text follows the estimate on screen. The card shows the season bill, the biggest saving lever, and this page.">文案跟着屏幕上的估算走。图上有季账单、最大省钱杠杆和本页链接。</p>
+    </div>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap" hidden>
+      <canvas id="shareCanvas" width="1200" height="630"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span class="mono" data-en='<a href="https://build-100.com/">build-100.com</a>'><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono" data-en='<a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a>'><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="HEAT-048 · Heating bill estimator">HEAT-048 · 取暖账单估算器</span>
+</footer>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  "use strict";
+  var E = window.HeatEngine;
+  if (!E) return;
+
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+
+  var D = E.DEFAULTS;
+  var state = {
+    mode: D.mode,
+    electricKind: D.electricKind,
+    area: D.area,
+    indoor: D.indoor,
+    outdoor: D.outdoor,
+    hours: D.hours,
+    heatLoadW: D.heatLoadWPerM2K,
+    priceThis: D.prices.gas.thisYear,
+    priceLast: D.prices.gas.lastYear
+  };
+  var shareOpen = false;
+  var copyTimer = null;
+
+  var KICK = {
+    gas: { zh: "锅炉 90%", en: "Boiler 90%" },
+    electric: { zh: "效率看下面", en: "See efficiency" },
+    district: { zh: "按热量计", en: "Billed as heat" },
+    oil: { zh: "锅炉 85%", en: "Boiler 85%" }
+  };
+
+  var FIELDS = [
+    { key: "area", num: "areaNum", range: "areaRange", em: "areaEm", lo: 15, hi: 300 },
+    { key: "indoor", num: "indoorNum", range: "indoorRange", em: "indoorEm", lo: 12, hi: 28 },
+    { key: "hours", num: "hoursNum", range: "hoursRange", em: "hoursEm", lo: 0, hi: 24 },
+    { key: "outdoor", num: "outdoorNum", range: "outdoorRange", em: "outdoorEm", lo: -8, hi: 16 },
+    { key: "heatLoadW", num: "lossNum", range: "lossRange", em: "lossEm", lo: 2, hi: 15 },
+    { key: "priceThis", num: "priceNowNum", range: "priceNowRange", em: "priceNowEm", lo: 0.02, hi: 1.2 },
+    { key: "priceLast", num: "priceThenNum", range: "priceThenRange", em: "priceThenEm", lo: 0.02, hi: 1.2 }
+  ];
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+  function $(id) { return document.getElementById(id); }
+
+  function modeById(id) {
+    var i;
+    for (i = 0; i < E.MODES.length; i++) if (E.MODES[i].id === id) return E.MODES[i];
+    return E.MODES[0];
+  }
+
+  function fmtLoose(n) {
+    if (!isFinite(n)) return "0";
+    var r = Math.round(n * 10000) / 10000;
+    return String(r);
+  }
+
+  function parseLoose(s) {
+    if (typeof s !== "string") s = String(s == null ? "" : s);
+    var cleaned = s.trim().replace(/\s/g, "").replace(",", ".");
+    if (cleaned === "") return NaN;
+    return parseFloat(cleaned);
+  }
+
+  function formatPrice(n) {
+    var v = Math.round(Number(n) * 10000) / 10000;
+    if (!isFinite(v)) v = 0;
+    var s = v.toFixed(4).replace(/0+$/, "").replace(/\.$/, "");
+    var dot = s.indexOf(".");
+    if (dot === -1) s += ".00";
+    else if (s.length - dot - 1 < 2) s += "0";
+    return "€" + s;
+  }
+
+  function formatPct(p) {
+    if (!isFinite(p)) return "0%";
+    var r = Math.round(p * 10) / 10;
+    if (Math.abs(r - Math.round(r)) < 1e-9) return String(Math.round(r)) + "%";
+    return r.toFixed(1) + "%";
+  }
+
+  function formatKwh(n, digits) {
+    if (!isFinite(n)) n = 0;
+    var d = digits ? 1 : 0;
+    var p = Math.pow(10, d);
+    var r = Math.round(n * p) / p;
+    var neg = r < 0;
+    var abs = Math.abs(r);
+    var whole = Math.floor(abs + 1e-9);
+    var dec = d ? Math.round((abs - whole) * 10) : 0;
+    if (dec === 10) { whole += 1; dec = 0; }
+    var body = String(whole);
+    var grouped = "";
+    while (body.length > 3) {
+      grouped = "," + body.slice(-3) + grouped;
+      body = body.slice(0, -3);
+    }
+    grouped = body + grouped;
+    var text = (neg ? "-" : "") + grouped;
+    if (d && dec) text += "." + dec;
+    return text + " kWh";
+  }
+
+  function formatMoney1(n) {
+    if (!isFinite(n)) n = 0;
+    var neg = n < 0;
+    var abs = Math.abs(n);
+    var r = Math.round(abs * 10) / 10;
+    var whole = Math.floor(r + 1e-9);
+    var dec = Math.round((r - whole) * 10);
+    if (dec === 10) { whole += 1; dec = 0; }
+    var core = E.formatEuro(whole);
+    if (dec) core += "." + dec;
+    return (neg ? "-" : "") + core;
+  }
+
+  function clean(key, v) {
+    if (key === "priceThis" || key === "priceLast") return Math.round(v * 10000) / 10000;
+    if (key === "area") return Math.round(v * 10) / 10;
+    return Math.round(v * 10) / 10;
+  }
+
+  function unitFor(f, v) {
+    if (f.key === "area") return fmtLoose(v) + " m²";
+    if (f.key === "indoor" || f.key === "outdoor") return fmtLoose(v) + "°C";
+    if (f.key === "hours") return t(fmtLoose(v) + " 小时", fmtLoose(v) + " h");
+    if (f.key === "heatLoadW") return fmtLoose(v) + " W/m²·°C";
+    return formatPrice(v) + "/kWh";
+  }
+
+  function writeEm(f) {
+    var em = $(f.em);
+    if (em) em.textContent = unitFor(f, state[f.key]);
+  }
+
+  function writeControls() {
+    FIELDS.forEach(function (f) {
+      var num = $(f.num);
+      var range = $(f.range);
+      var v = state[f.key];
+      if (num && document.activeElement !== num) num.value = fmtLoose(v);
+      var rv = v;
+      if (rv < f.lo) rv = f.lo;
+      if (rv > f.hi) rv = f.hi;
+      if (range) range.value = String(rv);
+      writeEm(f);
+    });
+  }
+
+  function currentInput() {
+    return {
+      mode: state.mode,
+      electricKind: state.electricKind,
+      area: state.area,
+      indoor: state.indoor,
+      outdoor: state.outdoor,
+      hours: state.hours,
+      heatLoad: state.heatLoadW / 1000,
+      priceThis: state.priceThis,
+      priceLast: state.priceLast
+    };
+  }
+
+  function fieldByKey(key) {
+    var i;
+    for (i = 0; i < FIELDS.length; i++) if (FIELDS[i].key === key) return FIELDS[i];
+    return null;
+  }
+
+  function setKey(key, v) {
+    state[key] = clean(key, v);
+  }
+
+  function effNote(b) {
+    var n = b.input;
+    if (n.mode === "gas") return t("天然气锅炉按效率 90% 算：烧掉的气大约有一成变不成屋里的热。", "Gas boiler at 90% efficiency: about a tenth of the gas does not become heat in the room.");
+    if (n.mode === "oil") return t("燃油锅炉按效率 85% 算。", "Oil boiler at 85% efficiency.");
+    if (n.mode === "district") return t("集中供暖按送到家里的热量计价，效率按 100%，单价是每千瓦时多少欧元。", "District heat is billed on the heat delivered, at 100% efficiency, in euro per kWh.");
+    if (n.electricKind === "pump") return t("热泵按 COP 2.5 算：同样的热，用电大约是直热的四成。", "Heat pump at COP 2.5: the same heat uses about two-fifths of the electricity of resistance heat.");
+    return t("电直热按效率 100% 算：1 度电换成 1 度热。", "Resistance heat at 100%: 1 kWh of electricity becomes 1 kWh of heat.");
+  }
+
+  function topOf(list) {
+    var best = list[0];
+    var i;
+    for (i = 1; i < list.length; i++) if (list[i].savedEuro > best.savedEuro) best = list[i];
+    return best;
+  }
+
+  function fillModeCards() {
+    var host = $("modeList");
+    if (host) host.setAttribute("aria-label", t("取暖方式", "Heating type"));
+    document.querySelectorAll(".mode-card").forEach(function (btn) {
+      var id = btn.getAttribute("data-mode");
+      var m = modeById(id);
+      var kick = KICK[id] || { zh: id, en: id };
+      var on = id === state.mode;
+      btn.setAttribute("aria-checked", on ? "true" : "false");
+      var kicker = btn.querySelector(".mode-kicker");
+      var name = btn.querySelector(".mode-name");
+      var blurb = btn.querySelector(".mode-blurb");
+      var price = btn.querySelector(".mode-price");
+      var now = btn.querySelector(".mode-now");
+      if (kicker) kicker.textContent = t(kick.zh, kick.en);
+      if (name) name.textContent = t(m.label.zh, m.label.en);
+      if (blurb) blurb.textContent = t(m.blurb.zh, m.blurb.en);
+      if (price) price.textContent = t("预设 ", "Preset ") + formatPrice(m.priceThis) + "/kWh";
+      if (now) {
+        now.hidden = !on;
+        now.textContent = on ? t("在用", "In use") : "";
+      }
+    });
+    var panel = $("elecPanel");
+    if (panel) panel.hidden = state.mode !== "electric";
+    var seg = $("elecSeg");
+    if (seg) seg.setAttribute("aria-label", t("电取暖的效率", "Electric heating efficiency"));
+    var pump = state.electricKind === "pump";
+    var resistBtn = $("kindResist");
+    var pumpBtn = $("kindPump");
+    if (resistBtn) resistBtn.setAttribute("aria-selected", pump ? "false" : "true");
+    if (pumpBtn) pumpBtn.setAttribute("aria-selected", pump ? "true" : "false");
+  }
+
+  function barRow(label, valueText, widthPct, kind) {
+    var row = document.createElement("div");
+    row.className = "bar-row";
+    var name = document.createElement("span");
+    name.className = "bar-name";
+    name.textContent = label;
+    var track = document.createElement("div");
+    track.className = "bar-track";
+    track.setAttribute("aria-hidden", "true");
+    var fill = document.createElement("div");
+    fill.className = "bar-fill " + kind;
+    var w = widthPct;
+    if (!isFinite(w) || w < 0) w = 0;
+    if (w > 100) w = 100;
+    fill.style.width = w + "%";
+    track.appendChild(fill);
+    var val = document.createElement("span");
+    val.className = "bar-val";
+    val.textContent = valueText;
+    row.appendChild(name);
+    row.appendChild(track);
+    row.appendChild(val);
+    return row;
+  }
+
+  function renderResults() {
+    var b = E.bill(currentInput());
+    var list = E.levers(currentInput());
+    var mode = modeById(b.mode);
+    var kind = "";
+    if (b.mode === "electric") kind = b.input.electricKind === "pump" ? t(" · 热泵", " · heat pump") : t(" · 直热", " · resistance");
+    var euro = $("billEuro");
+    if (euro) euro.textContent = E.formatEuro(b.costThisYear);
+    var meta = $("billMeta");
+    if (meta) {
+      meta.textContent = t(mode.label.zh, mode.label.en) + kind + t(
+        " · 2026-11-01 至 2027-03-31 · " + b.input.days + " 天",
+        " · 1 Nov 2026 – 31 Mar 2027 · " + b.input.days + " days"
+      );
+    }
+    var eff = $("effNote");
+    if (eff) eff.textContent = effNote(b);
+    var assume = $("assume");
+    if (assume) {
+      assume.textContent = t(
+        "按室外均温 " + fmtLoose(state.outdoor) + "°C、热损失 " + fmtLoose(state.heatLoadW) + " W/m²·°C、供暖季 " + b.input.days + " 天估算。",
+        "Outdoor average " + fmtLoose(state.outdoor) + "°C, heat loss " + fmtLoose(state.heatLoadW) + " W/m²·°C, " + b.input.days + "-day season."
+      );
+    }
+    var kwhTotal = $("kwhTotal");
+    var kwhDaily = $("kwhDaily");
+    var kwhMonthly = $("kwhMonthly");
+    if (kwhTotal) kwhTotal.textContent = formatKwh(b.kwh, 0);
+    if (kwhDaily) kwhDaily.textContent = formatKwh(b.kwhDaily, 1);
+    if (kwhMonthly) kwhMonthly.textContent = formatKwh(b.kwhMonthly, 1);
+    var costDaily = $("costDaily");
+    var costMonthly = $("costMonthly");
+    var costDelta = $("costDelta");
+    if (costDaily) costDaily.textContent = formatMoney1(b.daily);
+    if (costMonthly) costMonthly.textContent = formatMoney1(b.monthly);
+    if (costDelta) {
+      var signed = b.delta > 0 ? "+" + E.formatEuro(b.delta) : E.formatEuro(b.delta);
+      costDelta.textContent = signed;
+      costDelta.className = "stat-num dyn" + (b.delta > 0 ? " is-up" : (b.delta < 0 ? " is-down" : ""));
+    }
+    var n = b.input;
+    var lossW = Math.round(n.heatLoad * 1000 * 10) / 10;
+    var worked = $("worked");
+    if (worked) {
+      worked.textContent = fmtLoose(n.area) + " m² × " + lossW + " W/m²·°C × " + fmtLoose(b.deltaT) + "°C × " + fmtLoose(n.hours) + " h × " + n.days + " d ÷ " + fmtLoose(n.efficiency) + " ÷ 1000";
+    }
+    var host = $("compare");
+    if (host) {
+      host.textContent = "";
+      var max = Math.max(b.rawThis, b.rawLast, 0);
+      var wLast = max > 0 ? b.rawLast / max * 100 : 0;
+      var wThis = max > 0 ? b.rawThis / max * 100 : 0;
+      host.appendChild(barRow(t("去年", "Last year"), E.formatEuro(b.costLastYear), wLast, "was"));
+      host.appendChild(barRow(t("今年", "This year"), E.formatEuro(b.costThisYear), wThis, "now"));
+    }
+    var note = $("compareNote");
+    if (note) {
+      var rise = b.priceLast > 0 ? (b.priceThis - b.priceLast) / b.priceLast * 100 : null;
+      if (rise == null) {
+        note.textContent = t("去年单价是 0，不好算百分比。", "Last year's unit price is 0, so there is no percentage.");
+      } else if (Math.abs(rise) < 0.05 && b.delta === 0) {
+        note.textContent = t("单价和去年一样，账单金额相同。", "The unit price matches last year, so the bill matches too.");
+      } else if (rise >= 0) {
+        note.textContent = t(
+          "单价比去年高 " + formatPct(rise) + "，这一季大约多付 " + E.formatEuro(Math.max(0, b.delta)) + "。",
+          "The unit price is " + formatPct(rise) + " higher than last year, about " + E.formatEuro(Math.max(0, b.delta)) + " more this season."
+        );
+      } else {
+        note.textContent = t(
+          "单价比去年低 " + formatPct(Math.abs(rise)) + "，这一季大约少付 " + E.formatEuro(Math.abs(b.delta)) + "。",
+          "The unit price is " + formatPct(Math.abs(rise)) + " lower than last year, about " + E.formatEuro(Math.abs(b.delta)) + " less this season."
+        );
+      }
+    }
+    renderLevers(list);
+  }
+
+  function renderLevers(list) {
+    var host = $("leverList");
+    var lead = $("leverLead");
+    if (!host || !list || !list.length) return;
+    var top = topOf(list);
+    if (lead) {
+      if (top && top.savedEuro > 0) {
+        lead.textContent = t(
+          "最大的一项是" + top.label.zh + "，大约省 " + E.formatEuro(top.savedEuro) + "。",
+          "The largest is " + top.label.en + ", about " + E.formatEuro(top.savedEuro) + "."
+        );
+      } else {
+        lead.textContent = t("按现在的设定，这四项都省不下钱。", "With these settings, none of the four saves money.");
+      }
+    }
+    host.textContent = "";
+    list.forEach(function (item) {
+      var card = document.createElement("article");
+      var maxed = top && item.id === top.id && item.savedEuro > 0;
+      card.className = "lever" + (maxed ? " is-max" : "");
+      var head = document.createElement("div");
+      head.className = "lever-top";
+      var h = document.createElement("h3");
+      h.textContent = t(item.label.zh, item.label.en);
+      head.appendChild(h);
+      if (maxed) {
+        var pill = document.createElement("span");
+        pill.className = "pill";
+        pill.textContent = t("最大杠杆", "Biggest lever");
+        head.appendChild(pill);
+      }
+      var money = document.createElement("p");
+      money.className = "lever-euro";
+      money.textContent = E.formatEuro(item.savedEuro);
+      var noteEl = document.createElement("p");
+      noteEl.className = "lever-note";
+      noteEl.textContent = t(item.note.zh, item.note.en);
+      card.appendChild(head);
+      card.appendChild(money);
+      card.appendChild(noteEl);
+      host.appendChild(card);
+    });
+  }
+
+  function renderAll() {
+    fillModeCards();
+    writeControls();
+    renderResults();
+    if (shareOpen) drawShare();
+  }
+
+  function stampZh() {
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    });
+  }
+
+  function applyLang(l) {
+    lang = l;
+    if (copyTimer) { clearTimeout(copyTimer); copyTimer = null; }
+    var copyBtn = $("copyBtn");
+    if (copyBtn) copyBtn.classList.remove("copied");
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    var btn = $("langBtn");
+    if (btn) {
+      btn.textContent = l === "en" ? "中文" : "EN";
+      btn.setAttribute("aria-label", l === "en" ? "切换到中文" : "Switch language");
+    }
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    renderAll();
+  }
+
+  function fontStack() {
+    return '"Noto Sans CJK SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+  }
+
+  function setFont(ctx, weight, px) {
+    ctx.font = weight + " " + px + "px " + fontStack();
+  }
+
+  function fitText(ctx, text, maxW, weight, px, minPx) {
+    var size = px;
+    setFont(ctx, weight, size);
+    while (size > minPx && ctx.measureText(text).width > maxW) {
+      size -= 2;
+      setFont(ctx, weight, size);
+    }
+    return size;
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    var rr = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + rr, y);
+    ctx.arcTo(x + w, y, x + w, y + h, rr);
+    ctx.arcTo(x + w, y + h, x, y + h, rr);
+    ctx.arcTo(x, y + h, x, y, rr);
+    ctx.arcTo(x, y, x + w, y, rr);
+    ctx.closePath();
+  }
+
+  function drawShare() {
+    var canvas = $("shareCanvas");
+    if (!canvas) return;
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    var b = E.bill(currentInput());
+    var list = E.levers(currentInput());
+    var top = topOf(list);
+    var mode = modeById(b.mode);
+    var W = 1200;
+    var H = 630;
+    var pad = 64;
+    var maxW = W - pad * 2;
+    canvas.width = W;
+    canvas.height = H;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.045)";
+    var gx;
+    var gy;
+    for (gx = 18; gx < W; gx += 36) {
+      for (gy = 18; gy < H; gy += 36) ctx.fillRect(gx, gy, 1.4, 1.4);
+    }
+    ctx.fillStyle = "#fbbf24";
+    ctx.fillRect(0, 0, 10, H);
+    ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#fbbf24";
+    setFont(ctx, "700", 22);
+    ctx.fillText("HEAT-048", pad, 72);
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#7d848c";
+    setFont(ctx, "400", 20);
+    ctx.fillText("Everyday", W - pad, 72);
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#edeff1";
+    var title = t("这个冬天，取暖要花多少？", "How much will heating cost this winter?");
+    fitText(ctx, title, maxW, "700", 42, 26);
+    ctx.fillText(title, pad, 132);
+    var money = E.formatEuro(b.costThisYear);
+    ctx.fillStyle = "#fbbf24";
+    fitText(ctx, money, maxW, "700", 108, 64);
+    ctx.fillText(money, pad, 262);
+    var kind = "";
+    if (b.mode === "electric") kind = b.input.electricKind === "pump" ? t(" · 热泵", " · heat pump") : t(" · 直热", " · resistance");
+    var meta = t(mode.label.zh, mode.label.en) + kind + t(" · 供暖季 151 天", " · 151-day season");
+    ctx.fillStyle = "#edeff1";
+    fitText(ctx, meta, maxW, "400", 26, 16);
+    ctx.fillText(meta, pad, 318);
+    var rise = b.priceLast > 0 ? (b.priceThis - b.priceLast) / b.priceLast * 100 : 0;
+    var deltaLine;
+    if (b.delta > 0) {
+      deltaLine = t(
+        "比去年多 " + E.formatEuro(b.delta) + " · 单价 +" + formatPct(rise),
+        E.formatEuro(b.delta) + " more than last year · unit price +" + formatPct(rise)
+      );
+    } else if (b.delta < 0) {
+      deltaLine = t(
+        "比去年少 " + E.formatEuro(Math.abs(b.delta)) + " · 单价 -" + formatPct(Math.abs(rise)),
+        E.formatEuro(Math.abs(b.delta)) + " less than last year · unit price -" + formatPct(Math.abs(rise))
+      );
+    } else {
+      deltaLine = t("和去年一样", "Same as last year");
+    }
+    ctx.fillStyle = b.delta > 0 ? "#f87171" : (b.delta < 0 ? "#4ade80" : "#9aa1a8");
+    fitText(ctx, deltaLine, maxW, "600", 28, 16);
+    ctx.fillText(deltaLine, pad, 368);
+
+    var cardY = 400;
+    var cardH = 128;
+    ctx.fillStyle = "rgba(237,239,241,0.04)";
+    roundRect(ctx, pad, cardY, maxW, cardH, 16);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(251,191,36,0.55)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = "#fbbf24";
+    setFont(ctx, "700", 18);
+    ctx.fillText(t("最大省钱杠杆", "Biggest saving lever"), pad + 24, cardY + 36);
+    var leverName = top ? t(top.label.zh, top.label.en) : "";
+    ctx.fillStyle = "#edeff1";
+    fitText(ctx, leverName, maxW - 48, "700", 32, 18);
+    ctx.fillText(leverName, pad + 24, cardY + 78);
+    var saveLine = t("大约省 ", "About ") + E.formatEuro(top ? top.savedEuro : 0);
+    ctx.fillStyle = "#fbbf24";
+    fitText(ctx, saveLine, maxW - 48, "700", 26, 16);
+    ctx.fillText(saveLine, pad + 24, cardY + 112);
+
+    ctx.strokeStyle = "rgba(237,239,241,0.14)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad, 556);
+    ctx.lineTo(W - pad, 556);
+    ctx.stroke();
+    var url = "build-100.com/048";
+    var disc = t("估算值，非精确账单", "Estimate only, not a precise bill");
+    ctx.fillStyle = "#9aa1a8";
+    ctx.textAlign = "left";
+    fitText(ctx, disc, 640, "400", 22, 14);
+    ctx.fillText(disc, pad, 598);
+    ctx.textAlign = "right";
+    fitText(ctx, url, 420, "400", 22, 14);
+    ctx.fillText(url, W - pad, 598);
+    ctx.textAlign = "left";
+    canvas.setAttribute("aria-label", t("取暖季估算卡", "Heating season estimate card"));
+    var wrap = $("shareWrap");
+    if (wrap) wrap.hidden = false;
+    shareOpen = true;
+  }
+
+  function markCopied() {
+    var btn = $("copyBtn");
+    if (!btn) return;
+    btn.classList.add("copied");
+    btn.textContent = t("已复制", "Copied");
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () {
+      btn.classList.remove("copied");
+      if (btn.dataset.zh === undefined) return;
+      btn.innerHTML = lang === "en" ? btn.dataset.en : btn.dataset.zh;
+    }, 1600);
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  function selectMode(id) {
+    var m = modeById(id);
+    state.mode = m.id;
+    state.priceThis = m.priceThis;
+    state.priceLast = m.priceLast;
+    renderAll();
+  }
+
+  function setKind(kind) {
+    state.electricKind = kind === "pump" ? "pump" : "resist";
+    renderAll();
+  }
+
+  stampZh();
+
+  document.querySelectorAll(".mode-card").forEach(function (btn) {
+    btn.addEventListener("click", function () { selectMode(btn.getAttribute("data-mode")); });
+  });
+
+  FIELDS.forEach(function (f) {
+    var num = $(f.num);
+    var range = $(f.range);
+    if (!num || !range) return;
+    range.addEventListener("input", function () {
+      var v = parseFloat(range.value);
+      if (!isFinite(v)) return;
+      setKey(f.key, v);
+      if (document.activeElement !== num) num.value = fmtLoose(state[f.key]);
+      writeEm(f);
+      renderResults();
+      if (shareOpen) drawShare();
+    });
+    num.addEventListener("input", function () {
+      var v = parseLoose(num.value);
+      if (!isFinite(v) || v < f.lo || v > f.hi) return;
+      setKey(f.key, v);
+      range.value = String(state[f.key]);
+      writeEm(f);
+      renderResults();
+      if (shareOpen) drawShare();
+    });
+    num.addEventListener("blur", function () {
+      var v = parseLoose(num.value);
+      if (!isFinite(v)) v = state[f.key];
+      if (v < f.lo) v = f.lo;
+      if (v > f.hi) v = f.hi;
+      setKey(f.key, v);
+      num.value = fmtLoose(state[f.key]);
+      range.value = String(state[f.key]);
+      writeEm(f);
+      renderResults();
+      if (shareOpen) drawShare();
+    });
+  });
+
+  var resistBtn = $("kindResist");
+  var pumpBtn = $("kindPump");
+  if (resistBtn) resistBtn.addEventListener("click", function () { setKind("resist"); });
+  if (pumpBtn) pumpBtn.addEventListener("click", function () { setKind("pump"); });
+
+  var resetBtn = $("resetPrices");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", function () {
+      var m = modeById(state.mode);
+      state.priceThis = m.priceThis;
+      state.priceLast = m.priceLast;
+      renderAll();
+    });
+  }
+
+  $("langBtn").addEventListener("click", function () {
+    applyLang(lang === "en" ? "zh" : "en");
+  });
+
+  $("copyBtn").addEventListener("click", function () {
+    var text = E.shareText(E.bill(currentInput()), lang);
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      markCopied();
+    }
+    var clip = (navigator.clipboard && navigator.clipboard.writeText)
+      ? navigator.clipboard.writeText(text)
+      : Promise.reject();
+    var timed = new Promise(function (_, reject) {
+      setTimeout(function () { reject(new Error("copy-timeout")); }, 400);
+    });
+    Promise.race([clip, timed]).then(finish, function () {
+      fallbackCopy(text);
+      finish();
+    });
+  });
+
+  $("shareImgBtn").addEventListener("click", function () {
+    drawShare();
+    var wrap = $("shareWrap");
+    if (wrap && wrap.scrollIntoView) {
+      try { wrap.scrollIntoView({ block: "nearest" }); } catch (e) {}
+    }
+  });
+
+  if (lang === "en") applyLang("en");
+  else renderAll();
+})();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>
