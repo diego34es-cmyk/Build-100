@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-15",
+  "updated": "2026-10-16",
   "filters": [
     {
       "id": "all",
@@ -626,6 +626,19 @@
       ],
       "live": true,
       "url": "https://build-100.com/048/"
+    },
+    {
+      "id": "049",
+      "code": "DEBT",
+      "name": "DEBT-049",
+      "sub_zh": "AI 债务链爆雷模拟器——输入债务/GPU 利用率/融资成本，算利息覆盖，看哪一环先断",
+      "sub_en": "AI debt-chain blow-up simulator — debt, GPU utilization, financing cost; coverage and which link snaps first",
+      "cats": [
+        "finance",
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/049/"
     }
   ]
 }

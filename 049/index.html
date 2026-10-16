@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DEBT-049 · AI 债务链爆雷模拟器</title>
+<meta name="description" content="AI 债务链压力测试台：输入债务规模、GPU 利用率、融资成本，算年利息和利息覆盖倍数，用链条断裂温度计看哪一环先断。数据截至 2026-10-15。教育演示，不构成投资建议。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/049/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E049%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="DEBT-049 · AI 债务链爆雷模拟器">
+<meta property="og:description" content="输入债务规模、GPU 利用率、融资成本，算利息覆盖倍数，看 AI 债务链哪一环先断。截至 2026-10-15。">
+<meta property="og:url" content="https://build-100.com/049/">
+<meta property="og:image" content="https://build-100.com/049/og-049.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="DEBT-049 · AI 债务链爆雷模拟器">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DEBT-049 · AI 债务链爆雷模拟器">
+<meta name="twitter:description" content="AI debt-chain stress test. Debt, GPU utilization, financing cost, interest coverage, and which link snaps first. As of 2026-10-15.">
+<meta name="twitter:image" content="https://build-100.com/049/og-049.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;         /* 「再加 $X」的视觉锚点色 */
+    --accent: #dc2626;
+    --accent-glow: rgba(220,38,38,0.35);
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-padding-top: 72px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 44px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1.14;
+    letter-spacing: 0.01em;
+    margin-bottom: 18px;
+    text-wrap: balance;
+  }
+  .hero p.sub { color: var(--muted); max-width: 40em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.sub strong { color: var(--ink); font-weight: 500; }
+  .asof { margin-top: 16px; color: var(--accent); letter-spacing: 0.08em; text-transform: none; }
+
+  .kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 22px; }
+  @media (min-width: 720px) { .kpis { grid-template-columns: repeat(4, 1fr); } }
+  .kpi { background: var(--bg-raise); border: 1px solid var(--line); border-radius: 10px; padding: 14px 14px 12px; }
+  .kpi .n {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    font-size: clamp(1.15rem, 2.4vw, 1.45rem); color: var(--accent); letter-spacing: -0.02em;
+  }
+  .kpi .l { color: var(--faint); font-size: 0.75rem; margin-top: 4px; line-height: 1.35; }
+  .tape { margin-top: 14px; color: var(--muted); font-size: 0.88rem; }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .scroll-hint { margin-bottom: 10px; letter-spacing: 0.12em; }
+  .chain-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px;
+    scrollbar-color: rgba(237, 239, 241, 0.28) transparent;
+  }
+  .chain-scroll::-webkit-scrollbar { height: 8px; }
+  .chain-scroll::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 99px; }
+  .chain { display: flex; align-items: stretch; min-width: 1120px; }
+  .chain-node {
+    flex: 1 0 156px;
+    background: var(--bg-raise);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    padding: 12px 12px 14px;
+  }
+  .chain-arrow { flex: 0 0 22px; width: 22px; height: 16px; align-self: center; color: var(--faint); }
+  .chain-node .idx { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--faint); }
+  .chain-node h3 { font-size: 1rem; line-height: 1.3; margin: 4px 0 2px; }
+  .chain-node .role { color: var(--muted); font-size: 0.75rem; margin-bottom: 8px; }
+  .chain-node .owes, .chain-node .earns { font-size: 0.75rem; line-height: 1.45; color: var(--muted); margin-top: 6px; }
+  .chain-node .earns { color: var(--ink); }
+  .hot-tag {
+    display: none;
+    margin-top: 10px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .chain-node.hot .hot-tag { display: inline-block; }
+  .chain-node.hot.break {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent), 0 0 22px var(--accent-glow);
+  }
+  .chain-node.hot.break .hot-tag, .chain-node.hot.break .idx { color: var(--accent); }
+  .chain-node.hot.warn {
+    border-color: var(--delta);
+    box-shadow: 0 0 0 1px var(--delta), 0 0 18px rgba(251, 191, 36, 0.28);
+  }
+  .chain-node.hot.warn .hot-tag, .chain-node.hot.warn .idx { color: var(--delta); }
+  .chain-node.dim { opacity: 0.48; }
+
+  .slider-row {
+    display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; align-items: center;
+    padding: 14px 0; border-bottom: 1px solid var(--line);
+  }
+  .slider-row:last-child { border-bottom: none; }
+  .slider-row .name { font-size: 0.95rem; }
+  .slider-row .name small { display: block; color: var(--faint); font-size: 0.78rem; font-weight: 400; }
+  .slider-val {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.15rem;
+    color: var(--accent); min-width: 7ch; text-align: right;
+  }
+  input[type=range] {
+    grid-column: 1 / -1; -webkit-appearance: none; appearance: none; width: 100%; height: 4px;
+    background: var(--line-strong); border-radius: 2px; outline: none; margin: 4px 0 0;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--accent); cursor: pointer; box-shadow: 0 0 8px var(--accent-glow);
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 18px; height: 18px; border: none; border-radius: 50%;
+    background: var(--accent); cursor: pointer;
+  }
+
+  .stats { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 8px; }
+  @media (min-width: 720px) { .stats { grid-template-columns: 1fr 1fr 1fr; } }
+  .stat {
+    background: var(--bg-raise); border: 1px solid var(--line); border-radius: 10px; padding: 16px;
+    min-height: 132px;
+  }
+  .stat .k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
+  .stat .n {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    font-size: clamp(1.7rem, 4vw, 2.3rem); letter-spacing: -0.03em; margin-top: 8px; line-height: 1.1;
+  }
+  .stat .u { color: var(--muted); font-size: 0.82rem; margin-top: 6px; }
+  .stat.break { border-color: var(--accent); }
+  .stat.break .n, .stat.break .u { color: var(--accent); }
+  .stat.warn { border-color: var(--delta); }
+  .stat.warn .n, .stat.warn .u { color: var(--delta); }
+  .stat.safe { border-color: var(--live); }
+  .stat.safe .n, .stat.safe .u { color: var(--live); }
+  .thermo {
+    position: relative; height: 16px; border-radius: 999px; margin: 14px 0 6px;
+    background: linear-gradient(90deg, #dc2626 0%, #dc2626 33.333%, #fbbf24 33.333%, #fbbf24 66.666%, #4ade80 66.666%, #4ade80 100%);
+  }
+  .thermo-mini { margin-top: 16px; }
+  .thermo-mark {
+    position: absolute; top: -6px; width: 4px; height: 28px; border-radius: 2px;
+    background: var(--ink); transform: translateX(-2px); left: 35.56%;
+  }
+  .thermo-scale, .legend {
+    display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--faint); text-transform: uppercase;
+  }
+  .legend { justify-content: flex-start; gap: 14px; margin-top: 10px; letter-spacing: 0.04em; text-transform: none; font-size: 0.78rem; color: var(--muted); }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+  .lg-break { background: #dc2626; }
+  .lg-warn { background: #fbbf24; }
+  .lg-safe { background: #4ade80; }
+  .formula, .assumptions {
+    margin-top: 14px; color: var(--muted); font-size: 0.86rem; line-height: 1.55;
+    padding: 12px 14px; border-left: 2px solid var(--line-strong);
+  }
+
+  .scenarios { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  @media (min-width: 800px) { .scenarios { grid-template-columns: 1fr 1fr 1fr; } }
+  .scenario {
+    text-align: left; background: var(--bg-raise); border: 1px solid var(--line-strong);
+    border-radius: 10px; padding: 14px; color: inherit; cursor: pointer; transition: border-color .18s, background .18s;
+  }
+  .scenario:hover { border-color: var(--muted); }
+  .scenario.active { border-color: var(--accent); background: rgba(220, 38, 38, 0.08); box-shadow: 0 0 0 1px var(--accent) inset; }
+  .scenario-k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+  .scenario-t { display: block; font-weight: 700; margin: 6px 0; font-size: 0.95rem; line-height: 1.35; }
+  .scenario-d { display: block; color: var(--muted); font-size: 0.8rem; line-height: 1.45; }
+
+  .break-card {
+    margin-top: 16px; border: 1px solid var(--line-strong); border-radius: 10px; padding: 18px 18px 16px;
+    background: var(--bg-raise);
+  }
+  .break-card.break { border-color: var(--accent); background: linear-gradient(160deg, rgba(220, 38, 38, 0.16), transparent 72%); }
+  .break-card.warn { border-color: var(--delta); background: linear-gradient(160deg, rgba(251, 191, 36, 0.14), transparent 72%); }
+  .break-card.safe { border-color: var(--live); background: linear-gradient(160deg, rgba(74, 222, 128, 0.12), transparent 72%); }
+  .break-card .kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .break-card h3 { font-size: clamp(1.35rem, 3vw, 1.8rem); line-height: 1.2; margin: 8px 0; }
+  .break-card p { color: var(--muted); font-size: 0.95rem; }
+  .break-card.break h3 { color: var(--accent); }
+  .break-card.warn h3 { color: var(--delta); }
+  .break-card.safe h3 { color: var(--live); }
+  .pips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+  .pips span {
+    font-size: 0.75rem; color: var(--muted); border: 1px solid var(--line);
+    border-radius: 999px; padding: 4px 10px;
+  }
+  .pips span.on.break { border-color: var(--accent); color: var(--ink); }
+  .pips span.on.warn { border-color: var(--delta); color: var(--ink); }
+  .pips span.on.safe { border-color: var(--live); color: var(--ink); }
+
+  .sources { list-style: none; }
+  .sources li { padding: 12px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.92rem; }
+  .sources li:first-child { border-top: none; padding-top: 0; }
+  .disclaimer {
+    margin-top: 14px; padding: 14px 16px; border: 1px dashed var(--line-strong); border-radius: 8px;
+    background: rgba(220, 38, 38, 0.06); color: var(--muted); font-size: 0.9rem;
+  }
+  .disclaimer strong { color: var(--ink); font-weight: 500; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237, 239, 241, 0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); background: rgba(74, 222, 128, 0.1); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line); }
+  .share-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  footer {
+    display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: space-between; align-items: center;
+    padding: 28px var(--pad) 48px; border-top: 1px solid var(--line); max-width: 880px; margin: 0 auto;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">DEBT<span>·049</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="DEBT-049 · Finance Tools">DEBT-049 · Finance Tools</p>
+    <h1 data-en="CoreWeave at a 15% coupon. Which link snaps?">CoreWeave 债息 15%。哪一环先断？</h1>
+    <p class="sub" data-en="Turn the AI selloff set off by CoreWeave's roughly <strong>15%</strong> coupon into a debt-chain stress bench. Enter debt, GPU utilization, and financing cost to see annual interest, interest coverage, and which link snaps first.">
+      把 CoreWeave 债息约 <strong>15%</strong> 引发的 AI 抛售，做成一台债务链压力测试台。输入债务规模、GPU 利用率和融资成本，看年利息、利息覆盖倍数，以及哪一环先断。
+    </p>
+    <p class="mono asof" data-en="As of 2026-10-15 · Educational demo. Not investment advice.">数据截至 2026-10-15 · 本页为教育演示，不构成投资建议</p>
+    <div class="kpis">
+      <div class="kpi">
+        <div class="n">15%</div>
+        <div class="l" data-en="CoreWeave bond yield · Reuters">CoreWeave 债券收益率 · Reuters</div>
+      </div>
+      <div class="kpi">
+        <div class="n">-15.5%</div>
+        <div class="l" data-en="Share price, Wednesday · Reuters">股价周三单日 · Reuters</div>
+      </div>
+      <div class="kpi">
+        <div class="n">-7% / -5%</div>
+        <div class="l" data-en="KOSPI / Nikkei, Asia session">KOSPI / 日经 · 亚盘</div>
+      </div>
+      <div class="kpi">
+        <div class="n">7,744</div>
+        <div class="l" data-en="S&amp;P 500 close · US 10-year 5.05%">S&amp;P 500 收盘 · 10 年期美债 5.05%</div>
+      </div>
+    </div>
+    <p class="tape" data-en="Philadelphia semiconductor index down 7 sessions (Investrade). Asia session: KOSPI −7%, Nikkei −5%.">费城半导体指数连跌 7 天（Investrade）。亚盘 KOSPI -7%，日经 -5%。</p>
+  </header>
+
+  <section class="field" id="chain">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <h2 class="field-title" data-en="The debt chain: who owes whom, who earns">债务链：谁欠谁，谁赚利息</h2>
+      <p class="field-hint" data-en="Six links, left to right. Money is borrowed on the left and has to be earned back on the right. Scroll sideways.">从左到右六环。钱从左边借进来，得靠右边赚回来。可左右滑动。</p>
+    </div>
+    <p class="mono scroll-hint" data-en="Scroll sideways for all six links.">左右滑动，看全六环。</p>
+    <div class="chain-scroll">
+      <div class="chain">
+        <article class="chain-node dim" data-link="creditor">
+          <div class="idx">01</div>
+          <h3 data-en="Creditors">债权人</h3>
+          <div class="role" data-en="Bonds / banks">债券 / 银行</div>
+          <p class="owes" data-en="Who owes whom: the neocloud owes creditors principal and the coupon.">谁欠谁：neocloud 欠债权人本金和票息。</p>
+          <p class="earns" data-en="Who earns: creditors earn the coupon (about 15% in this market). They do not own the GPUs.">谁赚利息：债权人赚票息（这场行情约 15%），不拥有 GPU。</p>
+          <span class="hot-tag" data-en="First to snap">最先断</span>
+        </article>
+        <svg class="chain-arrow" viewBox="0 0 22 16" aria-hidden="true" focusable="false"><path d="M1 8h14M11 3l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <article class="chain-node hot warn" data-link="neocloud" aria-current="true">
+          <div class="idx">02</div>
+          <h3 data-en="Neocloud">neocloud</h3>
+          <div class="role" data-en="CoreWeave-class">CoreWeave 类</div>
+          <p class="owes" data-en="Who owes whom: it pays creditors the coupon and pays GPU vendors for the boxes.">谁欠谁：向债权人付息，并向 GPU 供应商付设备款。</p>
+          <p class="earns" data-en="Who earns: GPU rent from hyperscaler tenants. Interest comes out of that rent first.">谁赚利息：向云大厂租客收算力租金；利息先从这笔租金里扣。</p>
+          <span class="hot-tag" data-en="First to snap">最先断</span>
+        </article>
+        <svg class="chain-arrow" viewBox="0 0 22 16" aria-hidden="true" focusable="false"><path d="M1 8h14M11 3l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <article class="chain-node dim" data-link="gpu">
+          <div class="idx">03</div>
+          <h3 data-en="GPU vendors">GPU 供应商</h3>
+          <div class="role" data-en="NVIDIA-class">NVIDIA 类</div>
+          <p class="owes" data-en="Who owes whom: the neocloud owes them for hardware. They do not carry this debt.">谁欠谁：neocloud 欠它货款或预付款，它不背这张债。</p>
+          <p class="earns" data-en="Who earns: hardware margin, not bond interest. Orders depend on the buyer still getting financing.">谁赚利息：赚硬件毛利，不赚债息；订单取决于下游还借不借得到钱。</p>
+          <span class="hot-tag" data-en="First to snap">最先断</span>
+        </article>
+        <svg class="chain-arrow" viewBox="0 0 22 16" aria-hidden="true" focusable="false"><path d="M1 8h14M11 3l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <article class="chain-node dim" data-link="hyperscaler">
+          <div class="idx">04</div>
+          <h3 data-en="Hyperscaler tenants">云大厂租客</h3>
+          <div class="role" data-en="Compute lessees">算力承租</div>
+          <p class="owes" data-en="Who owes whom: they pay the neocloud GPU rent under contract.">谁欠谁：按合约向 neocloud 付 GPU 租金。</p>
+          <p class="earns" data-en="Who earns: cloud margin from reselling compute to AI apps. They do not pay the neocloud coupon.">谁赚利息：把算力转售给 AI 应用，赚云毛利，不吃 neocloud 的债息。</p>
+          <span class="hot-tag" data-en="First to snap">最先断</span>
+        </article>
+        <svg class="chain-arrow" viewBox="0 0 22 16" aria-hidden="true" focusable="false"><path d="M1 8h14M11 3l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <article class="chain-node dim" data-link="app">
+          <div class="idx">05</div>
+          <h3 data-en="AI apps">AI 应用</h3>
+          <div class="role" data-en="Models and products">模型与产品</div>
+          <p class="owes" data-en="Who owes whom: they pay hyperscalers for inference and training.">谁欠谁：向云大厂付推理和训练账单。</p>
+          <p class="earns" data-en="Who earns: subscription fees from end users. Most apps still burn cash and earn no coupon.">谁赚利息：向终端收订阅；多数应用仍在烧钱，赚不到债息。</p>
+          <span class="hot-tag" data-en="First to snap">最先断</span>
+        </article>
+        <svg class="chain-arrow" viewBox="0 0 22 16" aria-hidden="true" focusable="false"><path d="M1 8h14M11 3l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <article class="chain-node dim" data-link="enduser">
+          <div class="idx">06</div>
+          <h3 data-en="End revenue">终端收入</h3>
+          <div class="role" data-en="Subscriptions and API">订阅与 API</div>
+          <p class="owes" data-en="Who owes whom: users pay for subscriptions or API calls. They do not owe the upstream debt.">谁欠谁：用户付订阅或 API 费用，不背上游的债。</p>
+          <p class="earns" data-en="Who earns: the only cash that enters from outside. It does not pay the coupon, but it has to cover it.">谁赚利息：全链唯一从外部进来的现金；它不支付债息，但得盖住上游的利息。</p>
+          <span class="hot-tag" data-en="First to snap">最先断</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="field" id="stress">
+    <div class="field-head">
+      <span class="field-no">02</span>
+      <h2 class="field-title" data-en="Stress test">压力测试</h2>
+      <p class="field-hint" data-en="Three live sliders. Annual interest = debt × financing cost. Coverage = annual compute revenue / annual interest.">三根滑杆，实时重算。年利息 = 债务 × 融资成本。覆盖倍数 = 年化算力收入 / 年利息。</p>
+    </div>
+
+    <div class="slider-row">
+      <div class="name">
+        <span data-en="Debt outstanding">债务总额</span>
+        <small data-en="USD billions · 0 to 80">亿美元 · 0 到 80</small>
+      </div>
+      <span class="slider-val" id="debtVal">20.0</span>
+      <input id="debt" type="range" min="0" max="80" step="0.5" value="20" aria-label="债务总额">
+    </div>
+    <div class="slider-row">
+      <div class="name">
+        <span data-en="GPU utilization">GPU 利用率</span>
+        <small data-en="Share of the fleet that is rented">等效集群里正在出租的比例</small>
+      </div>
+      <span class="slider-val" id="utilVal">80%</span>
+      <input id="util" type="range" min="0" max="100" step="1" value="80" aria-label="GPU 利用率">
+    </div>
+    <div class="slider-row">
+      <div class="name">
+        <span data-en="Average financing cost">平均融资成本</span>
+        <small data-en="Percent per year · CoreWeave yield is about 15%">年化百分比 · CoreWeave 收益率约 15%</small>
+      </div>
+      <span class="slider-val" id="costVal">15.0%</span>
+      <input id="cost" type="range" min="0" max="30" step="0.1" value="15" aria-label="平均融资成本">
+    </div>
+
+    <div class="field-head" style="margin-top:22px">
+      <span class="field-no">02b</span>
+      <h3 class="field-title" data-en="Tunable constants">可调常量</h3>
+      <p class="field-hint" data-en="Equivalent GPU fleet, and annual rent per GPU at 100% utilization.">等效 GPU 规模，以及 100% 利用率下的单卡年租金。</p>
+    </div>
+    <div class="slider-row">
+      <div class="name">
+        <span data-en="Equivalent GPUs">等效 GPU 规模</span>
+        <small data-en="H100-class cards in the illustrative book">示意账里的 H100 级卡数</small>
+      </div>
+      <span class="slider-val" id="gpuVal">200,000</span>
+      <input id="gpu" type="range" min="0" max="1000000" step="10000" value="200000" aria-label="等效 GPU 规模">
+    </div>
+    <div class="slider-row">
+      <div class="name">
+        <span data-en="Rent per GPU">租金单价</span>
+        <small data-en="USD per GPU-year at 100% utilization">美元 / 卡·年（按 100% 利用率）</small>
+      </div>
+      <span class="slider-val" id="rentVal">20,000</span>
+      <input id="rent" type="range" min="0" max="80000" step="500" value="20000" aria-label="租金单价">
+    </div>
+    <p class="formula" id="rentHour">约 $2.28 / 卡·时（按 8760 小时）</p>
+
+    <div class="stats">
+      <article class="stat">
+        <div class="k" data-en="Annual interest">年利息支出</div>
+        <div class="n" id="interestOut">3.00</div>
+        <div class="u" data-en="USD billions">亿美元</div>
+      </article>
+      <article class="stat">
+        <div class="k" data-en="Annual compute revenue">年化算力收入</div>
+        <div class="n" id="revenueOut">3.20</div>
+        <div class="u" data-en="USD billions">亿美元</div>
+      </article>
+      <article class="stat warn" id="coverStat">
+        <div class="k" data-en="Interest coverage">利息覆盖倍数</div>
+        <div class="n" id="coverOut">1.07×</div>
+        <div class="u" id="levelOut">预警</div>
+        <div class="thermo thermo-mini" aria-hidden="true"><div class="thermo-mark" id="markMini"></div></div>
+      </article>
+    </div>
+    <p class="formula" id="formulaLine">年利息 3.00 = 债务 20.0 × 15.0%。算力收入 3.20 = 200,000 卡 × 80% × $20,000 / 10亿。</p>
+    <p class="formula" id="spreadLine">相对 10 年期美债 5.05%（截至 2026-10-15），融资利差 +9.95 个百分点。</p>
+    <p class="assumptions" data-en="Illustrative book, not a filing: default debt is $20B, 200,000 equivalent GPUs, rent $20,000 per GPU-year at 100% utilization (about $2.28 per GPU-hour). The 15% coupon matches the CoreWeave bond yield as of 2026-10-15. Sliders recompute live. Coverage under 1× is a red break, 1–2× is an orange warning, above 2× is green and safe.">
+      示意账本，不是财报：默认债务 20 亿美元、等效 GPU 20 万张、租金 $20,000/卡·年（100% 利用率，约 $2.28/卡·时）。债息 15% 对齐截至 2026-10-15 的 CoreWeave 债券收益率。滑杆实时重算。覆盖低于 1× 红色断裂，1–2× 橙色预警，高于 2× 绿色安全。
+    </p>
+  </section>
+
+  <section class="field" id="scenarios">
+    <div class="field-head">
+      <span class="field-no">03</span>
+      <h2 class="field-title" data-en="Scenario presets">情景预设</h2>
+      <p class="field-hint" data-en="One click loads debt, utilization, financing cost, fleet size, and rent. Each line is a reading of that book.">一键载入债务、利用率、融资成本、集群规模和租金。每句是对这套账的解读。</p>
+    </div>
+    <div class="scenarios" id="scenarioRow">
+      <button class="scenario active" type="button" data-scenario="coreweave" aria-pressed="true">
+        <span class="scenario-k" data-en="Base">现状</span>
+        <span class="scenario-t" data-en="CoreWeave now (15% coupon)">CoreWeave 现状（债息 15%）</span>
+        <span class="scenario-d" data-en="Coupon stuck near 15% (junk pricing). On this illustrative book, coverage sits just over 1× — orange warning.">债息停在约 15%（垃圾债定价）。按这套示意账，利息覆盖刚过 1×，橙色预警。</span>
+      </button>
+      <button class="scenario" type="button" data-scenario="hike" aria-pressed="false">
+        <span class="scenario-k" data-en="+2pp">加息</span>
+        <span class="scenario-t" data-en="Rates rise again (financing cost +2pp)">加息再起（融资成本 +2pp）</span>
+        <span class="scenario-d" data-en="Financing cost is 2 percentage points above the base case. Same debt, same utilization — annual interest exceeds compute revenue and the thermometer turns red.">融资成本在现状上再加 2 个百分点。同样的债、同样的出租率，年利息超过算力收入，温度计转红。</span>
+      </button>
+      <button class="scenario" type="button" data-scenario="util60" aria-pressed="false">
+        <span class="scenario-k" data-en="Idle">空转</span>
+        <span class="scenario-t" data-en="GPU utilization slides to 60%">GPU 利用率滑到 60%</span>
+        <span class="scenario-d" data-en="GPU utilization slides to 60%. Rent collapses first, so the hyperscaler-tenant link loosens before the coupon.">GPU 利用率滑到 60%。租金先塌，云大厂租客这一环比票息更早松动。</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="field" id="break">
+    <div class="field-head">
+      <span class="field-no">04</span>
+      <h2 class="field-title" data-en="Where it snaps">爆点定位</h2>
+      <p class="field-hint" data-en="The thermometer marks the first link on the chain, plus one sentence on why.">温度计标出链条上最先断的一环，并给一句话解释。</p>
+    </div>
+    <div class="thermo" id="thermo" aria-hidden="true"><div class="thermo-mark" id="mark"></div></div>
+    <div class="thermo-scale">
+      <span>0</span>
+      <span data-en="1× warning">1× 预警</span>
+      <span>2×</span>
+      <span data-en="3× and above">3×+</span>
+    </div>
+    <div class="legend">
+      <span><i class="lg-break"></i><span data-en="Under 1× · break">低于 1× · 断裂</span></span>
+      <span><i class="lg-warn"></i><span data-en="1–2× · warning">1–2× · 预警</span></span>
+      <span><i class="lg-safe"></i><span data-en="Above 2× · safe">高于 2× · 安全</span></span>
+    </div>
+    <article class="break-card warn" id="breakCard">
+      <p class="kicker" id="breakKicker">预警 · 缓冲薄，最先会断的一环</p>
+      <h3 id="breakName">neocloud</h3>
+      <p id="breakText">neocloud 利息先吃掉利润 → 债主抽贷 → GPU 订单砍单。</p>
+    </article>
+    <div class="pips" id="linkPips">
+      <span data-link="creditor" data-en="Creditors">债权人</span>
+      <span class="on warn" data-link="neocloud" data-en="Neocloud">neocloud</span>
+      <span data-link="gpu" data-en="GPU vendors">GPU 供应商</span>
+      <span data-link="hyperscaler" data-en="Hyperscaler tenants">云大厂租客</span>
+      <span data-link="app" data-en="AI apps">AI 应用</span>
+      <span data-link="enduser" data-en="End revenue">终端收入</span>
+    </div>
+    <p class="assumptions" data-en="Break rules, in order: coverage above 2× holds. Utilization under 50% points at end revenue, under 70% at hyperscaler tenants. Rent under $8,000 per GPU-year points at GPU vendors. A financing cost of 12% or more points at the neocloud. Debt of $40B or more with coverage under 1× and a cheaper coupon points at creditors. Any other 1–2× cushion points at AI apps.">
+      爆点规则按这个顺序：覆盖高于 2× 不断；利用率低于 50% 看终端收入，低于 70% 看云大厂租客；租金单价低于每卡每年 8000 美元看 GPU 供应商；融资成本达到 12% 看 neocloud；债务达到 40 亿美元、覆盖低于 1×、而且融资成本更低时看债权人；其余 1–2× 的薄覆盖看 AI 应用。
+    </p>
+  </section>
+
+  <section class="field" id="sources">
+    <div class="field-head">
+      <span class="field-no">05</span>
+      <h2 class="field-title" data-en="Sources and disclaimer">数据来源与免责</h2>
+      <p class="field-hint" data-en="Market prints are static. The debt, fleet, and rent are a teaching book.">行情是静态摘录。债务、集群和租金是教学账，不是公司指引。</p>
+    </div>
+    <ul class="sources">
+      <li data-en="Reuters: CoreWeave bond yield about 15%; the stock fell about 15.5% on Wednesday.">Reuters：CoreWeave 债券收益率约 15%；股价周三单日约 -15.5%。</li>
+      <li data-en="Asia session: KOSPI −7%, Nikkei −5%.">亚盘：KOSPI -7%，日经 -5%。</li>
+      <li data-en="Investrade: the Philadelphia semiconductor index fell for 7 sessions in a row.">Investrade：费城半导体指数连跌 7 天。</li>
+      <li data-en="S&amp;P 500 closed about 7,744. The US 10-year yield was about 5.05%.">S&amp;P 500 收约 7,744。10 年期美债收益率约 5.05%。</li>
+      <li data-en="fool.com: market write-up of the same AI-chain selloff. No extra figures are taken from it.">fool.com：同一轮 AI 链条抛售的市场综述。本页不另引它的数字。</li>
+    </ul>
+    <p class="disclaimer">
+      <strong data-en="As of 2026-10-15.">数据截至 2026-10-15。</strong>
+      <span data-en="Sources: Reuters / fool.com / Investrade. This page is an educational demo and is not investment advice.">来源：Reuters / fool.com / Investrade。本页为教育演示，不构成投资建议。</span>
+    </p>
+  </section>
+
+  <div class="share-row">
+    <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+    <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+  </div>
+  <div class="share-canvas-wrap" id="shareWrap">
+    <canvas id="shareCanvas" width="1200" height="628" aria-label="share card"></canvas>
+    <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+  </div>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/" data-en="build-100.com">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="@JCheng557">@JCheng557</a></span>
+  <span class="mono" data-en="DEBT-049 · AI debt-chain stress test">DEBT-049 · AI 债务链爆雷模拟器</span>
+</footer>
+
+<script type="module">
+import {
+  AS_OF,
+  MARKET_SNAPSHOT,
+  SCENARIO_IDS,
+  applyScenario,
+  evaluate,
+  formatInt,
+  formatPct,
+  formatMultiple,
+  formatBn,
+  formatBnNumber,
+  buildShareText,
+} from "./engine.js";
+
+var lang = "zh";
+try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+
+function t(zh, en) { return lang === "en" ? en : zh; }
+function $(id) { return document.getElementById(id); }
+function num(id) {
+  var v = parseFloat($(id).value);
+  return isFinite(v) ? v : 0;
+}
+function close(a, b) { return Math.abs(a - b) < 0.001; }
+
+function readForm() {
+  return {
+    debtBn: num("debt"),
+    utilizationPct: num("util"),
+    financingCostPct: num("cost"),
+    gpuCount: num("gpu"),
+    rentPerGpuYearUsd: num("rent"),
+  };
+}
+
+function levelName(level) {
+  if (level === "break") return t("断裂", "Break");
+  if (level === "warn") return t("预警", "Warning");
+  return t("安全", "Safe");
+}
+
+function levelKicker(level) {
+  if (level === "break") return t("断裂 · 最先断的一环", "Break · first link to snap");
+  if (level === "warn") return t("预警 · 缓冲薄，最先会断的一环", "Warning · thin cushion, first link that would snap");
+  return t("安全 · 链条接住", "Safe · the chain holds");
+}
+
+function markerPct(coverage) {
+  if (coverage === Infinity) return 100;
+  if (!isFinite(coverage) || coverage < 0) return 0;
+  return Math.max(0, Math.min(100, (coverage / 3) * 100));
+}
+
+function renderInputs(r) {
+  $("debtVal").textContent = Number(r.input.debtBn).toFixed(1);
+  $("utilVal").textContent = formatPct(r.input.utilizationPct, 0);
+  $("costVal").textContent = formatPct(r.input.financingCostPct, 1);
+  $("gpuVal").textContent = formatInt(r.input.gpuCount);
+  $("rentVal").textContent = "$" + formatInt(r.input.rentPerGpuYearUsd);
+  $("rentHour").textContent = t(
+    "约 $" + r.hourlyRentUsd.toFixed(2) + " / 卡·时（按 8760 小时）",
+    "about $" + r.hourlyRentUsd.toFixed(2) + " / GPU-hour (8,760 hours)"
+  );
+  $("debt").setAttribute("aria-label", t("债务总额（亿美元）", "Debt outstanding (USD billions)"));
+  $("util").setAttribute("aria-label", t("GPU 利用率（%）", "GPU utilization (%)"));
+  $("cost").setAttribute("aria-label", t("平均融资成本（%）", "Average financing cost (%)"));
+  $("gpu").setAttribute("aria-label", t("等效 GPU 规模", "Equivalent GPU count"));
+  $("rent").setAttribute("aria-label", t("租金单价（美元/卡·年）", "Rent per GPU (USD per year)"));
+}
+
+function renderStats(r) {
+  $("interestOut").textContent = formatBnNumber(r.interestBn);
+  $("revenueOut").textContent = formatBnNumber(r.revenueBn);
+  $("coverOut").textContent = formatMultiple(r.coverage);
+  $("levelOut").textContent = levelName(r.level);
+  var stat = $("coverStat");
+  stat.classList.remove("break", "warn", "safe");
+  stat.classList.add(r.level);
+  $("formulaLine").textContent = t(
+    "年利息 " + formatBnNumber(r.interestBn) + " = 债务 " + Number(r.input.debtBn).toFixed(1) + " × " + formatPct(r.input.financingCostPct) + "。算力收入 " + formatBnNumber(r.revenueBn) + " = " + formatInt(r.input.gpuCount) + " 卡 × " + formatPct(r.input.utilizationPct, 0) + " × $" + formatInt(r.input.rentPerGpuYearUsd) + " / 10亿。",
+    "Interest " + formatBnNumber(r.interestBn) + " = debt " + Number(r.input.debtBn).toFixed(1) + " × " + formatPct(r.input.financingCostPct) + ". Compute revenue " + formatBnNumber(r.revenueBn) + " = " + formatInt(r.input.gpuCount) + " GPUs × " + formatPct(r.input.utilizationPct, 0) + " × $" + formatInt(r.input.rentPerGpuYearUsd) + " / 1e9."
+  );
+  var sign = r.spreadPp > 0 ? "+" : "";
+  $("spreadLine").textContent = t(
+    "相对 10 年期美债 " + formatPct(MARKET_SNAPSHOT.ust10yPct) + "（截至 " + AS_OF + "），融资利差 " + sign + r.spreadPp.toFixed(2) + " 个百分点。",
+    "Versus the " + formatPct(MARKET_SNAPSHOT.ust10yPct) + " US 10-year (as of " + AS_OF + "), the financing spread is " + sign + r.spreadPp.toFixed(2) + " percentage points."
+  );
+}
+
+function renderChain(r) {
+  var id = r.link.linkId;
+  document.querySelectorAll(".chain-node").forEach(function (node) {
+    var on = node.getAttribute("data-link") === id;
+    node.classList.toggle("hot", on);
+    node.classList.toggle("break", on && r.level === "break");
+    node.classList.toggle("warn", on && r.level === "warn");
+    node.classList.toggle("dim", id !== "none" && !on);
+    if (on) node.setAttribute("aria-current", "true");
+    else node.removeAttribute("aria-current");
+  });
+  document.querySelectorAll("#linkPips span").forEach(function (node) {
+    var on = node.getAttribute("data-link") === id;
+    node.classList.toggle("on", on);
+    node.classList.toggle("break", on && r.level === "break");
+    node.classList.toggle("warn", on && r.level === "warn");
+    node.classList.toggle("safe", on && r.level === "safe");
+  });
+}
+
+function renderScenarios(r) {
+  var active = "";
+  SCENARIO_IDS.forEach(function (id) {
+    var s = applyScenario(id);
+    var p = r.input;
+    if (!s) return;
+    if (close(s.debtBn, p.debtBn) && close(s.utilizationPct, p.utilizationPct) &&
+        close(s.financingCostPct, p.financingCostPct) && close(s.gpuCount, p.gpuCount) &&
+        close(s.rentPerGpuYearUsd, p.rentPerGpuYearUsd)) {
+      active = id;
+    }
+  });
+  document.querySelectorAll("#scenarioRow .scenario").forEach(function (btn) {
+    var on = btn.getAttribute("data-scenario") === active;
+    btn.classList.toggle("active", on);
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+}
+
+function renderThermo(r) {
+  var pct = markerPct(r.coverage);
+  ["markMini", "mark"].forEach(function (id) {
+    var el = $(id);
+    el.style.left = pct + "%";
+    el.title = formatMultiple(r.coverage);
+  });
+  var card = $("breakCard");
+  card.classList.remove("break", "warn", "safe");
+  card.classList.add(r.level);
+  $("breakKicker").textContent = levelKicker(r.level);
+  $("breakName").textContent = t(r.link.nameZh, r.link.nameEn);
+  $("breakText").textContent = t(r.link.zh, r.link.en);
+}
+
+function renderAll() {
+  var r = evaluate(readForm());
+  renderInputs(r);
+  renderStats(r);
+  renderChain(r);
+  renderScenarios(r);
+  renderThermo(r);
+}
+
+function applyLang(l) {
+  lang = l;
+  document.querySelectorAll("[data-en]").forEach(function (el) {
+    if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+  });
+  document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+  $("langBtn").textContent = l === "en" ? "中文" : "EN";
+  try { localStorage.setItem("lang", l); } catch (e) {}
+  renderAll();
+}
+
+function wrapFill(ctx, text, x, y, maxW, lineH) {
+  var line = "";
+  var yy = y;
+  var lines = 0;
+  var i;
+  for (i = 0; i < text.length; i++) {
+    var ch = text.charAt(i);
+    if (ctx.measureText(line + ch).width > maxW && line) {
+      ctx.fillText(line, x, yy);
+      line = ch;
+      yy += lineH;
+      lines += 1;
+      if (lines >= 2) return;
+    } else {
+      line += ch;
+    }
+  }
+  if (line) ctx.fillText(line, x, yy);
+}
+
+function renderShare() {
+  var r = evaluate(readForm());
+  var c = $("shareCanvas");
+  var ctx = c.getContext("2d");
+  var W = 1200;
+  var H = 628;
+  var color = r.level === "break" ? "#dc2626" : r.level === "warn" ? "#fbbf24" : "#4ade80";
+  var gx;
+  var gy;
+  ctx.fillStyle = "#060709";
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "rgba(237,239,241,0.055)";
+  for (gx = 18; gx < W; gx += 36) {
+    for (gy = 18; gy < H; gy += 36) {
+      ctx.beginPath();
+      ctx.arc(gx, gy, 1.15, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.fillStyle = "#dc2626";
+  ctx.font = "600 22px ui-monospace, Menlo, monospace";
+  ctx.fillText("DEBT · 049  ·  FINANCE TOOLS", 64, 70);
+  ctx.fillStyle = "#edeff1";
+  ctx.font = "700 46px Helvetica Neue, Helvetica, Arial, sans-serif";
+  ctx.fillText(t("债息 15%，哪一环先断？", "A 15% coupon. Which link snaps?"), 64, 132);
+  ctx.fillStyle = "#7d848c";
+  ctx.font = "400 20px Helvetica Neue, Helvetica, Arial, sans-serif";
+  ctx.fillText(t("截至 2026-10-15 · 教育演示，不构成投资建议", "As of 2026-10-15 · educational demo, not investment advice"), 64, 174);
+
+  ctx.fillStyle = color;
+  ctx.font = "700 84px ui-monospace, Menlo, monospace";
+  var multiple = formatMultiple(r.coverage);
+  ctx.fillText(multiple, 64, 292);
+  var mw = ctx.measureText(multiple).width;
+  ctx.font = "700 28px Helvetica Neue, Helvetica, Arial, sans-serif";
+  ctx.fillText(levelName(r.level) + "  ·  " + t(r.link.nameZh, r.link.nameEn), 80 + mw, 278);
+
+  var stats = [
+    [t("年利息", "Interest"), formatBn(r.interestBn, lang)],
+    [t("算力收入", "Compute revenue"), formatBn(r.revenueBn, lang)],
+    [t("债务", "Debt"), formatBn(r.input.debtBn, lang)],
+    [t("利用率", "Utilization"), formatPct(r.input.utilizationPct, 0)],
+    [t("融资成本", "Financing"), formatPct(r.input.financingCostPct)],
+  ];
+  stats.forEach(function (row, i) {
+    var x = 64 + i * 210;
+    ctx.fillStyle = "#4a5057";
+    ctx.font = "500 13px ui-monospace, Menlo, monospace";
+    ctx.fillText(String(row[0]).toUpperCase(), x, 360);
+    ctx.fillStyle = "#edeff1";
+    ctx.font = "700 26px Helvetica Neue, Helvetica, Arial, sans-serif";
+    ctx.fillText(row[1], x, 396);
+  });
+
+  var barX = 64;
+  var barY = 448;
+  var barW = 1072;
+  var barH = 18;
+  ctx.fillStyle = "#dc2626";
+  ctx.fillRect(barX, barY, barW / 3, barH);
+  ctx.fillStyle = "#fbbf24";
+  ctx.fillRect(barX + barW / 3, barY, barW / 3, barH);
+  ctx.fillStyle = "#4ade80";
+  ctx.fillRect(barX + (2 * barW) / 3, barY, barW / 3, barH);
+  var mx = barX + (markerPct(r.coverage) / 100) * barW;
+  ctx.fillStyle = "#edeff1";
+  ctx.fillRect(mx - 1.5, barY - 7, 3, barH + 14);
+  ctx.fillStyle = "#7d848c";
+  ctx.font = "500 14px ui-monospace, Menlo, monospace";
+  ctx.fillText(t("低于 1× 断裂", "Under 1× break"), barX, barY + 40);
+  ctx.fillText(t("1–2× 预警", "1–2× warning"), barX + barW / 2 - 48, barY + 40);
+  ctx.fillText(t("高于 2× 安全", "Above 2× safe"), barX + barW - 130, barY + 40);
+
+  ctx.fillStyle = "#edeff1";
+  ctx.font = "500 22px Helvetica Neue, Helvetica, Arial, sans-serif";
+  wrapFill(ctx, t(r.link.zh, r.link.en), 64, 548, 1000, 28);
+
+  ctx.fillStyle = "#4a5057";
+  ctx.font = "500 18px ui-monospace, Menlo, monospace";
+  ctx.fillText("build-100.com/049", 64, H - 36);
+  ctx.fillStyle = "#dc2626";
+  ctx.fillText("049", W - 110, H - 36);
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (e) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e2) { return false; }
+  }
+}
+
+function flashCopied(btn) {
+  btn.classList.add("copied");
+  var prev = btn.innerHTML;
+  btn.textContent = t("已复制", "Copied");
+  setTimeout(function () {
+    btn.classList.remove("copied");
+    btn.innerHTML = prev;
+  }, 1600);
+}
+
+["debt", "util", "cost", "gpu", "rent"].forEach(function (id) {
+  $(id).addEventListener("input", renderAll);
+});
+document.querySelectorAll("#scenarioRow .scenario").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    var s = applyScenario(btn.getAttribute("data-scenario"));
+    if (!s) return;
+    $("debt").value = String(s.debtBn);
+    $("util").value = String(s.utilizationPct);
+    $("cost").value = String(s.financingCostPct);
+    $("gpu").value = String(s.gpuCount);
+    $("rent").value = String(s.rentPerGpuYearUsd);
+    renderAll();
+  });
+});
+$("copyBtn").addEventListener("click", async function () {
+  var ok = await copyText(buildShareText(evaluate(readForm()), lang));
+  if (ok) flashCopied($("copyBtn"));
+});
+$("shareImgBtn").addEventListener("click", function () {
+  renderShare();
+  $("shareWrap").classList.add("show");
+});
+$("langBtn").addEventListener("click", function () { applyLang(lang === "en" ? "zh" : "en"); });
+
+applyLang(lang);
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>
