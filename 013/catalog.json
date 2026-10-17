@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-16",
+  "updated": "2026-10-17",
   "filters": [
     {
       "id": "all",
@@ -639,6 +639,19 @@
       ],
       "live": true,
       "url": "https://build-100.com/049/"
+    },
+    {
+      "id": "050",
+      "code": "ROTATE",
+      "name": "ROTATE-050",
+      "sub_zh": "股债轮盘——5 张真实新闻卡、5 次股债现金再分配，看你能不能跑赢 60/40 躺平组合",
+      "sub_en": "Stock-bond roulette — 5 real news cards, 5 rounds of stocks/bonds/cash reallocation: can you beat a lazy 60/40?",
+      "cats": [
+        "market",
+        "learn"
+      ],
+      "live": true,
+      "url": "https://build-100.com/050/"
     }
   ]
 }

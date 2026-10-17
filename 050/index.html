@@ -1,0 +1,980 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ROTATE-050 · 股债轮盘</title>
+<meta name="description" content="5 张真实新闻卡，5 次把钱分进股票、债券和现金。新闻一来，你的钱往哪转？看能不能跑赢 60/40 和全现金。游戏涨跌为简化数值，仅供娱乐学习。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/050/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E050%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ROTATE-050 · 股债轮盘">
+<meta property="og:description" content="5 张真实新闻卡，5 次把钱分进股票、债券和现金。新闻一来，你的钱往哪转？看能不能跑赢 60/40 和全现金。游戏涨跌为简化数值，仅供娱乐学习。">
+<meta property="og:url" content="https://build-100.com/050/">
+<meta property="og:image" content="https://build-100.com/050/og-050.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="ROTATE-050 · 股债轮盘">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ROTATE-050 · 股债轮盘">
+<meta name="twitter:description" content="Five real news cards, five splits across stocks, bonds, and cash. News hits. Where does your money go? Game returns are simplified numbers, not real market data — for fun and learning only.">
+<meta name="twitter:image" content="https://build-100.com/050/og-050.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;         /* 「再加 $X」的视觉锚点色 */
+    --accent: #a855f7;
+    --accent-glow: rgba(168,85,247,0.35);
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button, input { font-family: inherit; color: inherit; }
+  button:focus-visible, input:focus-visible, a:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  [hidden] { display: none !important; }
+  h1, h2, h3, p, td, th, li, label { overflow-wrap: anywhere; }
+  img, canvas, svg, input, button { max-width: 100%; }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  .up { color: var(--live); }
+  .down { color: #f87171; }
+  .flat { color: var(--ink); }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted);
+    transition: color .2s; white-space: nowrap; min-height: 44px;
+    display: inline-flex; align-items: center;
+  }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+    min-height: 44px; min-width: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 44px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1.14;
+    letter-spacing: 0.01em;
+    margin-bottom: 18px;
+    text-wrap: balance;
+  }
+  .hero p.lede { color: var(--muted); max-width: 40em; font-size: clamp(0.95rem, 1.4vw, 1.1rem); }
+  .hero p.lede strong { color: var(--ink); font-weight: 500; }
+  .real-note { margin-top: 16px; color: var(--muted); font-size: 0.88rem; }
+  .cta {
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-top: 18px; min-height: 44px; padding: 12px 20px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    border: 1px solid var(--accent); border-radius: 4px; background: var(--accent); color: var(--bg);
+    cursor: pointer; transition: box-shadow .2s;
+  }
+  .cta:hover { box-shadow: 0 0 24px var(--accent-glow); }
+  .disclaimer-banner {
+    display: block; margin-top: 14px; padding: 12px 14px;
+    border: 1px solid var(--accent); border-radius: 10px;
+    background: rgba(168, 85, 247, 0.12); color: var(--ink);
+    font-weight: 700; line-height: 1.45;
+    box-shadow: 0 0 22px var(--accent-glow);
+  }
+  .disclaimer-mini {
+    margin-top: 12px; color: var(--muted); font-size: 0.82rem;
+    border-left: 2px solid var(--accent); padding-left: 10px;
+  }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+  .subhead { margin: 22px 0 8px; }
+
+  .hud { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+  .hud-round { font-weight: 700; font-size: 1.05rem; }
+  .hud-cumul {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    color: var(--accent); letter-spacing: 0.02em;
+  }
+  .pips { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: 10px; }
+  .pips i { display: block; height: 6px; border-radius: 999px; background: var(--line-strong); }
+  .pips i.now { background: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+  .pips i.done { background: var(--accent); opacity: 0.72; }
+
+  .news {
+    margin: 16px 0; padding: 16px 16px 14px;
+    background: var(--bg-raise); border: 1px solid var(--line-strong); border-radius: 14px;
+    border-top: 3px solid var(--accent);
+  }
+  .news-meta { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--accent); }
+  .news-title { font-size: clamp(1.25rem, 3vw, 1.7rem); line-height: 1.25; margin: 8px 0; }
+  .news-what { color: var(--muted); font-size: 0.98rem; }
+
+  .slider-row {
+    display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; align-items: center;
+    padding: 10px 10px 4px; border-bottom: 1px solid var(--line);
+  }
+  .slider-row:last-of-type { border-bottom: none; }
+  .slider-row .name { font-size: 0.95rem; }
+  .slider-val {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.15rem;
+    color: var(--accent); min-width: 5ch; text-align: right;
+  }
+  input[type=range] {
+    grid-column: 1 / -1; -webkit-appearance: none; appearance: none; width: 100%; height: 44px;
+    background: transparent; border-radius: 2px; outline: none; margin: 0; touch-action: none; cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    height: 4px; background: var(--line-strong); border-radius: 2px;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 44px; height: 44px; margin-top: -20px; border-radius: 50%;
+    background: var(--accent); cursor: pointer; border: 3px solid #060709;
+    box-shadow: 0 0 0 1px var(--accent), 0 0 8px var(--accent-glow);
+  }
+  input[type=range]::-moz-range-track {
+    height: 4px; background: var(--line-strong); border-radius: 2px; border: none;
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 44px; height: 44px; border: 3px solid #060709; border-radius: 50%;
+    background: var(--accent); cursor: pointer; box-shadow: 0 0 0 1px var(--accent);
+  }
+  input[type=range]:disabled { cursor: not-allowed; opacity: 0.55; }
+  .slider-row.bond .slider-val { color: var(--delta); }
+  .slider-row.cash .slider-val { color: var(--live); }
+
+  .tool-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .tool-btn {
+    flex: 1 1 140px; min-height: 44px; padding: 10px 14px;
+    border-radius: 999px; border: 1px solid var(--line-strong); background: transparent; color: var(--ink);
+    cursor: pointer; font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em;
+  }
+  .tool-btn:hover { border-color: var(--ink); }
+  .tool-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .tool-note { margin-top: 8px; color: var(--faint); font-size: 0.82rem; }
+  .sum-line {
+    margin-top: 12px; font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: 0.95rem; letter-spacing: 0.02em;
+  }
+  .sum-line.ok { color: var(--live); }
+  .sum-line.bad { color: var(--delta); }
+  .lock-note { margin-top: 8px; color: var(--muted); font-size: 0.86rem; }
+
+  .reveal-btn, .next-btn, .replay-btn {
+    width: 100%; min-height: 48px; margin-top: 12px;
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+    font-weight: 700; border-radius: 10px; cursor: pointer;
+  }
+  .reveal-btn {
+    border: none; background: var(--accent); color: #060709;
+    box-shadow: 0 0 24px var(--accent-glow);
+  }
+  .reveal-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+  .next-btn, .replay-btn {
+    background: transparent; color: var(--ink); border: 1px solid var(--line-strong);
+  }
+  .next-btn:hover, .replay-btn:hover { border-color: var(--ink); }
+
+  .legend { margin-top: 14px; color: var(--muted); font-size: 0.82rem; }
+  .result-stats { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 8px; }
+  .stat {
+    background: var(--bg-raise); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+  }
+  .stat .k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
+  .stat-num {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    font-size: clamp(1.4rem, 4vw, 1.8rem); letter-spacing: -0.03em; line-height: 1.15; margin-top: 4px;
+  }
+  .bar-row {
+    display: grid; grid-template-columns: minmax(4.6rem, auto) minmax(0, 1fr) auto;
+    gap: 8px; align-items: center; margin-top: 8px;
+  }
+  .bar-name { font-size: 0.88rem; }
+  .bar-track {
+    position: relative; height: 16px; border-radius: 999px;
+    background: rgba(237, 239, 241, 0.08);
+  }
+  .bar-track::after {
+    content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px;
+    background: rgba(237, 239, 241, 0.35);
+  }
+  .bar-fill { position: absolute; top: 2px; bottom: 2px; border-radius: 999px; }
+  .bar-fill.up { left: 50%; background: var(--live); }
+  .bar-fill.down { right: 50%; background: #f87171; }
+  .bar-val {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    min-width: 6.5ch; text-align: right; font-size: 0.92rem;
+  }
+  .why-kicker {
+    margin-top: 16px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .why-text { margin-top: 4px; font-size: 1.02rem; }
+  .round-cmp { margin-top: 10px; color: var(--muted); }
+
+  .score-row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .grade-badge {
+    width: 92px; height: 92px; border-radius: 18px; flex: none;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-weight: 700; font-size: 56px; line-height: 1;
+    border: 1px solid var(--accent); color: var(--accent);
+    box-shadow: 0 0 24px var(--accent-glow);
+  }
+  .grade-badge.A { color: var(--live); border-color: var(--live); box-shadow: 0 0 24px rgba(74, 222, 128, 0.35); }
+  .grade-badge.B { color: var(--delta); border-color: var(--delta); box-shadow: 0 0 24px rgba(251, 191, 36, 0.28); }
+  .grade-badge.C { color: #f87171; border-color: #f87171; box-shadow: 0 0 24px rgba(248, 113, 113, 0.28); }
+  .grade-flavor { color: var(--muted); margin-top: 2px; }
+  .score-num {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    font-size: clamp(2.4rem, 8vw, 3.6rem); letter-spacing: -0.04em; line-height: 1;
+  }
+  .cmp-line {
+    margin-top: 12px; font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: 0.92rem; letter-spacing: 0.01em;
+  }
+  .threshold {
+    margin-top: 12px; color: var(--muted); font-size: 0.9rem;
+    padding: 12px 14px; border-left: 2px solid var(--line-strong);
+  }
+  .recap { list-style: none; display: grid; gap: 8px; margin-top: 8px; }
+  .recap li {
+    padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg-raise);
+  }
+  .mini-card {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px;
+    border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+    background: var(--bg-raise); margin-top: 8px;
+  }
+  .mini-card .when { font-weight: 700; }
+  .mini-card .ret { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700; }
+  .mini-card .mix { grid-column: 1 / -1; color: var(--muted); font-variant-numeric: tabular-nums; font-size: 0.86rem; }
+  .how p { color: var(--muted); margin-top: 10px; }
+  .how p strong { color: var(--ink); font-weight: 600; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s; min-height: 44px;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); background: rgba(74, 222, 128, 0.1); }
+  .share-canvas-wrap { display: none; margin-top: 16px; }
+  .share-canvas-wrap.show { display: block; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line); }
+  .share-hint { color: var(--faint); font-size: 0.8rem; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
+
+  footer {
+    display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: space-between; align-items: center;
+    padding: 28px var(--pad) 48px; border-top: 1px solid var(--line); max-width: 880px; margin: 0 auto;
+  }
+  footer .mono { letter-spacing: 0.16em; }
+  footer a { color: var(--muted); display: inline-flex; align-items: center; min-height: 44px; }
+  footer a:hover { color: var(--ink); }
+
+  @media (min-width: 720px) {
+    .result-stats { grid-template-columns: 1fr 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 0 14px; gap: 8px; }
+    .nav-back { font-size: 11px; letter-spacing: 0; }
+    .nav-brand { font-size: 13px; }
+    .nav-lang { padding: 6px 10px; letter-spacing: 0.12em; }
+    .share-btn { flex: 1 1 100%; }
+    .reveal-btn, .next-btn, .replay-btn { letter-spacing: 0.06em; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">ROTATE<span>·050</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="Mini Games · ROTATE-050">Mini Games · ROTATE-050</p>
+    <h1 data-en="News hits. Where does your money go?">新闻一来，你的钱往哪转？</h1>
+    <p class="lede" data-en="Five real news cards. Five times you split 100% across stocks, bonds, and cash. After each card, see where the money went. At the end, stack your total against a do-nothing 60/40 and against all cash.">五张真实新闻卡，五次把 100% 重新分给股票、债券和现金。每张牌公布之后，看这一轮钱往哪流。五轮结束，再和躺平的 60/40、全现金比一比。</p>
+    <button class="cta" id="startBtn" type="button" data-en="Start the game">开始游戏</button>
+    <p class="real-note" data-en="All news is real; returns are simplified game values.">新闻全部真实，涨跌为游戏简化数值。</p>
+    <p class="disclaimer-banner" data-en="Game returns are simplified numbers, not real market data — for fun and learning only.">游戏涨跌为简化数值，非真实行情，仅供娱乐学习</p>
+  </header>
+
+  <section class="field" id="game">
+    <div class="field-head">
+      <span class="field-no">01</span>
+      <h2 class="field-title" data-en="Split this round">本轮分仓</h2>
+      <p class="field-hint" data-en="Read the card, then set stocks, bonds, and cash. The three must add up to 100% before the result can open.">先看新闻卡，再调股票、债券和现金。三项加起来必须是 100%，才能公布结果。</p>
+    </div>
+    <div class="hud">
+      <p class="hud-round" id="roundLabel"></p>
+      <p class="hud-cumul" id="cumulLive"></p>
+    </div>
+    <div class="pips" id="pips" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    <article class="news">
+      <p class="news-meta"><span id="newsRound"></span> · <span id="newsDate"></span></p>
+      <h3 class="news-title" id="newsTitle"></h3>
+      <p class="news-what" id="newsWhat"></p>
+    </article>
+
+    <div class="slider-row stock">
+      <div class="name"><span data-en="Stocks">股票</span></div>
+      <span class="slider-val" id="stockVal">34%</span>
+      <input id="stock" type="range" min="0" max="100" step="1" value="34" aria-label="股票百分比">
+    </div>
+    <div class="slider-row bond">
+      <div class="name"><span data-en="Bonds">债券</span></div>
+      <span class="slider-val" id="bondVal">33%</span>
+      <input id="bond" type="range" min="0" max="100" step="1" value="33" aria-label="债券百分比">
+    </div>
+    <div class="slider-row cash">
+      <div class="name"><span data-en="Cash">现金</span></div>
+      <span class="slider-val" id="cashVal">33%</span>
+      <input id="cash" type="range" min="0" max="100" step="1" value="33" aria-label="现金百分比">
+    </div>
+    <div class="tool-row">
+      <button class="tool-btn" id="fillBtn" type="button" data-en="Fill with cash">现金补齐</button>
+      <button class="tool-btn" id="evenBtn" type="button" data-en="Split evenly">均分</button>
+    </div>
+    <p class="tool-note" data-en="Fill with cash puts the gap into cash. If stocks plus bonds are already over 100%, they scale back to 100% and cash is 0. Even split is 34 / 33 / 33.">现金补齐把差额放进现金。股票加债券如果已经超过 100%，就按比例压回 100%，现金为 0。均分是 34 / 33 / 33。</p>
+    <p class="sum-line ok" id="sumLine" data-en="Total 100%">合计 100%</p>
+    <p class="lock-note" id="lockNote" hidden data-en="This round is in. Sliders are locked.">本轮已公布，滑杆已锁定。</p>
+    <button class="reveal-btn" id="revealBtn" type="button" data-en="Show results">公布结果</button>
+
+    <div id="result" hidden>
+      <p class="legend" data-en="Green is up, red is down. Bar length follows the size of the move.">绿涨红跌。条的长短按涨跌幅度。</p>
+      <div id="bars"></div>
+      <div class="result-stats">
+        <article class="stat">
+          <div class="k" data-en="This round">本轮收益</div>
+          <div class="stat-num" id="youRound"></div>
+        </article>
+        <article class="stat">
+          <div class="k" data-en="Cumulative">累计收益</div>
+          <div class="stat-num" id="youCumul"></div>
+        </article>
+        <article class="stat">
+          <div class="k" data-en="60/40 this round">本轮 60/40</div>
+          <div class="stat-num" id="benchRound"></div>
+        </article>
+      </div>
+      <p class="round-cmp" id="roundCmp"></p>
+      <p class="why-kicker" data-en="Market reaction">市场反应</p>
+      <p class="why-text" id="reactText"></p>
+      <p class="why-kicker" data-en="Why">为什么</p>
+      <p class="why-text" id="whyText"></p>
+      <p class="disclaimer-mini" data-en="Simplified numbers, not real market data — for fun and learning only.">简化数值，非真实行情，仅供娱乐学习</p>
+      <button class="next-btn" id="nextBtn" type="button" data-en="Next round">下一轮</button>
+      <button class="next-btn" id="settleBtn" type="button" hidden data-en="See results">看结算</button>
+    </div>
+  </section>
+
+  <section class="field" id="settle" hidden>
+    <div class="field-head">
+      <span class="field-no" id="settleNo">02</span>
+      <h2 class="field-title" data-en="Settlement">结算</h2>
+      <p class="field-hint" data-en="Five rounds, added together. Set next to a 60/40 and next to all cash.">五轮简单相加，对照 60/40 和全现金。</p>
+    </div>
+    <div class="score-row">
+      <p class="grade-badge" id="gradeBadge"></p>
+      <div>
+        <p class="mono" data-en="Grade">评级</p>
+        <p class="grade-flavor" id="gradeFlavor"></p>
+        <p class="mono" data-en="Your cumulative return">你的累计收益</p>
+        <p class="score-num" id="scoreNum"></p>
+      </div>
+    </div>
+    <h3 class="field-title subhead" data-en="You, the 60/40, and all cash">你、60/40、全现金</h3>
+    <div id="cmpBars"></div>
+    <p class="cmp-line" id="cmpLine"></p>
+    <p class="threshold" data-en="S is strictly above +2.50%. A is strictly above +0.50% (beats all cash). B is strictly above -2.00%. Anything lower is C.">S 严格大于 +2.50%。A 严格大于 +0.50%（跑赢全现金）。B 严格大于 -2.00%。否则为 C。</p>
+    <h3 class="field-title subhead" data-en="Three-line recap">三句话复盘</h3>
+    <ol class="recap" id="recapList"></ol>
+    <h3 class="field-title subhead" data-en="Five rounds">五轮小表</h3>
+    <div id="miniTable"></div>
+    <p class="disclaimer-mini" data-en="Simplified numbers, not real market data — for fun and learning only.">简化数值，非真实行情，仅供娱乐学习</p>
+    <button class="replay-btn" id="replayBtn" type="button" data-en="Play again">再玩一局</button>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap">
+      <canvas id="shareCanvas" width="1200" height="630" aria-label="结算分享卡"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+
+  <section class="field how" id="how">
+    <div class="field-head">
+      <span class="field-no" id="howNo">02</span>
+      <h2 class="field-title" data-en="How to play">怎么玩</h2>
+    </div>
+    <p data-en="Each round you read the news, then split 100% across stocks, bonds, and cash. If the total is not 100%, the result stays closed. After the reveal the sliders lock. You see how each asset moved, your return for the round, your running total, and why the money moved. The five rounds are added together. No compounding.">每轮先看新闻，再把 100% 分成股票、债券和现金。合计不是 100%，不能公布。公布之后滑杆锁定，你会看到三类资产的涨跌、你的本轮收益、累计收益，以及钱为什么这样流。五轮收益简单相加，不算复利。</p>
+    <p data-en="Fill with cash puts the gap into cash. If stocks plus bonds are already over 100%, they are scaled back to 100% and cash is 0. Even split is 34 / 33 / 33.">现金补齐把差额放进现金。股票加债券如果已经超过 100%，就按比例压回 100%，现金为 0。均分是 34 / 33 / 33。</p>
+    <p data-en="News window: the week of 2026-10-12 through 10-16. The five cards stay in source order. Round 5 is dated Week of 10-12.">新闻素材时间：2026-10-12 当周至 10-16。五张卡按素材顺序出场。第 5 轮的日期是 10-12 当周。</p>
+    <p data-en="Benchmarks: the 60/40 holds 60% stocks and 40% bonds every round. All cash stays in cash every round.">基准：60/40 每轮是 60% 股票加 40% 债券。全现金是每轮都放在现金里。</p>
+    <p data-en="Grades: S is strictly above +2.50%. A is strictly above +0.50% (beats all cash). B is strictly above -2.00%. Otherwise the grade is C.">评级：S 严格大于 +2.50%。A 严格大于 +0.50%（跑赢全现金）。B 严格大于 -2.00%。否则是 C。</p>
+    <p><strong data-en="Game returns are simplified numbers, not real market data — for fun and learning only.">游戏涨跌为简化数值，非真实行情，仅供娱乐学习。</strong> <span data-en="All news is real; returns are simplified game values.">新闻全部真实，涨跌为游戏简化数值。</span></p>
+  </section>
+</main>
+
+<footer>
+  <span class="mono"><a href="https://build-100.com/" data-en="build-100.com">build-100.com</a></span>
+  <span class="mono"><a href="https://x.com/JCheng557" target="_blank" rel="noopener" data-en="@JCheng557">@JCheng557</a></span>
+  <span class="mono" data-en="ROTATE-050 · Stock-bond roulette">ROTATE-050 · 股债轮盘</span>
+</footer>
+
+<script src="engine.js"></script>
+<script>
+var E = window.RotateEngine;
+var lang = "zh";
+try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+
+var state = { round: 0, phase: "alloc", history: [] };
+
+function t(zh, en) { return lang === "en" ? en : zh; }
+function $(id) { return document.getElementById(id); }
+
+function tone(pct) {
+  var bp = Math.round(Number(pct) * 100);
+  if (bp > 0) return "up";
+  if (bp < 0) return "down";
+  return "flat";
+}
+
+function toneColor(pct) {
+  var name = tone(pct);
+  if (name === "up") return "#4ade80";
+  if (name === "down") return "#f87171";
+  return "#edeff1";
+}
+
+function prefersReduce() {
+  return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function scrollToId(id) {
+  var node = $(id);
+  if (!node) return;
+  node.scrollIntoView({ behavior: prefersReduce() ? "auto" : "smooth", block: "start" });
+}
+
+function readAlloc() {
+  return {
+    stock: Number($("stock").value),
+    bond: Number($("bond").value),
+    cash: Number($("cash").value)
+  };
+}
+
+function setSliders(a) {
+  $("stock").value = String(a.stock);
+  $("bond").value = String(a.bond);
+  $("cash").value = String(a.cash);
+}
+
+function copyAlloc(a) {
+  return { stock: a.stock, bond: a.bond, cash: a.cash };
+}
+
+function historyBp(count) {
+  var sum = 0;
+  var i;
+  for (i = 0; i < count; i++) {
+    sum += Math.round(E.roundReturn(state.history[i], i) * 100);
+  }
+  return sum;
+}
+
+function renderProgress() {
+  var n = state.round + 1;
+  $("roundLabel").textContent = t("第 " + n + " / 5 轮", "Round " + n + " / 5");
+  var counted = state.phase === "alloc" ? state.round : state.round + 1;
+  var bp = counted > 0 ? historyBp(counted) : 0;
+  $("cumulLive").textContent = t("累计 " + E.formatBp(bp), "Total " + E.formatBp(bp));
+  $("cumulLive").className = "hud-cumul " + (counted ? tone(bp / 100) : "flat");
+  var pips = $("pips").querySelectorAll("i");
+  Array.prototype.forEach.call(pips, function (pip, i) {
+    var revealed = i < state.round || (i === state.round && state.phase !== "alloc");
+    pip.classList.toggle("done", revealed);
+    pip.classList.toggle("now", i === state.round && state.phase === "alloc");
+  });
+}
+
+function renderNews() {
+  var card = E.ROUNDS[state.round];
+  $("newsRound").textContent = t("第 " + (state.round + 1) + " 轮", "Round " + (state.round + 1));
+  $("newsDate").textContent = lang === "en" ? card.date.en : card.date.zh;
+  $("newsTitle").textContent = lang === "en" ? card.title.en : card.title.zh;
+  $("newsWhat").textContent = lang === "en" ? card.what.en : card.what.zh;
+}
+
+function renderSliders() {
+  var alloc = readAlloc();
+  var locked = state.phase !== "alloc";
+  $("stockVal").textContent = alloc.stock + "%";
+  $("bondVal").textContent = alloc.bond + "%";
+  $("cashVal").textContent = alloc.cash + "%";
+  $("stock").disabled = locked;
+  $("bond").disabled = locked;
+  $("cash").disabled = locked;
+  $("fillBtn").disabled = locked;
+  $("evenBtn").disabled = locked;
+  $("stock").setAttribute("aria-label", t("股票百分比", "Stocks percent"));
+  $("bond").setAttribute("aria-label", t("债券百分比", "Bonds percent"));
+  $("cash").setAttribute("aria-label", t("现金百分比", "Cash percent"));
+  $("lockNote").hidden = !locked;
+}
+
+function renderSum() {
+  var line = $("sumLine");
+  var btn = $("revealBtn");
+  if (state.phase !== "alloc") {
+    line.textContent = t("合计 100%", "Total 100%");
+    line.className = "sum-line ok";
+    btn.hidden = true;
+    return;
+  }
+  btn.hidden = false;
+  var v = E.validateAllocation(readAlloc());
+  if (v.total == null) {
+    line.textContent = t("这组分配读不出来。", "This mix can't be read.");
+    line.className = "sum-line bad";
+    btn.disabled = true;
+    return;
+  }
+  if (v.diff < 0) {
+    line.textContent = t("合计 " + v.total + "%，还差 " + (-v.diff) + "%", "Total " + v.total + "%, " + (-v.diff) + "% short");
+    line.className = "sum-line bad";
+  } else if (v.diff > 0) {
+    line.textContent = t("合计 " + v.total + "%，超出 " + v.diff + "%", "Total " + v.total + "%, " + v.diff + "% over");
+    line.className = "sum-line bad";
+  } else if (!v.ok) {
+    line.textContent = t("合计 100%，但三项必须是 0 到 100 的整数。", "Total is 100%, but each sleeve must be a whole number from 0 to 100.");
+    line.className = "sum-line bad";
+  } else {
+    line.textContent = t("合计 100%", "Total 100%");
+    line.className = "sum-line ok";
+  }
+  btn.disabled = !v.ok;
+}
+
+function addBar(host, name, pct, scaleBp) {
+  var bp = Math.round(Number(pct) * 100);
+  var row = document.createElement("div");
+  row.className = "bar-row";
+  var label = document.createElement("span");
+  label.className = "bar-name";
+  label.textContent = name;
+  var track = document.createElement("div");
+  track.className = "bar-track";
+  if (bp !== 0) {
+    var fill = document.createElement("div");
+    fill.className = "bar-fill " + (bp > 0 ? "up" : "down");
+    fill.style.width = Math.min(50, (Math.abs(bp) / scaleBp) * 50) + "%";
+    track.appendChild(fill);
+  }
+  var val = document.createElement("span");
+  val.className = "bar-val " + tone(pct);
+  val.textContent = E.formatPct(pct);
+  row.appendChild(label);
+  row.appendChild(track);
+  row.appendChild(val);
+  host.appendChild(row);
+}
+
+function renderResult() {
+  var show = state.phase !== "alloc";
+  $("result").hidden = !show;
+  if (!show) return;
+  var alloc = state.history[state.round];
+  var card = E.ROUNDS[state.round];
+  var mine = E.roundReturn(alloc, state.round);
+  var bench = E.benchmark6040().rounds[state.round];
+  var bars = $("bars");
+  bars.innerHTML = "";
+  addBar(bars, t("股票", "Stocks"), card.ret.stock, 300);
+  addBar(bars, t("债券", "Bonds"), card.ret.bond, 300);
+  addBar(bars, t("现金", "Cash"), card.ret.cash, 300);
+  var you = $("youRound");
+  you.textContent = E.formatPct(mine);
+  you.className = "stat-num " + tone(mine);
+  var cumulBp = historyBp(state.round + 1);
+  var cumul = $("youCumul");
+  cumul.textContent = E.formatBp(cumulBp);
+  cumul.className = "stat-num " + tone(cumulBp / 100);
+  var benchEl = $("benchRound");
+  benchEl.textContent = E.formatPct(bench);
+  benchEl.className = "stat-num " + tone(bench);
+  var gap = Math.round(mine * 100) - Math.round(bench * 100);
+  var verdict = gap > 0
+    ? t("本轮跑赢 60/40。", "You beat the 60/40 this round.")
+    : gap < 0
+      ? t("本轮没跑赢 60/40。", "You trailed the 60/40 this round.")
+      : t("本轮与 60/40 打平。", "You tied the 60/40 this round.");
+  $("roundCmp").textContent = t(
+    "你 " + E.formatPct(mine) + "，本轮 60/40 是 " + E.formatPct(bench) + "。" + verdict,
+    "You " + E.formatPct(mine) + ", the 60/40 this round is " + E.formatPct(bench) + ". " + verdict
+  );
+  $("reactText").textContent = lang === "en" ? card.react.en : card.react.zh;
+  $("whyText").textContent = lang === "en" ? card.why.en : card.why.zh;
+  var last = state.round >= 4;
+  $("nextBtn").hidden = last;
+  $("settleBtn").hidden = !last;
+}
+
+function flavorText(g) {
+  if (g === "S") return t("顶尖轮动", "Top rotation");
+  if (g === "A") return t("跑赢现金", "Beat cash");
+  if (g === "B") return t("守住阵脚", "Held the line");
+  return t("再转一次", "Spin again");
+}
+
+function renderSettle() {
+  var done = state.phase === "settle" && state.history.length === 5;
+  $("settle").hidden = !done;
+  $("howNo").textContent = done ? "03" : "02";
+  if (!done) return;
+  var allocs = state.history.map(copyAlloc);
+  var total = E.totalReturn(allocs);
+  var g = E.grade(total);
+  var badge = $("gradeBadge");
+  badge.textContent = g;
+  badge.className = "grade-badge " + g;
+  badge.setAttribute("aria-label", t("评级 " + g, "Grade " + g));
+  $("gradeFlavor").textContent = flavorText(g);
+  var score = $("scoreNum");
+  score.textContent = E.formatPct(total);
+  score.className = "score-num " + tone(total);
+  var b = E.benchmark6040();
+  var c = E.benchmarkCash();
+  var host = $("cmpBars");
+  host.innerHTML = "";
+  var rows = [
+    [t("你", "You"), total],
+    ["60/40", b.total],
+    [t("全现金", "All cash"), c.total]
+  ];
+  var scale = 50;
+  rows.forEach(function (row) {
+    var bp = Math.abs(Math.round(row[1] * 100));
+    if (bp > scale) scale = bp;
+  });
+  rows.forEach(function (row) { addBar(host, row[0], row[1], scale); });
+  $("cmpLine").textContent = t(
+    "你 " + E.formatPct(total) + " · 60/40 " + E.formatPct(b.total) + " · 全现金 " + E.formatPct(c.total),
+    "You " + E.formatPct(total) + " · 60/40 " + E.formatPct(b.total) + " · all cash " + E.formatPct(c.total)
+  );
+  var list = $("recapList");
+  list.innerHTML = "";
+  E.recap(allocs, lang).forEach(function (line) {
+    var li = document.createElement("li");
+    li.textContent = line;
+    list.appendChild(li);
+  });
+  var table = $("miniTable");
+  table.innerHTML = "";
+  state.history.forEach(function (a, i) {
+    var card = document.createElement("article");
+    card.className = "mini-card";
+    var when = document.createElement("p");
+    when.className = "when";
+    var date = lang === "en" ? E.ROUNDS[i].date.en : E.ROUNDS[i].date.zh;
+    when.textContent = t("第 " + (i + 1) + " 轮 · " + date, "Round " + (i + 1) + " · " + date);
+    var ret = document.createElement("p");
+    var pct = E.roundReturn(a, i);
+    ret.className = "ret " + tone(pct);
+    ret.textContent = E.formatPct(pct);
+    var mix = document.createElement("p");
+    mix.className = "mix";
+    mix.textContent = t(
+      "股票 " + a.stock + "% · 债券 " + a.bond + "% · 现金 " + a.cash + "%",
+      "Stocks " + a.stock + "% · Bonds " + a.bond + "% · Cash " + a.cash + "%"
+    );
+    card.appendChild(when);
+    card.appendChild(ret);
+    card.appendChild(mix);
+    table.appendChild(card);
+  });
+  $("shareCanvas").setAttribute("aria-label", t("结算分享卡", "Settlement share card"));
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function drawShare() {
+  if (state.history.length !== 5) return;
+  var allocs = state.history.map(copyAlloc);
+  var total = E.totalReturn(allocs);
+  var g = E.grade(total);
+  var b = E.benchmark6040();
+  var c = E.benchmarkCash();
+  var canvas = $("shareCanvas");
+  var ctx = canvas.getContext("2d");
+  var W = 1200;
+  var H = 630;
+  var gx;
+  var gy;
+  ctx.fillStyle = "#060709";
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "rgba(237,239,241,0.055)";
+  for (gx = 18; gx < W; gx += 36) {
+    for (gy = 18; gy < H; gy += 36) {
+      ctx.beginPath();
+      ctx.arc(gx, gy, 1.15, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.fillStyle = "#a855f7";
+  ctx.fillRect(0, 0, W, 8);
+  ctx.font = "600 22px ui-monospace, Menlo, Consolas, monospace";
+  ctx.fillText("ROTATE · 050  ·  MINI GAMES", 64, 78);
+  ctx.fillStyle = "#edeff1";
+  ctx.font = "700 40px Helvetica Neue, Helvetica, Arial, sans-serif";
+  ctx.fillText(t("新闻一来，你的钱往哪转？", "News hits. Where does your money go?"), 64, 136);
+
+  var gradeColor = g === "S" ? "#a855f7" : g === "A" ? "#4ade80" : g === "B" ? "#fbbf24" : "#f87171";
+  ctx.fillStyle = gradeColor;
+  ctx.font = "700 128px ui-monospace, Menlo, Consolas, monospace";
+  ctx.fillText(g, 64, 292);
+  var gw = ctx.measureText(g).width;
+  ctx.fillStyle = "#7d848c";
+  ctx.font = "600 18px ui-monospace, Menlo, Consolas, monospace";
+  ctx.fillText(t("累计收益", "CUMULATIVE"), 64 + gw + 36, 214);
+  ctx.fillStyle = toneColor(total);
+  ctx.font = "700 64px ui-monospace, Menlo, Consolas, monospace";
+  ctx.fillText(E.formatPct(total), 64 + gw + 36, 284);
+
+  var cols = [
+    [t("你", "YOU"), total],
+    ["60/40", b.total],
+    [t("全现金", "ALL CASH"), c.total]
+  ];
+  cols.forEach(function (col, i) {
+    var x = 64 + i * 360;
+    ctx.fillStyle = "#0b0d10";
+    roundRect(ctx, x, 348, 332, 112, 14);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(237,239,241,0.16)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.fillStyle = "#7d848c";
+    ctx.font = "600 16px ui-monospace, Menlo, Consolas, monospace";
+    ctx.fillText(col[0], x + 22, 390);
+    ctx.fillStyle = toneColor(col[1]);
+    ctx.font = "700 36px ui-monospace, Menlo, Consolas, monospace";
+    ctx.fillText(E.formatPct(col[1]), x + 22, 434);
+  });
+
+  ctx.fillStyle = "#9aa1a8";
+  ctx.font = "500 20px Helvetica Neue, Helvetica, Arial, sans-serif";
+  ctx.fillText(lang === "en" ? E.DISCLAIMER.en : E.DISCLAIMER.zh, 64, 522);
+  ctx.fillStyle = "#edeff1";
+  ctx.font = "600 22px ui-monospace, Menlo, Consolas, monospace";
+  ctx.fillText("build-100.com/050", 64, 586);
+  ctx.fillStyle = "#a855f7";
+  ctx.fillText("050", W - 120, 586);
+}
+
+function renderAll() {
+  renderProgress();
+  renderNews();
+  renderSliders();
+  renderSum();
+  renderResult();
+  renderSettle();
+  if ($("shareWrap").classList.contains("show")) drawShare();
+}
+
+function applyLang(l) {
+  lang = l;
+  document.querySelectorAll("[data-en]").forEach(function (el) {
+    if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+  });
+  document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+  $("langBtn").textContent = l === "en" ? "中文" : "EN";
+  try { localStorage.setItem("lang", l); } catch (e) {}
+  renderAll();
+}
+
+function onReveal() {
+  if (state.phase !== "alloc") return;
+  var alloc = readAlloc();
+  if (!E.validateAllocation(alloc).ok) return;
+  state.history[state.round] = copyAlloc(alloc);
+  state.phase = "reveal";
+  renderAll();
+}
+
+function onNext() {
+  if (state.phase === "settle") {
+    scrollToId("settle");
+    return;
+  }
+  if (state.phase !== "reveal") return;
+  if (state.round >= 4) {
+    state.phase = "settle";
+    renderAll();
+    scrollToId("settle");
+    return;
+  }
+  state.round += 1;
+  state.phase = "alloc";
+  setSliders(E.evenSplit());
+  renderAll();
+  scrollToId("game");
+}
+
+function onReplay() {
+  state.round = 0;
+  state.phase = "alloc";
+  state.history = [];
+  setSliders(E.evenSplit());
+  $("shareWrap").classList.remove("show");
+  renderAll();
+  scrollToId("game");
+}
+
+function copyText(text) {
+  var clip = null;
+  try { clip = navigator.clipboard; } catch (e) { clip = null; }
+  if (clip && typeof clip.writeText === "function") {
+    try {
+      return Promise.resolve()
+        .then(function () { return clip.writeText(text); })
+        .then(function () { return true; })
+        .catch(function () { return fallbackCopy(text); });
+    } catch (e) {
+      return Promise.resolve(fallbackCopy(text));
+    }
+  }
+  return Promise.resolve(fallbackCopy(text));
+}
+
+function fallbackCopy(text) {
+  try {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    return ok;
+  } catch (e) {
+    return false;
+  }
+}
+
+function flashCopied(btn) {
+  btn.classList.add("copied");
+  var prev = btn.innerHTML;
+  btn.textContent = t("已复制", "Copied");
+  setTimeout(function () {
+    btn.classList.remove("copied");
+    btn.innerHTML = prev;
+  }, 1600);
+}
+
+["stock", "bond", "cash"].forEach(function (id) {
+  $(id).addEventListener("input", function () {
+    if (state.phase !== "alloc") return;
+    renderAll();
+  });
+});
+$("fillBtn").addEventListener("click", function () {
+  if (state.phase !== "alloc") return;
+  setSliders(E.fillCash(readAlloc()));
+  renderAll();
+});
+$("evenBtn").addEventListener("click", function () {
+  if (state.phase !== "alloc") return;
+  setSliders(E.evenSplit());
+  renderAll();
+});
+$("revealBtn").addEventListener("click", onReveal);
+$("nextBtn").addEventListener("click", onNext);
+$("settleBtn").addEventListener("click", onNext);
+$("replayBtn").addEventListener("click", onReplay);
+$("startBtn").addEventListener("click", function () { scrollToId("game"); });
+$("copyBtn").addEventListener("click", function () {
+  if (state.history.length !== 5) return;
+  var pending;
+  try {
+    pending = copyText(E.shareText(state.history.map(copyAlloc), lang));
+  } catch (e) {
+    return;
+  }
+  Promise.resolve(pending).then(function (ok) {
+    if (ok) flashCopied($("copyBtn"));
+  }).catch(function () {});
+});
+$("shareImgBtn").addEventListener("click", function () {
+  if (state.history.length !== 5) return;
+  drawShare();
+  $("shareWrap").classList.add("show");
+});
+$("langBtn").addEventListener("click", function () { applyLang(lang === "en" ? "zh" : "en"); });
+
+applyLang(lang);
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>
