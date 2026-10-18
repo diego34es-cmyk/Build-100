@@ -1,0 +1,1223 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CRASH-051 · 危机前夜长什么样</title>
+<meta name="description" content="把 1987、2000、2008 三次危机前夜的关键指标摆在今天旁边。标普 500 负 beta 股票数量创历史新高，美股估值杠杆与仓位已超过这三次危机前的水平。学习内容，非投资建议。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/051/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E051%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CRASH-051 · 危机前夜长什么样">
+<meta property="og:description" content="把 1987、2000、2008 三次危机前夜的关键指标摆在今天旁边。标普 500 负 beta 股票数量创历史新高，美股估值杠杆与仓位已超过这三次危机前的水平。学习内容，非投资建议。">
+<meta property="og:url" content="https://build-100.com/051/">
+<meta property="og:image" content="https://build-100.com/051/og-051.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="CRASH-051 · 危机前夜长什么样">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CRASH-051 · 危机前夜长什么样">
+<meta name="twitter:description" content="Place the key readings from the eves of 1987, 2000, and 2008 beside today. The count of negative-beta stocks in the S&amp;P 500 is at a record high, and valuation, leverage, and positioning are already above the levels before those three crises. Educational content, not investment advice.">
+<meta name="twitter:image" content="https://build-100.com/051/og-051.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #ff4d6d;
+    --accent-glow: rgba(255,77,109,0.35);
+    --warm: #fbbf24;
+    --hot: #f87171;
+    --cool: var(--accent);
+    --up: #f87171;
+    --down: #4ade80;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+    --you: var(--warm);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: "Noto Sans CJK SC", var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font-family: inherit; color: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  [hidden] { display: none !important; }
+  h2, h3, p, td, th, li, label, .lede, .field-title, .reading, .choice, .callout, .explain, .badge-note, .asof, .sig-ref, .eve-text, .legend-copy, .source-list, .rules {
+    overflow-wrap: anywhere;
+  }
+  h1, .crisis-year, .light-sum { overflow-wrap: normal; }
+  img, canvas, svg, input, button { max-width: 100%; }
+  button { white-space: normal; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; min-width: 0; min-height: 44px; display: inline-flex; align-items: center; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; text-align: center; flex: none; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+    flex: none; min-height: 44px; min-width: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 48px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; letter-spacing: 0.04em; line-height: 1.45; text-wrap: balance; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; margin-bottom: 18px;
+  }
+  .hero p.lede { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); }
+  .hero p.lede strong { color: var(--ink); font-weight: 600; }
+
+  .cta {
+    display: inline-flex; align-items: center; justify-content: center; margin-top: 18px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--accent); border-radius: 4px;
+    background: var(--accent); color: var(--bg); cursor: pointer; transition: all .2s;
+    min-height: 44px; line-height: 1.4; text-align: center;
+  }
+  .cta:hover { box-shadow: 0 0 24px var(--accent-glow); }
+
+  .strip-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; margin-top: 28px; }
+  .light-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .strip-cell {
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+    gap: 2px; min-width: 0; max-width: 100%; min-height: 52px;
+    padding: 8px 6px 8px 10px;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); color: inherit; text-decoration: none;
+  }
+  .strip-cell.is-red { box-shadow: inset 3px 0 0 #f87171; }
+  .strip-cell.is-yellow { box-shadow: inset 3px 0 0 #fbbf24; }
+  .strip-cell:hover { border-color: var(--line-strong); }
+  .strip-cell .lamp { min-height: 0; max-width: 100%; min-width: 0; letter-spacing: 0.04em; }
+  .strip-name {
+    display: block; min-width: 0; max-width: 100%;
+    color: var(--ink); font-size: 12px; font-weight: 700; line-height: 1.25;
+    letter-spacing: 0; overflow-wrap: break-word;
+  }
+  .signal-list { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
+  .sig {
+    position: relative; min-width: 0;
+    border: 1px solid var(--line); border-radius: 14px;
+    background: var(--bg-raise);
+    padding: 14px 14px 14px 16px;
+  }
+  .sig::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--muted);
+  }
+  .sig.is-red::before { background: #f87171; box-shadow: 0 0 12px rgba(248,113,113,0.45); }
+  .sig.is-yellow::before { background: #fbbf24; box-shadow: 0 0 12px rgba(251,191,36,0.35); }
+  .sig.is-green::before { background: #4ade80; box-shadow: 0 0 12px rgba(74,222,128,0.35); }
+  .sig.is-grey::before { background: var(--muted); }
+  .sig-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .sig-name { font-size: 1rem; font-weight: 700; line-height: 1.35; min-width: 0; }
+  .reading { margin-top: 8px; color: var(--ink); font-size: 1rem; font-weight: 600; line-height: 1.45; }
+  .reading.is-exact { font-weight: 700; }
+  .qual-tag {
+    display: inline-flex; align-items: center; min-height: 22px;
+    margin-left: 6px; padding: 1px 8px; border-radius: 999px;
+    border: 1px solid var(--line-strong); color: var(--muted);
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+    font-weight: 600; vertical-align: middle; white-space: nowrap;
+  }
+  .sig-src { margin-top: 8px; color: var(--faint); font-size: 0.78rem; line-height: 1.4; }
+  .sig-src a, .dash-src a, .source-list a {
+    color: var(--accent); display: inline-flex; align-items: center; justify-content: center;
+    min-height: 44px; min-width: 44px; padding: 0 8px;
+  }
+  .sig-ref {
+    margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 0.88rem;
+  }
+  .lamp {
+    display: inline-flex; align-items: center; gap: 6px; flex: none;
+    min-height: 28px; font-family: var(--mono); font-size: 12px;
+    letter-spacing: 0.08em; font-weight: 700; line-height: 1;
+  }
+  .lamp-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); flex: none; }
+  .lamp-red { color: #f87171; }
+  .lamp-red .lamp-dot { background: #f87171; box-shadow: 0 0 8px rgba(248,113,113,0.65); }
+  .lamp-yellow { color: #fbbf24; }
+  .lamp-yellow .lamp-dot { background: #fbbf24; box-shadow: 0 0 8px rgba(251,191,36,0.55); }
+  .lamp-green { color: #4ade80; }
+  .lamp-green .lamp-dot { background: #4ade80; box-shadow: 0 0 8px rgba(74,222,128,0.55); }
+  .lamp-grey { color: var(--muted); }
+  .lamp-grey .lamp-dot { background: var(--muted); }
+  .lamp-rel { letter-spacing: 0.03em; max-width: 100%; min-width: 0; white-space: normal; }
+  .lamp-rel .lamp-label { overflow-wrap: anywhere; }
+  .light-sum {
+    margin-top: 14px; font-family: var(--mono); font-weight: 700;
+    font-size: 1.02rem; letter-spacing: 0.04em; color: var(--ink);
+  }
+
+  .asof {
+    margin-top: 16px; padding: 12px 14px;
+    border: 1px solid var(--accent); border-radius: 12px;
+    background: rgba(255, 77, 109, 0.1);
+    color: var(--ink); font-size: 0.95rem; font-weight: 700; line-height: 1.5;
+  }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .crisis-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .crisis {
+    min-width: 0; display: grid; grid-template-columns: 1fr; gap: 8px;
+    border: 1px solid var(--line); border-radius: 14px;
+    background: var(--bg-raise); padding: 16px;
+  }
+  .crisis-year {
+    font-family: var(--mono); font-weight: 700; color: var(--accent);
+    font-size: clamp(2.4rem, 8vw, 3.1rem); letter-spacing: -0.04em; line-height: 0.95;
+  }
+  .crisis-name { font-size: 1.25rem; font-weight: 700; line-height: 1.25; }
+  .crisis-date { color: var(--muted); font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.04em; margin-top: 4px; }
+  .hist-tag {
+    display: inline-flex; align-items: center; min-height: 28px; margin-top: 8px;
+    padding: 2px 10px; border-radius: 999px; border: 1px solid var(--line-strong);
+    color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  }
+  .crisis-what { margin-top: 10px; color: var(--ink); font-size: 0.98rem; }
+  .fact-list { list-style: none; display: grid; gap: 6px; margin-top: 10px; }
+  .fact-list li {
+    font-family: var(--mono); font-weight: 700; font-size: 0.95rem;
+    letter-spacing: -0.02em; line-height: 1.4;
+  }
+  .eve-kicker { margin-top: 14px; font-size: 0.95rem; font-weight: 700; }
+  .eve { border-top: 1px solid var(--line); padding: 10px 0; min-width: 0; }
+  .eve-name { font-weight: 700; font-size: 0.95rem; }
+  .eve-line { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; margin-top: 4px; }
+  .eve-line .reading, .eve-line .eve-text { flex: 1 1 12rem; min-width: 0; margin-top: 0; }
+  .eve-text { color: var(--muted); font-size: 0.92rem; min-width: 0; }
+
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0 12px; }
+  .tab {
+    flex: 1 1 0; min-width: 72px; min-height: 44px; padding: 10px 12px;
+    border-radius: 999px; border: 1px solid var(--line-strong); background: transparent;
+    cursor: pointer; font-family: var(--mono); letter-spacing: 0.06em; font-size: 14px;
+  }
+  .tab[aria-selected="true"] {
+    background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 700;
+  }
+  .dash-now { color: var(--muted); font-size: 0.9rem; margin-bottom: 10px; }
+  .dash-list { display: grid; gap: 10px; }
+  .dash-row {
+    min-width: 0; display: grid; grid-template-columns: 1fr; gap: 10px;
+    border: 1px solid var(--line); border-radius: 14px;
+    background: var(--bg-raise); padding: 14px;
+  }
+  .dash-name { font-size: 1.02rem; font-weight: 700; line-height: 1.35; }
+  .dash-kicker {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    color: var(--faint); margin-bottom: 4px;
+  }
+  .dash-src { margin-top: 6px; color: var(--faint); font-size: 0.78rem; }
+  .legend { display: grid; gap: 10px; margin-top: 16px; }
+  .legend-item { display: flex; gap: 10px; align-items: flex-start; min-width: 0; }
+  .legend-copy { min-width: 0; color: var(--muted); font-size: 0.9rem; }
+  .legend-copy strong { display: block; color: var(--ink); font-weight: 700; }
+  .grey-note { margin-top: 12px; font-weight: 700; }
+
+  .progress {
+    height: 8px; border-radius: 999px; background: rgba(237,239,241,0.12); overflow: hidden; margin-top: 4px;
+  }
+  .progress > span {
+    display: block; height: 100%; width: 0; background: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow); transition: width .25s;
+  }
+  .progress-text { color: var(--muted); font-size: 0.86rem; margin: 8px 0 14px; }
+  .quiz-list { display: grid; gap: 12px; }
+  .q-card {
+    min-width: 0; border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px; background: rgba(11,13,16,0.65);
+  }
+  .q-title { font-size: 1.02rem; line-height: 1.4; margin-bottom: 4px; }
+  .choice {
+    display: flex; align-items: center; width: 100%; min-height: 44px; margin-top: 8px;
+    text-align: left; padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--line-strong); background: var(--bg-raise); cursor: pointer; line-height: 1.4;
+  }
+  .choice:disabled { cursor: default; }
+  .choice.is-right { border-color: #4ade80; background: rgba(74,222,128,0.12); }
+  .choice.is-wrong { border-color: #f87171; background: rgba(248,113,113,0.12); }
+  .explain {
+    margin-top: 10px; padding-left: 10px; border-left: 3px solid var(--line-strong);
+    color: var(--muted); font-size: 0.92rem;
+  }
+  .explain.is-right { border-color: #4ade80; }
+  .explain.is-wrong { border-color: #f87171; }
+  .quiz-end { margin-top: 8px; font-weight: 700; }
+  .badge-inline {
+    margin-top: 12px; border: 1px solid var(--accent); border-radius: 12px;
+    padding: 14px 16px; background: rgba(255,77,109,0.1);
+    font-family: var(--mono); font-weight: 700; letter-spacing: 0.06em;
+    color: var(--accent); font-size: 1.05rem; overflow-wrap: anywhere;
+  }
+  .result-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .result-actions .share-btn, .result-actions .cta { margin-top: 0; }
+
+  .disclaimer {
+    margin-top: 14px; border: 1px solid rgba(251,191,36,0.45);
+    background: rgba(251,191,36,0.08); color: var(--ink);
+    border-radius: 12px; padding: 14px 16px; font-size: 0.95rem; font-weight: 700;
+  }
+  .hero .disclaimer { margin-top: 16px; }
+  .disclaimer.full { font-weight: 600; margin-top: 18px; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s; min-height: 44px;
+    display: inline-flex; align-items: center; justify-content: center; text-align: center;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { margin-top: 14px; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; display: block; }
+  .share-hint { color: var(--faint); font-size: 0.82rem; margin-top: 8px; }
+
+  .subhead { margin: 18px 0 8px; font-size: 1rem; }
+  .source-list, .rules { list-style: none; display: grid; gap: 0; }
+  .source-list li, .rules li {
+    padding: 10px 0; border-bottom: 1px solid var(--line); min-width: 0;
+  }
+  .rules li { color: var(--muted); }
+
+  .badge-dialog {
+    width: min(440px, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+    background: #0b0d10;
+    color: var(--ink);
+    padding: 22px 18px 18px;
+    box-shadow: 0 0 40px var(--accent-glow);
+  }
+  .badge-dialog::backdrop { background: rgba(6, 7, 9, 0.72); }
+  .badge-kicker { font-family: var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); font-size: 12px; }
+  .badge-mark {
+    font-size: clamp(1.6rem, 6vw, 2.6rem); font-weight: 700; line-height: 1.15;
+    color: var(--accent); margin: 8px 0; overflow-wrap: anywhere;
+  }
+  .badge-score { font-family: var(--mono); font-size: 1.15rem; margin-bottom: 8px; }
+  .badge-note { color: var(--muted); font-size: 0.92rem; }
+  .badge-dialog .cta, .badge-dialog .share-btn { width: 100%; margin-top: 10px; }
+
+  footer {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding: 28px var(--pad) 40px; border-top: 1px solid var(--line);
+    max-width: 880px; margin: 0 auto;
+  }
+  footer > span {
+    display: inline-flex; align-items: center; min-height: 44px;
+    min-width: 0; max-width: 100%;
+  }
+  footer a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 0; }
+  footer a:hover { color: var(--ink); }
+  footer .mono { color: var(--faint); }
+
+  @media (min-width: 720px) {
+    .crisis { grid-template-columns: 140px minmax(0, 1fr); align-items: start; column-gap: 18px; }
+  }
+  @media (min-width: 800px) {
+    .signal-list { grid-template-columns: 1fr 1fr; }
+    .dash-row { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.15fr) minmax(0, 1.25fr); align-items: start; }
+  }
+  @media (min-width: 900px) {
+    .light-strip { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 0 14px; gap: 8px; }
+    .nav-back { font-size: 11px; letter-spacing: 0; }
+    .nav-brand { font-size: 13px; }
+    .nav-lang { padding: 6px 10px; letter-spacing: 0.12em; }
+    .share-btn { padding: 12px 12px; flex: 1 1 100%; }
+    .result-actions .share-btn { flex: 1 1 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* 禁用所有动画 */
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">CRASH<span>·051</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="Learning · CRASH-051">Learning · CRASH-051</p>
+    <h1 data-en="What does the eve of a crash look like?">危机前夜长什么样？</h1>
+    <p class="lede" data-en="Set the key readings from the eves of 1987, 2000, and 2008 beside today, and see what a warning looks like in five minutes.">把 1987、2000、2008 三次危机前夜的关键指标摆在今天旁边，5 分钟看懂预警信号长什么样。</p>
+    <div class="light-strip" id="lightStrip"></div>
+    <p class="light-sum" id="lightSum" aria-live="polite"></p>
+    <h2 class="strip-title" data-en="Six lights today">今天的 6 盏灯</h2>
+    <div class="signal-list" id="signalList"></div>
+    <p class="asof" data-en="Scope and dates: around Oct 12–14, 2026. Lights follow how the reports compare with history. This page sets no threshold of its own.">指标口径与数据日期：2026-10-12 至 2026-10-14 前后。灯按报道怎么和历史比，本页不自设阈值。</p>
+    <p class="disclaimer" data-en="Educational content, not investment advice. Lights are qualitative comparisons with history, not crash predictions.">学习内容，非投资建议；信号灯是与历史的定性对比，不是崩盘预测</p>
+    <a class="cta" href="#crises" data-en="Start the comparison">开始对照</a>
+  </header>
+
+  <section class="field" id="crises">
+    <div class="field-head">
+      <span class="field-no" data-en="01">01</span>
+      <h2 class="field-title" data-en="Three crash eves">三次危机前夜</h2>
+      <p class="field-hint" data-en="Each card says what happened. The three eve lights show today versus that episode, not the alarm level at the time.">每张卡说清当时发生了什么。前夜 3 指标的灯，表示今天相对那一次，不是当时的警报等级。</p>
+    </div>
+    <div class="crisis-grid" id="crisisGrid"></div>
+  </section>
+
+  <section class="field" id="dashboard">
+    <div class="field-head">
+      <span class="field-no" data-en="02">02</span>
+      <h2 class="field-title" data-en="Today vs the eve">今天 vs 前夜</h2>
+      <p class="field-hint" data-en="Pick a year. Each row puts that eve beside today.">先选一年。每一行是那次前夜，旁边是今天。</p>
+    </div>
+    <p class="asof" data-en="Scope and dates: around Oct 12–14, 2026. Each cell is today versus that eve. Red means today is more extreme, yellow means similar, green means today is lower, grey means not compared.">指标口径与数据日期：2026-10-12 至 2026-10-14 前后。每一格是今天相对那一次前夜。红是今天更极端，黄是相近，绿是今天较低，灰是不比较。</p>
+    <div class="tabs" id="yearTabs" role="tablist" aria-label="选择一次危机前夜">
+      <button class="tab" id="tab-1987" type="button" role="tab" data-year="1987" aria-controls="dashPanel" aria-selected="false" tabindex="-1" data-en="1987">1987</button>
+      <button class="tab" id="tab-2000" type="button" role="tab" data-year="2000" aria-controls="dashPanel" aria-selected="true" tabindex="0" data-en="2000">2000</button>
+      <button class="tab" id="tab-2008" type="button" role="tab" data-year="2008" aria-controls="dashPanel" aria-selected="false" tabindex="-1" data-en="2008">2008</button>
+    </div>
+    <p class="dash-now" id="dashNow"></p>
+    <div id="dashPanel" role="tabpanel" aria-labelledby="tab-2000"></div>
+    <div class="legend" id="legend"></div>
+    <p class="grey-note" data-en="A grey light means there is no like-for-like figure. We do not fill in a number.">灰灯表示没有同口径数字，我们不补数字。</p>
+  </section>
+
+  <section class="field" id="quiz">
+    <div class="field-head">
+      <span class="field-no" data-en="03">03</span>
+      <h2 class="field-title" data-en="Five-question check">五题小测</h2>
+      <p class="field-hint" data-en="Single choice. The note shows as soon as you tap. The score and the badge appear when you finish.">单选。点下去立刻看到对错和解释。做完显示得分和徽章。</p>
+    </div>
+    <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+    <p class="progress-text" id="progressText" aria-live="polite"></p>
+    <div class="quiz-list" id="quizList"></div>
+    <div id="quizResult" hidden>
+      <p class="badge-inline" id="badgeInline"></p>
+      <p class="quiz-end" id="quizEnd" aria-live="polite"></p>
+      <p class="disclaimer" data-en="Educational content, not investment advice. Lights are qualitative comparisons with history, not crash predictions.">学习内容，非投资建议；信号灯是与历史的定性对比，不是崩盘预测</p>
+      <div class="result-actions">
+        <button class="share-btn" id="retryBtn" type="button" data-en="Try again">重做</button>
+        <a class="share-btn" id="reviewLink" href="#dashboard" data-en="Review the dashboard" hidden>去看仪表盘</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="field" id="share">
+    <div class="field-head">
+      <span class="field-no" data-en="04">04</span>
+      <h2 class="field-title" data-en="Share">分享</h2>
+      <p class="field-hint" data-en="The summary includes today's lights, your score, and the badge.">文案里有今天的灯、你的成绩和徽章。</p>
+    </div>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap" hidden>
+      <canvas id="shareCanvas" width="1200" height="630"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+
+  <section class="field" id="sources">
+    <div class="field-head">
+      <span class="field-no" data-en="05">05</span>
+      <h2 class="field-title" data-en="Sources and dates">来源与日期</h2>
+    </div>
+    <p class="asof" data-en="Scope and dates: around Oct 12–14, 2026. Below: the source and date of each reading, and how a light is chosen.">指标口径与数据日期：2026-10-12 至 2026-10-14 前后。下面是每条读数的来源与日期，以及灯的判定口径。</p>
+    <ul class="source-list" id="sourceList"></ul>
+    <h3 class="subhead" data-en="Crisis cards">危机卡</h3>
+    <p data-en="Figures on the three crisis cards are public historical data.">三张危机卡上的事件数字为公开历史数据。</p>
+    <h3 class="subhead" data-en="Other signals from the same days">同期其它信号</h3>
+    <p data-en="Consumer stocks lagged the broad market by a wide margin, and semiconductors fell for six straight days (2026-10-14). These two stay in this note. They are not lights on the dashboard.">消费股显著跑输大盘，半导体连续 6 日下跌（2026-10-14）。这两条只记在这里，不进仪表盘。</p>
+    <h3 class="subhead" data-en="How a light is chosen">灯的判定口径</h3>
+    <ul class="rules">
+      <li data-en="Red: the report says a record high, a record, or a level above the eves of 1987, 2000, and 2008.">红：报道写明创历史新高、创纪录，或超过 1987、2000、2008 前夜。</li>
+      <li data-en="Yellow: elevated, but the window is not those three eves (for example, highest since 2010, or a 9-year low), or the reading is qualitative only.">黄：偏高，但比较窗口不是三次前夜（例如 2010 年以来最高、9 年新低），或只有定性描述。</li>
+      <li data-en="Green: today is below that period. On this page it appears only in the 2008 household-delinquency cell, and the comparison is 2009–2010 after the crisis, not the eve.">绿：今天低于该时期水平。本页只出现在 2008 家庭逾期一格，比较对象是 2009–2010 危机后，不是前夜。</li>
+      <li data-en="Grey: no like-for-like figure, or the measure did not exist then. The page says not compared, and does not fill in a number.">灰：无同口径可比数字，或该指标当时不存在。页面写「不比较」，不补数字。</li>
+    </ul>
+    <p class="disclaimer full" data-en="Educational content, not investment advice. Lights are qualitative comparisons with history, not crash predictions. This page is not a recommendation to buy or sell any security, and it cannot tell you when prices will fall. Red means the published comparison is more extreme, or the report states a record. Yellow means elevated, or qualitative only. Green means today is below the period being compared. Grey means there is no like-for-like figure, or the measure did not exist yet. A grey light is left blank: this page does not fill in a number and does not invent a threshold. Declines on the crisis cards are public historical data. Today's readings come from the reports and the survey dated on the page. Different measures are not subtracted from one another.">学习内容，非投资建议；信号灯是与历史的定性对比，不是崩盘预测。本页不构成买卖任何证券的建议，也不能告诉你价格何时下跌。红灯表示报道里的比较更极端，或写明了纪录；黄灯表示偏高，或只有定性描述；绿灯表示今天低于用来比较的那个时期；灰灯表示没有同口径数字，或该指标当时还不存在。灰灯不补数字，本页也不自设阈值。危机卡上的跌幅是公开历史数据。今日读数来自所注日期的报道和调查，口径不同，不能直接相减。</p>
+  </section>
+</main>
+
+<footer>
+  <span class="mono" data-en='<a href="https://build-100.com/">build-100.com</a>'><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono" data-en='<a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a>'><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="CRASH-051 · Crash-eve vs today">CRASH-051 · 危机前夜对照</span>
+</footer>
+
+<dialog class="badge-dialog" id="badgeDialog" aria-labelledby="badgeTitle">
+  <p class="badge-kicker" data-en="Lesson badge">学习徽章</p>
+  <p class="badge-mark" id="badgeTitle"></p>
+  <p class="badge-score" id="badgeScore"></p>
+  <p class="badge-note" id="badgeNote"></p>
+  <p class="disclaimer" data-en="Educational content, not investment advice. Lights are qualitative comparisons with history, not crash predictions.">学习内容，非投资建议；信号灯是与历史的定性对比，不是崩盘预测</p>
+  <button class="share-btn" id="badgeReview" type="button" data-en="Review the dashboard" hidden>去看仪表盘</button>
+  <button class="share-btn" id="badgeRetry" type="button" data-en="Try again" hidden>重做</button>
+  <button class="cta" id="badgeClose" type="button" data-en="Close">收下</button>
+</dialog>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  "use strict";
+  var E = window.CrashEngine;
+  if (!E) return;
+
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+
+  var year = "2000";
+  var picks = {};
+  var badgeShown = false;
+  var shareOpen = false;
+  var copyTimer = null;
+  var YEARS = ["1987", "2000", "2008"];
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+  function $(id) { return document.getElementById(id); }
+  function pair(obj) { return obj ? t(obj.zh, obj.en) : ""; }
+
+  function isFigure(sig) { return sig.id === "cash"; }
+
+  function stampZh() {
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    });
+  }
+
+  function signalById(id) {
+    var i;
+    for (i = 0; i < E.SIGNALS.length; i++) {
+      if (E.SIGNALS[i].id === id) return E.SIGNALS[i];
+    }
+    return null;
+  }
+
+  function crisisByYear(y) {
+    var i;
+    var key = String(y);
+    for (i = 0; i < E.CRISES.length; i++) {
+      if (String(E.CRISES[i].year) === key) return E.CRISES[i];
+    }
+    return null;
+  }
+
+  function lampEl(light, mode) {
+    var spec = E.LIGHTS[light] || E.LIGHTS.grey;
+    var key = E.LIGHTS[light] ? light : "grey";
+    var rel = mode === "rel";
+    var span = document.createElement("span");
+    span.className = "lamp lamp-" + key + (rel ? " lamp-rel" : "");
+    var dot = document.createElement("i");
+    dot.className = "lamp-dot";
+    dot.setAttribute("aria-hidden", "true");
+    var label = document.createElement("span");
+    label.className = "lamp-label";
+    var words = rel ? (spec.rel || spec) : spec;
+    label.textContent = pair(words) + (rel ? " ·" : "");
+    span.appendChild(dot);
+    span.appendChild(label);
+    return span;
+  }
+
+  function addQualTag(parent, light, figure) {
+    if (figure || light === "grey") return;
+    parent.appendChild(document.createTextNode(" "));
+    var tag = document.createElement("span");
+    tag.className = "qual-tag";
+    tag.textContent = t("定性", "Qualitative");
+    parent.appendChild(tag);
+  }
+
+  function sourceBits(sig) {
+    var frag = document.createDocumentFragment();
+    frag.appendChild(document.createTextNode(t("来源", "Source") + " · " + pair(sig.today.source) + " · " + sig.today.date));
+    if (sig.id === "cash") {
+      frag.appendChild(document.createTextNode(" · "));
+      var a = document.createElement("a");
+      a.href = "https://build-100.com/042/";
+      a.textContent = t("见本站 042", "see 042");
+      frag.appendChild(a);
+    }
+    return frag;
+  }
+
+  function renderHero() {
+    var strip = $("lightStrip");
+    if (strip) {
+      strip.textContent = "";
+      E.SIGNALS.forEach(function (sig) {
+        var cell = document.createElement("a");
+        cell.className = "strip-cell is-" + sig.light;
+        cell.href = "#sig-" + sig.id;
+        cell.appendChild(lampEl(sig.light));
+        var shortName = document.createElement("span");
+        shortName.className = "strip-name";
+        shortName.textContent = pair(sig.short || sig.name);
+        cell.appendChild(shortName);
+        strip.appendChild(cell);
+      });
+    }
+    var host = $("signalList");
+    if (!host) return;
+    host.textContent = "";
+    E.SIGNALS.forEach(function (sig) {
+      var card = document.createElement("article");
+      card.className = "sig is-" + sig.light;
+      card.id = "sig-" + sig.id;
+      var top = document.createElement("div");
+      top.className = "sig-top";
+      var name = document.createElement("h3");
+      name.className = "sig-name";
+      name.textContent = pair(sig.name);
+      top.appendChild(name);
+      top.appendChild(lampEl(sig.light));
+      var reading = document.createElement("p");
+      reading.className = "reading" + (isFigure(sig) ? " is-exact" : " is-qual");
+      reading.appendChild(document.createTextNode(pair(sig.today.text)));
+      addQualTag(reading, sig.light, isFigure(sig));
+      var src = document.createElement("p");
+      src.className = "sig-src";
+      src.appendChild(sourceBits(sig));
+      var ref = document.createElement("p");
+      ref.className = "sig-ref";
+      ref.textContent = pair(sig.ref);
+      card.appendChild(top);
+      card.appendChild(reading);
+      card.appendChild(src);
+      card.appendChild(ref);
+      host.appendChild(card);
+    });
+    var sum = E.lightSummary();
+    $("lightSum").textContent = t(
+      "今天：" + sum.red + " 红 · " + sum.yellow + " 黄",
+      "Today: " + sum.red + " red · " + sum.yellow + " yellow"
+    );
+  }
+
+  function renderCrises() {
+    var host = $("crisisGrid");
+    if (!host) return;
+    host.textContent = "";
+    E.CRISES.forEach(function (crisis) {
+      var card = document.createElement("article");
+      card.className = "crisis";
+      var y = document.createElement("p");
+      y.className = "crisis-year";
+      y.textContent = String(crisis.year);
+      var body = document.createElement("div");
+      body.className = "crisis-body";
+      var name = document.createElement("h3");
+      name.className = "crisis-name";
+      name.textContent = pair(crisis.name);
+      var date = document.createElement("p");
+      date.className = "crisis-date";
+      date.textContent = crisis.date;
+      var tag = document.createElement("p");
+      tag.className = "hist-tag";
+      tag.textContent = t("公开历史数据", "Public historical data");
+      var what = document.createElement("p");
+      what.className = "crisis-what";
+      what.textContent = pair(crisis.what);
+      var facts = document.createElement("ul");
+      facts.className = "fact-list";
+      crisis.facts.forEach(function (fact) {
+        var li = document.createElement("li");
+        li.textContent = pair(fact);
+        facts.appendChild(li);
+      });
+      var kicker = document.createElement("h4");
+      kicker.className = "eve-kicker";
+      kicker.textContent = t("前夜 3 指标", "Three eve readings");
+      body.appendChild(name);
+      body.appendChild(date);
+      body.appendChild(tag);
+      body.appendChild(what);
+      body.appendChild(facts);
+      body.appendChild(kicker);
+      crisis.eveSignals.forEach(function (id) {
+        var sig = signalById(id);
+        if (!sig) return;
+        var eve = sig.crises[String(crisis.year)];
+        if (!eve) return;
+        var row = document.createElement("div");
+        row.className = "eve";
+        var ename = document.createElement("p");
+        ename.className = "eve-name";
+        ename.textContent = pair(sig.name);
+        var line = document.createElement("div");
+        line.className = "eve-line is-rel";
+        line.appendChild(lampEl(eve.light, "rel"));
+        var text = document.createElement("p");
+        text.className = "eve-text";
+        text.appendChild(document.createTextNode(pair(eve.text)));
+        addQualTag(text, eve.light, false);
+        line.appendChild(text);
+        row.appendChild(ename);
+        row.appendChild(line);
+        body.appendChild(row);
+      });
+      card.appendChild(y);
+      card.appendChild(body);
+      host.appendChild(card);
+    });
+  }
+
+  function renderDashboard() {
+    var tabs = $("yearTabs");
+    if (tabs) tabs.setAttribute("aria-label", t("选择一次危机前夜", "Choose a crash eve"));
+    YEARS.forEach(function (y) {
+      var tab = $("tab-" + y);
+      if (!tab) return;
+      var on = y === year;
+      tab.setAttribute("aria-selected", on ? "true" : "false");
+      tab.tabIndex = on ? 0 : -1;
+    });
+    var panel = $("dashPanel");
+    if (panel) panel.setAttribute("aria-labelledby", "tab-" + year);
+    var crisis = crisisByYear(year);
+    var now = $("dashNow");
+    if (now) {
+      now.textContent = crisis
+        ? t("正在看 ", "Now showing ") + year + " · " + pair(crisis.name)
+        : "";
+    }
+    if (!panel) return;
+    panel.textContent = "";
+    var list = document.createElement("div");
+    list.className = "dash-list";
+    var rows = E.dashboardRows(year);
+    rows.forEach(function (row) {
+      var sig = signalById(row.id);
+      var card = document.createElement("article");
+      card.className = "dash-row";
+      var nameCol = document.createElement("div");
+      var name = document.createElement("h3");
+      name.className = "dash-name";
+      name.textContent = pair(row.name);
+      nameCol.appendChild(name);
+
+      var eveCol = document.createElement("div");
+      var eveK = document.createElement("p");
+      eveK.className = "dash-kicker";
+      eveK.textContent = year + t(" 前夜", " eve");
+      var eveLine = document.createElement("div");
+      eveLine.className = "eve-line is-rel";
+      eveLine.appendChild(lampEl(row.eve.light, "rel"));
+      var eveText = document.createElement("p");
+      eveText.className = "eve-text";
+      eveText.appendChild(document.createTextNode(pair(row.eve.text)));
+      addQualTag(eveText, row.eve.light, false);
+      eveLine.appendChild(eveText);
+      eveCol.appendChild(eveK);
+      eveCol.appendChild(eveLine);
+
+      var todayCol = document.createElement("div");
+      var todayK = document.createElement("p");
+      todayK.className = "dash-kicker";
+      todayK.textContent = t("今天", "Today");
+      var todayLine = document.createElement("div");
+      todayLine.className = "eve-line";
+      todayLine.appendChild(lampEl(row.today.light));
+      var todayText = document.createElement("p");
+      todayText.className = "reading" + (sig && isFigure(sig) ? " is-exact" : " is-qual");
+      todayText.appendChild(document.createTextNode(pair(row.today.text)));
+      addQualTag(todayText, row.today.light, sig && isFigure(sig));
+      todayLine.appendChild(todayText);
+      var src = document.createElement("p");
+      src.className = "dash-src";
+      if (sig) src.appendChild(sourceBits(sig));
+      else src.textContent = pair(row.today.source) + " · " + row.today.date;
+      todayCol.appendChild(todayK);
+      todayCol.appendChild(todayLine);
+      todayCol.appendChild(src);
+
+      card.appendChild(nameCol);
+      card.appendChild(eveCol);
+      card.appendChild(todayCol);
+      list.appendChild(card);
+    });
+    panel.appendChild(list);
+  }
+
+  function renderLegend() {
+    var host = $("legend");
+    if (!host) return;
+    host.textContent = "";
+    ["red", "yellow", "green", "grey"].forEach(function (key) {
+      var spec = E.LIGHTS[key];
+      var item = document.createElement("div");
+      item.className = "legend-item";
+      item.appendChild(lampEl(key));
+      var copy = document.createElement("p");
+      copy.className = "legend-copy";
+      copy.textContent = pair(spec.meaning);
+      item.appendChild(copy);
+      host.appendChild(item);
+    });
+  }
+
+  function answerList() {
+    var arr = [];
+    var i;
+    for (i = 0; i < E.QUESTIONS.length; i++) {
+      var id = E.QUESTIONS[i].id;
+      arr.push(Object.prototype.hasOwnProperty.call(picks, id) ? picks[id] : null);
+    }
+    return arr;
+  }
+
+  function answeredCount() {
+    var n = 0;
+    var i;
+    for (i = 0; i < E.QUESTIONS.length; i++) {
+      if (Object.prototype.hasOwnProperty.call(picks, E.QUESTIONS[i].id)) n += 1;
+    }
+    return n;
+  }
+
+  function syncBadge(result, done) {
+    var badge = E.badgeFor(done ? result.correct : 0);
+    var title = $("badgeTitle");
+    var score = $("badgeScore");
+    var note = $("badgeNote");
+    if (title) title.textContent = pair(badge.name);
+    if (score) score.textContent = t("得分 ", "Score ") + result.correct + "/" + result.total;
+    if (note) {
+      if (result.correct >= 5) note.textContent = t("五题全对。灯仍然不是崩盘时间表。", "Five out of five. The lights are still not a timetable for a crash.");
+      else if (result.correct >= 4) note.textContent = t("四题对。可以再看一眼灰灯为什么空着。", "Four correct. Look again at why a grey light stays blank.");
+      else note.textContent = t("回到对照仪表盘，看清每一盏灯在比什么。", "Go back to the dashboard and see what each light is comparing.");
+    }
+    var inline = $("badgeInline");
+    if (inline) inline.textContent = pair(badge.name) + " · " + result.correct + "/5";
+    var end = $("quizEnd");
+    if (end) {
+      end.textContent = t(
+        "本轮 " + result.correct + "/5 · " + pair(badge.name),
+        "This round " + result.correct + "/5 · " + pair(badge.name)
+      );
+    }
+    var review = $("reviewLink");
+    var badgeReview = $("badgeReview");
+    var badgeRetry = $("badgeRetry");
+    var low = result.correct <= 3;
+    if (review) review.hidden = !low;
+    if (badgeReview) badgeReview.hidden = !low;
+    if (badgeRetry) badgeRetry.hidden = !low;
+  }
+
+  function openBadge(result) {
+    syncBadge(result, true);
+    var dlg = $("badgeDialog");
+    if (dlg && typeof dlg.showModal === "function" && !dlg.open) dlg.showModal();
+  }
+
+  function renderQuiz() {
+    var host = $("quizList");
+    if (!host) return;
+    var result = E.scoreQuiz(answerList());
+    var answered = answeredCount();
+    var done = answered === E.QUESTIONS.length;
+    var bar = $("progressBar");
+    if (bar) bar.style.width = (answered / E.QUESTIONS.length * 100) + "%";
+    var progress = $("progressText");
+    if (progress) {
+      progress.textContent = t(
+        "已答 " + answered + "/5 · 答对 " + result.correct,
+        "Answered " + answered + "/5 · " + result.correct + " correct"
+      );
+    }
+    host.textContent = "";
+    E.QUESTIONS.forEach(function (q, qi) {
+      var card = document.createElement("article");
+      card.className = "q-card";
+      card.setAttribute("data-qid", q.id);
+      var title = document.createElement("h3");
+      title.className = "q-title";
+      title.textContent = (qi + 1) + ". " + pair(q.q);
+      card.appendChild(title);
+      var picked = Object.prototype.hasOwnProperty.call(picks, q.id) ? picks[q.id] : null;
+      q.options.forEach(function (opt, oi) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "choice";
+        btn.setAttribute("data-i", String(oi));
+        btn.textContent = pair(opt);
+        if (picked !== null && picked !== undefined) {
+          btn.disabled = true;
+          if (oi === q.answer) btn.classList.add("is-right");
+          if (oi === picked && picked !== q.answer) btn.classList.add("is-wrong");
+        }
+        btn.addEventListener("click", function () {
+          if (Object.prototype.hasOwnProperty.call(picks, q.id)) return;
+          picks[q.id] = oi;
+          renderQuiz();
+          var now = E.scoreQuiz(answerList());
+          var nowDone = answeredCount() === E.QUESTIONS.length;
+          if (nowDone && !badgeShown) {
+            badgeShown = true;
+            openBadge(now);
+          } else {
+            var again = document.querySelector('.q-card[data-qid="' + q.id + '"] button[data-i="' + oi + '"]');
+            if (again && again.focus) again.focus();
+          }
+          if (shareOpen) drawShare();
+        });
+        card.appendChild(btn);
+      });
+      if (picked !== null && picked !== undefined) {
+        var note = document.createElement("p");
+        var right = picked === q.answer;
+        note.className = "explain " + (right ? "is-right" : "is-wrong");
+        note.textContent = (right ? t("答对。", "Correct. ") : t("不是这句。", "Not this one. ")) + pair(q.explain);
+        card.appendChild(note);
+      }
+      host.appendChild(card);
+    });
+    var box = $("quizResult");
+    if (box) box.hidden = !done;
+    if (done) syncBadge(result, true);
+  }
+
+  function renderSources() {
+    var ul = $("sourceList");
+    if (!ul) return;
+    ul.textContent = "";
+    E.SIGNALS.forEach(function (sig) {
+      var li = document.createElement("li");
+      li.appendChild(document.createTextNode(pair(sig.name) + " · "));
+      li.appendChild(sourceBits(sig));
+      ul.appendChild(li);
+    });
+  }
+
+  function renderAll() {
+    renderHero();
+    renderCrises();
+    renderDashboard();
+    renderLegend();
+    renderQuiz();
+    renderSources();
+    if (shareOpen) drawShare();
+  }
+
+  function applyLang(l) {
+    lang = l;
+    if (copyTimer) { clearTimeout(copyTimer); copyTimer = null; }
+    var copyBtn = $("copyBtn");
+    if (copyBtn) copyBtn.classList.remove("copied");
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    var langBtn = $("langBtn");
+    langBtn.textContent = l === "en" ? "中文" : "EN";
+    langBtn.setAttribute("aria-label", l === "en" ? "切换到中文" : "Switch language");
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    renderAll();
+  }
+
+  function fontStack() {
+    return '"Noto Sans CJK SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+  }
+  function setFont(ctx, weight, px) {
+    ctx.font = weight + " " + px + "px " + fontStack();
+  }
+  function fitText(ctx, text, maxW, weight, px, minPx) {
+    var size = px;
+    setFont(ctx, weight, size);
+    while (size > minPx && ctx.measureText(text).width > maxW) {
+      size -= 1;
+      setFont(ctx, weight, size);
+    }
+    return size;
+  }
+  function roundRect(ctx, x, y, w, h, r) {
+    var rr = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + rr, y);
+    ctx.arcTo(x + w, y, x + w, y + h, rr);
+    ctx.arcTo(x + w, y + h, x, y + h, rr);
+    ctx.arcTo(x, y + h, x, y, rr);
+    ctx.arcTo(x, y, x + w, y, rr);
+    ctx.closePath();
+  }
+  function lightHex(light) {
+    if (light === "red") return "#f87171";
+    if (light === "yellow") return "#fbbf24";
+    if (light === "green") return "#4ade80";
+    return "#7d848c";
+  }
+
+  function drawShare() {
+    var canvas = $("shareCanvas");
+    if (!canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    var W = 1200;
+    var H = 630;
+    var pad = 56;
+    var maxW = W - pad * 2;
+    canvas.width = W;
+    canvas.height = H;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.045)";
+    var gx;
+    var gy;
+    for (gx = 18; gx < W; gx += 36) {
+      for (gy = 18; gy < H; gy += 36) ctx.fillRect(gx, gy, 1.4, 1.4);
+    }
+    ctx.fillStyle = "#ff4d6d";
+    ctx.fillRect(0, 0, 10, H);
+    ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#ff4d6d";
+    setFont(ctx, "700", 22);
+    ctx.fillText("CRASH-051", pad, 64);
+    ctx.fillStyle = "#edeff1";
+    var title = t("危机前夜长什么样？", "What does the eve of a crash look like?");
+    fitText(ctx, title, maxW, "700", 40, 22);
+    ctx.fillText(title, pad, 118);
+
+    var sum = E.lightSummary();
+    var tally = t(sum.red + " 红 · " + sum.yellow + " 黄", sum.red + " red · " + sum.yellow + " yellow");
+    ctx.fillStyle = "#ff4d6d";
+    fitText(ctx, tally, maxW, "700", 32, 20);
+    ctx.fillText(tally, pad, 168);
+
+    var gap = 14;
+    var boxW = (maxW - gap * 2) / 3;
+    var boxH = 70;
+    E.SIGNALS.forEach(function (sig, i) {
+      var col = i % 3;
+      var row = Math.floor(i / 3);
+      var x = pad + col * (boxW + gap);
+      var y = 196 + row * (boxH + 12);
+      ctx.fillStyle = "rgba(237,239,241,0.04)";
+      roundRect(ctx, x, y, boxW, boxH, 12);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(237,239,241,0.14)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.fillStyle = lightHex(sig.light);
+      ctx.arc(x + 22, y + 28, 7, 0, Math.PI * 2);
+      ctx.fill();
+      var spec = E.LIGHTS[sig.light];
+      ctx.fillStyle = lightHex(sig.light);
+      setFont(ctx, "700", 16);
+      ctx.fillText(pair(spec), x + 38, y + 34);
+      ctx.fillStyle = "#edeff1";
+      var nm = pair(sig.name);
+      fitText(ctx, nm, boxW - 28, "600", 16, 12);
+      ctx.fillText(nm, x + 14, y + 56);
+    });
+
+    var result = E.scoreQuiz(answerList());
+    var badge = E.badgeFor(result.correct);
+    var scoreLine = result.correct + "/5";
+    var badgeLine = pair(badge.name);
+    ctx.fillStyle = "#edeff1";
+    fitText(ctx, scoreLine, 280, "700", 54, 28);
+    ctx.fillText(scoreLine, pad, 430);
+    var scoreW = ctx.measureText(scoreLine).width;
+    ctx.fillStyle = "#ff4d6d";
+    fitText(ctx, badgeLine, Math.max(180, maxW - scoreW - 28), "700", 28, 16);
+    ctx.fillText(badgeLine, pad + Math.min(scoreW + 24, 360), 424);
+
+    ctx.strokeStyle = "rgba(237,239,241,0.14)";
+    ctx.beginPath();
+    ctx.moveTo(pad, 500);
+    ctx.lineTo(W - pad, 500);
+    ctx.stroke();
+    var disc = lang === "en" ? E.DISCLAIMER.en : E.DISCLAIMER.zh;
+    ctx.fillStyle = "#9aa1a8";
+    fitText(ctx, disc, maxW, "400", 18, 12);
+    ctx.fillText(disc, pad, 548);
+    ctx.fillStyle = "#edeff1";
+    setFont(ctx, "600", 22);
+    ctx.fillText("build-100.com/051", pad, 598);
+
+    canvas.setAttribute("aria-label", t("危机前夜分享卡", "Crash-eve share card"));
+    $("shareWrap").hidden = false;
+    shareOpen = true;
+  }
+
+  function markCopied() {
+    var btn = $("copyBtn");
+    if (!btn) return;
+    btn.classList.add("copied");
+    btn.textContent = t("已复制", "Copied");
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () {
+      btn.classList.remove("copied");
+      if (btn.dataset.zh === undefined) return;
+      btn.innerHTML = lang === "en" ? btn.dataset.en : btn.dataset.zh;
+    }, 1600);
+  }
+
+  function fallbackCopy(text) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch (err) {}
+      document.body.removeChild(ta);
+    } catch (err) {}
+  }
+
+  function resetQuiz() {
+    picks = {};
+    badgeShown = false;
+    var dlg = $("badgeDialog");
+    if (dlg && dlg.open && dlg.close) dlg.close();
+    renderQuiz();
+    if (shareOpen) drawShare();
+    var quiz = $("quiz");
+    if (quiz && quiz.scrollIntoView) {
+      try { quiz.scrollIntoView({ block: "start" }); } catch (e) {}
+    }
+  }
+
+  function goDashboard() {
+    var dlg = $("badgeDialog");
+    if (dlg && dlg.open && dlg.close) dlg.close();
+    var dash = $("dashboard");
+    if (dash && dash.scrollIntoView) {
+      try { dash.scrollIntoView({ block: "start" }); } catch (e) {}
+    }
+  }
+
+  stampZh();
+
+  $("langBtn").addEventListener("click", function () {
+    applyLang(lang === "en" ? "zh" : "en");
+  });
+
+  document.querySelectorAll(".tab").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var next = btn.getAttribute("data-year");
+      if (next !== "1987" && next !== "2000" && next !== "2008") return;
+      year = next;
+      renderDashboard();
+    });
+  });
+
+  $("yearTabs").addEventListener("keydown", function (ev) {
+    var i = YEARS.indexOf(year);
+    if (ev.key === "ArrowRight" || ev.key === "ArrowDown") i = (i + 1) % YEARS.length;
+    else if (ev.key === "ArrowLeft" || ev.key === "ArrowUp") i = (i + YEARS.length - 1) % YEARS.length;
+    else return;
+    ev.preventDefault();
+    year = YEARS[i];
+    renderDashboard();
+    var tab = $("tab-" + year);
+    if (tab && tab.focus) tab.focus();
+  });
+
+  $("retryBtn").addEventListener("click", resetQuiz);
+  $("badgeRetry").addEventListener("click", resetQuiz);
+  $("badgeReview").addEventListener("click", goDashboard);
+  $("badgeClose").addEventListener("click", function () {
+    var dlg = $("badgeDialog");
+    if (dlg && dlg.close) dlg.close();
+  });
+
+  $("copyBtn").addEventListener("click", function () {
+    var text;
+    try { text = E.shareText(E.scoreQuiz(answerList()).correct, lang); }
+    catch (e) { return; }
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      markCopied();
+    }
+    var clipPromise;
+    try {
+      var clip = navigator.clipboard;
+      if (clip && typeof clip.writeText === "function") {
+        var result = clip.writeText(text);
+        clipPromise = result && typeof result.then === "function" ? result : Promise.reject();
+      } else clipPromise = Promise.reject();
+    } catch (e) {
+      clipPromise = Promise.reject();
+    }
+    var timed = new Promise(function (_, reject) {
+      setTimeout(function () { reject(new Error("copy-timeout")); }, 400);
+    });
+    Promise.race([Promise.resolve(clipPromise), timed]).then(finish, function () {
+      fallbackCopy(text);
+      finish();
+    });
+  });
+
+  $("shareImgBtn").addEventListener("click", function () {
+    try { drawShare(); } catch (e) {}
+  });
+
+  if (lang === "en") applyLang("en");
+  else renderAll();
+})();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

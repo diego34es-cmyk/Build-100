@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-17",
+  "updated": "2026-10-18",
   "filters": [
     {
       "id": "all",
@@ -652,6 +652,19 @@
       ],
       "live": true,
       "url": "https://build-100.com/050/"
+    },
+    {
+      "id": "051",
+      "code": "CRASH",
+      "name": "CRASH-051",
+      "sub_zh": "危机前夜对照课——把 1987/2000/2008 三次危机前夜的关键信号摆在今天旁边，6 盏灯 + 5 题小测",
+      "sub_en": "Crash-eve lesson — warning signals from the eves of 1987, 2000 and 2008 beside today's readings: 6 lights and a 5-question quiz",
+      "cats": [
+        "learn",
+        "market"
+      ],
+      "live": true,
+      "url": "https://build-100.com/051/"
     }
   ]
 }
