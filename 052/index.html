@@ -1,0 +1,1114 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLOCK-052 · 冬令时错位周</title>
+<meta name="description" content="2026-10-25 欧洲拨回冬令时，美国要到 11-01 才调。错位周 10/26–10/30 美股开盘变成马德里时间 14:30。倒计时、对照表、调钟自查清单。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/052/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E052%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CLOCK-052 · 冬令时错位周">
+<meta property="og:description" content="2026-10-25 欧洲拨回冬令时，美国要到 11-01 才调。错位周 10/26–10/30 美股开盘变成马德里时间 14:30。倒计时、对照表、调钟自查清单。">
+<meta property="og:url" content="https://build-100.com/052/">
+<meta property="og:image" content="https://build-100.com/052/og-052.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="CLOCK-052 · 冬令时错位周">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CLOCK-052 · 冬令时错位周">
+<meta name="twitter:description" content="Europe falls back on 2026-10-25; the US waits until 11-01. During mismatch week (Oct 26–30) the NYSE open is 14:30 in Madrid. Countdown, comparison table, clock checklist.">
+<meta name="twitter:image" content="https://build-100.com/052/og-052.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #c084fc;
+    --accent-glow: rgba(192,132,252,0.35);
+    --warm: #fbbf24;
+    --hot: #f87171;
+    --cool: var(--accent);
+    --up: #f87171;
+    --down: #4ade80;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+    --you: var(--warm);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: "Noto Sans CJK SC", var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font-family: inherit; color: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible, label:focus-within {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  [hidden] { display: none !important; }
+  h2, h3, p, td, th, li, label, .lede, .field-title, .choice, .callout, .explain, .badge-note, .asof, .cd-status, .cd-target, .phase-k, .phase-v, .city-name, .check-text, .note-copy {
+    overflow-wrap: anywhere;
+  }
+  h1, .cd-num, .nyse-open { overflow-wrap: normal; }
+  img, canvas, svg, input, button { max-width: 100%; }
+  button { white-space: normal; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; min-width: 0; min-height: 44px; display: inline-flex; align-items: center; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; text-align: center; flex: none; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+    flex: none; min-height: 44px; min-width: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 48px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; letter-spacing: 0.04em; line-height: 1.45; text-wrap: balance; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; margin-bottom: 18px;
+  }
+  .hero p.lede { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); }
+  .hero p.lede strong { color: var(--ink); font-weight: 600; }
+
+  .cta {
+    display: inline-flex; align-items: center; justify-content: center; margin-top: 18px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--accent); border-radius: 4px;
+    background: var(--accent); color: var(--bg); cursor: pointer; transition: all .2s;
+    min-height: 44px; line-height: 1.4; text-align: center;
+  }
+  .cta:hover { box-shadow: 0 0 24px var(--accent-glow); }
+
+  .cd-block { margin-top: 22px; }
+  .cd-status {
+    font-weight: 700; font-size: clamp(1.05rem, 2vw, 1.25rem); line-height: 1.35; color: var(--ink);
+  }
+  .cd-grid {
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px; margin-top: 12px;
+  }
+  .cd-cell {
+    min-width: 0; text-align: center;
+    border: 1px solid var(--line); border-radius: 14px;
+    background: var(--bg-raise); padding: 12px 6px 10px;
+  }
+  .cd-num {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    font-size: clamp(1.7rem, 7vw, 3.1rem); letter-spacing: -0.04em; line-height: 1.1;
+  }
+  .cd-lab {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); margin-top: 4px;
+  }
+  .cd-sub { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .cd-sub .cd-status { font-size: 0.95rem; color: var(--muted); font-weight: 600; }
+  .cd-sub .cd-num { font-size: clamp(1.15rem, 4vw, 1.7rem); }
+  .cd-target {
+    font-family: var(--mono); color: var(--muted); font-size: 0.82rem;
+    letter-spacing: 0.04em; margin-top: 10px;
+  }
+  @keyframes cd-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+  .cd-num.pulse { animation: cd-pulse 1s ease-in-out infinite; }
+
+  .asof {
+    margin-top: 16px; padding: 12px 14px;
+    border: 1px solid var(--accent); border-radius: 12px;
+    background: rgba(192, 132, 252, 0.1);
+    color: var(--ink); font-size: 0.95rem; font-weight: 700; line-height: 1.5;
+  }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .phase-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 14px; }
+  .phase-card {
+    min-width: 0; position: relative;
+    border: 1px solid var(--line); border-radius: 14px;
+    background: var(--bg-raise); padding: 16px;
+  }
+  .phase-card.is-now {
+    border-color: var(--accent);
+    box-shadow: 0 0 28px var(--accent-glow);
+  }
+  .phase-you {
+    display: none; align-items: center; min-height: 28px;
+    margin-bottom: 8px; padding: 2px 10px; width: fit-content; max-width: 100%;
+    border-radius: 999px; border: 1px solid var(--accent);
+    color: var(--accent); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  }
+  .phase-card.is-now .phase-you { display: inline-flex; }
+  .phase-label { font-size: 1.12rem; font-weight: 700; line-height: 1.3; }
+  .phase-range { color: var(--muted); font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.04em; margin-top: 4px; }
+  .phase-dl { display: grid; gap: 8px; margin-top: 14px; }
+  .phase-row { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 8px; align-items: baseline; }
+  .phase-k { color: var(--faint); font-size: 0.82rem; }
+  .phase-v { font-weight: 700; font-family: var(--mono); letter-spacing: 0.02em; }
+  .nyse-open {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    font-size: clamp(1.35rem, 4vw, 1.8rem); letter-spacing: -0.03em; line-height: 1.1;
+  }
+  .phase-card[data-phase="gap"] .nyse-open {
+    color: var(--accent); font-size: clamp(1.8rem, 5vw, 2.6rem);
+    text-shadow: 0 0 22px var(--accent-glow);
+  }
+
+  .callout {
+    margin-top: 12px; border: 1px solid var(--line-strong); border-radius: 12px;
+    padding: 14px 16px; background: rgba(192, 132, 252, 0.07);
+  }
+  .callout p { color: var(--ink); font-size: 0.95rem; }
+  .callout + .callout { margin-top: 10px; }
+
+  .check-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 4px 0 12px; }
+  .progress {
+    height: 8px; border-radius: 999px; background: rgba(237,239,241,0.12); overflow: hidden; margin-top: 4px;
+  }
+  .progress > span {
+    display: block; height: 100%; width: 0; background: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow); transition: width .25s;
+  }
+  .progress-text { color: var(--muted); font-size: 0.86rem; margin: 8px 0 14px; }
+  .check-list { display: grid; gap: 8px; }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    min-height: 44px; padding: 12px 14px;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); cursor: pointer;
+  }
+  .check-item:has(input:checked) {
+    border-color: var(--accent); background: rgba(192, 132, 252, 0.08);
+  }
+  .check-item input {
+    width: 20px; height: 20px; margin-top: 2px; flex: none;
+    accent-color: var(--accent);
+  }
+  .check-text { min-width: 0; line-height: 1.4; }
+
+  .city-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .city-card {
+    min-width: 0; border: 1px solid var(--line); border-radius: 14px;
+    background: var(--bg-raise); padding: 14px;
+  }
+  .city-name { font-size: 1.05rem; font-weight: 700; }
+  .city-rows { display: grid; gap: 8px; margin-top: 10px; }
+  .city-row {
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    min-height: 36px; padding: 6px 8px; border-radius: 8px;
+  }
+  .city-row.is-now { background: rgba(192, 132, 252, 0.12); outline: 1px solid var(--accent); }
+  .city-band { color: var(--muted); font-size: 0.86rem; min-width: 0; }
+  .city-diff {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    font-size: 1.05rem; letter-spacing: 0.02em;
+  }
+
+  .quiz-list { display: grid; gap: 12px; }
+  .q-card {
+    min-width: 0; border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px; background: rgba(11,13,16,0.65);
+  }
+  .q-title { font-size: 1.02rem; line-height: 1.4; margin-bottom: 4px; }
+  .choice {
+    display: flex; align-items: center; width: 100%; min-height: 44px; margin-top: 8px;
+    text-align: left; padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--line-strong); background: var(--bg-raise); cursor: pointer; line-height: 1.4;
+  }
+  .choice:disabled { cursor: default; }
+  .choice.is-right { border-color: #4ade80; background: rgba(74,222,128,0.12); }
+  .choice.is-wrong { border-color: #f87171; background: rgba(248,113,113,0.12); }
+  .explain {
+    margin-top: 10px; padding-left: 10px; border-left: 3px solid var(--line-strong);
+    color: var(--muted); font-size: 0.92rem;
+  }
+  .explain.is-right { border-color: #4ade80; }
+  .explain.is-wrong { border-color: #f87171; }
+  .quiz-end { margin-top: 8px; font-weight: 700; }
+  .badge-inline {
+    margin-top: 12px; border: 1px solid var(--accent); border-radius: 12px;
+    padding: 14px 16px; background: rgba(192,132,252,0.1);
+    font-family: var(--mono); font-weight: 700; letter-spacing: 0.06em;
+    color: var(--accent); font-size: 1.05rem; overflow-wrap: anywhere;
+  }
+  .result-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .result-actions .share-btn, .result-actions .cta { margin-top: 0; }
+
+  .disclaimer {
+    margin-top: 14px; border: 1px solid rgba(251,191,36,0.45);
+    background: rgba(251,191,36,0.08); color: var(--ink);
+    border-radius: 12px; padding: 14px 16px; font-size: 0.95rem; font-weight: 700;
+  }
+  .hero .disclaimer { margin-top: 16px; }
+  .disclaimer.full { font-weight: 600; margin-top: 18px; }
+  .note-copy { color: var(--muted); margin-top: 10px; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s; min-height: 44px;
+    display: inline-flex; align-items: center; justify-content: center; text-align: center;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { margin-top: 14px; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; display: block; }
+  .share-hint { color: var(--faint); font-size: 0.82rem; margin-top: 8px; }
+
+  .badge-dialog {
+    width: min(440px, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+    background: #0b0d10;
+    color: var(--ink);
+    padding: 22px 18px 18px;
+    box-shadow: 0 0 40px var(--accent-glow);
+  }
+  .badge-dialog::backdrop { background: rgba(6, 7, 9, 0.72); }
+  .badge-kicker { font-family: var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); font-size: 12px; }
+  .badge-mark {
+    font-size: clamp(1.6rem, 6vw, 2.6rem); font-weight: 700; line-height: 1.15;
+    color: var(--accent); margin: 8px 0; overflow-wrap: anywhere;
+  }
+  .badge-score { font-family: var(--mono); font-size: 1.15rem; margin-bottom: 8px; }
+  .badge-note { color: var(--muted); font-size: 0.92rem; }
+  .badge-dialog .cta, .badge-dialog .share-btn { width: 100%; margin-top: 10px; }
+
+  footer {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding: 28px var(--pad) 40px; border-top: 1px solid var(--line);
+    max-width: 880px; margin: 0 auto;
+  }
+  footer > span {
+    display: inline-flex; align-items: center; min-height: 44px;
+    min-width: 0; max-width: 100%;
+  }
+  footer a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 0; }
+  footer a:hover { color: var(--ink); }
+  footer .mono { color: var(--faint); }
+
+  @media (min-width: 720px) {
+    .phase-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .city-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 0 14px; gap: 8px; }
+    .nav-back { font-size: 11px; letter-spacing: 0; }
+    .nav-brand { font-size: 13px; }
+    .nav-lang { padding: 6px 10px; letter-spacing: 0.12em; }
+    .share-btn { padding: 12px 12px; flex: 1 1 100%; }
+    .result-actions .share-btn { flex: 1 1 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* 禁用所有动画 */
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+    .cd-num.pulse { animation: none; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">CLOCK<span>·052</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="Everyday Fixes · CLOCK-052">Everyday Fixes · CLOCK-052</p>
+    <h1 data-en="Clock-mismatch week: US stocks open an hour early">冬令时错位周：美股提前一小时开盘</h1>
+    <p class="lede" data-en="This Sunday at 03:00 the clocks go back to 02:00 — you get an extra hour of sleep. The US waits until Nov 1, so from Oct 26–30 the NYSE open is <strong>14:30</strong> in Madrid.">这周日凌晨 3 点变成 2 点，多睡 1 小时。美国要到 11-01 才调，所以 10/26–10/30 美股开盘变成马德里时间 <strong>14:30</strong>。</p>
+
+    <div class="cd-block" id="cdMain">
+      <p class="cd-status" id="cdStatus"></p>
+      <div class="cd-grid" id="cdGrid">
+        <div class="cd-cell"><div class="cd-num" data-unit="days">00</div><div class="cd-lab" data-en="Days">天</div></div>
+        <div class="cd-cell"><div class="cd-num" data-unit="hours">00</div><div class="cd-lab" data-en="Hours">时</div></div>
+        <div class="cd-cell"><div class="cd-num" data-unit="minutes">00</div><div class="cd-lab" data-en="Min">分</div></div>
+        <div class="cd-cell"><div class="cd-num pulse" data-unit="seconds">00</div><div class="cd-lab" data-en="Sec">秒</div></div>
+      </div>
+      <p class="cd-target" data-en="2026-10-25 03:00 CEST → 02:00 CET">2026-10-25 03:00 CEST → 02:00 CET</p>
+    </div>
+    <div class="cd-block cd-sub" id="cdSub">
+      <p class="cd-status" id="cdSubStatus"></p>
+      <div class="cd-grid" id="cdSubGrid">
+        <div class="cd-cell"><div class="cd-num" data-unit="days">00</div><div class="cd-lab" data-en="Days">天</div></div>
+        <div class="cd-cell"><div class="cd-num" data-unit="hours">00</div><div class="cd-lab" data-en="Hours">时</div></div>
+        <div class="cd-cell"><div class="cd-num" data-unit="minutes">00</div><div class="cd-lab" data-en="Min">分</div></div>
+        <div class="cd-cell"><div class="cd-num" data-unit="seconds">00</div><div class="cd-lab" data-en="Sec">秒</div></div>
+      </div>
+      <p class="cd-target" data-en="2026-11-01 02:00 EDT → 01:00 EST">2026-11-01 02:00 EDT → 01:00 EST</p>
+    </div>
+
+    <p class="asof" data-en="Data as of 2026-10-19. Times are written in Madrid local time.">数据日期 2026-10-19。时间按马德里本地时间写。</p>
+    <a class="cta" href="#phases" data-en="See the mismatch-week table">看错位周对照</a>
+  </header>
+
+  <section class="field" id="phases">
+    <div class="field-head">
+      <span class="field-no" data-en="01">01</span>
+      <h2 class="field-title" data-en="Mismatch-week table">错位周对照表</h2>
+      <p class="field-hint" data-en="Three bands. During mismatch week the NYSE open is 14:30 in Madrid — not 15:30. Last Sunday of October, EU Directive 2000/84/EC.">三档并排。错位周美股开盘是马德里时间 14:30，不是 15:30。每年 10 月最后一个周日，依据欧盟指令 2000/84/EC。</p>
+    </div>
+    <p class="asof" data-en="Data as of 2026-10-19. US hours are the regular session only, no pre-market or after-hours.">数据日期 2026-10-19。美股只算常规交易时段，不含盘前盘后。</p>
+    <div class="phase-grid" id="phaseGrid"></div>
+    <div class="callout">
+      <p data-en="Crypto trades 24/7, so the open bell does not apply — but a reminder alarm set to local time will still shift.">加密货币 24/7 交易，不受开盘时间影响；但按本地时间设的提醒闹钟仍会偏移。</p>
+    </div>
+    <div class="callout">
+      <p data-en="Earnings nights in mismatch week (US after the close): Oct 28 (Wed) Microsoft, Alphabet; Oct 29 (Thu) Amazon.">错位周内的财报夜（美东盘后）：10-28（周三）微软 Microsoft、谷歌 Alphabet；10-29（周四）亚马逊 Amazon。</p>
+    </div>
+    <div class="callout">
+      <p data-en="On Oct 25 in Madrid the local hour 02:00–03:00 happens twice. Overnight flights and shift rosters go wrong if they only read local time — use UTC or the origin time.">10-25 凌晨马德里本地 02:00–03:00 这一小时会出现两次。红眼航班、值班表若只看本地时间会乱；看 UTC 或起飞地时间。</p>
+    </div>
+  </section>
+
+  <section class="field" id="checklist">
+    <div class="field-head">
+      <span class="field-no" data-en="02">02</span>
+      <h2 class="field-title" data-en="Clock checklist">调钟自查清单</h2>
+      <p class="field-hint" data-en="Ticks stay on this device. Clear all if you want a fresh list.">勾选会记在这台设备上。要重来就全部清空。</p>
+    </div>
+    <div class="progress" aria-hidden="true"><span id="checkBar"></span></div>
+    <div class="check-toolbar">
+      <p class="progress-text" id="checkProgress" aria-live="polite"></p>
+      <button class="share-btn" id="clearChecks" type="button" data-en="Clear all">全部清空</button>
+    </div>
+    <div class="check-list" id="checkList"></div>
+  </section>
+
+  <section class="field" id="cities">
+    <div class="field-head">
+      <span class="field-no" data-en="03">03</span>
+      <h2 class="field-title" data-en="City offsets vs Madrid">城市时差速查</h2>
+      <p class="field-hint" data-en="Offset from Madrid. The UK falls back the same day, Oct 25, BST to GMT. China and Japan do not use daylight saving time.">相对马德里。英国同一天 10-25 从 BST 拨回 GMT。中国、日本不实行夏令时。</p>
+    </div>
+    <div class="city-grid" id="cityGrid"></div>
+  </section>
+
+  <section class="field" id="quiz">
+    <div class="field-head">
+      <span class="field-no" data-en="04">04</span>
+      <h2 class="field-title" data-en="Three-question check">三题小测</h2>
+      <p class="field-hint" data-en="Single choice. The note shows as soon as you tap. The score and the badge appear when you finish.">单选。点下去立刻看到对错和解释。做完显示得分和徽章。</p>
+    </div>
+    <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+    <p class="progress-text" id="progressText" aria-live="polite"></p>
+    <div class="quiz-list" id="quizList"></div>
+    <div id="quizResult" hidden>
+      <p class="badge-inline" id="badgeInline"></p>
+      <p class="quiz-end" id="quizEnd" aria-live="polite"></p>
+      <div class="result-actions">
+        <button class="share-btn" id="retryBtn" type="button" data-en="Try again">重做</button>
+        <a class="share-btn" id="reviewLink" href="#phases" data-en="Check the table again" hidden>去看对照表</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="field" id="share">
+    <div class="field-head">
+      <span class="field-no" data-en="05">05</span>
+      <h2 class="field-title" data-en="Share">分享</h2>
+      <p class="field-hint" data-en="The summary includes mismatch-week 14:30, your score, and the badge.">文案里有错位周 14:30、你的成绩和徽章。</p>
+    </div>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap" hidden>
+      <canvas id="shareCanvas" width="1200" height="630"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+
+  <section class="field" id="notes">
+    <div class="field-head">
+      <span class="field-no" data-en="06">06</span>
+      <h2 class="field-title" data-en="Notes">注记</h2>
+    </div>
+    <p class="note-copy" data-en="In 2018 the European Commission proposed ending seasonal clock changes. It is still not law — member states have not agreed on permanent winter time or summer time — so 2026 still switches.">2018 年欧盟委员会提出取消季节性调钟的提案，至今未成为法律（成员国没谈拢永久留冬令时还是夏令时），所以 2026 年照常调。</p>
+    <p class="asof" data-en="Data as of 2026-10-19. Times are written in Madrid local time. US stocks use the regular session only, not pre-market or after-hours. Holidays are out of scope on this page.">数据日期 2026-10-19。时间按马德里本地时间写；美股只算常规交易时段，不含盘前盘后；节假日不在本页范围。</p>
+    <p class="disclaimer full" data-en="For reference only; check official exchange and airline notices.">时间信息仅供参考，以交易所和航空公司官方公告为准</p>
+  </section>
+</main>
+
+<footer>
+  <span class="mono" data-en='<a href="https://build-100.com/">build-100.com</a>'><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono" data-en='<a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a>'><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="CLOCK-052 · Clock-mismatch week">CLOCK-052 · 冬令时错位周</span>
+</footer>
+
+<dialog class="badge-dialog" id="badgeDialog" aria-labelledby="badgeTitle">
+  <p class="badge-kicker" data-en="Lesson badge">学习徽章</p>
+  <p class="badge-mark" id="badgeTitle"></p>
+  <p class="badge-score" id="badgeScore"></p>
+  <p class="badge-note" id="badgeNote"></p>
+  <button class="share-btn" id="badgeReview" type="button" data-en="Check the table again" hidden>去看对照表</button>
+  <button class="share-btn" id="badgeRetry" type="button" data-en="Try again" hidden>重做</button>
+  <button class="cta" id="badgeClose" type="button" data-en="Close">收下</button>
+</dialog>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  "use strict";
+  var E = window.ClockEngine;
+  if (!E) return;
+
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+
+  var picks = {};
+  var checked = loadChecks();
+  var badgeShown = false;
+  var shareOpen = false;
+  var copyTimer = null;
+  var lastPhase = "";
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+  function $(id) { return document.getElementById(id); }
+  function pair(obj) { return obj ? t(obj.zh, obj.en) : ""; }
+
+  function stampZh() {
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    });
+  }
+
+  function pad2(n) {
+    n = Math.max(0, Math.floor(Number(n) || 0));
+    return (n < 10 ? "0" : "") + n;
+  }
+
+  function loadChecks() {
+    try {
+      var raw = localStorage.getItem("clock052-checks");
+      var arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveChecks() {
+    try { localStorage.setItem("clock052-checks", JSON.stringify(checked)); } catch (e) {}
+  }
+
+  function writeCd(root, cd) {
+    if (!root) return;
+    var map = {
+      days: pad2(cd.days),
+      hours: pad2(cd.hours),
+      minutes: pad2(cd.minutes),
+      seconds: pad2(cd.seconds)
+    };
+    var nodes = root.querySelectorAll(".cd-num");
+    var i;
+    for (i = 0; i < nodes.length; i++) {
+      var u = nodes[i].getAttribute("data-unit");
+      if (u && map[u] != null) nodes[i].textContent = map[u];
+    }
+  }
+
+  function renderCountdown() {
+    var now = Date.now();
+    var phase = E.phaseAt(now);
+    var eu = E.countdown(E.EU_SWITCH, now);
+    var us = E.countdown(E.US_SWITCH, now);
+    var status = $("cdStatus");
+    var grid = $("cdGrid");
+    var sub = $("cdSub");
+    var subStatus = $("cdSubStatus");
+    var subGrid = $("cdSubGrid");
+
+    if (phase === "after") {
+      if (status) status.textContent = t("两边都已切换，时差恢复 6 小时", "Both sides have switched. The offset is 6 hours again.");
+      if (grid) grid.hidden = true;
+      if (sub) sub.hidden = true;
+    } else if (phase === "gap") {
+      if (status) status.textContent = t("已切换 · 欧洲已是冬令时", "Switched · Europe is on winter time");
+      if (grid) {
+        grid.hidden = false;
+        writeCd(grid, us);
+      }
+      if (sub) sub.hidden = false;
+      if (subStatus) subStatus.textContent = t("美国还没调", "The US has not switched yet");
+      if (subGrid) subGrid.hidden = true;
+    } else {
+      if (status) status.textContent = t("距离欧洲拨钟", "Until Europe falls back");
+      if (grid) {
+        grid.hidden = false;
+        writeCd(grid, eu);
+      }
+      if (sub) sub.hidden = false;
+      if (subStatus) subStatus.textContent = t("美国还没调", "The US has not switched yet");
+      if (subGrid) {
+        subGrid.hidden = false;
+        writeCd(subGrid, us);
+      }
+    }
+
+    if (phase !== lastPhase) {
+      lastPhase = phase;
+      markCurrentPhase(phase);
+    }
+  }
+
+  function markCurrentPhase(phase) {
+    document.querySelectorAll(".phase-card").forEach(function (card) {
+      card.classList.toggle("is-now", card.getAttribute("data-phase") === phase);
+    });
+    document.querySelectorAll(".city-row").forEach(function (row) {
+      row.classList.toggle("is-now", row.getAttribute("data-phase") === phase);
+    });
+  }
+
+  function renderPhases() {
+    var host = $("phaseGrid");
+    if (!host) return;
+    host.textContent = "";
+    var nowPhase = E.phaseAt(Date.now());
+    E.PHASES.forEach(function (p) {
+      var card = document.createElement("article");
+      card.className = "phase-card" + (p.id === nowPhase ? " is-now" : "");
+      card.setAttribute("data-phase", p.id);
+
+      var you = document.createElement("p");
+      you.className = "phase-you";
+      you.textContent = t("你现在在这档", "You are in this band");
+
+      var label = document.createElement("h3");
+      label.className = "phase-label";
+      label.textContent = pair(p.label);
+
+      var range = document.createElement("p");
+      range.className = "phase-range";
+      range.textContent = pair(p.range);
+
+      var dl = document.createElement("div");
+      dl.className = "phase-dl";
+      var rows = [
+        [t("马德里", "Madrid"), p.madrid],
+        [t("美东", "US East"), p.ny],
+        [t("两地时差", "Offset"), t(p.gapHours + " 小时", p.gapHours + " hours")],
+        [t("NYSE 开盘（马德里）", "NYSE open (Madrid)"), p.nyseOpen, "nyse-open"],
+        [t("NYSE 收盘（马德里）", "NYSE close (Madrid)"), p.nyseClose]
+      ];
+      rows.forEach(function (row) {
+        var line = document.createElement("div");
+        line.className = "phase-row";
+        var k = document.createElement("span");
+        k.className = "phase-k";
+        k.textContent = row[0];
+        var v = document.createElement("span");
+        v.className = "phase-v" + (row[2] ? " " + row[2] : "");
+        v.textContent = row[1];
+        line.appendChild(k);
+        line.appendChild(v);
+        dl.appendChild(line);
+      });
+
+      card.appendChild(you);
+      card.appendChild(label);
+      card.appendChild(range);
+      card.appendChild(dl);
+      host.appendChild(card);
+    });
+  }
+
+  function fmtDiff(n) {
+    var sign = n > 0 ? "+" : "";
+    return sign + n + t(" 小时", "h");
+  }
+
+  function renderCities() {
+    var host = $("cityGrid");
+    if (!host) return;
+    host.textContent = "";
+    var nowPhase = E.phaseAt(Date.now());
+    var bands = [
+      { id: "before", zh: "切换前", en: "Before" },
+      { id: "gap", zh: "错位周", en: "Mismatch week" },
+      { id: "after", zh: "美国切换后", en: "After the US switch" }
+    ];
+    E.CITIES.forEach(function (city) {
+      var card = document.createElement("article");
+      card.className = "city-card";
+      var name = document.createElement("h3");
+      name.className = "city-name";
+      name.textContent = pair(city.name);
+      var rows = document.createElement("div");
+      rows.className = "city-rows";
+      bands.forEach(function (band) {
+        var row = document.createElement("div");
+        row.className = "city-row" + (band.id === nowPhase ? " is-now" : "");
+        row.setAttribute("data-phase", band.id);
+        var k = document.createElement("span");
+        k.className = "city-band";
+        k.textContent = t(band.zh, band.en);
+        var v = document.createElement("span");
+        v.className = "city-diff";
+        v.textContent = fmtDiff(city.diffs[band.id]);
+        row.appendChild(k);
+        row.appendChild(v);
+        rows.appendChild(row);
+      });
+      card.appendChild(name);
+      card.appendChild(rows);
+      host.appendChild(card);
+    });
+  }
+
+  function isChecked(id) {
+    return checked.indexOf(id) !== -1;
+  }
+
+  function setChecked(id, on) {
+    var i = checked.indexOf(id);
+    if (on && i === -1) checked.push(id);
+    if (!on && i !== -1) checked.splice(i, 1);
+    saveChecks();
+  }
+
+  function renderChecklist() {
+    var host = $("checkList");
+    if (!host) return;
+    host.textContent = "";
+    E.CHECKLIST.forEach(function (item) {
+      var lab = document.createElement("label");
+      lab.className = "check-item";
+      var input = document.createElement("input");
+      input.type = "checkbox";
+      input.setAttribute("data-id", item.id);
+      input.checked = isChecked(item.id);
+      var text = document.createElement("span");
+      text.className = "check-text";
+      text.textContent = pair(item.text);
+      lab.appendChild(input);
+      lab.appendChild(text);
+      host.appendChild(lab);
+    });
+    renderCheckProgress();
+  }
+
+  function renderCheckProgress() {
+    var prog = E.checklistProgress(checked);
+    var bar = $("checkBar");
+    if (bar) bar.style.width = (prog.total ? (prog.done / prog.total * 100) : 0) + "%";
+    var el = $("checkProgress");
+    if (el) {
+      el.textContent = t(
+        "已完成 " + prog.done + " / " + prog.total,
+        "Done " + prog.done + " / " + prog.total
+      );
+    }
+  }
+
+  function answerList() {
+    var arr = [];
+    var i;
+    for (i = 0; i < E.QUESTIONS.length; i++) {
+      var id = E.QUESTIONS[i].id;
+      arr.push(Object.prototype.hasOwnProperty.call(picks, id) ? picks[id] : null);
+    }
+    return arr;
+  }
+
+  function answeredCount() {
+    var n = 0;
+    var i;
+    for (i = 0; i < E.QUESTIONS.length; i++) {
+      if (Object.prototype.hasOwnProperty.call(picks, E.QUESTIONS[i].id)) n += 1;
+    }
+    return n;
+  }
+
+  function syncBadge(result, done) {
+    var badge = E.badgeFor(done ? result.correct : 0);
+    var title = $("badgeTitle");
+    var score = $("badgeScore");
+    var note = $("badgeNote");
+    if (title) title.textContent = pair(badge.name);
+    if (score) score.textContent = t("得分 ", "Score ") + result.correct + "/" + result.total;
+    if (note) {
+      if (result.correct >= 3) note.textContent = t("三题全对。错位周开盘是 14:30。", "Three out of three. The mismatch-week open is 14:30.");
+      else if (result.correct >= 2) note.textContent = t("还差一点。再对一次 14:30 和那一小时重复。", "Almost. Check 14:30 and the hour that repeats.");
+      else note.textContent = t("回到对照表，看清错位周那一档。", "Go back to the table and look at the mismatch-week band.");
+    }
+    var inline = $("badgeInline");
+    if (inline) inline.textContent = pair(badge.name) + " · " + result.correct + "/3";
+    var end = $("quizEnd");
+    if (end) {
+      end.textContent = t(
+        "本轮 " + result.correct + "/3 · " + pair(badge.name),
+        "This round " + result.correct + "/3 · " + pair(badge.name)
+      );
+    }
+    var low = result.correct <= 1;
+    var review = $("reviewLink");
+    var badgeReview = $("badgeReview");
+    var badgeRetry = $("badgeRetry");
+    if (review) review.hidden = !low;
+    if (badgeReview) badgeReview.hidden = !low;
+    if (badgeRetry) badgeRetry.hidden = !low;
+  }
+
+  function openBadge(result) {
+    syncBadge(result, true);
+    var dlg = $("badgeDialog");
+    if (dlg && typeof dlg.showModal === "function" && !dlg.open) dlg.showModal();
+  }
+
+  function renderQuiz() {
+    var host = $("quizList");
+    if (!host) return;
+    var result = E.scoreQuiz(answerList());
+    var answered = answeredCount();
+    var done = answered === E.QUESTIONS.length;
+    var bar = $("progressBar");
+    if (bar) bar.style.width = (answered / E.QUESTIONS.length * 100) + "%";
+    var progress = $("progressText");
+    if (progress) {
+      progress.textContent = t(
+        "已答 " + answered + "/3 · 答对 " + result.correct,
+        "Answered " + answered + "/3 · " + result.correct + " correct"
+      );
+    }
+    host.textContent = "";
+    E.QUESTIONS.forEach(function (q, qi) {
+      var card = document.createElement("article");
+      card.className = "q-card";
+      card.setAttribute("data-qid", q.id);
+      var title = document.createElement("h3");
+      title.className = "q-title";
+      title.textContent = (qi + 1) + ". " + pair(q.q);
+      card.appendChild(title);
+      var picked = Object.prototype.hasOwnProperty.call(picks, q.id) ? picks[q.id] : null;
+      q.options.forEach(function (opt, oi) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "choice";
+        btn.setAttribute("data-i", String(oi));
+        btn.textContent = pair(opt);
+        if (picked !== null && picked !== undefined) {
+          btn.disabled = true;
+          if (oi === q.answer) btn.classList.add("is-right");
+          if (oi === picked && picked !== q.answer) btn.classList.add("is-wrong");
+        }
+        btn.addEventListener("click", function () {
+          if (Object.prototype.hasOwnProperty.call(picks, q.id)) return;
+          picks[q.id] = oi;
+          renderQuiz();
+          var now = E.scoreQuiz(answerList());
+          var nowDone = answeredCount() === E.QUESTIONS.length;
+          if (nowDone && !badgeShown) {
+            badgeShown = true;
+            openBadge(now);
+          } else {
+            var again = document.querySelector('.q-card[data-qid="' + q.id + '"] button[data-i="' + oi + '"]');
+            if (again && again.focus) again.focus();
+          }
+          if (shareOpen) drawShare();
+        });
+        card.appendChild(btn);
+      });
+      if (picked !== null && picked !== undefined) {
+        var note = document.createElement("p");
+        var right = picked === q.answer;
+        note.className = "explain " + (right ? "is-right" : "is-wrong");
+        note.textContent = (right ? t("答对。", "Correct. ") : t("不是这句。", "Not this one. ")) + pair(q.explain);
+        card.appendChild(note);
+      }
+      host.appendChild(card);
+    });
+    var box = $("quizResult");
+    if (box) box.hidden = !done;
+    if (done) syncBadge(result, true);
+  }
+
+  function renderAll() {
+    renderCountdown();
+    renderPhases();
+    renderChecklist();
+    renderCities();
+    renderQuiz();
+    if (shareOpen) drawShare();
+  }
+
+  function applyLang(l) {
+    lang = l;
+    if (copyTimer) { clearTimeout(copyTimer); copyTimer = null; }
+    var copyBtn = $("copyBtn");
+    if (copyBtn) copyBtn.classList.remove("copied");
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    var langBtn = $("langBtn");
+    langBtn.textContent = l === "en" ? "中文" : "EN";
+    langBtn.setAttribute("aria-label", l === "en" ? "切换到中文" : "Switch language");
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    lastPhase = "";
+    renderAll();
+  }
+
+  function fontStack() {
+    return '"Noto Sans CJK SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+  }
+  function setFont(ctx, weight, px) {
+    ctx.font = weight + " " + px + "px " + fontStack();
+  }
+  function fitText(ctx, text, maxW, weight, px, minPx) {
+    var size = px;
+    setFont(ctx, weight, size);
+    while (size > minPx && ctx.measureText(text).width > maxW) {
+      size -= 1;
+      setFont(ctx, weight, size);
+    }
+    return size;
+  }
+  function roundRect(ctx, x, y, w, h, r) {
+    var rr = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + rr, y);
+    ctx.arcTo(x + w, y, x + w, y + h, rr);
+    ctx.arcTo(x + w, y + h, x, y + h, rr);
+    ctx.arcTo(x, y + h, x, y, rr);
+    ctx.arcTo(x, y, x + w, y, rr);
+    ctx.closePath();
+  }
+
+  function drawShare() {
+    var canvas = $("shareCanvas");
+    if (!canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    var W = 1200;
+    var H = 630;
+    var pad = 56;
+    var maxW = W - pad * 2;
+    canvas.width = W;
+    canvas.height = H;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.045)";
+    var gx;
+    var gy;
+    for (gx = 18; gx < W; gx += 36) {
+      for (gy = 18; gy < H; gy += 36) ctx.fillRect(gx, gy, 1.4, 1.4);
+    }
+    ctx.fillStyle = "#c084fc";
+    ctx.fillRect(0, 0, 10, H);
+    ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#c084fc";
+    setFont(ctx, "700", 22);
+    ctx.fillText("CLOCK-052", pad, 64);
+    ctx.fillStyle = "#edeff1";
+    var title = t("冬令时错位周：美股提前一小时开盘", "Clock-mismatch week: US stocks open an hour early");
+    fitText(ctx, title, maxW, "700", 36, 20);
+    ctx.fillText(title, pad, 118);
+
+    var hook = t("错位周美股 14:30 开盘（马德里）", "Mismatch week: US stocks open 14:30 in Madrid");
+    ctx.fillStyle = "#c084fc";
+    fitText(ctx, hook, maxW, "700", 32, 18);
+    ctx.fillText(hook, pad, 176);
+
+    ctx.fillStyle = "rgba(237,239,241,0.04)";
+    roundRect(ctx, pad, 210, maxW, 210, 16);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(237,239,241,0.14)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    var result = E.scoreQuiz(answerList());
+    var answered = answeredCount();
+    var badge = E.badgeFor(answered === E.QUESTIONS.length ? result.correct : 0);
+    var scoreLine = (answered === E.QUESTIONS.length ? result.correct : "–") + "/3";
+    ctx.fillStyle = "#edeff1";
+    fitText(ctx, scoreLine, maxW - 40, "700", 92, 48);
+    ctx.fillText(scoreLine, pad + 28, 320);
+    ctx.fillStyle = "#c084fc";
+    var badgeLine = pair(badge.name);
+    fitText(ctx, badgeLine, maxW - 40, "700", 32, 18);
+    ctx.fillText(badgeLine, pad + 28, 372);
+
+    ctx.strokeStyle = "rgba(237,239,241,0.14)";
+    ctx.beginPath();
+    ctx.moveTo(pad, 500);
+    ctx.lineTo(W - pad, 500);
+    ctx.stroke();
+    var asof = t("数据日期 " + E.META.asOf, "Data as of " + E.META.asOf);
+    ctx.fillStyle = "#9aa1a8";
+    fitText(ctx, asof, maxW, "400", 18, 12);
+    ctx.fillText(asof, pad, 548);
+    ctx.fillStyle = "#edeff1";
+    setFont(ctx, "600", 22);
+    ctx.fillText("build-100.com/052", pad, 598);
+
+    canvas.setAttribute("aria-label", t("错位周分享卡", "Mismatch-week share card"));
+    $("shareWrap").hidden = false;
+    shareOpen = true;
+  }
+
+  function markCopied() {
+    var btn = $("copyBtn");
+    if (!btn) return;
+    btn.classList.add("copied");
+    btn.textContent = t("已复制", "Copied");
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () {
+      btn.classList.remove("copied");
+      if (btn.dataset.zh === undefined) return;
+      btn.innerHTML = lang === "en" ? btn.dataset.en : btn.dataset.zh;
+    }, 1600);
+  }
+
+  function fallbackCopy(text) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch (err) {}
+      document.body.removeChild(ta);
+    } catch (err) {}
+  }
+
+  function resetQuiz() {
+    picks = {};
+    badgeShown = false;
+    var dlg = $("badgeDialog");
+    if (dlg && dlg.open && dlg.close) dlg.close();
+    renderQuiz();
+    if (shareOpen) drawShare();
+    var quiz = $("quiz");
+    if (quiz && quiz.scrollIntoView) {
+      try { quiz.scrollIntoView({ block: "start" }); } catch (e) {}
+    }
+  }
+
+  function goTable() {
+    var dlg = $("badgeDialog");
+    if (dlg && dlg.open && dlg.close) dlg.close();
+    var el = $("phases");
+    if (el && el.scrollIntoView) {
+      try { el.scrollIntoView({ block: "start" }); } catch (e) {}
+    }
+  }
+
+  stampZh();
+
+  $("langBtn").addEventListener("click", function () {
+    applyLang(lang === "en" ? "zh" : "en");
+  });
+
+  $("checkList").addEventListener("change", function (ev) {
+    var input = ev.target;
+    if (!input || input.type !== "checkbox") return;
+    var id = input.getAttribute("data-id");
+    if (!id) return;
+    setChecked(id, input.checked);
+    renderCheckProgress();
+  });
+
+  $("clearChecks").addEventListener("click", function () {
+    checked = [];
+    saveChecks();
+    renderChecklist();
+  });
+
+  $("retryBtn").addEventListener("click", resetQuiz);
+  $("badgeRetry").addEventListener("click", resetQuiz);
+  $("badgeReview").addEventListener("click", goTable);
+  $("badgeClose").addEventListener("click", function () {
+    var dlg = $("badgeDialog");
+    if (dlg && dlg.close) dlg.close();
+  });
+
+  $("copyBtn").addEventListener("click", function () {
+    var text;
+    try { text = E.shareText(lang, E.scoreQuiz(answerList()).correct); }
+    catch (e) { return; }
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      markCopied();
+    }
+    var clipPromise;
+    try {
+      var clip = navigator.clipboard;
+      if (clip && typeof clip.writeText === "function") {
+        var result = clip.writeText(text);
+        clipPromise = result && typeof result.then === "function" ? result : Promise.reject();
+      } else clipPromise = Promise.reject();
+    } catch (e) {
+      clipPromise = Promise.reject();
+    }
+    var timed = new Promise(function (_, reject) {
+      setTimeout(function () { reject(new Error("copy-timeout")); }, 400);
+    });
+    Promise.race([Promise.resolve(clipPromise), timed]).then(finish, function () {
+      fallbackCopy(text);
+      finish();
+    });
+  });
+
+  $("shareImgBtn").addEventListener("click", function () {
+    try { drawShare(); } catch (e) {}
+  });
+
+  if (lang === "en") applyLang("en");
+  else renderAll();
+
+  setInterval(renderCountdown, 1000);
+})();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

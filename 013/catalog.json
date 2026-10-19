@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-18",
+  "updated": "2026-10-19",
   "filters": [
     {
       "id": "all",
@@ -665,6 +665,19 @@
       ],
       "live": true,
       "url": "https://build-100.com/051/"
+    },
+    {
+      "id": "052",
+      "code": "CLOCK",
+      "name": "CLOCK-052",
+      "sub_zh": "冬令时错位周——10-25 欧洲拨回 1 小时、美国 11-01 才调：倒计时 + 错位周美股 14:30 开盘对照 + 调钟自查清单",
+      "sub_en": "Clock-mismatch week — Europe falls back Oct 25, the US not until Nov 1: countdown, the 14:30 Madrid NYSE open, and a clock-fix checklist",
+      "cats": [
+        "life",
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/052/"
     }
   ]
 }
