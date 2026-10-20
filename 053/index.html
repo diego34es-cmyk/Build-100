@@ -1,0 +1,1298 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GRADE-053 · 财报成绩单</title>
+<meta name="description" content="今晚（2026-10-20）美股盘后 SPCX 发 Q3 财报、Netflix 也发。输入实际 EPS 和营收，30 秒打出 S/A/B/C/D 成绩单，并给出盘后解读清单。仅供学习参考，不构成投资建议。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/053/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E053%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="GRADE-053 · 财报成绩单">
+<meta property="og:description" content="今晚（2026-10-20）美股盘后 SPCX 发 Q3 财报、Netflix 也发。输入实际 EPS 和营收，30 秒打出 S/A/B/C/D 成绩单，并给出盘后解读清单。仅供学习参考，不构成投资建议。">
+<meta property="og:url" content="https://build-100.com/053/">
+<meta property="og:image" content="https://build-100.com/053/og-053.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="GRADE-053 · 财报成绩单">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GRADE-053 · 财报成绩单">
+<meta name="twitter:description" content="Tonight (2026-10-20) after the US close, SPCX reports Q3 and Netflix reports too. Enter actual EPS and revenue, grade it S/A/B/C/D in 30 seconds, plus an after-hours checklist. For education only, not investment advice.">
+<meta name="twitter:image" content="https://build-100.com/053/og-053.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #34d399;
+    --accent-glow: rgba(52,211,153,0.35);
+    --warm: #fbbf24;
+    --hot: #f87171;
+    --cool: var(--accent);
+    --up: #f87171;
+    --down: #4ade80;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+    --you: var(--warm);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: "Noto Sans CJK SC", var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font-family: inherit; color: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible, label:focus-within {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  [hidden] { display: none !important; }
+  h2, h3, p, td, th, li, label, dt, dd, .lede, .field-title, .choice, .callout, .explain, .asof, .cd-status, .cd-target, .check-text, .note-copy, .in-lab, .verdict, .reaction, .empty-state, .metric-name, .metric-note, .warn-banner, .overall-sub, .exp-k {
+    overflow-wrap: anywhere;
+  }
+  h1, .cd-num, .grade-mark, .metric-letter { overflow-wrap: normal; }
+  img, canvas, svg, input, button { max-width: 100%; }
+  button { white-space: normal; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; min-width: 0; min-height: 44px; display: inline-flex; align-items: center; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; text-align: center; flex: none; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+    flex: none; min-height: 44px; min-width: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 48px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; letter-spacing: 0.04em; line-height: 1.45; text-wrap: balance; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; margin-bottom: 18px;
+  }
+  .hero p.lede { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); }
+  .hero p.lede strong { color: var(--ink); font-weight: 600; }
+
+  .cta {
+    display: inline-flex; align-items: center; justify-content: center; margin-top: 18px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--accent); border-radius: 4px;
+    background: var(--accent); color: var(--bg); cursor: pointer; transition: all .2s;
+    min-height: 44px; line-height: 1.4; text-align: center;
+  }
+  .cta:hover { box-shadow: 0 0 24px var(--accent-glow); }
+
+  .cd-block { margin-top: 22px; }
+  .cd-status {
+    font-weight: 700; font-size: clamp(1.05rem, 2vw, 1.25rem); line-height: 1.35; color: var(--ink);
+  }
+  .cd-grid {
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px; margin-top: 12px;
+  }
+  .cd-cell {
+    min-width: 0; text-align: center;
+    border: 1px solid var(--line); border-radius: 14px;
+    background: var(--bg-raise); padding: 12px 6px 10px;
+  }
+  .cd-num {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    font-size: clamp(1.7rem, 7vw, 3.1rem); letter-spacing: -0.04em; line-height: 1.1;
+  }
+  .cd-lab {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); margin-top: 4px;
+  }
+  .cd-target {
+    font-family: var(--mono); color: var(--muted); font-size: 0.82rem;
+    letter-spacing: 0.04em; margin-top: 10px;
+  }
+  @keyframes cd-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+  .cd-num.pulse { animation: cd-pulse 1s ease-in-out infinite; }
+
+  .asof {
+    margin-top: 16px; padding: 12px 14px;
+    border: 1px solid var(--accent); border-radius: 12px;
+    background: rgba(52, 211, 153, 0.1);
+    color: var(--ink); font-size: 0.95rem; font-weight: 700; line-height: 1.5;
+  }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .tabs {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px; margin: 4px 0 12px;
+  }
+  .tab {
+    min-width: 0; min-height: 44px; padding: 10px 8px;
+    border-radius: 999px; border: 1px solid var(--line-strong); background: transparent;
+    cursor: pointer; font-family: var(--mono); letter-spacing: 0.04em; font-size: 13px;
+    display: inline-flex; align-items: center; justify-content: center; text-align: center;
+  }
+  .tab[aria-selected="true"] {
+    background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 700;
+  }
+
+  .exp-card {
+    margin-top: 4px; min-width: 0;
+    border: 1px solid var(--line); border-radius: 14px;
+    background: var(--bg-raise); padding: 16px;
+  }
+  .exp-dl { display: grid; gap: 10px; }
+  .exp-row {
+    display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    gap: 8px; align-items: baseline;
+  }
+  .exp-row dt, .exp-k { color: var(--muted); font-size: 0.86rem; }
+  .exp-row dd {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    text-align: right; letter-spacing: 0.01em;
+  }
+  .exp-card .asof { margin-top: 14px; }
+  .exp-card .in-grid { margin-top: 12px; }
+
+  .in-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .in-lab { display: grid; gap: 6px; min-width: 0; }
+  .in-lab > span { color: var(--muted); font-size: 0.86rem; }
+  .in-lab input {
+    width: 100%; min-height: 44px; padding: 10px 12px;
+    border: 1px solid var(--line-strong); border-radius: 10px;
+    background: var(--bg-raise); font-family: var(--mono);
+    font-variant-numeric: tabular-nums; font-size: 16px;
+  }
+
+  .empty-state {
+    border: 1px dashed var(--line-strong); border-radius: 14px;
+    padding: 28px 16px; text-align: center; color: var(--muted);
+  }
+  .overall { text-align: center; padding: 8px 0 18px; }
+  .overall-kicker {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+  }
+  .grade-mark {
+    font-family: var(--mono); font-weight: 700;
+    font-size: clamp(4.6rem, 20vw, 7.2rem);
+    line-height: 0.9; letter-spacing: -0.06em;
+  }
+  .grade-S, .grade-A { color: var(--accent); text-shadow: 0 0 32px var(--accent-glow); }
+  .grade-B { color: var(--ink); }
+  .grade-C { color: #fbbf24; }
+  .grade-D { color: #f87171; }
+  .overall-sub { color: var(--muted); margin-top: 8px; font-size: 0.92rem; }
+
+  .metric-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .metric-card {
+    min-width: 0; border: 1px solid var(--line); border-radius: 14px;
+    background: var(--bg-raise); padding: 16px;
+  }
+  .metric-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .metric-name { font-weight: 700; }
+  .metric-letter {
+    font-family: var(--mono); font-weight: 700;
+    font-size: clamp(1.8rem, 7vw, 2.6rem); line-height: 1;
+  }
+  .metric-pct {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-weight: 700; font-size: 1.15rem; margin-top: 8px;
+  }
+  .metric-note { color: var(--muted); font-size: 0.86rem; margin-top: 8px; }
+
+  .bar {
+    position: relative; height: 10px; margin-top: 12px;
+    background: rgba(237,239,241,0.08); border-radius: 999px; overflow: hidden;
+  }
+  .bar-zero {
+    position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
+    background: var(--line-strong);
+  }
+  .bar-fill {
+    position: absolute; top: 0; bottom: 0; width: 0;
+  }
+  .bar-fill.is-pos { left: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+  .bar-fill.is-neg { right: 50%; background: var(--hot); }
+  .bar-fill.is-flat { left: 50%; width: 2px; background: var(--muted); }
+
+  .verdict {
+    margin-top: 14px; padding: 14px 16px;
+    border: 1px solid var(--line-strong); border-radius: 12px;
+    background: rgba(52, 211, 153, 0.07); font-weight: 600;
+  }
+  .reaction {
+    margin-top: 10px; padding: 14px 16px; border-radius: 12px; font-weight: 700;
+  }
+  .reaction.is-good-drop {
+    border: 1px solid rgba(251, 191, 36, 0.45);
+    background: rgba(251, 191, 36, 0.08);
+  }
+  .reaction.is-bad-pop {
+    border: 1px solid rgba(248, 113, 113, 0.45);
+    background: rgba(248, 113, 113, 0.08);
+  }
+  .reaction.is-aligned {
+    border: 1px solid var(--accent);
+    background: rgba(52, 211, 153, 0.08);
+  }
+
+  .check-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 4px 0 12px; }
+  .progress {
+    height: 8px; border-radius: 999px; background: rgba(237,239,241,0.12); overflow: hidden; margin-top: 4px;
+  }
+  .progress > span {
+    display: block; height: 100%; width: 0; background: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow); transition: width .25s;
+  }
+  .progress-text { color: var(--muted); font-size: 0.86rem; margin: 8px 0 14px; }
+  .check-list { display: grid; gap: 8px; }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    min-height: 44px; padding: 12px 14px;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); cursor: pointer;
+  }
+  .check-item:has(input:checked) {
+    border-color: var(--accent); background: rgba(52, 211, 153, 0.08);
+  }
+  .check-item input {
+    width: 20px; height: 20px; margin-top: 2px; flex: none;
+    accent-color: var(--accent);
+  }
+  .check-text { min-width: 0; line-height: 1.4; }
+
+  .grade-table, .hist {
+    width: 100%; border-collapse: collapse;
+  }
+  .grade-table th, .grade-table td, .hist th, .hist td {
+    text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line);
+    font-size: 0.9rem; vertical-align: top;
+  }
+  .grade-table th, .hist th {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); font-weight: 600;
+  }
+  .grade-letter {
+    font-family: var(--mono); font-weight: 700; font-size: 1.15rem; line-height: 1;
+  }
+  .hist-wrap { min-width: 0; }
+
+  .warn-banner {
+    margin: 8px 0 12px; padding: 10px 14px;
+    border: 1px dashed var(--delta); border-radius: 10px;
+    color: var(--delta); font-weight: 700; font-size: 0.92rem;
+  }
+
+  .disclaimer {
+    margin-top: 14px; border: 1px solid rgba(251,191,36,0.45);
+    background: rgba(251,191,36,0.08); color: var(--ink);
+    border-radius: 12px; padding: 14px 16px; font-size: 0.95rem; font-weight: 700;
+  }
+  .hero .disclaimer { margin-top: 16px; }
+  .disclaimer.full { font-weight: 600; margin-top: 18px; }
+  .note-copy { color: var(--muted); margin-top: 10px; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s; min-height: 44px;
+    display: inline-flex; align-items: center; justify-content: center; text-align: center;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { margin-top: 14px; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; display: block; }
+  .share-hint { color: var(--faint); font-size: 0.82rem; margin-top: 8px; }
+
+  footer {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding: 28px var(--pad) 40px; border-top: 1px solid var(--line);
+    max-width: 880px; margin: 0 auto;
+  }
+  footer > span {
+    display: inline-flex; align-items: center; min-height: 44px;
+    min-width: 0; max-width: 100%;
+  }
+  footer a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 0; }
+  footer a:hover { color: var(--ink); }
+  footer .mono { color: var(--faint); }
+
+  @media (min-width: 720px) {
+    .in-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .in-grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .metric-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 0 14px; gap: 8px; }
+    .nav-back { font-size: 11px; letter-spacing: 0; }
+    .nav-brand { font-size: 13px; }
+    .nav-lang { padding: 6px 10px; letter-spacing: 0.12em; }
+    .share-btn { padding: 12px 12px; flex: 1 1 100%; }
+    .exp-row { grid-template-columns: 1fr; }
+    .exp-row dd { text-align: left; font-size: 1.05rem; }
+    .hist, .hist tbody, .hist tr, .hist td { display: block; width: 100%; }
+    .hist thead { display: none; }
+    .hist tr {
+      border: 1px solid var(--line); border-radius: 12px;
+      background: var(--bg-raise); padding: 12px 14px; margin-bottom: 10px;
+    }
+    .hist td {
+      display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+      border-bottom: 1px solid var(--line); padding: 8px 0;
+    }
+    .hist td:last-child { border-bottom: 0; }
+    .hist td::before {
+      content: attr(data-label); color: var(--muted);
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+      text-transform: uppercase; flex: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* 禁用所有动画 */
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+    .cd-num.pulse { animation: none; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">GRADE<span>·053</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="Finance Tools · GRADE-053">Finance Tools · GRADE-053</p>
+    <h1 data-en="Earnings report card: grade it in 30 seconds">财报成绩单：数字一出，30 秒判分</h1>
+    <p class="lede" data-en="EPS beat and the stock still fell? The market buys the <strong>expectation</strong>, not the print. Tonight (Tue 2026-10-20) after the US close, SPCX reports Q3 — call at 22:30 Madrid — and Netflix (NFLX) reports after the close too.">EPS beat 了股价却跌？市场买的是<strong>预期</strong>，不是数字。今晚（2026-10-20，周二）美股盘后，SPCX 发 Q3 财报，电话会马德里时间 22:30；Netflix（NFLX）也在今晚盘后发财报。</p>
+
+    <div class="cd-block" id="cdMain">
+      <p class="cd-status" id="cdStatus" aria-live="polite"></p>
+      <div class="cd-grid" id="cdGrid">
+        <div class="cd-cell"><div class="cd-num" data-unit="days">00</div><div class="cd-lab" data-en="Days">天</div></div>
+        <div class="cd-cell"><div class="cd-num" data-unit="hours">00</div><div class="cd-lab" data-en="Hours">时</div></div>
+        <div class="cd-cell"><div class="cd-num" data-unit="minutes">00</div><div class="cd-lab" data-en="Min">分</div></div>
+        <div class="cd-cell"><div class="cd-num pulse" data-unit="seconds">00</div><div class="cd-lab" data-en="Sec">秒</div></div>
+      </div>
+      <p class="cd-target" data-en="SPCX call · 22:30 Madrid">SPCX 电话会 · 马德里 22:30</p>
+    </div>
+
+    <p class="asof" data-en="Data as of 2026-10-20. Consensus is the public pre-print aggregate; the company announcement is the source of truth.">数据日期 2026-10-20。一致预期为财报前公开汇总口径，以公司公告为准。</p>
+    <p class="disclaimer" data-en="For education only, not investment advice.">仅供学习参考，不构成投资建议</p>
+    <a class="cta" href="#grade" data-en="Start grading">开始判分</a>
+  </header>
+
+  <section class="field" id="grade">
+    <div class="field-head">
+      <span class="field-no" data-en="01">01</span>
+      <h2 class="field-title" data-en="Pick a company">选择公司</h2>
+      <p class="field-hint" data-en="SPCX has tonight's consensus filled in. Netflix and Custom leave the expected figures for you.">SPCX 已填今晚一致预期。Netflix 和自定义的预期请自己填。</p>
+    </div>
+    <div class="tabs" id="coTabs" role="tablist" aria-label="选择公司">
+      <button class="tab" id="tab-spcx" type="button" role="tab" data-id="spcx" aria-controls="panel-spcx" aria-selected="true" tabindex="0" data-en="SPCX">SPCX</button>
+      <button class="tab" id="tab-nflx" type="button" role="tab" data-id="nflx" aria-controls="panel-nflx" aria-selected="false" tabindex="-1" data-en="Netflix (NFLX)">Netflix（NFLX）</button>
+      <button class="tab" id="tab-custom" type="button" role="tab" data-id="custom" aria-controls="panel-custom" aria-selected="false" tabindex="-1" data-en="Custom">自定义</button>
+    </div>
+
+    <div class="exp-card" id="panel-spcx" role="tabpanel" aria-labelledby="tab-spcx">
+      <dl class="exp-dl">
+        <div class="exp-row">
+          <dt data-en="Quarter">季度</dt>
+          <dd data-en="Q3 · after the US close tonight">Q3 · 今晚美股盘后</dd>
+        </div>
+        <div class="exp-row">
+          <dt data-en="Consensus EPS (non-GAAP)">一致预期 EPS（non-GAAP）</dt>
+          <dd data-en="$0.14">$0.14</dd>
+        </div>
+        <div class="exp-row">
+          <dt data-en="Consensus revenue">一致预期营收</dt>
+          <dd data-en="About $128.9B · +65% YoY">约 $128.9B · 同比 +65%</dd>
+        </div>
+        <div class="exp-row">
+          <dt data-en="Last quarter EPS">上季度 EPS</dt>
+          <dd data-en="−$0.09">−$0.09</dd>
+        </div>
+      </dl>
+      <p class="asof" data-en="Data as of 2026-10-20. Consensus is the public pre-print aggregate; the company announcement is the source of truth.">数据日期 2026-10-20。一致预期为财报前公开汇总口径，以公司公告为准。</p>
+    </div>
+
+    <div class="exp-card" id="panel-nflx" role="tabpanel" aria-labelledby="tab-nflx" hidden>
+      <p class="field-hint" data-en="Netflix (NFLX) also reports after the close tonight. Type the consensus you see.">Netflix（NFLX）也在今晚盘后发财报。预期请填你看到的一致预期。</p>
+      <div class="in-grid cols-2">
+        <label class="in-lab">
+          <span data-en="Expected EPS ($)">预期 EPS（$）</span>
+          <input id="expEpsNflx" type="text" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="">
+        </label>
+        <label class="in-lab">
+          <span data-en="Expected revenue ($B)">预期营收（$B）</span>
+          <input id="expRevNflx" type="text" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="">
+        </label>
+      </div>
+      <p class="asof" data-en="Data as of 2026-10-20. Consensus is the public pre-print aggregate; the company announcement is the source of truth.">数据日期 2026-10-20。一致预期为财报前公开汇总口径，以公司公告为准。</p>
+    </div>
+
+    <div class="exp-card" id="panel-custom" role="tabpanel" aria-labelledby="tab-custom" hidden>
+      <p class="field-hint" data-en="Any company. Fill in the name and the consensus you see.">任意公司。填公司名和你看到的一致预期。</p>
+      <div class="in-grid">
+        <label class="in-lab">
+          <span data-en="Company name">公司名</span>
+          <input id="customName" type="text" autocomplete="off" spellcheck="false" placeholder="">
+        </label>
+      </div>
+      <div class="in-grid cols-2">
+        <label class="in-lab">
+          <span data-en="Expected EPS ($)">预期 EPS（$）</span>
+          <input id="expEpsCustom" type="text" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="">
+        </label>
+        <label class="in-lab">
+          <span data-en="Expected revenue ($B)">预期营收（$B）</span>
+          <input id="expRevCustom" type="text" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="">
+        </label>
+      </div>
+      <p class="asof" data-en="Data as of 2026-10-20. Consensus is the public pre-print aggregate; the company announcement is the source of truth.">数据日期 2026-10-20。一致预期为财报前公开汇总口径，以公司公告为准。</p>
+    </div>
+  </section>
+
+  <section class="field" id="inputs">
+    <div class="field-head">
+      <span class="field-no" data-en="02">02</span>
+      <h2 class="field-title" data-en="Enter the actuals">输入实际数字</h2>
+      <p class="field-hint" data-en="Grades as you type. Negatives work (−0.09). A comma decimal works (0,14). After-hours % is optional.">边填边判分。支持负数（−0.09）和逗号小数（0,14）。盘后涨跌可留空。</p>
+    </div>
+    <div class="in-grid cols-3">
+      <label class="in-lab">
+        <span data-en="Actual EPS ($)">实际 EPS（$）</span>
+        <input id="actEps" type="text" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="">
+      </label>
+      <label class="in-lab">
+        <span data-en="Actual revenue ($B)">实际营收（$B）</span>
+        <input id="actRevB" type="text" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="">
+      </label>
+      <label class="in-lab">
+        <span data-en="After-hours move (%)">盘后涨跌（%）</span>
+        <input id="ahPct" type="text" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="">
+      </label>
+    </div>
+    <button class="cta" id="gradeBtn" type="button" data-en="Grade">判分</button>
+  </section>
+
+  <section class="field" id="report">
+    <div class="field-head">
+      <span class="field-no" data-en="03">03</span>
+      <h2 class="field-title" data-en="Report card">成绩单</h2>
+      <p class="field-hint" data-en="Overall is the average of EPS and revenue (S=5 … D=1), rounding .5 up. One side filled → that side is the overall.">综合分是 EPS 与营收平均（S=5 … D=1），.5 向上。只填一项时综合按该项。</p>
+    </div>
+    <div id="reportEmpty" class="empty-state" data-en="Enter actual EPS or revenue and the card appears here.">输入实际 EPS 或营收后，这里会出现成绩单。</div>
+    <div id="reportBody" hidden>
+      <div class="overall">
+        <p class="overall-kicker" id="overallKicker"></p>
+        <p class="grade-mark" id="overallMark">—</p>
+        <p class="overall-sub" id="overallSub"></p>
+      </div>
+      <div class="metric-grid">
+        <article class="metric-card" id="epsCard"></article>
+        <article class="metric-card" id="revCard"></article>
+      </div>
+      <p class="verdict" id="verdictLine"></p>
+      <p class="reaction" id="reactionLine" hidden></p>
+    </div>
+  </section>
+
+  <section class="field" id="checklist">
+    <div class="field-head">
+      <span class="field-no" data-en="04">04</span>
+      <h2 class="field-title" data-en="After-hours checklist">盘后解读清单</h2>
+      <p class="field-hint" data-en="Ticks stay on this device. Clear all if you want a fresh list.">勾选会记在这台设备上。要重来就全部清空。</p>
+    </div>
+    <div class="progress" aria-hidden="true"><span id="checkBar"></span></div>
+    <div class="check-toolbar">
+      <p class="progress-text" id="checkProgress" aria-live="polite"></p>
+      <button class="share-btn" id="clearChecks" type="button" data-en="Clear all">全部清空</button>
+    </div>
+    <div class="check-list" id="checkList"></div>
+  </section>
+
+  <section class="field" id="thresholds">
+    <div class="field-head">
+      <span class="field-no" data-en="05">05</span>
+      <h2 class="field-title" data-en="Grade thresholds">判分阈值</h2>
+      <p class="field-hint" data-en="surprise% = (actual − expected) / |expected| × 100. If expected is 0, there is no percentage.">surprise% = (实际 − 预期) / |预期| × 100。预期为 0 时不算百分比。</p>
+    </div>
+    <div id="threshTable"></div>
+  </section>
+
+  <section class="field" id="history">
+    <div class="field-head">
+      <span class="field-no" data-en="06">06</span>
+      <h2 class="field-title" data-en="SPCX history lookup">SPCX 历史速查</h2>
+      <p class="field-hint" data-en="Four illustrative quarters. Not an actual record.">最近 4 季示意。不是真实记录。</p>
+    </div>
+    <p class="warn-banner" data-en="Illustrative data, not actual records">示意数据，非真实记录</p>
+    <div class="hist-wrap" id="histTable"></div>
+    <p class="warn-banner" data-en="Illustrative data, not actual records">示意数据，非真实记录</p>
+  </section>
+
+  <section class="field" id="share">
+    <div class="field-head">
+      <span class="field-no" data-en="07">07</span>
+      <h2 class="field-title" data-en="Share">分享</h2>
+      <p class="field-hint" data-en="If you have not graded yet, the copy invites a friend to grade tonight's print.">还没判分时，文案是邀请来给今晚财报判分。</p>
+    </div>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap" hidden>
+      <canvas id="shareCanvas" width="1200" height="630"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+
+  <section class="field" id="notes">
+    <div class="field-head">
+      <span class="field-no" data-en="08">08</span>
+      <h2 class="field-title" data-en="Notes">注记</h2>
+    </div>
+    <p class="asof" data-en="Data as of 2026-10-20. Consensus is the public pre-print aggregate; the company announcement is the source of truth.">数据日期 2026-10-20。一致预期为财报前公开汇总口径，以公司公告为准。</p>
+    <p class="note-copy" data-en="The SPCX four-quarter table is illustrative data, not actual records.">SPCX 四季度表是示意数据，非真实记录。</p>
+    <p class="disclaimer full" data-en="For education only, not investment advice.">仅供学习参考，不构成投资建议</p>
+  </section>
+</main>
+
+<footer>
+  <span class="mono" data-en='<a href="https://build-100.com/">build-100.com</a>'><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono" data-en='<a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a>'><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="GRADE-053 · Earnings report card">GRADE-053 · 财报成绩单</span>
+</footer>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  "use strict";
+  var E = window.GradeEngine;
+  if (!E) return;
+
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+
+  var COMPANY_IDS = ["spcx", "nflx", "custom"];
+  var companyId = "spcx";
+  var checked = loadChecks();
+  var shareOpen = false;
+  var copyTimer = null;
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+  function $(id) { return document.getElementById(id); }
+  function pair(obj) { return obj ? t(obj.zh, obj.en) : ""; }
+
+  function stampZh() {
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    });
+  }
+
+  function pad2(n) {
+    n = Math.max(0, Math.floor(Number(n) || 0));
+    return (n < 10 ? "0" : "") + n;
+  }
+
+  function loadChecks() {
+    try {
+      var raw = localStorage.getItem("grade053-checks");
+      var arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveChecks() {
+    try { localStorage.setItem("grade053-checks", JSON.stringify(checked)); } catch (e) {}
+  }
+
+  function setPlaceholders() {
+    var fill = t("填你看到的一致预期", "Enter the consensus you see");
+    var map = [
+      ["expEpsNflx", fill],
+      ["expRevNflx", fill],
+      ["customName", t("公司名", "Company name")],
+      ["expEpsCustom", t("预期 EPS", "Expected EPS")],
+      ["expRevCustom", t("预期营收 $B", "Expected revenue $B")],
+      ["actEps", t("例如 −0.09", "e.g. -0.09")],
+      ["actRevB", t("例如 128.9", "e.g. 128.9")],
+      ["ahPct", t("可选", "Optional")]
+    ];
+    var i;
+    for (i = 0; i < map.length; i++) {
+      var el = $(map[i][0]);
+      if (el) el.setAttribute("placeholder", map[i][1]);
+    }
+  }
+
+  function writeCd(root, cd) {
+    if (!root) return;
+    var map = {
+      days: pad2(cd.days),
+      hours: pad2(cd.hours),
+      minutes: pad2(cd.minutes),
+      seconds: pad2(cd.seconds)
+    };
+    var nodes = root.querySelectorAll(".cd-num");
+    var i;
+    for (i = 0; i < nodes.length; i++) {
+      var u = nodes[i].getAttribute("data-unit");
+      if (u && map[u] != null) nodes[i].textContent = map[u];
+    }
+  }
+
+  function renderCountdown() {
+    var now = Date.now();
+    var cd = E.countdown(E.EARN_CALL, now);
+    var status = $("cdStatus");
+    var grid = $("cdGrid");
+    if (cd.done) {
+      if (status) status.textContent = t("财报已出 · 现在就来判分", "Results are out · grade them now");
+      if (grid) grid.hidden = true;
+    } else {
+      if (status) status.textContent = t("距离 SPCX 电话会", "Until the SPCX call");
+      if (grid) {
+        grid.hidden = false;
+        writeCd(grid, cd);
+      }
+    }
+  }
+
+  function companyById(id) {
+    var i;
+    for (i = 0; i < E.COMPANIES.length; i++) {
+      if (E.COMPANIES[i].id === id) return E.COMPANIES[i];
+    }
+    return E.COMPANIES[0];
+  }
+
+  function companyName() {
+    if (companyId === "spcx") return "SPCX";
+    if (companyId === "nflx") return "NFLX";
+    var n = (($("customName") && $("customName").value) || "").trim();
+    return n || t("自定义", "Custom");
+  }
+
+  function currentExp() {
+    var co = companyById(companyId);
+    if (co.preset) return { expEps: co.expEps, expRevB: co.expRevB };
+    if (companyId === "nflx") {
+      return {
+        expEps: $("expEpsNflx") ? $("expEpsNflx").value : "",
+        expRevB: $("expRevNflx") ? $("expRevNflx").value : ""
+      };
+    }
+    return {
+      expEps: $("expEpsCustom") ? $("expEpsCustom").value : "",
+      expRevB: $("expRevCustom") ? $("expRevCustom").value : ""
+    };
+  }
+
+  function currentReport() {
+    var exp = currentExp();
+    return E.report({
+      expEps: exp.expEps,
+      expRevB: exp.expRevB,
+      actEps: $("actEps") ? $("actEps").value : "",
+      actRevB: $("actRevB") ? $("actRevB").value : "",
+      ahPct: $("ahPct") ? $("ahPct").value : ""
+    });
+  }
+
+  function hasAnyActual() {
+    return E.parseNum($("actEps") && $("actEps").value) != null
+      || E.parseNum($("actRevB") && $("actRevB").value) != null;
+  }
+
+  function renderTabs() {
+    var list = $("coTabs");
+    if (list) list.setAttribute("aria-label", t("选择公司", "Choose a company"));
+    COMPANY_IDS.forEach(function (id) {
+      var tab = $("tab-" + id);
+      if (!tab) return;
+      var on = id === companyId;
+      tab.setAttribute("aria-selected", on ? "true" : "false");
+      tab.tabIndex = on ? 0 : -1;
+      var panel = $("panel-" + id);
+      if (panel) panel.hidden = !on;
+    });
+  }
+
+  function gradeClass(g) {
+    return isGrade(g) ? "grade-" + g : "";
+  }
+
+  function isGrade(g) {
+    return g === "S" || g === "A" || g === "B" || g === "C" || g === "D";
+  }
+
+  function fmtPct(n) {
+    if (n == null || !isFinite(n)) return "—";
+    var body = Math.abs(n).toFixed(1) + "%";
+    if (n > 0) return "+" + body;
+    if (n < 0) return "−" + body;
+    return "0.0%";
+  }
+
+  function fmtEps(n) {
+    if (n == null || !isFinite(n)) return "—";
+    var body = "$" + Math.abs(n).toFixed(2);
+    return n < 0 ? "−" + body : body;
+  }
+
+  function zeroExpected(exp, act) {
+    return E.parseNum(act) != null && E.parseNum(exp) === 0;
+  }
+
+  function fillMetric(host, titleZh, titleEn, side, exp, act) {
+    if (!host) return;
+    host.textContent = "";
+    var top = document.createElement("div");
+    top.className = "metric-top";
+    var name = document.createElement("p");
+    name.className = "metric-name";
+    name.textContent = t(titleZh, titleEn);
+    var letter = document.createElement("p");
+    letter.className = "metric-letter " + gradeClass(side.grade);
+    letter.textContent = side.grade || "—";
+    top.appendChild(name);
+    top.appendChild(letter);
+    host.appendChild(top);
+
+    var pct = document.createElement("p");
+    pct.className = "metric-pct " + gradeClass(side.grade);
+    pct.textContent = fmtPct(side.pct);
+    host.appendChild(pct);
+
+    var bar = document.createElement("div");
+    bar.className = "bar";
+    bar.setAttribute("aria-hidden", "true");
+    var zero = document.createElement("span");
+    zero.className = "bar-zero";
+    bar.appendChild(zero);
+    var fill = document.createElement("span");
+    fill.className = "bar-fill";
+    if (side.pct == null || !isFinite(side.pct)) {
+      fill.style.width = "0";
+    } else if (side.pct === 0) {
+      fill.className = "bar-fill is-flat";
+    } else {
+      var w = Math.min(Math.abs(side.pct), 30) / 30 * 50;
+      fill.className = "bar-fill " + (side.pct > 0 ? "is-pos" : "is-neg");
+      fill.style.width = w + "%";
+    }
+    bar.appendChild(fill);
+    host.appendChild(bar);
+
+    var note = document.createElement("p");
+    note.className = "metric-note";
+    if (zeroExpected(exp, act)) {
+      note.textContent = t("预期为 0，无法算百分比", "Expected is 0, so the percentage cannot be computed");
+    } else if (E.parseNum(act) == null) {
+      note.textContent = t("未填实际数字", "Actual not entered");
+    } else if (E.parseNum(exp) == null) {
+      note.textContent = t("先填一致预期", "Enter the consensus first");
+    } else {
+      note.textContent = t("相对一致预期的 surprise%", "Surprise vs consensus");
+    }
+    host.appendChild(note);
+  }
+
+  function renderReport() {
+    var empty = $("reportEmpty");
+    var body = $("reportBody");
+    var ready = hasAnyActual();
+    if (empty) empty.hidden = ready;
+    if (body) body.hidden = !ready;
+    if (!ready) return;
+
+    var exp = currentExp();
+    var rep = currentReport();
+    var mark = $("overallMark");
+    var kicker = $("overallKicker");
+    var sub = $("overallSub");
+    if (kicker) kicker.textContent = t("综合成绩", "Overall grade");
+    if (mark) {
+      mark.textContent = rep.overall || "—";
+      mark.className = "grade-mark " + gradeClass(rep.overall);
+    }
+    if (sub) {
+      if (rep.overall) {
+        sub.textContent = t(
+          companyName() + " · EPS " + (rep.eps.grade || "—") + " · 营收 " + (rep.rev.grade || "—"),
+          companyName() + " · EPS " + (rep.eps.grade || "—") + " · Revenue " + (rep.rev.grade || "—")
+        );
+      } else {
+        sub.textContent = t("还缺预期或实际数字，综合暂缺。", "Overall is waiting on an expected or actual figure.");
+      }
+    }
+    fillMetric($("epsCard"), "EPS", "EPS", rep.eps, exp.expEps, $("actEps") && $("actEps").value);
+    fillMetric($("revCard"), "营收", "Revenue", rep.rev, exp.expRevB, $("actRevB") && $("actRevB").value);
+
+    var verdict = $("verdictLine");
+    if (verdict) verdict.textContent = pair(rep.verdict);
+
+    var react = $("reactionLine");
+    if (react) {
+      if (rep.reaction && rep.reaction.kind) {
+        react.hidden = false;
+        react.className = "reaction is-" + rep.reaction.kind;
+        react.textContent = pair(rep.reaction.text);
+      } else {
+        react.hidden = true;
+        react.textContent = "";
+        react.className = "reaction";
+      }
+    }
+  }
+
+  function isChecked(id) {
+    return checked.indexOf(id) !== -1;
+  }
+
+  function setChecked(id, on) {
+    var i = checked.indexOf(id);
+    if (on && i === -1) checked.push(id);
+    if (!on && i !== -1) checked.splice(i, 1);
+    saveChecks();
+  }
+
+  function renderChecklist() {
+    var host = $("checkList");
+    if (!host) return;
+    host.textContent = "";
+    E.CHECKLIST.forEach(function (item) {
+      var lab = document.createElement("label");
+      lab.className = "check-item";
+      var input = document.createElement("input");
+      input.type = "checkbox";
+      input.setAttribute("data-id", item.id);
+      input.checked = isChecked(item.id);
+      var text = document.createElement("span");
+      text.className = "check-text";
+      text.textContent = pair(item.text);
+      lab.appendChild(input);
+      lab.appendChild(text);
+      host.appendChild(lab);
+    });
+    renderCheckProgress();
+  }
+
+  function renderCheckProgress() {
+    var prog = E.checklistProgress(checked);
+    var bar = $("checkBar");
+    if (bar) bar.style.width = (prog.total ? (prog.done / prog.total * 100) : 0) + "%";
+    var el = $("checkProgress");
+    if (el) {
+      el.textContent = t(
+        "已完成 " + prog.done + " / " + prog.total,
+        "Done " + prog.done + " / " + prog.total
+      );
+    }
+  }
+
+  function renderThresholds() {
+    var host = $("threshTable");
+    if (!host) return;
+    host.textContent = "";
+    var table = document.createElement("table");
+    table.className = "grade-table";
+    var thead = document.createElement("thead");
+    var hr = document.createElement("tr");
+    var h1 = document.createElement("th");
+    h1.textContent = t("成绩", "Grade");
+    var h2 = document.createElement("th");
+    h2.textContent = t("surprise% 区间", "surprise% range");
+    hr.appendChild(h1);
+    hr.appendChild(h2);
+    thead.appendChild(hr);
+    table.appendChild(thead);
+    var tbody = document.createElement("tbody");
+    E.THRESHOLDS.forEach(function (row) {
+      var tr = document.createElement("tr");
+      var g = document.createElement("td");
+      var mark = document.createElement("span");
+      mark.className = "grade-letter " + gradeClass(row.grade);
+      mark.textContent = row.grade;
+      g.appendChild(mark);
+      var r = document.createElement("td");
+      r.textContent = pair(row.range);
+      tr.appendChild(g);
+      tr.appendChild(r);
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    host.appendChild(table);
+  }
+
+  function renderHistory() {
+    var host = $("histTable");
+    if (!host) return;
+    host.textContent = "";
+    var table = document.createElement("table");
+    table.className = "hist";
+    var labels = [
+      t("季度", "Quarter"),
+      t("预期 EPS", "Exp. EPS"),
+      t("实际 EPS", "Act. EPS"),
+      t("结果", "Result"),
+      t("surprise%", "surprise%")
+    ];
+    var thead = document.createElement("thead");
+    var hr = document.createElement("tr");
+    labels.forEach(function (lab) {
+      var th = document.createElement("th");
+      th.textContent = lab;
+      hr.appendChild(th);
+    });
+    thead.appendChild(hr);
+    table.appendChild(thead);
+    var tbody = document.createElement("tbody");
+    E.HISTORY.forEach(function (row) {
+      var tr = document.createElement("tr");
+      var cells = [
+        row.quarter,
+        fmtEps(row.expEps),
+        fmtEps(row.actEps),
+        row.result === "beat" ? t("超预期", "beat") : t("不及预期", "miss"),
+        fmtPct(row.surprisePct)
+      ];
+      cells.forEach(function (val, i) {
+        var td = document.createElement("td");
+        td.setAttribute("data-label", labels[i]);
+        td.textContent = val;
+        if (i === 3) {
+          td.style.color = row.result === "beat" ? "var(--accent)" : "var(--hot)";
+          td.style.fontWeight = "700";
+        }
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    host.appendChild(table);
+  }
+
+  function renderAll() {
+    setPlaceholders();
+    renderCountdown();
+    renderTabs();
+    renderReport();
+    renderChecklist();
+    renderThresholds();
+    renderHistory();
+    if (shareOpen) drawShare();
+  }
+
+  function applyLang(l) {
+    lang = l;
+    if (copyTimer) { clearTimeout(copyTimer); copyTimer = null; }
+    var copyBtn = $("copyBtn");
+    if (copyBtn) copyBtn.classList.remove("copied");
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    var langBtn = $("langBtn");
+    langBtn.textContent = l === "en" ? "中文" : "EN";
+    langBtn.setAttribute("aria-label", l === "en" ? "切换到中文" : "Switch language");
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    renderAll();
+  }
+
+  function fontStack() {
+    return '"Noto Sans CJK SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+  }
+  function setFont(ctx, weight, px) {
+    ctx.font = weight + " " + px + "px " + fontStack();
+  }
+  function fitText(ctx, text, maxW, weight, px, minPx) {
+    var size = px;
+    setFont(ctx, weight, size);
+    while (size > minPx && ctx.measureText(text).width > maxW) {
+      size -= 1;
+      setFont(ctx, weight, size);
+    }
+    return size;
+  }
+  function roundRect(ctx, x, y, w, h, r) {
+    var rr = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + rr, y);
+    ctx.arcTo(x + w, y, x + w, y + h, rr);
+    ctx.arcTo(x + w, y + h, x, y + h, rr);
+    ctx.arcTo(x, y + h, x, y, rr);
+    ctx.arcTo(x, y, x + w, y, rr);
+    ctx.closePath();
+  }
+  function gradeHex(g) {
+    if (g === "S" || g === "A") return "#34d399";
+    if (g === "C") return "#fbbf24";
+    if (g === "D") return "#f87171";
+    return "#edeff1";
+  }
+
+  function drawShare() {
+    var canvas = $("shareCanvas");
+    if (!canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    var W = 1200;
+    var H = 630;
+    var pad = 56;
+    var maxW = W - pad * 2;
+    canvas.width = W;
+    canvas.height = H;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.045)";
+    var gx;
+    var gy;
+    for (gx = 18; gx < W; gx += 36) {
+      for (gy = 18; gy < H; gy += 36) ctx.fillRect(gx, gy, 1.4, 1.4);
+    }
+    ctx.fillStyle = "#34d399";
+    ctx.fillRect(0, 0, 10, H);
+    ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#34d399";
+    setFont(ctx, "700", 22);
+    ctx.fillText("GRADE-053", pad, 64);
+    ctx.fillStyle = "#edeff1";
+    var title = t("财报成绩单：数字一出，30 秒判分", "Earnings report card: grade it in 30 seconds");
+    fitText(ctx, title, maxW, "700", 34, 18);
+    ctx.fillText(title, pad, 118);
+
+    var ready = hasAnyActual();
+    var rep = ready ? currentReport() : null;
+    var graded = rep && isGrade(rep.overall);
+    var name = companyName();
+
+    ctx.fillStyle = "rgba(237,239,241,0.04)";
+    roundRect(ctx, pad, 150, maxW, 280, 16);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(237,239,241,0.14)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    if (!graded) {
+      ctx.fillStyle = "#34d399";
+      var invite = t("来给今晚财报判分", "Come grade tonight's earnings");
+      fitText(ctx, invite, maxW - 40, "700", 48, 24);
+      ctx.fillText(invite, pad + 28, 280);
+      ctx.fillStyle = "#9aa1a8";
+      setFont(ctx, "400", 22);
+      ctx.fillText(name, pad + 28, 330);
+    } else {
+      ctx.fillStyle = "#9aa1a8";
+      setFont(ctx, "400", 20);
+      ctx.fillText(name, pad + 28, 196);
+      ctx.fillStyle = gradeHex(rep.overall);
+      setFont(ctx, "700", 140);
+      ctx.fillText(rep.overall, pad + 28, 340);
+      ctx.fillStyle = "#edeff1";
+      var line = t(
+        "EPS " + fmtPct(rep.eps.pct) + " · 营收 " + fmtPct(rep.rev.pct),
+        "EPS " + fmtPct(rep.eps.pct) + " · Revenue " + fmtPct(rep.rev.pct)
+      );
+      fitText(ctx, line, maxW - 40, "700", 28, 16);
+      ctx.fillText(line, pad + 28, 392);
+    }
+
+    ctx.strokeStyle = "rgba(237,239,241,0.14)";
+    ctx.beginPath();
+    ctx.moveTo(pad, 500);
+    ctx.lineTo(W - pad, 500);
+    ctx.stroke();
+    var asof = t("数据日期 " + E.META.asOf, "Data as of " + E.META.asOf);
+    ctx.fillStyle = "#9aa1a8";
+    fitText(ctx, asof, maxW, "400", 18, 12);
+    ctx.fillText(asof, pad, 548);
+    ctx.fillStyle = "#edeff1";
+    setFont(ctx, "600", 22);
+    ctx.fillText("build-100.com/053", pad, 598);
+
+    canvas.setAttribute("aria-label", t("财报成绩单分享卡", "Earnings report-card share image"));
+    $("shareWrap").hidden = false;
+    shareOpen = true;
+  }
+
+  function markCopied() {
+    var btn = $("copyBtn");
+    if (!btn) return;
+    btn.classList.add("copied");
+    btn.textContent = t("已复制", "Copied");
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () {
+      btn.classList.remove("copied");
+      if (btn.dataset.zh === undefined) return;
+      btn.innerHTML = lang === "en" ? btn.dataset.en : btn.dataset.zh;
+    }, 1600);
+  }
+
+  function fallbackCopy(text) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch (err) {}
+      document.body.removeChild(ta);
+    } catch (err) {}
+  }
+
+  function selectCompany(id) {
+    if (COMPANY_IDS.indexOf(id) === -1) return;
+    companyId = id;
+    renderTabs();
+    renderReport();
+    if (shareOpen) drawShare();
+  }
+
+  stampZh();
+
+  $("langBtn").addEventListener("click", function () {
+    applyLang(lang === "en" ? "zh" : "en");
+  });
+
+  document.querySelectorAll("#coTabs .tab").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      selectCompany(btn.getAttribute("data-id"));
+    });
+  });
+
+  $("coTabs").addEventListener("keydown", function (ev) {
+    var i = COMPANY_IDS.indexOf(companyId);
+    if (ev.key === "ArrowRight" || ev.key === "ArrowDown") i = (i + 1) % COMPANY_IDS.length;
+    else if (ev.key === "ArrowLeft" || ev.key === "ArrowUp") i = (i + COMPANY_IDS.length - 1) % COMPANY_IDS.length;
+    else if (ev.key === "Home") i = 0;
+    else if (ev.key === "End") i = COMPANY_IDS.length - 1;
+    else return;
+    ev.preventDefault();
+    selectCompany(COMPANY_IDS[i]);
+    var tab = $("tab-" + companyId);
+    if (tab && tab.focus) tab.focus();
+  });
+
+  ["grade", "inputs"].forEach(function (id) {
+    var el = $(id);
+    if (!el) return;
+    el.addEventListener("input", function () {
+      renderReport();
+      if (shareOpen) drawShare();
+    });
+  });
+
+  $("gradeBtn").addEventListener("click", function () {
+    renderReport();
+    var el = $("report");
+    if (el && el.scrollIntoView) {
+      try { el.scrollIntoView({ block: "start" }); } catch (e) {}
+    }
+  });
+
+  $("checkList").addEventListener("change", function (ev) {
+    var input = ev.target;
+    if (!input || input.type !== "checkbox") return;
+    var id = input.getAttribute("data-id");
+    if (!id) return;
+    setChecked(id, input.checked);
+    renderCheckProgress();
+  });
+
+  $("clearChecks").addEventListener("click", function () {
+    checked = [];
+    saveChecks();
+    renderChecklist();
+  });
+
+  $("copyBtn").addEventListener("click", function () {
+    var text;
+    try {
+      var rep = hasAnyActual() ? currentReport() : null;
+      text = E.shareText(lang, rep, companyName());
+    } catch (e) { return; }
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      markCopied();
+    }
+    var clipPromise;
+    try {
+      var clip = navigator.clipboard;
+      if (clip && typeof clip.writeText === "function") {
+        var result = clip.writeText(text);
+        clipPromise = result && typeof result.then === "function" ? result : Promise.reject();
+      } else clipPromise = Promise.reject();
+    } catch (e) {
+      clipPromise = Promise.reject();
+    }
+    var timed = new Promise(function (_, reject) {
+      setTimeout(function () { reject(new Error("copy-timeout")); }, 400);
+    });
+    Promise.race([Promise.resolve(clipPromise), timed]).then(finish, function () {
+      fallbackCopy(text);
+      finish();
+    });
+  });
+
+  $("shareImgBtn").addEventListener("click", function () {
+    try { drawShare(); } catch (e) {}
+  });
+
+  if (lang === "en") applyLang("en");
+  else renderAll();
+
+  setInterval(renderCountdown, 1000);
+})();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

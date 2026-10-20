@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-19",
+  "updated": "2026-10-20",
   "filters": [
     {
       "id": "all",
@@ -678,6 +678,19 @@
       ],
       "live": true,
       "url": "https://build-100.com/052/"
+    },
+    {
+      "id": "053",
+      "code": "GRADE",
+      "name": "GRADE-053",
+      "sub_zh": "财报成绩单——输入实际 EPS 和营收，立刻算 beat/miss 幅度、打出 S/A/B/C/D 成绩，再对照盘后解读清单",
+      "sub_en": "Earnings report card — enter actual EPS and revenue, get the beat/miss surprise and an S–D grade, then a post-market checklist",
+      "cats": [
+        "finance",
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/053/"
     }
   ]
 }
