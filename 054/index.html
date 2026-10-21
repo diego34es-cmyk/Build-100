@@ -1,0 +1,1202 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADREAD-054 · 广告读心术</title>
+<meta name="description" content="你以为它在回答你，它也在读你。10 题换位当广告系统：当前对话、关个性化仍有广告、临时聊天 / Plus / 健康话题无广告、客户名单匹配 25,000 人。据 404 Media 2026-10-15 实测。教育演示，非官方说明。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/054/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E054%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ADREAD-054 · 广告读心术">
+<meta property="og:description" content="你以为它在回答你，它也在读你。10 题换位当广告系统：当前对话、关个性化仍有广告、临时聊天 / Plus / 健康话题无广告、客户名单匹配 25,000 人。据 404 Media 2026-10-15 实测。教育演示，非官方说明。">
+<meta property="og:url" content="https://build-100.com/054/">
+<meta property="og:image" content="https://build-100.com/054/og-054.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="ADREAD-054 · 广告读心术">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ADREAD-054 · 广告读心术">
+<meta name="twitter:description" content="You think it is answering you. It is also reading you. 10 rounds: current chat, ads after personalization is off, no ads in Temporary Chats / Plus / health, customer lists of 25,000. Based on 404 Media (2026-10-15). Educational demo.">
+<meta name="twitter:image" content="https://build-100.com/054/og-054.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #22d3ee;
+    --accent-glow: rgba(34,211,238,0.35);
+    --warm: #fbbf24;
+    --hot: #f87171;
+    --cool: var(--accent);
+    --up: #f87171;
+    --down: #4ade80;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+    --you: var(--warm);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: "Noto Sans CJK SC", var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font-family: inherit; color: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible, label:focus-within {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  [hidden] { display: none !important; }
+  h2, h3, p, td, th, li, label, dt, dd, .lede, .field-title, .choice, .callout, .explain, .asof, .check-text, .note-copy, .hook, .bubble, .ad-copy, .reveal, .why-body, .rank-name, .score-line, .chip, .verdict-line, .prog-text, .empty-state, .mech-card p, .review-item {
+    overflow-wrap: anywhere;
+  }
+  h1, .radar-num { overflow-wrap: normal; }
+  img, canvas, svg, input, button { max-width: 100%; }
+  button { white-space: normal; }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; min-width: 0; min-height: 44px; display: inline-flex; align-items: center; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; text-align: center; flex: none; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+    flex: none; min-height: 44px; min-width: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 48px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; letter-spacing: 0.04em; line-height: 1.45; text-wrap: balance; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; margin-bottom: 18px;
+  }
+  .hook {
+    font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; color: var(--accent);
+    margin-bottom: 14px; line-height: 1.35; text-shadow: 0 0 18px var(--accent-glow);
+  }
+  .hero p.lede { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); }
+  .hero p.lede strong { color: var(--ink); font-weight: 600; }
+
+  .cta {
+    display: inline-flex; align-items: center; justify-content: center; margin-top: 18px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--accent); border-radius: 4px;
+    background: var(--accent); color: var(--bg); cursor: pointer; transition: all .2s;
+    min-height: 44px; line-height: 1.4; text-align: center;
+  }
+  .cta:hover { box-shadow: 0 0 24px var(--accent-glow); }
+  .cta.ghost {
+    background: transparent; color: var(--ink); border-color: var(--line-strong);
+  }
+  .cta.ghost:hover { border-color: var(--accent); color: var(--accent); box-shadow: none; }
+
+  .asof {
+    margin-top: 16px; padding: 12px 14px;
+    border: 1px solid var(--accent); border-radius: 12px;
+    background: rgba(34, 211, 238, 0.1);
+    color: var(--ink); font-size: 0.95rem; font-weight: 700; line-height: 1.5;
+  }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .prog-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+  }
+  .prog-text {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px;
+    letter-spacing: 0.08em; color: var(--muted); flex: none;
+  }
+  .progress {
+    height: 8px; border-radius: 999px; background: rgba(237,239,241,0.12); overflow: hidden; flex: 1; min-width: 0;
+  }
+  .progress > span {
+    display: block; height: 100%; width: 0; background: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow); transition: width .25s;
+  }
+
+  .flip-scene { perspective: 1400px; min-width: 0; }
+  .flip-card {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(.2,.7,.2,1);
+  }
+  .flip-card.no-anim { transition: none; }
+  .flip-card.is-flipped { transform: rotateY(180deg); }
+  .flip-face {
+    min-width: 0;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  .flip-front { position: relative; transform: rotateY(0deg); }
+  .flip-back {
+    position: absolute;
+    top: 0; left: 0; width: 100%;
+    transform: rotateY(180deg);
+  }
+  .flip-card:not(.is-flipped) .flip-back { pointer-events: none; }
+  .flip-card.is-flipped .flip-front { pointer-events: none; }
+
+  .monitor {
+    border: 1px solid rgba(34,211,238,0.32);
+    border-radius: 16px;
+    background: var(--bg-raise);
+    padding: 16px;
+    box-shadow: 0 0 28px rgba(34,211,238,0.08);
+    min-width: 0;
+  }
+  .chip {
+    display: inline-flex; align-items: center; min-height: 28px; max-width: 100%;
+    padding: 2px 10px; margin-bottom: 12px;
+    border-radius: 999px; border: 1px solid var(--accent);
+    color: var(--accent); font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  }
+  .bubble-meta {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 6px;
+  }
+  .bubble {
+    background: rgba(34,211,238,0.08);
+    border: 1px solid rgba(34,211,238,0.18);
+    border-radius: 12px 12px 12px 4px;
+    padding: 12px 14px; line-height: 1.5;
+  }
+
+  .ad-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
+  .ad-card {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+    min-height: 44px; min-width: 0; width: 100%;
+    padding: 14px 16px; text-align: left;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); cursor: pointer; transition: border-color .2s, box-shadow .2s, background .2s;
+  }
+  .ad-card:hover { border-color: var(--accent); }
+  .ad-card:disabled { cursor: default; }
+  .ad-tag {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent); border: 1px solid var(--accent); border-radius: 999px;
+    padding: 3px 8px; line-height: 1.2;
+  }
+  .ad-card.is-none .ad-tag {
+    color: var(--muted); border-color: var(--line-strong);
+  }
+  .ad-copy { font-weight: 600; line-height: 1.4; }
+  .ad-card.is-pick { border-color: var(--line-strong); }
+  .ad-card.is-correct {
+    border-color: var(--accent); background: rgba(34,211,238,0.08);
+    box-shadow: 0 0 16px var(--accent-glow);
+  }
+  .ad-card.is-wrong {
+    border-color: #f87171; background: rgba(248,113,113,0.08);
+  }
+
+  .back-card {
+    border: 1px solid var(--line); border-radius: 16px;
+    background: var(--bg-raise); padding: 18px 16px;
+    min-width: 0;
+  }
+  .verdict-line {
+    font-weight: 700; font-size: clamp(1.15rem, 2.4vw, 1.45rem); line-height: 1.3; margin-bottom: 8px;
+  }
+  .verdict-line.is-ok { color: var(--accent); text-shadow: 0 0 18px var(--accent-glow); }
+  .verdict-line.is-no { color: #f87171; }
+  .reveal { font-weight: 600; margin-top: 8px; }
+  .why {
+    margin-top: 12px; border: 1px solid var(--line); border-radius: 12px;
+    padding: 2px 12px; background: rgba(237,239,241,0.03);
+  }
+  .why summary {
+    min-height: 44px; cursor: pointer; display: flex; align-items: center;
+    font-weight: 700; list-style-position: outside;
+  }
+  .why-body { color: var(--muted); padding: 0 0 12px; }
+  .correct-ad {
+    margin-top: 12px; padding: 12px 14px;
+    border: 1px dashed var(--accent); border-radius: 12px;
+    color: var(--muted); font-size: 0.92rem;
+  }
+  .correct-ad strong { color: var(--ink); }
+
+  .empty-state {
+    border: 1px dashed var(--line-strong); border-radius: 14px;
+    padding: 28px 16px; text-align: center; color: var(--muted);
+  }
+
+  .radar-wrap { text-align: center; padding: 8px 0 10px; }
+  .overall-kicker {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+  }
+  .radar-num {
+    font-family: var(--mono); font-weight: 700;
+    font-size: clamp(4.2rem, 18vw, 6.6rem);
+    line-height: 0.9; letter-spacing: -0.06em;
+    color: var(--accent); text-shadow: 0 0 32px var(--accent-glow);
+  }
+  .radar-num.is-hot { color: #f87171; text-shadow: 0 0 32px rgba(248,113,113,0.35); }
+  .radar-num.is-mid { color: #fbbf24; text-shadow: 0 0 32px rgba(251,191,36,0.3); }
+  .rank-name { font-weight: 700; font-size: clamp(1.15rem, 2.4vw, 1.5rem); margin-top: 10px; }
+  .score-line { color: var(--muted); margin-top: 6px; }
+  .radar-viz { margin: 8px auto 6px; max-width: 280px; }
+  .radar-viz svg { width: 100%; height: auto; display: block; }
+
+  .review-list { display: grid; gap: 8px; margin-top: 16px; }
+  .review-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    min-height: 44px; padding: 12px 14px;
+    border: 1px solid var(--line); border-radius: 12px; background: var(--bg-raise);
+  }
+  .review-mark {
+    font-weight: 700; flex: none; width: 1.25em; line-height: 1.4;
+  }
+  .review-mark.ok { color: var(--accent); }
+  .review-mark.no { color: #f87171; }
+  .review-text { min-width: 0; line-height: 1.4; }
+
+  .check-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 10px 0 8px; }
+  #settle .field-title + .check-toolbar { margin-top: 8px; }
+  #replayBtn { margin-top: 22px; }
+  .progress-text { color: var(--muted); font-size: 0.86rem; }
+  .check-list { display: grid; gap: 8px; }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    min-height: 44px; padding: 12px 14px;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); cursor: pointer;
+  }
+  .check-item:has(input:checked) {
+    border-color: var(--accent); background: rgba(34, 211, 238, 0.08);
+  }
+  .check-item input {
+    width: 20px; height: 20px; margin-top: 2px; flex: none;
+    accent-color: var(--accent);
+  }
+  .check-text { min-width: 0; line-height: 1.4; }
+
+  .mech-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .mech-card {
+    min-width: 0; border: 1px solid var(--line); border-radius: 14px;
+    background: var(--bg-raise); padding: 16px;
+  }
+  .mech-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; line-height: 1.35; }
+  .mech-card p { color: var(--muted); font-size: 0.92rem; }
+
+  .disclaimer {
+    margin-top: 14px; border: 1px solid rgba(251,191,36,0.45);
+    background: rgba(251,191,36,0.08); color: var(--ink);
+    border-radius: 12px; padding: 14px 16px; font-size: 0.95rem; font-weight: 700;
+  }
+  .disclaimer.full { font-weight: 600; margin-top: 18px; }
+  .note-copy { color: var(--muted); margin-top: 10px; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s; min-height: 44px;
+    display: inline-flex; align-items: center; justify-content: center; text-align: center;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237,239,241,0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { margin-top: 14px; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; display: block; }
+  .share-hint { color: var(--faint); font-size: 0.82rem; margin-top: 8px; }
+
+  footer {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding: 28px var(--pad) 40px; border-top: 1px solid var(--line);
+    max-width: 880px; margin: 0 auto;
+  }
+  footer > span {
+    display: inline-flex; align-items: center; min-height: 44px;
+    min-width: 0; max-width: 100%;
+  }
+  footer a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 0; }
+  footer a:hover { color: var(--ink); }
+  footer .mono { color: var(--faint); }
+
+  @media (min-width: 720px) {
+    .ad-grid { grid-template-columns: 1fr 1fr; }
+    .mech-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 0 14px; gap: 8px; }
+    .nav-back { font-size: 11px; letter-spacing: 0; }
+    .nav-brand { font-size: 13px; }
+    .nav-lang { padding: 6px 10px; letter-spacing: 0.12em; }
+    .share-btn { padding: 12px 12px; flex: 1 1 100%; }
+    .cta { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* 禁用所有动画 */
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+    .flip-card { transform: none !important; }
+    .flip-front, .flip-back { transform: none !important; position: relative !important; }
+    .flip-card:not(.is-flipped) .flip-back { display: none; }
+    .flip-card.is-flipped .flip-front { display: none; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand">ADREAD<span>·054</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="Mini Games · ADREAD-054">Mini Games · ADREAD-054</p>
+    <h1 data-en="Ad mind-reader: what your chats look like to advertisers">广告读心术：你的聊天，在广告商眼里值几个钱</h1>
+    <p class="hook" data-en="You think it is answering you. It is also reading you.">你以为它在回答你，它也在读你</p>
+    <p class="lede" data-en="On <strong>2026-10-15</strong>, 404 Media tested that advertisers can target by <strong>prompt content, phone number, and email</strong>. Ten rounds: you play the ad system.">2026-10-15，404 Media 实测：广告商可按 <strong>prompt 内容、手机号、邮箱</strong> 定向。接下来 10 题，你来当一次广告系统。</p>
+    <a class="cta" href="#game" id="startBtn" data-en="Start the game">开始游戏</a>
+  </header>
+
+  <section class="field" id="game">
+    <div class="field-head">
+      <span class="field-no" data-en="01">01</span>
+      <h2 class="field-title" data-en="Guess the ad">猜这题会出什么广告</h2>
+      <p class="field-hint" data-en="Four cards. One is what the system would serve — including “no ad here.”">四张卡，猜系统会推哪一张。其中一张可以是「这里不会出广告」。</p>
+    </div>
+    <p class="sr-only" id="live" aria-live="polite" aria-atomic="true"></p>
+    <div id="gameDone" class="empty-state" hidden data-en="Ten rounds in. The radar is below.">10 题已完成，下滑看雷达值。</div>
+    <div id="gameStage">
+      <div class="prog-row">
+        <p class="prog-text" id="progText">1 / 10</p>
+        <div class="progress" aria-hidden="true"><span id="progBar"></span></div>
+      </div>
+      <div class="flip-scene" id="flipScene">
+        <div class="flip-card" id="flipCard">
+          <div class="flip-face flip-front" id="frontFace"></div>
+          <div class="flip-face flip-back" id="backFace"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="field" id="settle">
+    <div class="field-head">
+      <span class="field-no" data-en="02">02</span>
+      <h2 class="field-title" data-en="Advertiser radar">广告商雷达</h2>
+      <p class="field-hint" data-en="Radar = 100 − correct × 10. More correct answers means you know the rules, so the radar is lower.">雷达值 = 100 − 答对题数 × 10。答对越多，说明你越懂这套定向规则，被读得越少。</p>
+    </div>
+    <div id="settleEmpty" class="empty-state" data-en="Finish all 10 rounds and the radar, rank, and review list appear here.">答完 10 题后，这里会出现雷达值、称号和回顾。</div>
+    <div id="settleBody" hidden>
+      <div class="radar-wrap">
+        <p class="overall-kicker" id="radarKicker"></p>
+        <p class="radar-num" id="radarNum">—</p>
+        <div class="radar-viz" aria-hidden="true">
+          <svg id="radarSvg" viewBox="0 0 280 160" width="280" height="160"></svg>
+        </div>
+        <p class="rank-name" id="rankName"></p>
+        <p class="score-line" id="scoreLine"></p>
+      </div>
+      <div class="review-list" id="reviewList"></div>
+    </div>
+    <h3 class="field-title" data-en="Lower how much can be read">降低被读</h3>
+    <div class="check-toolbar">
+      <p class="progress-text" id="actionProgress" aria-live="polite"></p>
+    </div>
+    <p class="field-hint" data-en="Ticks stay on this device. These cut how much of you the system can use.">勾选会记在这台设备上。用来降低系统能用到你的信号。</p>
+    <div class="progress" aria-hidden="true" style="margin: 8px 0 12px;"><span id="actionBar"></span></div>
+    <div class="check-list" id="actionList"></div>
+    <button class="cta" id="replayBtn" type="button" hidden data-en="Play again">再玩一次</button>
+  </section>
+
+  <section class="field" id="mechanisms">
+    <div class="field-head">
+      <span class="field-no" data-en="03">03</span>
+      <h2 class="field-title" data-en="Mechanism cheat sheet">机制速查表</h2>
+      <p class="field-hint" data-en="Readable without playing. Same facts the game uses.">不玩游戏也能看。和题里用的是同一套事实。</p>
+    </div>
+    <div class="mech-grid" id="mechList"></div>
+  </section>
+
+  <section class="field" id="share">
+    <div class="field-head">
+      <span class="field-no" data-en="04">04</span>
+      <h2 class="field-title" data-en="Share">分享</h2>
+      <p class="field-hint" data-en="If you have not finished, the copy invites a friend to see how much advertisers can read them.">还没玩完时，文案是邀请来测测广告商能读你多少。</p>
+    </div>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap" hidden>
+      <canvas id="shareCanvas" width="1200" height="630"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+
+  <section class="field" id="notes">
+    <div class="field-head">
+      <span class="field-no" data-en="05">05</span>
+      <h2 class="field-title" data-en="Notes">注记</h2>
+    </div>
+    <p class="disclaimer full" data-en="All chat snippets and ads are fictional examples. Educational demo, not an official OpenAI explainer.">所有聊天片段与广告均为虚构示例；教育演示，非 OpenAI 官方说明。</p>
+    <p class="note-copy" data-en="Sources: 404 Media reporting on 2026-10-15, and OpenAI Help Center language on ads and Ad Controls. This page does not replace the official docs.">资料来源：404 Media 2026-10-15 报道，以及 OpenAI 帮助中心关于广告与 Ad Controls 的口径。本页不替代官方说明。</p>
+    <p class="asof" data-en="Data as of 2026-10-21.">数据日期 2026-10-21。</p>
+  </section>
+</main>
+
+<footer>
+  <span class="mono" data-en='<a href="https://build-100.com/">build-100.com</a>'><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono" data-en='<a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a>'><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="ADREAD-054 · Ad mind-reader">ADREAD-054 · 广告读心术</span>
+</footer>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  "use strict";
+  var E = window.AdreadEngine;
+  if (!E) return;
+
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+
+  var game = E.newState();
+  var revealing = false;
+  var checked = loadChecks();
+  var shareOpen = false;
+  var copyTimer = null;
+  var NS = "http://www.w3.org/2000/svg";
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+  function $(id) { return document.getElementById(id); }
+  function pair(obj) { return obj ? t(obj.zh, obj.en) : ""; }
+
+  function stampZh() {
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    });
+  }
+
+  function loadChecks() {
+    try {
+      var raw = localStorage.getItem("adread054-actions");
+      var arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveChecks() {
+    try { localStorage.setItem("adread054-actions", JSON.stringify(checked)); } catch (e) {}
+  }
+
+  function answeredCount() {
+    var picks = game && game.picks ? game.picks : {};
+    return Object.keys(picks).length;
+  }
+
+  function findOption(round, id) {
+    if (!round) return null;
+    var i;
+    for (i = 0; i < round.options.length; i++) {
+      if (round.options[i].id === id) return round.options[i];
+    }
+    return null;
+  }
+
+  function correctOption(round) {
+    return findOption(round, round.answer);
+  }
+
+  function svgEl(name, attrs) {
+    var node = document.createElementNS(NS, name);
+    Object.keys(attrs || {}).forEach(function (k) { node.setAttribute(k, attrs[k]); });
+    return node;
+  }
+
+  function radarTone(v) {
+    if (v >= 70) return "hot";
+    if (v >= 40) return "mid";
+    return "cool";
+  }
+
+  function radarHex(v) {
+    if (v >= 70) return "#f87171";
+    if (v >= 40) return "#fbbf24";
+    return "#22d3ee";
+  }
+
+  function renderRadarSvg(value) {
+    var svg = $("radarSvg");
+    if (!svg) return;
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var cx = 140;
+    var cy = 128;
+    var r = 96;
+    var v = Math.max(0, Math.min(100, Number(value) || 0));
+    var track = svgEl("path", {
+      d: "M 44 128 A 96 96 0 0 1 236 128",
+      fill: "none",
+      stroke: "rgba(237,239,241,0.14)",
+      "stroke-width": "12",
+      "stroke-linecap": "round"
+    });
+    svg.appendChild(track);
+    if (v > 0) {
+      var ang = Math.PI * (1 - v / 100);
+      var x = cx + r * Math.cos(ang);
+      var y = cy - r * Math.sin(ang);
+      var large = "0";
+      var arc = svgEl("path", {
+        d: "M 44 128 A 96 96 0 " + large + " 1 " + x.toFixed(1) + " " + y.toFixed(1),
+        fill: "none",
+        stroke: radarHex(v),
+        "stroke-width": "12",
+        "stroke-linecap": "round"
+      });
+      svg.appendChild(arc);
+      var needle = svgEl("line", {
+        x1: String(cx), y1: String(cy),
+        x2: x.toFixed(1), y2: y.toFixed(1),
+        stroke: radarHex(v),
+        "stroke-width": "3"
+      });
+      svg.appendChild(needle);
+    }
+    svg.appendChild(svgEl("circle", { cx: String(cx), cy: String(cy), r: "6", fill: radarHex(v) }));
+    var lab0 = svgEl("text", { x: "44", y: "154", fill: "#7d848c", "font-size": "12", "text-anchor": "middle", "font-family": "ui-monospace, Menlo, monospace" });
+    lab0.textContent = "0";
+    var lab100 = svgEl("text", { x: "236", y: "154", fill: "#7d848c", "font-size": "12", "text-anchor": "middle", "font-family": "ui-monospace, Menlo, monospace" });
+    lab100.textContent = "100";
+    svg.appendChild(lab0);
+    svg.appendChild(lab100);
+  }
+
+  function makeAdButton(opt, round, enabled) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "ad-card" + (opt.sponsor ? "" : " is-none");
+    btn.setAttribute("data-id", opt.id);
+    if (!enabled) btn.disabled = true;
+    var pick = round ? game.picks[round.id] : null;
+    if (pick && pick === opt.id) btn.className += " is-pick";
+    if (pick) {
+      if (opt.id === round.answer) btn.className += " is-correct";
+      else if (opt.id === pick) btn.className += " is-wrong";
+    }
+    var tag = document.createElement("span");
+    tag.className = "ad-tag";
+    tag.textContent = opt.sponsor ? "Sponsored" : t("无广告位", "No ad slot");
+    var copy = document.createElement("span");
+    copy.className = "ad-copy";
+    copy.textContent = pair(opt.label);
+    btn.appendChild(tag);
+    btn.appendChild(copy);
+    if (enabled) {
+      btn.addEventListener("click", function () { pickOption(opt.id); });
+    }
+    return btn;
+  }
+
+  function renderFront(round) {
+    var host = $("frontFace");
+    if (!host || !round) return;
+    host.textContent = "";
+    var monitor = document.createElement("div");
+    monitor.className = "monitor";
+    var chip = document.createElement("p");
+    chip.className = "chip";
+    chip.textContent = pair(round.context);
+    var meta = document.createElement("p");
+    meta.className = "bubble-meta";
+    meta.textContent = t("你 · 当前对话", "You · this chat");
+    var bubble = document.createElement("p");
+    bubble.className = "bubble";
+    bubble.textContent = pair(round.chat);
+    monitor.appendChild(chip);
+    monitor.appendChild(meta);
+    monitor.appendChild(bubble);
+    host.appendChild(monitor);
+    var grid = document.createElement("div");
+    grid.className = "ad-grid";
+    grid.setAttribute("role", "group");
+    grid.setAttribute("aria-label", t("广告选项", "Ad options"));
+    var enabled = !revealing && game.picks[round.id] == null;
+    round.options.forEach(function (opt) {
+      grid.appendChild(makeAdButton(opt, round, enabled));
+    });
+    host.appendChild(grid);
+  }
+
+  function renderBack(round) {
+    var host = $("backFace");
+    if (!host || !round) return;
+    host.textContent = "";
+    var card = document.createElement("div");
+    card.className = "back-card";
+    var pick = game.picks[round.id];
+    var scored = E.scoreAnswer(round, pick);
+    var verdict = document.createElement("p");
+    verdict.className = "verdict-line " + (scored.correct ? "is-ok" : "is-no");
+    verdict.textContent = scored.correct ? t("正确", "Correct") : t("不对", "Incorrect");
+    card.appendChild(verdict);
+    var mech = E.MECHANISMS[round.mechanism];
+    if (mech) {
+      var mechLine = document.createElement("p");
+      mechLine.className = "mono";
+      mechLine.style.color = "var(--accent)";
+      mechLine.style.textTransform = "none";
+      mechLine.style.letterSpacing = "0.04em";
+      mechLine.textContent = pair(mech.title);
+      card.appendChild(mechLine);
+    }
+    var reveal = document.createElement("p");
+    reveal.className = "reveal";
+    reveal.textContent = pair(round.reveal);
+    card.appendChild(reveal);
+    if (!scored.correct) {
+      var right = correctOption(round);
+      var hint = document.createElement("p");
+      hint.className = "correct-ad";
+      hint.appendChild(document.createTextNode(t("系统会推：", "The system serves: ")));
+      var strong = document.createElement("strong");
+      strong.textContent = right ? pair(right.label) : "";
+      hint.appendChild(strong);
+      card.appendChild(hint);
+    }
+    var det = document.createElement("details");
+    det.className = "why";
+    var sum = document.createElement("summary");
+    sum.textContent = t("为什么", "Why");
+    var why = document.createElement("p");
+    why.className = "why-body";
+    why.textContent = pair(round.why);
+    det.appendChild(sum);
+    det.appendChild(why);
+    card.appendChild(det);
+    var next = document.createElement("button");
+    next.type = "button";
+    next.className = "cta";
+    next.style.marginTop = "16px";
+    next.style.width = "100%";
+    if (E.isDone(game)) next.textContent = t("查看结算", "See the radar");
+    else next.textContent = t("下一题", "Next");
+    next.addEventListener("click", goNext);
+    card.appendChild(next);
+    host.appendChild(card);
+  }
+
+  function sizeFlip() {
+    var card = $("flipCard");
+    var front = $("frontFace");
+    var back = $("backFace");
+    if (!card || !front || !back) return;
+    if (!revealing) {
+      card.style.minHeight = "";
+      return;
+    }
+    var h = Math.max(front.offsetHeight, back.scrollHeight);
+    if (h > 0) card.style.minHeight = h + "px";
+  }
+
+  function renderQuestion(deferFlip) {
+    var round = E.currentRound(game);
+    if (!round) return;
+    var n = game.index + 1;
+    var prog = $("progText");
+    if (prog) prog.textContent = n + " / 10";
+    var bar = $("progBar");
+    if (bar) bar.style.width = (answeredCount() / 10 * 100) + "%";
+    renderFront(round);
+    renderBack(round);
+    var card = $("flipCard");
+    if (!card) return;
+    if (revealing) {
+      sizeFlip();
+      if (!deferFlip) card.classList.add("is-flipped");
+    } else {
+      card.classList.remove("is-flipped");
+      card.style.minHeight = "";
+    }
+  }
+
+  function renderGame() {
+    var done = E.isDone(game);
+    var stage = $("gameStage");
+    var doneEl = $("gameDone");
+    if (done && !revealing) {
+      if (stage) stage.hidden = true;
+      if (doneEl) doneEl.hidden = false;
+    } else {
+      if (stage) stage.hidden = false;
+      if (doneEl) doneEl.hidden = true;
+      renderQuestion();
+    }
+  }
+
+  function renderSettle() {
+    var ready = E.isDone(game) && !revealing;
+    var empty = $("settleEmpty");
+    var body = $("settleBody");
+    var replayBtn = $("replayBtn");
+    if (empty) empty.hidden = ready;
+    if (body) body.hidden = !ready;
+    if (replayBtn) replayBtn.hidden = !ready;
+    if (!ready) return;
+    var n = game.correctCount;
+    var v = E.radar(n);
+    var rk = E.rank(n);
+    var kicker = $("radarKicker");
+    if (kicker) kicker.textContent = t("广告商雷达值", "Advertiser radar");
+    var num = $("radarNum");
+    if (num) {
+      num.textContent = String(v);
+      var tone = radarTone(v);
+      num.className = "radar-num" + (tone === "hot" ? " is-hot" : tone === "mid" ? " is-mid" : "");
+    }
+    renderRadarSvg(v);
+    var rankEl = $("rankName");
+    if (rankEl) rankEl.textContent = pair(rk);
+    var score = $("scoreLine");
+    if (score) {
+      score.textContent = t("答对 " + n + " / 10", "Correct " + n + " / 10");
+    }
+    var host = $("reviewList");
+    if (host) {
+      host.textContent = "";
+      game.order.forEach(function (idx) {
+        var round = E.ROUNDS[idx];
+        if (!round) return;
+        var pick = game.picks[round.id];
+        var ok = pick === round.answer;
+        var mech = E.MECHANISMS[round.mechanism];
+        var row = document.createElement("div");
+        row.className = "review-item";
+        var mark = document.createElement("span");
+        mark.className = "review-mark " + (ok ? "ok" : "no");
+        mark.textContent = ok ? "✓" : "✗";
+        var text = document.createElement("span");
+        text.className = "review-text";
+        text.textContent = mech ? pair(mech.title) : round.id;
+        row.appendChild(mark);
+        row.appendChild(text);
+        host.appendChild(row);
+      });
+    }
+  }
+
+  function isChecked(id) {
+    return checked.indexOf(id) !== -1;
+  }
+
+  function setChecked(id, on) {
+    var i = checked.indexOf(id);
+    if (on && i === -1) checked.push(id);
+    if (!on && i !== -1) checked.splice(i, 1);
+    saveChecks();
+  }
+
+  function renderActions() {
+    var host = $("actionList");
+    if (!host) return;
+    host.textContent = "";
+    E.ACTIONS.forEach(function (item) {
+      var lab = document.createElement("label");
+      lab.className = "check-item";
+      var input = document.createElement("input");
+      input.type = "checkbox";
+      input.setAttribute("data-id", item.id);
+      input.checked = isChecked(item.id);
+      var text = document.createElement("span");
+      text.className = "check-text";
+      text.textContent = pair(item.text);
+      lab.appendChild(input);
+      lab.appendChild(text);
+      host.appendChild(lab);
+    });
+    renderActionProgress();
+  }
+
+  function renderActionProgress() {
+    var prog = E.actionProgress(checked);
+    var bar = $("actionBar");
+    if (bar) bar.style.width = (prog.total ? (prog.done / prog.total * 100) : 0) + "%";
+    var el = $("actionProgress");
+    if (el) {
+      el.textContent = t(
+        "已完成 " + prog.done + " / " + prog.total,
+        "Done " + prog.done + " / " + prog.total
+      );
+    }
+  }
+
+  function renderMechanisms() {
+    var host = $("mechList");
+    if (!host) return;
+    host.textContent = "";
+    Object.keys(E.MECHANISMS).forEach(function (key) {
+      var m = E.MECHANISMS[key];
+      var art = document.createElement("article");
+      art.className = "mech-card";
+      var h = document.createElement("h3");
+      h.textContent = pair(m.title);
+      var p = document.createElement("p");
+      p.textContent = pair(m.fact);
+      art.appendChild(h);
+      art.appendChild(p);
+      host.appendChild(art);
+    });
+  }
+
+  function renderAll() {
+    renderGame();
+    renderSettle();
+    renderActions();
+    renderMechanisms();
+    if (shareOpen) drawShare();
+  }
+
+  function applyLang(l) {
+    lang = l;
+    if (copyTimer) { clearTimeout(copyTimer); copyTimer = null; }
+    var copyBtn = $("copyBtn");
+    if (copyBtn) copyBtn.classList.remove("copied");
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = l === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = l === "en" ? "en" : "zh-CN";
+    var langBtn = $("langBtn");
+    langBtn.textContent = l === "en" ? "中文" : "EN";
+    langBtn.setAttribute("aria-label", l === "en" ? "切换到中文" : "Switch language");
+    try { localStorage.setItem("lang", l); } catch (e) {}
+    renderAll();
+  }
+
+  function pickOption(optionId) {
+    if (revealing) return;
+    var round = E.currentRound(game);
+    if (!round) return;
+    if (game.picks[round.id] != null) return;
+    game = E.answer(game, optionId);
+    revealing = true;
+    var scored = E.scoreAnswer(round, optionId);
+    var live = $("live");
+    if (live) {
+      live.textContent = scored.correct
+        ? t("正确。" + pair(round.reveal), "Correct. " + pair(round.reveal))
+        : t("不对。" + pair(round.reveal), "Incorrect. " + pair(round.reveal));
+    }
+    renderQuestion(true);
+    requestAnimationFrame(function () {
+      var card = $("flipCard");
+      if (card) card.classList.add("is-flipped");
+    });
+  }
+
+  function goNext() {
+    if (!revealing) return;
+    if (E.isDone(game)) {
+      revealing = false;
+      renderAll();
+      var el = $("settle");
+      if (el && el.scrollIntoView) {
+        try { el.scrollIntoView({ block: "start" }); } catch (e) {}
+      }
+      if (shareOpen) drawShare();
+      return;
+    }
+    game = E.next(game);
+    revealing = false;
+    var card = $("flipCard");
+    if (card) {
+      card.classList.add("no-anim");
+      card.classList.remove("is-flipped");
+    }
+    renderQuestion();
+    requestAnimationFrame(function () {
+      if (card) card.classList.remove("no-anim");
+    });
+  }
+
+  function restart() {
+    game = E.newState();
+    revealing = false;
+    var card = $("flipCard");
+    if (card) {
+      card.classList.add("no-anim");
+      card.classList.remove("is-flipped");
+    }
+    renderAll();
+    requestAnimationFrame(function () {
+      if (card) card.classList.remove("no-anim");
+    });
+    var el = $("game");
+    if (el && el.scrollIntoView) {
+      try { el.scrollIntoView({ block: "start" }); } catch (e) {}
+    }
+  }
+
+  function fontStack() {
+    return '"Noto Sans CJK SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+  }
+  function setFont(ctx, weight, px) {
+    ctx.font = weight + " " + px + "px " + fontStack();
+  }
+  function fitText(ctx, text, maxW, weight, px, minPx) {
+    var size = px;
+    setFont(ctx, weight, size);
+    while (size > minPx && ctx.measureText(text).width > maxW) {
+      size -= 1;
+      setFont(ctx, weight, size);
+    }
+    return size;
+  }
+  function roundRect(ctx, x, y, w, h, r) {
+    var rr = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + rr, y);
+    ctx.arcTo(x + w, y, x + w, y + h, rr);
+    ctx.arcTo(x + w, y + h, x, y + h, rr);
+    ctx.arcTo(x, y + h, x, y, rr);
+    ctx.arcTo(x, y, x + w, y, rr);
+    ctx.closePath();
+  }
+
+  function drawShare() {
+    var canvas = $("shareCanvas");
+    if (!canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    var W = 1200;
+    var H = 630;
+    var pad = 56;
+    var maxW = W - pad * 2;
+    canvas.width = W;
+    canvas.height = H;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.045)";
+    var gx;
+    var gy;
+    for (gx = 18; gx < W; gx += 36) {
+      for (gy = 18; gy < H; gy += 36) ctx.fillRect(gx, gy, 1.4, 1.4);
+    }
+    ctx.fillStyle = "#22d3ee";
+    ctx.fillRect(0, 0, 10, H);
+    ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#22d3ee";
+    setFont(ctx, "700", 22);
+    ctx.fillText("ADREAD-054", pad, 64);
+    ctx.fillStyle = "#edeff1";
+    var title = t("广告读心术", "Ad mind-reader");
+    fitText(ctx, title, maxW, "700", 34, 18);
+    ctx.fillText(title, pad, 118);
+
+    var done = E.isDone(game) && !revealing;
+    ctx.fillStyle = "rgba(237,239,241,0.04)";
+    roundRect(ctx, pad, 150, maxW, 280, 16);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(237,239,241,0.14)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    if (!done) {
+      ctx.fillStyle = "#22d3ee";
+      var invite = t("来测测广告商能读你多少", "See how much advertisers can read you");
+      fitText(ctx, invite, maxW - 40, "700", 40, 22);
+      ctx.fillText(invite, pad + 28, 300);
+      ctx.fillStyle = "#9aa1a8";
+      setFont(ctx, "400", 22);
+      ctx.fillText(t("10 题 · 换位当广告系统", "10 rounds · play the ad system"), pad + 28, 350);
+    } else {
+      var n = game.correctCount;
+      var v = E.radar(n);
+      var rk = E.rank(n);
+      ctx.fillStyle = radarHex(v);
+      setFont(ctx, "700", 120);
+      ctx.fillText(String(v), pad + 28, 310);
+      ctx.fillStyle = "#edeff1";
+      var line = pair(rk) + "  ·  " + t("答对 " + n + " / 10", "Correct " + n + " / 10");
+      fitText(ctx, line, maxW - 40, "700", 28, 16);
+      ctx.fillText(line, pad + 28, 372);
+      ctx.fillStyle = "#9aa1a8";
+      setFont(ctx, "400", 18);
+      ctx.fillText(t("广告商雷达值", "Advertiser radar"), pad + 28, 196);
+    }
+
+    ctx.strokeStyle = "rgba(237,239,241,0.14)";
+    ctx.beginPath();
+    ctx.moveTo(pad, 500);
+    ctx.lineTo(W - pad, 500);
+    ctx.stroke();
+    var asof = t("数据日期 " + E.META.asOf, "Data as of " + E.META.asOf);
+    ctx.fillStyle = "#9aa1a8";
+    fitText(ctx, asof, maxW, "400", 18, 12);
+    ctx.fillText(asof, pad, 548);
+    ctx.fillStyle = "#edeff1";
+    setFont(ctx, "600", 22);
+    ctx.fillText("build-100.com/054", pad, 598);
+
+    canvas.setAttribute("aria-label", t("广告读心术分享卡", "Ad mind-reader share image"));
+    $("shareWrap").hidden = false;
+    shareOpen = true;
+  }
+
+  function markCopied() {
+    var btn = $("copyBtn");
+    if (!btn) return;
+    btn.classList.add("copied");
+    btn.textContent = t("已复制", "Copied");
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () {
+      btn.classList.remove("copied");
+      if (btn.dataset.zh === undefined) return;
+      btn.innerHTML = lang === "en" ? btn.dataset.en : btn.dataset.zh;
+    }, 1600);
+  }
+
+  function fallbackCopy(text) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch (err) {}
+      document.body.removeChild(ta);
+    } catch (err) {}
+  }
+
+  function sharePayload() {
+    var done = E.isDone(game) && !revealing;
+    return E.shareText(lang, done ? game.correctCount : null);
+  }
+
+  stampZh();
+
+  $("langBtn").addEventListener("click", function () {
+    applyLang(lang === "en" ? "zh" : "en");
+  });
+
+  $("startBtn").addEventListener("click", function () {
+    if (E.isDone(game) && !revealing) restart();
+  });
+
+  var replay = $("replayBtn");
+  if (replay) replay.addEventListener("click", restart);
+
+  $("actionList").addEventListener("change", function (ev) {
+    var input = ev.target;
+    if (!input || input.type !== "checkbox") return;
+    var id = input.getAttribute("data-id");
+    if (!id) return;
+    setChecked(id, input.checked);
+    renderActionProgress();
+  });
+
+  $("frontFace").addEventListener("keydown", function (ev) {
+    var buttons = $("frontFace").querySelectorAll(".ad-card");
+    if (!buttons.length) return;
+    var i;
+    var idx = -1;
+    for (i = 0; i < buttons.length; i++) {
+      if (buttons[i] === document.activeElement) idx = i;
+    }
+    var nextIdx = idx;
+    if (ev.key === "ArrowRight" || ev.key === "ArrowDown") nextIdx = (idx + 1 + buttons.length) % buttons.length;
+    else if (ev.key === "ArrowLeft" || ev.key === "ArrowUp") nextIdx = (idx - 1 + buttons.length) % buttons.length;
+    else if (ev.key === "Home") nextIdx = 0;
+    else if (ev.key === "End") nextIdx = buttons.length - 1;
+    else if (ev.key === "1" || ev.key === "2" || ev.key === "3" || ev.key === "4") {
+      nextIdx = Number(ev.key) - 1;
+      if (buttons[nextIdx] && !buttons[nextIdx].disabled) {
+        ev.preventDefault();
+        buttons[nextIdx].click();
+      }
+      return;
+    } else return;
+    if (nextIdx !== idx && buttons[nextIdx]) {
+      ev.preventDefault();
+      buttons[nextIdx].focus();
+    }
+  });
+
+  $("copyBtn").addEventListener("click", function () {
+    var text;
+    try { text = sharePayload(); } catch (e) { return; }
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      markCopied();
+    }
+    var clipPromise;
+    try {
+      var clip = navigator.clipboard;
+      if (clip && typeof clip.writeText === "function") {
+        var result = clip.writeText(text);
+        clipPromise = result && typeof result.then === "function" ? result : Promise.reject();
+      } else clipPromise = Promise.reject();
+    } catch (e) {
+      clipPromise = Promise.reject();
+    }
+    var timed = new Promise(function (_, reject) {
+      setTimeout(function () { reject(new Error("copy-timeout")); }, 400);
+    });
+    Promise.race([Promise.resolve(clipPromise), timed]).then(finish, function () {
+      fallbackCopy(text);
+      finish();
+    });
+  });
+
+  $("shareImgBtn").addEventListener("click", function () {
+    try { drawShare(); } catch (e) {}
+  });
+
+  if (lang === "en") applyLang("en");
+  else renderAll();
+})();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

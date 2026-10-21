@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-20",
+  "updated": "2026-10-21",
   "filters": [
     {
       "id": "all",
@@ -691,6 +691,19 @@
       ],
       "live": true,
       "url": "https://build-100.com/053/"
+    },
+    {
+      "id": "054",
+      "code": "ADREAD",
+      "name": "ADREAD-054",
+      "sub_zh": "广告读心术——10 道题换位当一次广告系统：猜聊天旁会推什么广告，翻牌看真实定向机制，再拿一张降低被读清单",
+      "sub_en": "Ad mind-reader — 10 rounds playing the ad system: guess which ad a chat triggers, flip to see the real targeting rule, then get a checklist to be read less",
+      "cats": [
+        "learn",
+        "life"
+      ],
+      "live": true,
+      "url": "https://build-100.com/054/"
     }
   ]
 }
