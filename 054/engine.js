@@ -18,8 +18,8 @@
     "current-chat": {
       title: { zh: "当前对话信号", en: "Current-chat signal" },
       fact: {
-        zh: "当前对话的内容会影响广告选择。广告出现在 Free / Go 计划、已登录成年用户的回答下方，标 Sponsored。",
-        en: "The current conversation can shape which ad is chosen. Ads appear under replies for logged-in adults on Free / Go, marked Sponsored."
+        zh: "当前对话的内容会影响广告选择。广告出现在 Free / Go 用户（非未成年账户）的回答下方，标 Sponsored。",
+        en: "The current conversation can shape which ad is chosen. Ads appear under replies for Free and Go users (not accounts identified as under 18), marked Sponsored."
       }
     },
     "history-memory": {
@@ -67,8 +67,8 @@
     "list-match": {
       title: { zh: "客户名单匹配", en: "Customer list matching" },
       fact: {
-        zh: "广告商可上传邮箱或手机号（或哈希后）做受众匹配，最少 25,000 人成团。广告商看不到具体是谁，也看不到聊天内容；匹配在 OpenAI 侧内部完成。",
-        en: "Advertisers can upload emails or phone numbers (or hashes) for audience matching. A list needs at least 25,000 people. Advertisers do not see who matched, and they do not see the chat; matching happens internally on OpenAI's side."
+        zh: "广告商可上传邮箱或手机号（或哈希后）做受众匹配。用于定向投放的名单需至少匹配到 25,000 名用户（不足只能用于排除）。广告商看不到具体是谁，也看不到聊天内容；匹配在 OpenAI 侧内部完成。",
+        en: "Advertisers can upload emails or phone numbers (or hashes) for audience matching. Targeting with a list requires at least 25,000 matched users; smaller lists can only be used to exclude people. Advertisers do not see who matched, and they do not see the chat; matching happens internally on OpenAI's side."
       }
     },
     "eea-personalize": {
@@ -100,7 +100,7 @@
         zh: "帮我排一条下周末去冰岛看极光的路线，预算中等，想少走回头路。",
         en: "Plan a weekend trip to Iceland for the northern lights. Mid-range budget, fewer backtracks."
       },
-      context: { zh: "Free 计划 · 已登录成年", en: "Free plan · logged-in adult" },
+      context: { zh: "Free 计划 · 非未成年账户", en: "Free plan · not an under-18 account" },
       options: [
         opt("aurora-trek", "AuroraTrek 冰岛极光三日套餐", "AuroraTrek 3-day Iceland lights package", "AuroraTrek"),
         opt("aurora-card", "NimbusCard 旅行联名卡", "NimbusCard travel co-brand card", "NimbusCard"),
@@ -114,8 +114,8 @@
         en: "The travel intent in this conversation is used to choose the ad."
       },
       why: {
-        zh: "广告出现在 Free / Go 计划、已登录成年用户的回答下方，并标 Sponsored。你正在聊冰岛极光，系统就可能配上旅行套餐。广告商看不到这段聊天内容。",
-        en: "Ads sit under replies for logged-in adults on Free / Go, marked Sponsored. This chat is about Iceland lights, so a trip package can be selected. Advertisers do not see the chat content."
+        zh: "广告出现在 Free / Go 用户（非未成年账户）的回答下方，并标 Sponsored。你正在聊冰岛极光，系统就可能配上旅行套餐。广告商看不到这段聊天内容。",
+        en: "Ads sit under replies for Free and Go users (not accounts identified as under 18), marked Sponsored. This chat is about Iceland lights, so a trip package can be selected. Advertisers do not see the chat content."
       }
     },
     {
@@ -124,7 +124,7 @@
         zh: "我在写给团队用的 Python 脚本，想把表格导出成 PDF，有没有稳妥的库？",
         en: "I'm writing a Python script for the team to export tables to PDF. Any solid library?"
       },
-      context: { zh: "Go 计划 · 已登录成年", en: "Go plan · logged-in adult" },
+      context: { zh: "Go 计划 · 非未成年账户", en: "Go plan · not an under-18 account" },
       options: [
         opt("python-pdf", "PaperForge PDF 导出工具", "PaperForge PDF export tool", "PaperForge"),
         opt("python-pet", "Pawsly 宠物订阅粮", "Pawsly pet-food subscription", "Pawsly"),
@@ -258,8 +258,8 @@
         en: "Ads are not shown beside health topics."
       },
       why: {
-        zh: "即便你在 Free 计划且已登录，健康相关回答下方也不会出 Sponsored。这是话题屏蔽，不是因为关了个性化，也不是付费档。",
-        en: "Even on Free as a logged-in user, a health reply does not get a Sponsored slot. This is a topic block, not a personalization setting and not a paid-plan rule."
+        zh: "即便你是 Free 用户（非未成年账户），健康相关回答下方也不会出 Sponsored。这是话题屏蔽，不是因为关了个性化，也不是付费档。",
+        en: "Even for a Free user (not an account identified as under 18), a health reply does not get a Sponsored slot. This is a topic block, not a personalization setting and not a paid-plan rule."
       }
     },
     {
@@ -282,8 +282,8 @@
         en: "Ads are not shown beside mental-health topics."
       },
       why: {
-        zh: "心理健康话题旁不展示广告，和健康、政治话题是同一类规则。即便你在 Free / Go 计划、已登录，这题也不会出现 Sponsored。",
-        en: "Mental-health topics do not show ads, the same class of rule as health and politics. Even on Free / Go as a logged-in user, this reply gets no Sponsored slot."
+        zh: "心理健康话题旁不展示广告，和健康、政治话题是同一类规则。即便你是 Free / Go 用户（非未成年账户），这题也不会出现 Sponsored。",
+        en: "Mental-health topics do not show ads, the same class of rule as health and politics. Even for Free and Go users (not accounts identified as under 18), this reply gets no Sponsored slot."
       }
     },
     {
@@ -292,7 +292,7 @@
         zh: "帮我把这封给房东的催修邮件写得客气一点，别开火。",
         en: "Rewrite this repair-nudge email to my landlord so it stays polite."
       },
-      context: { zh: "Free 计划 · 上传名单匹配", en: "Free plan · uploaded list matching" },
+      context: { zh: "Free 计划 · 在广告商的定向名单里", en: "Free plan · on an advertiser's targeting list" },
       options: [
         opt("list-bank", "CloudBank 新客信用卡", "CloudBank new-customer credit card", "CloudBank"),
         opt("list-move", "ShiftKit 搬家服务", "ShiftKit moving service", "ShiftKit"),
@@ -302,12 +302,12 @@
       answer: "list-bank",
       mechanism: "list-match",
       reveal: {
-        zh: "广告商可上传邮箱或手机号（或哈希后）做受众匹配，最少 25,000 人成团；他们看不到你是谁，也看不到聊天内容。",
-        en: "Advertisers can upload emails or phone numbers (or hashes) for audience matching, with a 25,000-person minimum; they do not see who you are, and they do not see the chat."
+        zh: "广告商可上传邮箱或手机号（或哈希后）做受众匹配；用于定向投放的名单需至少匹配到 25,000 名用户（不足只能用于排除）。他们看不到你是谁，也看不到聊天内容。",
+        en: "Advertisers can upload emails or phone numbers (or hashes) for audience matching. Targeting with a list requires at least 25,000 matched users; smaller lists can only be used to exclude people. They do not see who you are, and they do not see the chat."
       },
       why: {
-        zh: "匹配在 OpenAI 侧内部完成。广告商只知道这个至少 25,000 人的名单里有人看到了广告，看不到具体是谁。催修邮件本身不是选中信用卡的原因。",
-        en: "Matching is done internally on OpenAI's side. The advertiser knows someone in a list of at least 25,000 people saw the ad, not who. The landlord email is not why the card was chosen."
+        zh: "匹配在 OpenAI 侧内部完成。这份名单至少匹配到了 25,000 名用户，才能用来定向投放；广告商只拿到汇总数据，看不到具体是谁看到了广告。催修邮件本身不是选中信用卡的原因。",
+        en: "Matching is done internally on OpenAI's side. This list matched at least 25,000 users, which is what lets it be used for targeting; the advertiser only gets aggregate reporting, not who saw the ad. The landlord email is not why the card was chosen."
       }
     },
     {
@@ -370,6 +370,13 @@
       text: {
         zh: "Plus / Pro / Business / Enterprise / Edu 计划无广告",
         en: "Plus / Pro / Business / Enterprise / Edu plans have no ads"
+      }
+    },
+    {
+      id: "adsfree",
+      text: {
+        zh: "Free 用户可选择「Ads-Free」：没有广告，但使用额度更低",
+        en: "Free users can choose \"Ads-Free\": no ads, but lower usage limits"
       }
     },
     {
