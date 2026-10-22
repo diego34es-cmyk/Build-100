@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-21",
+  "updated": "2026-10-22",
   "filters": [
     {
       "id": "all",
@@ -704,6 +704,19 @@
       ],
       "live": true,
       "url": "https://build-100.com/054/"
+    },
+    {
+      "id": "055",
+      "code": "CAPEX",
+      "name": "CAPEX-055",
+      "sub_zh": "AI烧钱课——5 分钟四节互动小课 + 期末小考：拖滑杆读懂资本开支强度、自由现金流、利息覆盖和发债利率，判断谁在借钱烧 AI、谁还撑得住",
+      "sub_en": "AI burn class — four 5-minute interactive lessons plus a quiz: drag sliders to read capex intensity, free cash flow, interest coverage and bond yields, and tell who's borrowing to burn on AI and who can hold up",
+      "cats": [
+        "learn",
+        "finance"
+      ],
+      "live": true,
+      "url": "https://build-100.com/055/"
     }
   ]
 }
