@@ -59,13 +59,15 @@
   var BONDS = [
     {
       id: "coreweave",
-      label: { zh: "CoreWeave", en: "CoreWeave" },
+      label: { zh: "CoreWeave · 存量债券到期收益率", en: "CoreWeave · existing bonds, yield to maturity" },
+      display: { zh: "约 15%", en: "~15%" },
       yield: 15,
       source: "news"
     },
     {
       id: "oracle",
-      label: { zh: "甲骨文", en: "Oracle" },
+      label: { zh: "甲骨文 · 10–12 年期债券", en: "Oracle · 10–12 year bonds" },
+      display: { zh: "约 8–8.5%", en: "~8–8.5%" },
       yield: 8.5,
       source: "news"
     }
@@ -95,7 +97,7 @@
       snapshot: { capex: 40, revenue: 100, ocf: 50, cash: 70, ebit: 22, interest: 4, bondYield: 11 },
       answer: "danger",
       explain: {
-        zh: "资本开支极重，同时发债利率把信用利差推到困境感。即便自由现金流暂时为正，两盏红灯已经亮了——市场在用利率告诉你：钱很贵。",
+        zh: "资本开支极重，同时债券收益率把信用利差推到困境感。即便自由现金流暂时为正，两盏红灯已经亮了——市场在用利率告诉你：钱很贵。",
         en: "Capex is extreme, and the bond yield pushes the credit spread into distress. Free cash flow can still be positive and you still get two red lights — the market is saying money is expensive."
       }
     },
