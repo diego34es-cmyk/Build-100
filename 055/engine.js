@@ -79,7 +79,7 @@
       snapshot: { capex: 22, revenue: 100, ocf: 40, cash: 45, ebit: 30, interest: 5, bondYield: 5.5 },
       answer: "ok",
       explain: {
-        zh: "这份快照像现金牛在加码建设：资本开支偏重但还没到极重，自由现金流为正，利息覆盖是绿灯，发债利差也在投资级感区间。四盏灯里没有红灯，判撑得住。",
+        zh: "这份快照像现金牛在加码建设：资本开支偏重但还没到极重，自由现金流为正，利息覆盖是绿灯，信用利差也在投资级感区间。四盏灯里没有红灯，判撑得住。",
         en: "A cash-cow builder: capex is heavy but not extreme, free cash flow is positive, interest coverage is green, and the credit spread still feels investment-grade. No red lights, so it holds up."
       }
     },
@@ -124,7 +124,7 @@
       snapshot: { capex: 12, revenue: 80, ocf: 22, cash: 30, ebit: 3, interest: 3, bondYield: 10.5 },
       answer: "danger",
       explain: {
-        zh: "资本开支并不极端，但利息覆盖是红灯，发债利差是困境感。债在变贵、利润几乎盖不住利息——这是「缺钱」而不是「在建设」。两盏红灯，判危险。",
+        zh: "资本开支并不极端，但利息覆盖是红灯，信用利差是困境感。债在变贵、利润几乎盖不住利息——这是「缺钱」而不是「在建设」。两盏红灯，判危险。",
         en: "Capex is not extreme, but interest coverage is red and the credit spread is distress. Debt is getting expensive and profit barely covers interest — this is being short on cash, not building. Two red lights. Danger."
       }
     }
