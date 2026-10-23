@@ -308,7 +308,7 @@ test("CHECKLIST has 5 items and QUIZ has 3 with in-range answers and bilingual e
     assert.ok(item.en.trim());
   });
   assert.ok(E.CHECKLIST.some(function (item) { return /价保/.test(item.zh); }));
-  assert.ok(E.CHECKLIST.some(function (item) { return /名额/.test(item.zh); }));
+  assert.ok(E.CHECKLIST.some(function (item) { return /国补资格应恢复/.test(item.zh); }));
   assert.ok(E.CHECKLIST.some(function (item) { return /定金/.test(item.zh); }));
   assert.ok(E.CHECKLIST.some(function (item) { return /三家/.test(item.zh); }));
   assert.ok(E.CHECKLIST.some(function (item) { return /标识/.test(item.zh) && /地址/.test(item.zh); }));

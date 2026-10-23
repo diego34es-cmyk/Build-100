@@ -85,7 +85,7 @@
   };
 
   var TIMELINE_SRC = [
-    { id: "open", date: "10-20", label: { zh: "开门红", en: "Opening wave" } },
+    { id: "open", date: "10-20", label: { zh: "正式开卖", en: "Official sale start" } },
     { id: "wave2", date: "10-31–11-03", label: { zh: "第二波", en: "Second wave" } },
     { id: "rotate", date: "11-04–11-09", label: { zh: "品类轮动", en: "Category rotation" } },
     { id: "final", date: "11-11", label: { zh: "终极", en: "Finale" } },
@@ -101,8 +101,8 @@
     },
     {
       id: "refund",
-      zh: "国补全额退款会消耗当年名额。",
-      en: "A full refund on a subsidized order can use up this year's subsidy slot."
+      zh: "按规定，退货后已核销的国补资格应恢复；以当地和平台实际处理为准。",
+      en: "Under the rules, a used subsidy entitlement should be restored after a return. Local and platform handling decides."
     },
     {
       id: "deposit",
@@ -152,8 +152,8 @@
       ],
       answer: 1,
       explain: {
-        zh: "据公开报道，存储芯片合约均价涨超 200%。消息称，手机 11 月底或 12 月初涨价 300 元起，512G 与 1TB 涨 500 元起。双11后有反弹风险。",
-        en: "According to public reports, memory-chip contract prices are up more than 200%. Reports say phones may rise by 300 yuan or more in late November or early December, and 512G / 1TB by 500 yuan or more. There is a bounce-back risk after Double 11."
+        zh: "据公开报道，2026 年上半年末较 2025 年末，手机存储芯片合约均价涨超 200%（Counterpoint）。消息称，手机 11 月底或 12 月初涨价 300 元起，512G 与 1TB 涨 500 元起。双11后有反弹风险。",
+        en: "According to public reports, phone memory-chip contract prices at the end of H1 2026 were up more than 200% versus the end of 2025 (Counterpoint). Reports say phones may rise by 300 yuan or more in late November or early December, and 512G / 1TB by 500 yuan or more. There is a bounce-back risk after Double 11."
       }
     },
     {
