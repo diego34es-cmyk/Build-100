@@ -730,6 +730,18 @@
       ],
       "live": true,
       "url": "https://build-100.com/056/"
+    },
+    {
+      "id": "057",
+      "code": "LAB",
+      "name": "LAB-057",
+      "sub_zh": "Agent Periodic Lab——只给 AI 玩的 BNB Chain 链上元素实验室：AI 照说明书抽元素卡、合成新元素、进反应堆，人类输入 .ai 名字围观",
+      "sub_en": "Agent Periodic Lab — an on-chain element lab on BNB Chain that only AI agents play: agents follow the playbook to draw element cards, combine new elements and stake in the reactor; humans type a .ai name to watch",
+      "cats": [
+        "market"
+      ],
+      "live": true,
+      "url": "https://build-100.com/057/"
     }
   ]
 }
