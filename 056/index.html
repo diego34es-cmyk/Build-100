@@ -1,0 +1,1316 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DEAL-056 · 价格照妖镜：双11/黑五真假折扣 3 步看穿</title>
+<meta name="description" content="3 步看穿双11和黑五的真假折扣：对比划线价、日常价和到手价，按公开报道的顺序叠券和国补，判断现在买还是再等等。数据日期 2026-10-23。示例数字非真实价格。价格规则以各平台实时页面为准，不构成消费建议。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/056/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E056%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="DEAL-056 · 价格照妖镜：双11/黑五真假折扣 3 步看穿">
+<meta property="og:description" content="3 步看穿双11和黑五的真假折扣：对比划线价、日常价和到手价，按公开报道的顺序叠券和国补，判断现在买还是再等等。数据日期 2026-10-23。示例数字非真实价格。价格规则以各平台实时页面为准，不构成消费建议。">
+<meta property="og:url" content="https://build-100.com/056/">
+<meta property="og:image" content="https://build-100.com/056/og-056.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="DEAL-056 · 价格照妖镜：双11/黑五真假折扣 3 步看穿">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DEAL-056 · 价格照妖镜：双11/黑五真假折扣 3 步看穿">
+<meta name="twitter:description" content="Three steps to spot a fake Double 11 or Black Friday discount: compare the tag, the usual price, and what you pay, then stack the cuts in order. Data as of 2026-10-23. Sample figures are not live prices. Live platform pages win. Not shopping advice.">
+<meta name="twitter:image" content="https://build-100.com/056/og-056.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #fb923c;
+    --accent-glow: rgba(251,146,60,0.35);
+    --warm: #fbbf24;
+    --hot: #f87171;
+    --cool: var(--accent);
+    --up: #f87171;
+    --down: #4ade80;
+    --safe: #34d399;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+    --you: var(--warm);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: "Noto Sans CJK SC", var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font-family: inherit; color: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible, label:focus-within {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  [hidden] { display: none !important; }
+  h2, h3, p, td, th, li, label, dt, dd, .lede, .field-title, .choice, .callout, .explain, .asof, .check-text, .note-copy, .hook, .comment, .why-line, .rank-name, .score-line, .chip, .badge, .preset, .toc a, .hbar-meta, .quiz-feedback, .snap-k, .snap-v, .band-pill, .runway, .empty-state, .bar-name, .fall-name, .fall-sub, .tl-date, .tl-label, .verdict-line, .case-note, .order li {
+    overflow-wrap: anywhere;
+  }
+  h1, .big, .cover-num { overflow-wrap: normal; }
+  img, canvas, svg, input, button { max-width: 100%; }
+  button { white-space: normal; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; min-width: 0; overflow: hidden; text-overflow: ellipsis; min-height: 44px; display: inline-flex; align-items: center; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; text-align: center; flex: none; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+    flex: none; min-height: 44px; min-width: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 48px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; letter-spacing: 0.04em; line-height: 1.45; text-wrap: balance; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; margin-bottom: 18px;
+  }
+  .hook {
+    font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; color: var(--accent);
+    margin-bottom: 14px; line-height: 1.35; text-shadow: 0 0 18px var(--accent-glow);
+  }
+  .hero p.lede, .hero p.fact { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); margin-top: 12px; }
+  .hero p.lede strong, .hero p.fact strong { color: var(--ink); font-weight: 600; }
+
+  .date-badge {
+    display: inline-flex; align-items: center; flex-wrap: wrap; min-height: 44px; max-width: 100%;
+    margin-top: 4px; padding: 8px 14px; white-space: normal;
+    border: 1px solid var(--accent); border-radius: 999px;
+    background: rgba(251, 146, 60, 0.16);
+    color: var(--ink); font-weight: 700; line-height: 1.4;
+  }
+
+  .cta {
+    display: inline-flex; align-items: center; justify-content: center; margin-top: 18px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--accent); border-radius: 4px;
+    background: var(--accent); color: var(--bg); cursor: pointer; transition: all .2s;
+    min-height: 44px; line-height: 1.4; text-align: center;
+  }
+  .cta:hover { box-shadow: 0 0 24px var(--accent-glow); }
+  .cta.ghost {
+    background: transparent; color: var(--ink); border-color: var(--line-strong); margin-top: 0;
+  }
+  .cta.ghost:hover { border-color: var(--accent); color: var(--accent); box-shadow: none; }
+  .cta:disabled { cursor: default; opacity: 0.72; }
+  .cta.is-hit { border-color: #34d399; color: #34d399; font-weight: 700; opacity: 1; }
+  .cta.is-miss { opacity: 0.45; }
+
+  .toc {
+    display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 22px;
+  }
+  .toc a {
+    min-height: 44px; padding: 12px 14px;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise);
+    display: flex; align-items: center; gap: 12px;
+    transition: border-color .2s;
+  }
+  .toc a:hover { border-color: var(--accent); }
+  .toc .n {
+    font-family: var(--mono); color: var(--accent); font-size: 12px;
+    letter-spacing: 0.08em; flex: none;
+  }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+
+  .badge {
+    display: inline-flex; align-items: center; min-height: 28px;
+    margin: 4px 0 12px; padding: 4px 10px;
+    border-radius: 999px; border: 1px dashed var(--delta);
+    color: var(--delta); font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  }
+
+  .case {
+    margin-top: 16px; padding: 14px 14px 8px;
+    border: 1px solid var(--line); border-radius: 16px; background: var(--bg-raise);
+  }
+  .case .badge { margin-top: 0; }
+  .case-row {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+    padding: 8px 0; border-top: 1px solid var(--line); min-width: 0;
+  }
+  .case-row span { color: var(--muted); min-width: 0; }
+  .case-row b { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700; flex: none; }
+  .case-note { margin: 10px 0 8px; font-weight: 600; }
+
+  .cols { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; margin-bottom: 10px; }
+  .lab {
+    display: flex; flex-direction: column; justify-content: flex-end; gap: 6px;
+    color: var(--muted); font-size: 0.86rem; min-width: 0;
+  }
+  .lab input, .lab select {
+    display: block; width: 100%; min-height: 44px; height: 44px;
+    padding: 10px 12px; background: var(--bg); color: var(--ink);
+    border: 1px solid var(--line-strong); border-radius: 10px;
+    font-size: 16px; font-variant-numeric: tabular-nums;
+  }
+  .lab select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 18px) 19px, calc(100% - 12px) 19px; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; padding-right: 32px; }
+
+  .order { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 8px 0 14px; padding: 0; }
+  .order li {
+    border: 1px solid var(--line-strong); border-radius: 999px;
+    padding: 8px 12px; font-size: 0.86rem; background: var(--bg-raise); min-width: 0; max-width: 100%;
+  }
+  main > * { min-width: 0; }
+
+  .readout {
+    margin: 8px 0 12px; padding: 18px 16px;
+    border: 1px solid var(--line); border-radius: 16px;
+    background: var(--bg-raise); text-align: center;
+  }
+  .readout .big {
+    font-family: var(--mono); font-weight: 700;
+    font-size: clamp(2.6rem, 12vw, 4.4rem);
+    line-height: 0.95; letter-spacing: -0.04em;
+  }
+  .big.is-deal, .verdict.is-deal .verdict-name { color: #34d399; text-shadow: 0 0 28px rgba(52, 211, 153, 0.35); }
+  .big.is-wait, .verdict.is-wait .verdict-name { color: #fbbf24; text-shadow: 0 0 28px rgba(251, 191, 36, 0.35); }
+  .big.is-trap, .verdict.is-trap .verdict-name { color: #f87171; text-shadow: 0 0 28px rgba(248, 113, 113, 0.4); }
+  .big.is-price { color: var(--accent); text-shadow: 0 0 28px var(--accent-glow); }
+  .overall-kicker {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+  }
+  .runway { margin-top: 10px; color: var(--muted); font-size: 0.92rem; }
+  .comment { margin-top: 10px; font-weight: 700; line-height: 1.45; }
+
+  .bars { display: grid; gap: 12px; margin-top: 4px; }
+  .bar-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "name pct" "track track";
+    gap: 4px 10px; align-items: center; min-width: 0;
+  }
+  .bar-name { grid-area: name; min-width: 0; }
+  .bar-pct { grid-area: pct; font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700; flex: none; }
+  .bar-track {
+    grid-area: track; height: 12px; border-radius: 999px;
+    background: rgba(237, 239, 241, 0.08); overflow: hidden; min-width: 0;
+  }
+  .bar-fill { height: 100%; width: 0; border-radius: 999px; transition: width .2s; }
+  .bar-fill.is-claimed { background: var(--faint); }
+  .bar-fill.is-real.is-deal { background: #34d399; }
+  .bar-fill.is-real.is-wait { background: #fbbf24; }
+  .bar-fill.is-real.is-trap { background: #f87171; }
+
+  .lamps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
+  .lamp-cell {
+    min-height: 44px; border-radius: 12px; border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    color: var(--faint); background: var(--bg); min-width: 0; padding: 6px;
+  }
+  .lamp-cell .dot {
+    width: 14px; height: 14px; border-radius: 50%; background: currentColor;
+    opacity: 0.35; flex: none; display: inline-block;
+  }
+  .lamp-k { font-weight: 700; min-width: 0; }
+  .lamp-cell.is-on { font-weight: 700; border-color: currentColor; }
+  .lamp-cell.is-on .dot { opacity: 1; box-shadow: 0 0 12px currentColor; }
+  .lamp-cell.is-on.lv-none { color: #34d399; }
+  .lamp-cell.is-on.lv-medium { color: #fbbf24; }
+  .lamp-cell.is-on.lv-high { color: #f87171; }
+
+  .verdict { margin-top: 14px; padding: 16px; border-radius: 16px; border: 1px solid var(--line); text-align: left; }
+  .verdict.is-deal { border-color: #34d399; background: rgba(52, 211, 153, 0.1); }
+  .verdict.is-wait { border-color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
+  .verdict.is-trap { border-color: #f87171; background: rgba(248, 113, 113, 0.1); }
+  .verdict-name { font-size: clamp(1.8rem, 6vw, 2.6rem); font-weight: 700; line-height: 1.15; text-shadow: none; }
+  .verdict-line { margin-top: 6px; font-weight: 600; }
+
+  .fall { list-style: none; display: grid; gap: 8px; margin: 8px 0 14px; }
+  .fall-item {
+    border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px;
+    background: var(--bg-raise); min-height: 44px; min-width: 0;
+  }
+  .fall-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+  .fall-name { font-weight: 700; min-width: 0; }
+  .fall-saved { font-family: var(--mono); font-weight: 700; color: var(--accent); flex: none; font-variant-numeric: tabular-nums; }
+  .fall-sub { color: var(--muted); font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; margin-top: 2px; }
+
+  .gap {
+    margin-top: 12px; padding: 12px 14px; border-radius: 12px;
+    border: 1px solid var(--accent); background: rgba(251, 146, 60, 0.12); font-weight: 700;
+  }
+
+  .timeline { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; margin: 8px 0 16px; }
+  .tl-node {
+    display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 12px;
+    min-height: 52px; position: relative; padding-bottom: 8px;
+  }
+  .tl-dot {
+    width: 12px; height: 12px; border-radius: 50%; background: var(--accent);
+    margin-top: 6px; box-shadow: 0 0 0 4px rgba(251, 146, 60, 0.18); display: block;
+  }
+  .tl-node.is-past .tl-dot { background: var(--faint); box-shadow: none; }
+  .tl-node.is-past .tl-date, .tl-node.is-past .tl-label { color: var(--faint); }
+  .tl-node.is-future .tl-dot { background: var(--ink); box-shadow: none; }
+  .tl-node.is-today .tl-dot { background: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
+  .tl-node.is-today .tl-label { color: var(--accent); font-weight: 700; }
+  .tl-date { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); }
+  .tl-label { font-weight: 700; line-height: 1.35; }
+  .tl-node::before {
+    content: ""; position: absolute; left: 5px; top: 20px; bottom: 0; width: 2px;
+    background: var(--line-strong);
+  }
+  .tl-node:last-child::before { display: none; }
+
+  .presets { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 4px 0 14px; }
+  .preset {
+    min-width: 0; min-height: 44px; padding: 10px 12px; width: 100%;
+    border-radius: 12px; border: 1px solid var(--line-strong); background: var(--bg-raise);
+    cursor: pointer; text-align: left; font-size: 0.92rem; line-height: 1.35;
+    display: flex; align-items: center;
+  }
+  .preset[aria-pressed="true"] {
+    border-color: var(--accent); background: rgba(251, 146, 60, 0.12);
+    box-shadow: 0 0 16px var(--accent-glow); font-weight: 700;
+  }
+
+  .why-line {
+    margin-top: 12px; color: var(--muted); font-size: 0.92rem;
+    padding: 12px 14px; border-left: 3px solid var(--accent);
+    background: rgba(251, 146, 60, 0.06); border-radius: 0 10px 10px 0;
+  }
+
+  .checks { display: grid; gap: 8px; }
+  .check {
+    display: flex; align-items: center; gap: 12px;
+    min-height: 44px; padding: 10px 12px;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); cursor: pointer; min-width: 0;
+  }
+  .check input {
+    width: 22px; height: 22px; flex: none; accent-color: var(--accent);
+  }
+  .check-text { min-width: 0; }
+  .check-count { margin-top: 12px; font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: 0.08em; color: var(--accent); font-weight: 700; }
+
+  .prog-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .prog-text {
+    font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px;
+    letter-spacing: 0.08em; color: var(--muted); flex: none;
+  }
+  .progress {
+    height: 8px; border-radius: 999px; background: rgba(237, 239, 241, 0.12); overflow: hidden; flex: 1; min-width: 0;
+  }
+  .progress > span {
+    display: block; height: 100%; width: 0; background: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow); transition: width .25s;
+  }
+  .quiz-q { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; margin-bottom: 12px; }
+  .quiz-options { display: grid; gap: 8px; }
+  .quiz-opt { width: 100%; min-height: 44px; }
+  .quiz-feedback {
+    margin-top: 14px; padding: 14px 16px; border-radius: 12px;
+    border: 1px solid var(--line); background: rgba(237, 239, 241, 0.03);
+    font-weight: 600; line-height: 1.5;
+  }
+  .quiz-feedback.is-ok { border-color: rgba(52, 211, 153, 0.45); background: rgba(52, 211, 153, 0.08); }
+  .quiz-feedback.is-no { border-color: rgba(248, 113, 113, 0.45); background: rgba(248, 113, 113, 0.08); }
+  #quizNext { width: 100%; }
+
+  .empty-state {
+    border: 1px dashed var(--line-strong); border-radius: 14px;
+    padding: 28px 16px; text-align: center; color: var(--muted);
+  }
+  .score-wrap { text-align: center; padding: 8px 0 12px; }
+  .rank-name { font-weight: 700; font-size: clamp(1.35rem, 3vw, 1.8rem); margin-top: 8px; }
+  .score-line { color: var(--muted); margin-top: 6px; }
+
+  .disclaimer {
+    margin-top: 14px; border: 1px solid rgba(251, 146, 60, 0.45);
+    background: rgba(251, 146, 60, 0.08); color: var(--ink);
+    border-radius: 12px; padding: 14px 16px; font-size: 0.95rem; font-weight: 700;
+  }
+  .hero .disclaimer { margin-top: 16px; }
+  .note-copy { color: var(--muted); margin-top: 10px; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s; min-height: 44px;
+    display: inline-flex; align-items: center; justify-content: center; text-align: center;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237, 239, 241, 0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { margin-top: 14px; max-width: 100%; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; display: block; }
+  .share-hint { color: var(--faint); font-size: 0.82rem; margin-top: 8px; }
+
+  footer {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding: 28px var(--pad) 40px; border-top: 1px solid var(--line);
+    max-width: 880px; margin: 0 auto;
+  }
+  footer > span {
+    display: inline-flex; align-items: center; min-height: 44px;
+    min-width: 0; max-width: 100%;
+  }
+  footer a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 0; }
+  footer a:hover { color: var(--ink); }
+  footer .mono { color: var(--faint); }
+
+  @media (min-width: 720px) {
+    .toc { grid-template-columns: 1fr 1fr; }
+    .cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .presets { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .timeline { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+    .tl-node { grid-template-columns: minmax(0, 1fr); min-height: 0; padding-bottom: 0; }
+    .tl-node::before { display: none; }
+    .tl-dot { margin-top: 0; margin-bottom: 8px; }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 0 14px; gap: 8px; }
+    .nav-back { font-size: 11px; letter-spacing: 0; }
+    .nav-brand { font-size: 13px; }
+    .nav-lang { padding: 6px 10px; letter-spacing: 0.12em; }
+    .share-btn { padding: 12px 12px; flex: 1 1 100%; }
+    .cta { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* 禁用所有动画 */
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand" data-en="DEAL<span>·056</span>">DEAL<span>·056</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="Everyday Fixes · DEAL-056">Everyday Fixes · DEAL-056</p>
+    <h1 data-en="Price X-ray: spot fake Double 11 &amp; Black Friday discounts in 3 steps">价格照妖镜：双11/黑五真假折扣 3 步看穿</h1>
+    <p class="hook" data-en="Raised tags, stacked cuts, and AI price checks broke the old bundle math. Three steps to see a raise-then-cut.">今年满减退场、国补叠加、AI 比价，老凑单经验不灵了。3 步看穿先涨后降</p>
+    <p class="date-badge" data-en="Data as of 2026-10-23">数据日期 2026-10-23</p>
+    <p class="lede" data-en="Black Friday still runs on a raised tag and a loud percent off. What matters is the price you pay versus the price you saw in the last 30 days. Old bundle-to-a-threshold math fails when the cut is per item.">据公开报道，天猫 10 月 15 日开启预售。今年取消「跨店满300减50」，改为「官方立减」：单件直降，不用凑单。京东 10 月 20 日晚 8 点第一波降价（开门红）。有门店店员坦言，可能先涨价，再拉低一波。</p>
+    <p class="fact" data-en="According to public reports, 79.4% of shoppers ask an AI before they buy. AI's influence on purchase decisions is 43.7%, ahead of traditional media ads (42.6%) for the first time. If you estimate a percent-off subsidy on the original price, you overstate the savings.">据公开报道：79.4% 的消费者购物前先问 AI；AI 对消费决策的影响力 43.7%，首次超过传统媒体广告（42.6%）。第四批以旧换新资金 625 亿元覆盖双11周期。家电国补 15%（单件最高 1500 元），手机数码 15%（单件最高 500 元），可与平台优惠叠加。</p>
+    <aside class="case">
+      <p class="badge" data-en="Sample product · sample figures">示例商品 · 示例数字</p>
+      <div class="case-row"><span data-en="Strikethrough price">划线价</span><b data-en="3999">3999</b></div>
+      <div class="case-row"><span data-en="Usual price over 30 days">30 天日常价</span><b data-en="2999">2999</b></div>
+      <div class="case-row"><span data-en="Price you pay">到手价</span><b data-en="2899">2899</b></div>
+      <p class="case-note" data-en="Real drop about 3% versus the usual price. The tag looks much more generous. Sample figures, not a live price.">真实降幅约 3%（相对日常价）。划线价看起来降得多。示例数字，不是真实平台价格。</p>
+    </aside>
+    <nav class="toc" id="tocNav" aria-label="On this page">
+      <a href="#step1"><span class="n" data-en="01">01</span><span data-en="Spot the real drop">真假折扣</span></a>
+      <a href="#step2"><span class="n" data-en="02">02</span><span data-en="Check the stack">叠加顺序</span></a>
+      <a href="#step3"><span class="n" data-en="03">03</span><span data-en="When to buy">下单时机</span></a>
+      <a href="#pits"><span class="n" data-en="04">04</span><span data-en="Traps to avoid">避坑清单</span></a>
+      <a href="#quiz"><span class="n" data-en="05">05</span><span data-en="Three questions">三题小测</span></a>
+    </nav>
+    <a class="cta" href="#step1" data-en="Start with the three prices">从三个价开始</a>
+    <p class="disclaimer" data-en="Live platform pages win. This is not shopping advice.">价格规则以各平台实时页面为准，不构成消费建议。</p>
+  </header>
+
+  <section class="field" id="step1">
+    <div class="field-head">
+      <span class="field-no" data-en="01">01</span>
+      <h2 class="field-title" data-en="Step 1 · Real or fake discount">第 1 步 · 真假折扣判定</h2>
+      <p class="field-hint" data-en="Real drop = (usual price − price you pay) / usual price. 15% or more: real deal. From 5% up to 15%: wait. Under 5%, including a price you pay that is not below the usual price: inflated tag. Tag inflation versus the usual price: under 10% no clear suspicion, from 10% up to 30% medium, 30% or more high. Rules of thumb, not hard rules.">真实降幅 =（日常价 − 到手价）/ 日常价。15% 及以上为真香，5% 起、不到 15% 为再等等，低于 5%（含到手价不低于日常价）为套路价。划线价相对日常价的虚高：低于 10% 无明显嫌疑，10% 起、不到 30% 为中等，30% 及以上为高。经验口径，非硬规则。</p>
+    </div>
+    <p class="badge" data-en="Sample product · sample figures">示例商品 · 示例数字</p>
+    <p class="field-hint" data-en="Defaults are a sample product and sample figures, not a live platform price. Replace them with your three prices. A shop floor can raise a tag, then cut it. Use the price you saw over 30 days, not the crossed-out number.">默认是示例商品的示例数字，不是真实平台价格。换成你自己的三个价。有门店店员坦言，可能先涨价，再拉低一波。基准用 30 天里见过的日常价，不用划线价。</p>
+    <div class="cols cols-3">
+      <label class="lab" for="listPrice"><span data-en="Strikethrough price (yuan)">划线价（元）</span><input id="listPrice" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="3999"></label>
+      <label class="lab" for="usualPrice"><span data-en="Usual price over 30 days, or a low you saw (yuan)">30 天日常价 / 历史低价（元）</span><input id="usualPrice" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="2999"></label>
+      <label class="lab" for="salePrice"><span data-en="Price you actually pay (yuan)">到手价（元）</span><input id="salePrice" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="2899"></label>
+    </div>
+    <div class="dyn" id="discOut"></div>
+  </section>
+
+  <section class="field" id="step2">
+    <div class="field-head">
+      <span class="field-no" data-en="02">02</span>
+      <h2 class="field-title" data-en="Step 2 · Stacking order">第 2 步 · 叠加顺序检查</h2>
+      <p class="field-hint" data-en="According to public reports, the order is: direct cut, then store and category coupons, then PLUS 5% off, then a super red packet, then trade-in, then a 15% subsidy. The subsidy is calculated on what you still pay after those earlier cuts. Appliances: 15%, up to 1500 yuan per item. Phones and digital: 15%, up to 500 yuan per item. Reported order. The live checkout wins.">据公开报道，叠加顺序是：商品直降 → 店铺券/品类券 → PLUS 95 折 → 超级红包 → 以旧换新 → 国补 15%。国补按前面全部抵扣后的实付金额核算。家电国补 15%（单件最高 1500 元），手机数码 15%（单件最高 500 元）。第四批以旧换新资金 625 亿元覆盖双11周期，可与平台优惠叠加。顺序据公开报道，以平台实际结算为准。</p>
+    </div>
+    <p class="badge" data-en="Sample figures, not a live price">示例数字，不是真实价格</p>
+    <ol class="order">
+      <li data-en="1. Direct cut">1. 商品直降</li>
+      <li data-en="2. Store and category coupons">2. 店铺券/品类券</li>
+      <li data-en="3. PLUS 5% off">3. PLUS 95 折</li>
+      <li data-en="4. Super red packet">4. 超级红包</li>
+      <li data-en="5. Trade-in">5. 以旧换新</li>
+      <li data-en="6. Subsidy 15%">6. 国补 15%</li>
+    </ol>
+    <div class="cols cols-2">
+      <label class="lab" for="inPrice"><span data-en="Price before the stack (yuan)">叠加前价格（元）</span><input id="inPrice" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="2999"></label>
+      <label class="lab" for="inCat"><span data-en="Category (sets the subsidy)">品类（决定国补）</span>
+        <select id="inCat">
+          <option value="appliance" data-en="Appliances">家电</option>
+          <option value="digital" selected data-en="Phones and digital">手机数码</option>
+          <option value="none" data-en="No subsidy">无国补</option>
+        </select>
+      </label>
+    </div>
+    <div class="cols cols-2">
+      <label class="lab" for="inDirect"><span data-en="Direct cut (yuan)">商品直降（元）</span><input id="inDirect" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="0"></label>
+      <label class="lab" for="inCoupon"><span data-en="Store coupon + category coupon (yuan, combined)">店铺券 + 品类券（元，合并）</span><input id="inCoupon" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="100"></label>
+    </div>
+    <div class="cols cols-2">
+      <label class="lab" for="inRed"><span data-en="Super red packet (yuan)">超级红包（元）</span><input id="inRed" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="0"></label>
+      <label class="lab" for="inTrade"><span data-en="Trade-in credit (yuan)">以旧换新（元）</span><input id="inTrade" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="0"></label>
+    </div>
+    <label class="check"><input id="inPlus" type="checkbox"><span class="check-text" data-en="PLUS 5% off">PLUS 95 折</span></label>
+    <div class="dyn" id="stackOut"></div>
+    <p class="field-hint" data-en="The order is from public reports. The live checkout is what counts.">顺序据公开报道，以平台实际结算为准。</p>
+  </section>
+
+  <section class="field" id="step3">
+    <div class="field-head">
+      <span class="field-no" data-en="03">03</span>
+      <h2 class="field-title" data-en="Step 3 · When to buy">第 3 步 · 下单时机</h2>
+      <p class="field-hint" data-en="Today, 23 Oct 2026, is the compare-and-wait window. Rhythm: Oct 20 opening wave (past), then Oct 31–Nov 3 second wave, Nov 4–9 category rotation, Nov 11 finale, Nov 12–13 encore, Nov 27 Black Friday. Pick a category.">今天 10 月 23 日，处在加购比价期。据公开报道，节奏是：10-20 开门红（已过）→ 10-31–11-03 第二波 → 11-04–11-09 品类轮动 → 11-11 终极 → 11-12–11-13 返场 → 11-27 黑五。天猫 10 月 15 日已开预售。京东 10 月 20 日晚 8 点的第一波已经过去。按品类看现在该不该等。</p>
+    </div>
+    <div class="timeline dyn" id="timeline"></div>
+    <div class="presets" id="catBtns">
+      <button type="button" class="preset" data-cat="phone" aria-pressed="true" data-en="Phones and digital">手机数码</button>
+      <button type="button" class="preset" data-cat="appliance" aria-pressed="false" data-en="Large appliances">大家电</button>
+      <button type="button" class="preset" data-cat="daily" aria-pressed="false" data-en="Everyday goods">日用百货</button>
+    </div>
+    <div id="advicePhone">
+      <p class="comment dyn" id="advicePhoneLine"></p>
+      <p class="why-line" data-en="According to public reports, memory-chip contract prices are up more than 200%. Reports say phones may rise by 300 yuan or more in late November or early December, and 512G / 1TB by 500 yuan or more. There is a bounce-back risk after Double 11.">据公开报道，存储芯片合约均价涨超 200%。消息称，手机 11 月底或 12 月初涨价 300 元起，512G / 1TB 涨 500 元起。双11后有反弹风险。</p>
+    </div>
+    <div id="adviceAppliance" hidden>
+      <p class="comment dyn" id="adviceApplianceLine"></p>
+    </div>
+    <div id="adviceDaily" hidden>
+      <p class="comment dyn" id="adviceDailyLine"></p>
+    </div>
+  </section>
+
+  <section class="field" id="pits">
+    <div class="field-head">
+      <span class="field-no" data-en="04">04</span>
+      <h2 class="field-title" data-en="Traps to avoid">避坑清单</h2>
+      <p class="field-hint" data-en="Tick what you have already checked. This browser remembers the ticks on this device.">勾上你已经核对过的。这个浏览器会在本机记住勾选。</p>
+    </div>
+    <div class="checks dyn" id="checkList"></div>
+    <p class="check-count dyn" id="checkCount"></p>
+  </section>
+
+  <section class="field" id="quiz">
+    <div class="field-head">
+      <span class="field-no" data-en="05">05</span>
+      <h2 class="field-title" data-en="Three-question check">三题小测</h2>
+      <p class="field-hint" data-en="One question at a time. You get the reason as soon as you pick.">一次一题。点下去立刻看到原因。</p>
+    </div>
+    <div id="quizStage">
+      <div class="prog-row">
+        <p class="prog-text dyn" id="quizProg"></p>
+        <div class="progress" aria-hidden="true"><span id="quizBar"></span></div>
+      </div>
+      <h3 class="quiz-q dyn" id="quizQ"></h3>
+      <div class="quiz-options dyn" id="quizOpts"></div>
+      <p class="quiz-feedback dyn" id="quizLive" aria-live="polite" aria-atomic="true" hidden></p>
+      <button class="cta" id="quizNext" type="button" hidden data-en="Next">下一题</button>
+    </div>
+    <div id="quizDone" hidden>
+      <div class="score-wrap dyn" id="quizScore"></div>
+      <button class="cta" id="quizRetry" type="button" data-en="Try again">再测一次</button>
+    </div>
+  </section>
+
+  <section class="field" id="share">
+    <div class="field-head">
+      <span class="field-no" data-en="06">06</span>
+      <h2 class="field-title" data-en="Share">分享</h2>
+      <p class="field-hint" data-en="The card shows the verdict from the prices you entered, or the quiz badge if you have not entered prices yet.">分享卡写你填出来的判定。还没填价时，写小测徽章。</p>
+    </div>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap" hidden>
+      <canvas id="shareCanvas" width="1200" height="630"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+
+  <section class="field" id="notes">
+    <div class="field-head">
+      <span class="field-no" data-en="07">07</span>
+      <h2 class="field-title" data-en="Notes">注记</h2>
+    </div>
+    <p class="date-badge" data-en="Data as of 2026-10-23">数据日期 2026-10-23</p>
+    <p class="note-copy" data-en="News figures are from public reports. 79.4% of shoppers ask an AI before they buy. AI's influence on purchase decisions is 43.7%, ahead of traditional media ads at 42.6%. A fourth trade-in fund covers the Double 11 period. Appliance subsidy: 15%, up to 1500 yuan per item. Phones and digital: 15%, up to 500 yuan per item. Memory-chip contract prices are up more than 200%. Reports say phones may rise by 300 yuan or more in late November or early December, and 512G / 1TB by 500 yuan or more.">新闻数字据公开报道：79.4% 的消费者购物前先问 AI；AI 对消费决策影响力 43.7%，传统媒体广告 42.6%；第四批以旧换新资金 625 亿元覆盖双11周期；家电国补 15%（单件最高 1500 元）；手机数码 15%（单件最高 500 元）；存储芯片合约均价涨超 200%。消息称，手机 11 月底或 12 月初涨价 300 元起，512G / 1TB 涨 500 元起。</p>
+    <p class="note-copy" data-en="Figures such as 3999 / 2999 / 2899, and the numbers prefilled in the stack, are sample figures. They are not a live price on any platform.">页面里的 3999 / 2999 / 2899，以及叠加器里预填的数字，都是示例数字，不是任何商品的真实平台价格。</p>
+    <p class="note-copy" data-en="Real deal, wait, and inflated tag use rules of thumb, not hard rules.">真香、再等等、套路价的分界是经验口径，非硬规则。</p>
+    <p class="disclaimer" data-en="Live platform pages win. This is not shopping advice.">价格规则以各平台实时页面为准，不构成消费建议。</p>
+  </section>
+</main>
+
+<footer>
+  <span class="mono" data-en='<a href="https://build-100.com/">build-100.com</a>'><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono" data-en='<a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a>'><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="DEAL-056 · Price X-ray">DEAL-056 · 价格照妖镜</span>
+</footer>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  "use strict";
+  var E = window.DealEngine;
+  if (!E) return;
+
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  if (lang !== "en" && lang !== "zh") lang = "zh";
+
+  var CHECK_KEY = "deal056-check";
+  var checked = {};
+  var cat = "phone";
+  var quizIndex = 0;
+  var quizAnswers = [];
+  var quizRevealed = false;
+  var quizDone = false;
+  var shareOpen = false;
+  var copyTimer = null;
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+  function $(id) { return document.getElementById(id); }
+  function pair(obj) { return obj ? t(obj.zh, obj.en) : ""; }
+
+  function loadChecked() {
+    checked = {};
+    try {
+      var raw = localStorage.getItem(CHECK_KEY);
+      var arr = raw ? JSON.parse(raw) : [];
+      if (Array.isArray(arr)) {
+        arr.forEach(function (id) { if (typeof id === "string") checked[id] = true; });
+      }
+    } catch (e) {}
+  }
+
+  function saveChecked() {
+    var ids = [];
+    E.CHECKLIST.forEach(function (item) {
+      if (checked[item.id]) ids.push(item.id);
+    });
+    try { localStorage.setItem(CHECK_KEY, JSON.stringify(ids)); } catch (e) {}
+  }
+
+  function fmtYuan(n) {
+    if (typeof n !== "number" || !isFinite(n)) return "\u2014";
+    var r = Math.round(n * 100) / 100;
+    if (r > -0.005 && r < 0) r = 0;
+    var neg = r < 0;
+    var s = Math.abs(r).toFixed(2);
+    if (s.slice(-3) === ".00") s = s.slice(0, -3);
+    else if (s.charAt(s.length - 1) === "0") s = s.slice(0, -1);
+    return (neg ? "-" : "") + s;
+  }
+
+  function fmtPct(n) {
+    if (typeof n !== "number" || !isFinite(n)) return "\u2014";
+    var p = Math.round(n * 1000) / 10;
+    if (p > -0.05 && p < 0) p = 0;
+    var neg = p < 0;
+    var abs = Math.abs(p);
+    var body = Math.abs(abs - Math.round(abs)) < 1e-9 ? String(Math.round(abs)) : abs.toFixed(1);
+    return (neg ? "-" : "") + body + "%";
+  }
+
+  function numOrNull(raw) {
+    if (raw == null) return null;
+    var s = String(raw).trim().replace(/,/g, "");
+    if (!s) return null;
+    if (!/^[+-]?(?:\d+\.?\d*|\.\d+)$/.test(s)) return null;
+    var n = Number(s);
+    return isFinite(n) ? n : null;
+  }
+
+  function clear(node) {
+    if (!node) return;
+    while (node.firstChild) node.removeChild(node.firstChild);
+  }
+
+  function make(tag, cls, text) {
+    var node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text != null) node.textContent = text;
+    return node;
+  }
+
+  function readResult() {
+    var list = $("listPrice");
+    var usual = $("usualPrice");
+    var sale = $("salePrice");
+    if (!list || !usual || !sale) return null;
+    return E.checkDiscount(list.value, usual.value, sale.value);
+  }
+
+  function barRow(label, ratio, cls) {
+    var row = make("div", "bar-row");
+    row.appendChild(make("span", "bar-name", label));
+    var pct = 0;
+    if (typeof ratio === "number" && isFinite(ratio)) pct = ratio * 100;
+    if (pct < 0) pct = 0;
+    if (pct > 100) pct = 100;
+    var track = make("div", "bar-track");
+    var fill = make("div", "bar-fill " + cls);
+    fill.style.width = pct.toFixed(2) + "%";
+    track.appendChild(fill);
+    row.appendChild(track);
+    row.appendChild(make("span", "bar-pct", fmtPct(ratio)));
+    return row;
+  }
+
+  function renderDiscount() {
+    var host = $("discOut");
+    if (!host) return;
+    clear(host);
+    var result = readResult();
+    if (!result) {
+      host.appendChild(make("p", "empty-state", t(
+        "填上划线价、30 天日常价、到手价。三个都要大于 0。",
+        "Enter the strikethrough price, the 30-day usual price, and the price you pay. All three must be greater than 0."
+      )));
+      return;
+    }
+    var v = E.VERDICTS[result.verdict];
+    var tone = result.verdict === "deal" ? "is-deal" : result.verdict === "wait" ? "is-wait" : "is-trap";
+    var box = make("div", "readout");
+    box.appendChild(make("p", "overall-kicker", t("真实降幅", "Real drop")));
+    box.appendChild(make("p", "big " + tone, fmtPct(result.realDrop)));
+    box.appendChild(make("p", "runway", t("相对 30 天日常价", "Versus the 30-day usual price")));
+    host.appendChild(box);
+
+    var bars = make("div", "bars");
+    bars.appendChild(barRow(t("宣称降幅", "Claimed drop"), result.claimedDrop, "is-claimed"));
+    bars.appendChild(barRow(t("真实降幅", "Real drop"), result.realDrop, "is-real " + tone));
+    host.appendChild(bars);
+
+    host.appendChild(make("p", "field-hint", t("先涨后降嫌疑", "Raise-then-cut suspicion")));
+    var lamps = make("div", "lamps");
+    [
+      ["none", t("低", "Low")],
+      ["medium", t("中", "Mid")],
+      ["high", t("高", "High")]
+    ].forEach(function (row) {
+      var on = result.suspicion === row[0];
+      var cell = make("div", "lamp-cell" + (on ? " is-on lv-" + row[0] : ""));
+      cell.appendChild(make("span", "dot"));
+      cell.appendChild(make("span", "lamp-k", row[1] + (on ? t(" · 当前", " · now") : "")));
+      lamps.appendChild(cell);
+    });
+    host.appendChild(lamps);
+    var susName = pair(E.SUSPICION[result.suspicion]);
+    var infl = fmtPct(result.listInflation);
+    host.appendChild(make("p", "comment", t(
+      susName + "。划线价相对日常价虚高 " + infl + "。",
+      susName + ". Tag inflation versus the usual price is " + infl + "."
+    )));
+
+    var card = make("div", "verdict " + tone);
+    card.appendChild(make("p", "overall-kicker", t("判定", "Verdict")));
+    card.appendChild(make("p", "verdict-name", pair(v)));
+    card.appendChild(make("p", "verdict-line", pair(v.line)));
+    if (!(result.realDrop > 1e-6)) {
+      card.appendChild(make("p", "verdict-line", t(
+        "到手价不低于日常价。",
+        "The price you pay is not below the usual price."
+      )));
+    }
+    host.appendChild(card);
+  }
+
+  function readOpts() {
+    return {
+      direct: $("inDirect") ? $("inDirect").value : 0,
+      coupon: $("inCoupon") ? $("inCoupon").value : 0,
+      plus: $("inPlus") ? $("inPlus").checked : false,
+      redpacket: $("inRed") ? $("inRed").value : 0,
+      tradein: $("inTrade") ? $("inTrade").value : 0,
+      category: $("inCat") ? $("inCat").value : "none"
+    };
+  }
+
+  function renderStack() {
+    var host = $("stackOut");
+    if (!host) return;
+    clear(host);
+    var raw = $("inPrice") ? $("inPrice").value : "";
+    var price = numOrNull(raw);
+    if (price == null || price <= 0) {
+      host.appendChild(make("p", "empty-state", t(
+        "先填一个大于 0 的叠加前价格。空白优惠按 0 算。",
+        "Enter a price above 0 to start the stack. A blank discount counts as 0."
+      )));
+      return;
+    }
+    var opts = readOpts();
+    var result = E.stack(price, opts);
+    var gap = E.naiveSubsidyGap(price, opts);
+    var list = make("ol", "fall");
+    result.steps.forEach(function (step) {
+      var li = make("li", "fall-item");
+      var top = make("div", "fall-top");
+      top.appendChild(make("span", "fall-name", pair(E.ORDER_LABELS[step.key])));
+      var savedTxt;
+      if (step.key === "plus" && !opts.plus) savedTxt = t("未勾选", "Off");
+      else if (step.key === "subsidy" && (!opts.category || opts.category === "none")) savedTxt = t("无国补", "No subsidy");
+      else if (step.saved < 0.005) savedTxt = "\u22120";
+      else savedTxt = "\u2212" + fmtYuan(step.saved);
+      top.appendChild(make("span", "fall-saved", savedTxt));
+      li.appendChild(top);
+      var sub = fmtYuan(step.before) + " \u2192 " + fmtYuan(step.after);
+      if (step.key === "subsidy" && opts.category && opts.category !== "none") {
+        sub += t(" · 按此时实付", " · on the amount due now");
+      }
+      li.appendChild(make("p", "fall-sub", sub));
+      list.appendChild(li);
+    });
+    host.appendChild(list);
+
+    var box = make("div", "readout");
+    box.appendChild(make("p", "overall-kicker", t("理论最低到手价", "Theoretical lowest price")));
+    box.appendChild(make("p", "big is-price", fmtYuan(result.final)));
+    box.appendChild(make("p", "runway", t(
+      "前面各步合计扣掉 " + fmtYuan(result.totalSaved) + " 元。这是按顺序试算，不是平台账单。",
+      "Earlier steps take off " + fmtYuan(result.totalSaved) + " yuan in total. A sequential estimate, not a platform receipt."
+    )));
+    host.appendChild(box);
+
+    if (gap > 0.004) {
+      host.appendChild(make("p", "gap", t(
+        "别按原价算国补，会把能省的钱高估 " + fmtYuan(gap) + " 元。",
+        "Don't estimate the subsidy on the original price. That overstates the savings by " + fmtYuan(gap) + " yuan."
+      )));
+    }
+
+    var rule = E.SUBSIDY[opts.category];
+    var capLine;
+    if (!rule) {
+      capLine = t("这一档没有国补。", "This category has no subsidy.");
+    } else {
+      var pct = String(Math.round(rule.rate * 100));
+      capLine = t(
+        "据公开报道，这一档国补 " + pct + "%，单件最高 " + rule.cap + " 元，按此时实付核算。",
+        "According to public reports, this subsidy is " + pct + "%, capped at " + rule.cap + " yuan per item, on what you pay at this step."
+      );
+    }
+    host.appendChild(make("p", "field-hint", capLine));
+  }
+
+  function todayNode() {
+    var item = make("div", "tl-node is-today");
+    item.appendChild(make("span", "tl-dot"));
+    var body = make("div", "tl-body");
+    body.appendChild(make("p", "tl-date", "10-23"));
+    body.appendChild(make("p", "tl-label", t("今天 · 加购比价期", "Today · compare and wait")));
+    item.appendChild(body);
+    return item;
+  }
+
+  function renderTimeline() {
+    var host = $("timeline");
+    if (!host) return;
+    clear(host);
+    var placed = false;
+    E.TIMELINE.forEach(function (node) {
+      if (!placed && !node.past) {
+        host.appendChild(todayNode());
+        placed = true;
+      }
+      var item = make("div", "tl-node " + (node.past ? "is-past" : "is-future"));
+      item.appendChild(make("span", "tl-dot"));
+      var body = make("div", "tl-body");
+      body.appendChild(make("p", "tl-date", node.date));
+      body.appendChild(make("p", "tl-label", pair(node.label)));
+      item.appendChild(body);
+      host.appendChild(item);
+    });
+    if (!placed) host.appendChild(todayNode());
+  }
+
+  function renderAdvice() {
+    var keys = ["phone", "appliance", "daily"];
+    var i;
+    for (i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      var cap = key.charAt(0).toUpperCase() + key.slice(1);
+      var panel = $("advice" + cap);
+      var line = $("advice" + cap + "Line");
+      if (line) line.textContent = pair(E.CATEGORY_ADVICE[key]);
+      if (panel) panel.hidden = key !== cat;
+    }
+    var host = $("catBtns");
+    if (!host) return;
+    var buttons = host.querySelectorAll(".preset");
+    for (i = 0; i < buttons.length; i++) {
+      buttons[i].setAttribute("aria-pressed", buttons[i].getAttribute("data-cat") === cat ? "true" : "false");
+    }
+  }
+
+  function checkCount() {
+    var n = 0;
+    E.CHECKLIST.forEach(function (item) { if (checked[item.id]) n += 1; });
+    return n;
+  }
+
+  function renderCheckCount() {
+    var el = $("checkCount");
+    if (!el) return;
+    var n = checkCount();
+    el.textContent = t("已勾 " + n + "/" + E.CHECKLIST.length, "Checked " + n + "/" + E.CHECKLIST.length);
+  }
+
+  function renderChecklist() {
+    var host = $("checkList");
+    if (!host) return;
+    clear(host);
+    E.CHECKLIST.forEach(function (item) {
+      var label = make("label", "check");
+      var input = document.createElement("input");
+      input.type = "checkbox";
+      input.value = item.id;
+      input.checked = !!checked[item.id];
+      label.appendChild(input);
+      label.appendChild(make("span", "check-text", pair(item)));
+      host.appendChild(label);
+    });
+    renderCheckCount();
+  }
+
+  function renderQuiz() {
+    var stage = $("quizStage");
+    var done = $("quizDone");
+    if (quizDone) {
+      if (stage) stage.hidden = true;
+      if (done) done.hidden = false;
+      var g = E.gradeQuiz(quizAnswers);
+      var b = E.badge(g.correct);
+      var box = $("quizScore");
+      if (box) {
+        clear(box);
+        var tone = g.correct >= 3 ? "is-deal" : g.correct >= 1 ? "is-wait" : "is-trap";
+        box.appendChild(make("p", "overall-kicker", t("小测得分", "Quiz score")));
+        box.appendChild(make("p", "big " + tone, g.correct + "/" + g.total));
+        box.appendChild(make("p", "rank-name", pair(b)));
+        box.appendChild(make("p", "score-line", t(
+          "3 题里答对 " + g.correct + " 题。",
+          g.correct + " of " + g.total + " correct."
+        )));
+      }
+      return;
+    }
+    if (stage) stage.hidden = false;
+    if (done) done.hidden = true;
+    var q = E.QUIZ[quizIndex];
+    if (!q) return;
+    var prog = $("quizProg");
+    if (prog) prog.textContent = (quizIndex + 1) + " / " + E.QUIZ.length;
+    var bar = $("quizBar");
+    if (bar) {
+      var filled = quizIndex + (quizRevealed ? 1 : 0);
+      bar.style.width = (filled / E.QUIZ.length * 100) + "%";
+    }
+    var qEl = $("quizQ");
+    if (qEl) qEl.textContent = pair(q.q);
+    var opts = $("quizOpts");
+    if (opts) {
+      clear(opts);
+      q.options.forEach(function (op, i) {
+        var btn = make("button", "cta ghost quiz-opt");
+        btn.type = "button";
+        btn.setAttribute("data-i", String(i));
+        btn.textContent = pair(op);
+        if (quizRevealed) {
+          btn.disabled = true;
+          if (i === q.answer) btn.className += " is-hit";
+          else if (i === quizAnswers[quizIndex]) btn.className += " is-miss";
+          btn.setAttribute("aria-pressed", i === quizAnswers[quizIndex] ? "true" : "false");
+        } else {
+          btn.setAttribute("aria-pressed", "false");
+        }
+        opts.appendChild(btn);
+      });
+    }
+    var live = $("quizLive");
+    var nextBtn = $("quizNext");
+    if (quizRevealed) {
+      var right = quizAnswers[quizIndex] === q.answer;
+      if (live) {
+        live.hidden = false;
+        live.className = "quiz-feedback dyn " + (right ? "is-ok" : "is-no");
+        live.textContent = (right ? t("答对了。", "Correct. ") : t("还不对。", "Not quite. ")) + pair(q.explain);
+      }
+      if (nextBtn) {
+        nextBtn.hidden = false;
+        nextBtn.textContent = quizIndex >= E.QUIZ.length - 1 ? t("看得分", "See the score") : t("下一题", "Next");
+      }
+    } else if (live) {
+      live.hidden = true;
+      live.textContent = "";
+      live.className = "quiz-feedback dyn";
+      if (nextBtn) nextBtn.hidden = true;
+    }
+  }
+
+  function fontStack() {
+    return '"Noto Sans CJK SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+  }
+  function setFont(ctx, weight, px) {
+    ctx.font = weight + " " + px + "px " + fontStack();
+  }
+  function fitText(ctx, text, maxW, weight, px, minPx) {
+    var size = px;
+    setFont(ctx, weight, size);
+    while (size > minPx && ctx.measureText(text).width > maxW) {
+      size -= 2;
+      setFont(ctx, weight, size);
+    }
+    return size;
+  }
+
+  function drawShare() {
+    var canvas = $("shareCanvas");
+    if (!canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    var W = 1200;
+    var H = 630;
+    var pad = 64;
+    var maxW = W - pad * 2;
+    canvas.width = W;
+    canvas.height = H;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.045)";
+    var gx;
+    var gy;
+    for (gx = 18; gx < W; gx += 36) {
+      for (gy = 18; gy < H; gy += 36) ctx.fillRect(gx, gy, 1.4, 1.4);
+    }
+    ctx.fillStyle = "#fb923c";
+    ctx.fillRect(0, 0, 12, H);
+    ctx.textBaseline = "top";
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#fb923c";
+    setFont(ctx, "700", 22);
+    ctx.fillText("EVERYDAY FIXES · DEAL-056", pad, 48);
+
+    ctx.fillStyle = "#edeff1";
+    var title = t("价格照妖镜", "Price X-ray");
+    fitText(ctx, title, maxW, "700", 64, 28);
+    ctx.fillText(title, pad, 96);
+
+    ctx.fillStyle = "#9aa1a8";
+    var sub = t("双11 / 黑五真假折扣，3 步看穿", "Spot fake Double 11 and Black Friday discounts");
+    fitText(ctx, sub, maxW, "400", 28, 16);
+    ctx.fillText(sub, pad, 176);
+
+    var result = readResult();
+    var graded = quizDone ? E.gradeQuiz(quizAnswers) : null;
+    var badge = graded ? E.badge(graded.correct) : null;
+    var headline;
+    var support;
+    var color = "#fb923c";
+    if (result) {
+      headline = pair(E.VERDICTS[result.verdict]);
+      support = t("真实降幅 " + fmtPct(result.realDrop), "Real drop " + fmtPct(result.realDrop));
+      if (result.verdict === "deal") color = "#34d399";
+      else if (result.verdict === "wait") color = "#fbbf24";
+      else color = "#f87171";
+    } else if (badge) {
+      headline = pair(badge);
+      support = t("小测 " + graded.correct + "/" + graded.total, "Quiz " + graded.correct + "/" + graded.total);
+      color = graded.correct >= 3 ? "#34d399" : graded.correct >= 1 ? "#fbbf24" : "#f87171";
+    } else {
+      headline = t("3 步看穿真假折扣", "Three steps to spot a fake discount");
+      support = t("划线价、叠加顺序、下单时机", "The tag, the stack, the timing");
+    }
+
+    ctx.fillStyle = color;
+    fitText(ctx, headline, maxW, "700", 72, 28);
+    ctx.fillText(headline, pad, 260);
+    ctx.fillStyle = "#edeff1";
+    fitText(ctx, support, maxW, "400", 32, 16);
+    ctx.fillText(support, pad, 360);
+    if (result && badge) {
+      ctx.fillStyle = "#9aa1a8";
+      var badgeLine = pair(badge);
+      fitText(ctx, badgeLine, maxW, "400", 24, 16);
+      ctx.fillText(badgeLine, pad, 420);
+    }
+
+    ctx.strokeStyle = "rgba(237,239,241,0.16)";
+    ctx.beginPath();
+    ctx.moveTo(pad, 500);
+    ctx.lineTo(W - pad, 500);
+    ctx.stroke();
+    ctx.fillStyle = "#edeff1";
+    setFont(ctx, "600", 28);
+    ctx.fillText("build-100.com/056", pad, 524);
+    ctx.fillStyle = "#9aa1a8";
+    var asof = t(
+      "数据日期 " + E.META.asOf + " · 示例或自填，非实时平台价",
+      "Data as of " + E.META.asOf + " · sample or yours, not a live price"
+    );
+    fitText(ctx, asof, maxW, "400", 20, 14);
+    ctx.fillText(asof, pad, 572);
+
+    canvas.setAttribute("aria-label", t("价格照妖镜分享卡", "Price X-ray share image"));
+    var wrap = $("shareWrap");
+    if (wrap) wrap.hidden = false;
+    shareOpen = true;
+  }
+
+  function renderAll() {
+    renderDiscount();
+    renderStack();
+    renderTimeline();
+    renderAdvice();
+    renderChecklist();
+    renderQuiz();
+    if (shareOpen) {
+      try { drawShare(); } catch (e) {}
+    }
+  }
+
+  function applyLang(l) {
+    lang = l === "en" ? "en" : "zh";
+    if (copyTimer) { clearTimeout(copyTimer); copyTimer = null; }
+    var copyBtn = $("copyBtn");
+    if (copyBtn) copyBtn.classList.remove("copied");
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = lang === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = lang === "en" ? "en" : "zh-CN";
+    var langBtn = $("langBtn");
+    if (langBtn) {
+      langBtn.textContent = lang === "en" ? "中文" : "EN";
+      langBtn.setAttribute("aria-label", lang === "en" ? "切换到中文" : "Switch language");
+    }
+    var tocNav = $("tocNav");
+    if (tocNav) tocNav.setAttribute("aria-label", t("目录", "On this page"));
+    try { localStorage.setItem("lang", lang); } catch (e) {}
+    renderAll();
+  }
+
+  function pickQuiz(i) {
+    if (quizDone || quizRevealed) return;
+    if (i !== 0 && i !== 1 && i !== 2) return;
+    quizAnswers[quizIndex] = i;
+    quizRevealed = true;
+    renderQuiz();
+  }
+
+  function nextQuiz() {
+    if (!quizRevealed || quizDone) return;
+    if (quizIndex >= E.QUIZ.length - 1) {
+      quizDone = true;
+      renderQuiz();
+      if (shareOpen) {
+        try { drawShare(); } catch (e) {}
+      }
+      return;
+    }
+    quizIndex += 1;
+    quizRevealed = false;
+    renderQuiz();
+  }
+
+  function retryQuiz() {
+    quizIndex = 0;
+    quizAnswers = [];
+    quizRevealed = false;
+    quizDone = false;
+    renderQuiz();
+    if (shareOpen) {
+      try { drawShare(); } catch (e) {}
+    }
+  }
+
+  function markCopied() {
+    var btn = $("copyBtn");
+    if (!btn) return;
+    btn.classList.add("copied");
+    btn.textContent = t("已复制", "Copied");
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () {
+      btn.classList.remove("copied");
+      if (btn.dataset.zh === undefined) return;
+      btn.innerHTML = lang === "en" ? btn.dataset.en : btn.dataset.zh;
+      copyTimer = null;
+    }, 1600);
+  }
+
+  function fallbackCopy(text) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch (err) {}
+      document.body.removeChild(ta);
+    } catch (err) {}
+  }
+
+  function sharePayload() {
+    var result = readResult();
+    return E.shareText(lang, result ? result.verdict : undefined);
+  }
+
+  loadChecked();
+
+  var langBtnEl = $("langBtn");
+  if (langBtnEl) {
+    langBtnEl.addEventListener("click", function () {
+      applyLang(lang === "en" ? "zh" : "en");
+    });
+  }
+
+  ["listPrice", "usualPrice", "salePrice"].forEach(function (id) {
+    var el = $(id);
+    if (!el) return;
+    el.addEventListener("input", function () {
+      renderDiscount();
+      if (shareOpen) {
+        try { drawShare(); } catch (e) {}
+      }
+    });
+  });
+
+  ["inPrice", "inDirect", "inCoupon", "inRed", "inTrade"].forEach(function (id) {
+    var el = $(id);
+    if (!el) return;
+    el.addEventListener("input", renderStack);
+  });
+  var catSel = $("inCat");
+  if (catSel) catSel.addEventListener("change", renderStack);
+  var plusEl = $("inPlus");
+  if (plusEl) plusEl.addEventListener("change", renderStack);
+
+  var catHost = $("catBtns");
+  if (catHost) {
+    catHost.addEventListener("click", function (ev) {
+      var btn = ev.target && ev.target.closest ? ev.target.closest(".preset") : null;
+      if (!btn || !catHost.contains(btn)) return;
+      cat = btn.getAttribute("data-cat") || "phone";
+      renderAdvice();
+    });
+  }
+
+  var checkHost = $("checkList");
+  if (checkHost) {
+    checkHost.addEventListener("change", function (ev) {
+      var target = ev.target;
+      if (!target || target.type !== "checkbox") return;
+      checked[target.value] = !!target.checked;
+      saveChecked();
+      renderCheckCount();
+    });
+  }
+
+  var quizHost = $("quizOpts");
+  if (quizHost) {
+    quizHost.addEventListener("click", function (ev) {
+      var btn = ev.target && ev.target.closest ? ev.target.closest(".quiz-opt") : null;
+      if (!btn || !quizHost.contains(btn)) return;
+      pickQuiz(Number(btn.getAttribute("data-i")));
+    });
+  }
+  var nextBtn = $("quizNext");
+  if (nextBtn) nextBtn.addEventListener("click", nextQuiz);
+  var retryBtn = $("quizRetry");
+  if (retryBtn) retryBtn.addEventListener("click", retryQuiz);
+
+  var copyBtn = $("copyBtn");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", function () {
+      var text;
+      try { text = sharePayload(); } catch (e) { return; }
+      var finished = false;
+      function finish() {
+        if (finished) return;
+        finished = true;
+        markCopied();
+      }
+      var clipPromise;
+      try {
+        var clip = navigator.clipboard;
+        if (clip && typeof clip.writeText === "function") {
+          var result = clip.writeText(text);
+          clipPromise = result && typeof result.then === "function" ? result : Promise.reject();
+        } else clipPromise = Promise.reject();
+      } catch (e) {
+        clipPromise = Promise.reject();
+      }
+      var timed = new Promise(function (_, reject) {
+        setTimeout(function () { reject(new Error("copy-timeout")); }, 400);
+      });
+      Promise.race([Promise.resolve(clipPromise), timed]).then(finish, function () {
+        fallbackCopy(text);
+        finish();
+      });
+    });
+  }
+
+  var imgBtn = $("shareImgBtn");
+  if (imgBtn) {
+    imgBtn.addEventListener("click", function () {
+      try { drawShare(); } catch (e) {}
+    });
+  }
+
+  applyLang(lang);
+})();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>
