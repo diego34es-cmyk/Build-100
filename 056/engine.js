@@ -21,7 +21,7 @@
 
   var SUBSIDY = {
     appliance: { rate: 0.15, cap: 1500 },
-    digital: { rate: 0.15, cap: 500 },
+    digital: { rate: 0.15, cap: 500, maxPrice: 6000 },
     none: null
   };
 
@@ -261,6 +261,7 @@
       if (b == null || b <= 0) return 0;
       var rule = SUBSIDY[category];
       if (!rule || !rule.rate) return 0;
+      if (rule.maxPrice && b > rule.maxPrice) return 0;
       var amt = b * rule.rate;
       if (!isFinite(amt) || amt <= 0) return 0;
       if (amt > rule.cap) return rule.cap;

@@ -399,3 +399,23 @@ test("shareText zh/en has exactly one https://build-100.com/056/ link", function
   assert.doesNotThrow(function () { E.shareText(); });
   assert.equal((E.shareText().match(LINK) || []).length, 1);
 });
+
+test("digital subsidy: price 7000 is above the 6000 limit, subsidy 0", function () {
+  var r = E.stack(7000, { category: "digital" });
+  assert.equal(r.steps[5].saved, 0);
+  assert.equal(r.final, 7000);
+  assert.equal(E.subsidyAmount(7000, "digital"), 0);
+});
+
+test("digital subsidy: price 6000 is at the limit, subsidy capped at 500", function () {
+  var r = E.stack(6000, { category: "digital" });
+  assert.equal(r.steps[5].saved, 500);
+  assert.equal(r.final, 5500);
+});
+
+test("digital subsidy: 6500 with a 600 coupon pays 5900, subsidy 500", function () {
+  var r = E.stack(6500, { category: "digital", coupon: 600 });
+  assert.equal(r.steps[5].before, 5900);
+  assert.equal(r.steps[5].saved, 500);
+  assert.equal(r.final, 5400);
+});
