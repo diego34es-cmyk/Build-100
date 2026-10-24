@@ -1,0 +1,949 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CBWEEK-058 · 央行超级周：Fed / ECB / BOJ 一页看清市场押注</title>
+<meta name="description" content="10 月 27–30，美联储、欧央行、日本央行同周议息。CME 期货隐含 10 月 FOMC 不变 92%、加息 8%；Kalshi 显示 12 月再加息 25bp 概率 68%。一页看清押注、三种情景与决议前清单。数据截至 2026-10-24。方向性示意，非预测，不构成投资建议。">
+<meta name="theme-color" content="#060709">
+<link rel="canonical" href="https://build-100.com/058/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E058%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CBWEEK-058 · 央行超级周：Fed / ECB / BOJ 一页看清市场押注">
+<meta property="og:description" content="10 月 27–30，美联储、欧央行、日本央行同周议息。CME 期货隐含 10 月 FOMC 不变 92%、加息 8%；Kalshi 显示 12 月再加息 25bp 概率 68%。一页看清押注、三种情景与决议前清单。数据截至 2026-10-24。方向性示意，非预测，不构成投资建议。">
+<meta property="og:url" content="https://build-100.com/058/">
+<meta property="og:image" content="https://build-100.com/058/og-058.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:image:alt" content="CBWEEK-058 · 央行超级周：Fed / ECB / BOJ 一页看清市场押注">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CBWEEK-058 · 央行超级周：Fed / ECB / BOJ 一页看清市场押注">
+<meta name="twitter:description" content="Oct 27–30: Fed, ECB and BOJ meet in the same week. CME futures imply a 92% hold and 8% hike for the October FOMC; Kalshi prices a 68% chance of another 25bp hike in December. Bets, three scenarios, and a pre-decision checklist on one page. Data as of 2026-10-24. Directional illustration only. Not a forecast. Not investment advice.">
+<meta name="twitter:image" content="https://build-100.com/058/og-058.png">
+<style>
+  :root {
+    --bg: #060709;
+    --bg-raise: #0b0d10;
+    --ink: #edeff1;
+    --muted: #7d848c;
+    --faint: #4a5057;
+    --line: rgba(237, 239, 241, 0.1);
+    --line-strong: rgba(237, 239, 241, 0.28);
+    --live: #4ade80;
+    --delta: #fbbf24;
+    --accent: #38bdf8;
+    --accent-glow: rgba(56,189,248,0.35);
+    --warm: #fbbf24;
+    --hot: #f87171;
+    --cool: var(--accent);
+    --up: #f87171;
+    --down: #4ade80;
+    --safe: #34d399;
+    --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    --pad: clamp(20px, 5vw, 64px);
+    --you: var(--warm);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; color-scheme: dark; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(237, 239, 241, 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--ink);
+    font-family: "Noto Sans CJK SC", var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font-family: inherit; color: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible, label:focus-within {
+    outline: 1px solid var(--ink); outline-offset: 3px;
+  }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  [hidden] { display: none !important; }
+  h2, h3, p, td, th, li, label, dt, dd, .lede, .field-title, .choice, .callout, .explain, .asof, .check-text, .note-copy, .hook, .comment, .why-line, .chip, .badge, .preset, .toc a, .watch, .pbar-legend, .move-why, .move-asset, .scene-desc, .tape-v, .tape-k, .clock-main, .clock-local, .clock-sub, .src-row, .bet-kicker, .stitle, .subhead {
+    overflow-wrap: anywhere;
+  }
+  h1, .big, .move-arrow { overflow-wrap: normal; }
+  img, canvas, svg, input, button { max-width: 100%; }
+  button { white-space: normal; }
+  main > * { min-width: 0; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 0 var(--pad); height: 60px;
+    background: rgba(6, 7, 9, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-back { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted); transition: color .2s; white-space: nowrap; min-width: 0; overflow: hidden; text-overflow: ellipsis; min-height: 44px; display: inline-flex; align-items: center; }
+  .nav-back:hover { color: var(--ink); }
+  .nav-brand { font-weight: 700; letter-spacing: 0.04em; font-size: 15px; text-align: center; flex: none; white-space: nowrap; }
+  .nav-brand span { color: var(--accent); }
+  .nav-lang {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--muted); padding: 7px 14px; cursor: pointer; transition: color .2s, background .2s; white-space: nowrap;
+    flex: none; min-height: 44px; min-width: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .nav-lang:hover { color: var(--ink); }
+
+  main { max-width: 880px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) 96px; }
+
+  .hero { margin-bottom: clamp(28px, 5vh, 48px); }
+  .hero .eyebrow { color: var(--accent); margin-bottom: 18px; letter-spacing: 0.04em; line-height: 1.45; text-wrap: balance; }
+  .hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem); font-weight: 700; line-height: 1.14;
+    letter-spacing: 0.01em; margin-bottom: 18px;
+  }
+  .hook {
+    font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; color: var(--accent);
+    margin-bottom: 14px; line-height: 1.35; text-shadow: 0 0 18px var(--accent-glow);
+  }
+  .hero p.lede, .hero p.fact { color: var(--muted); max-width: 42em; font-size: clamp(0.95rem, 1.4vw, 1.08rem); margin-top: 12px; }
+  .hero p.lede strong, .hero p.fact strong { color: var(--ink); font-weight: 600; }
+
+  .date-badge {
+    display: inline-flex; align-items: center; flex-wrap: wrap; min-height: 44px; max-width: 100%;
+    margin-top: 14px; padding: 8px 14px; white-space: normal;
+    border: 1px solid var(--accent); border-radius: 999px;
+    background: rgba(56, 189, 248, 0.16);
+    color: var(--ink); font-weight: 700; line-height: 1.4;
+  }
+
+  .clock {
+    margin-top: 18px; padding: 16px 16px 14px;
+    border: 1px solid var(--accent); border-radius: 16px;
+    background: rgba(56, 189, 248, 0.08);
+  }
+  .clock-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+  .clock-main {
+    font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    font-size: clamp(1.05rem, 3.6vw, 1.55rem); line-height: 1.35; margin-top: 8px;
+  }
+  .clock-local { color: var(--muted); margin-top: 8px; font-size: 0.92rem; }
+  .clock-sub { color: var(--muted); margin-top: 10px; font-size: 0.86rem; }
+
+  .toc {
+    display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 22px;
+  }
+  .toc a {
+    min-height: 44px; padding: 12px 14px;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise);
+    display: flex; align-items: center; gap: 12px;
+    transition: border-color .2s;
+  }
+  .toc a:hover { border-color: var(--accent); }
+  .toc .n {
+    font-family: var(--mono); color: var(--accent); font-size: 12px;
+    letter-spacing: 0.08em; flex: none;
+  }
+
+  .field { border-top: 1px solid var(--line); padding: clamp(24px, 4vh, 36px) 0; scroll-margin-top: 76px; }
+  .field-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .field-no { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: var(--faint); }
+  .field-title { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 700; }
+  .field-hint { color: var(--muted); font-size: 0.86rem; width: 100%; margin-top: 2px; }
+  .subhead { font-weight: 700; margin: 16px 0 8px; color: var(--ink); }
+
+  .bet-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .bet-card {
+    min-width: 0; padding: 14px; border: 1px solid var(--line); border-radius: 16px;
+    background: var(--bg-raise);
+  }
+  .bet-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+  .bet-card h3 { font-size: 1.05rem; margin: 4px 0 10px; line-height: 1.3; }
+  .pbar {
+    display: flex; height: 12px; border-radius: 999px; overflow: hidden;
+    background: rgba(237, 239, 241, 0.08); min-width: 0; margin: 8px 0 8px;
+  }
+  .pbar-hold { background: var(--accent); }
+  .pbar-hike { background: #f87171; }
+  .pbar-rest { flex: 1; background: rgba(148, 163, 184, 0.35); min-width: 0; }
+  .pbar-legend { font-size: 0.82rem; color: var(--muted); }
+  .asof { color: var(--faint); font-size: 0.78rem; margin-top: 6px; }
+  .rate-line { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700; margin: 8px 0; }
+  .src-table { margin-top: 10px; min-width: 0; }
+  .src-row {
+    display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: 4px 8px; padding: 8px 0; border-top: 1px solid var(--line);
+    font-size: 0.78rem; min-width: 0;
+  }
+  .src-row.is-head { color: var(--faint); font-family: var(--mono); letter-spacing: 0.06em; text-transform: uppercase; border-top: 0; padding-top: 0; }
+  .src-row span { min-width: 0; }
+  .points { margin: 10px 0 0; padding-left: 1.1em; color: var(--muted); font-size: 0.9rem; }
+  .points li { margin: 4px 0; }
+  .watch {
+    margin-top: 12px; color: var(--muted); font-size: 0.92rem;
+    padding: 12px 14px; border-left: 3px solid var(--accent);
+    background: rgba(56, 189, 248, 0.06); border-radius: 0 10px 10px 0;
+  }
+  .watch strong { color: var(--ink); }
+
+  .presets { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 4px 0 14px; }
+  .preset {
+    min-width: 0; min-height: 44px; padding: 10px 12px; width: 100%;
+    border-radius: 12px; border: 1px solid var(--line-strong); background: var(--bg-raise);
+    cursor: pointer; text-align: left; font-size: 0.92rem; line-height: 1.35;
+    display: flex; align-items: center;
+  }
+  .preset[aria-pressed="true"] {
+    border-color: var(--accent); background: rgba(56, 189, 248, 0.12);
+    box-shadow: 0 0 16px var(--accent-glow); font-weight: 700;
+  }
+  .scene-btn {
+    min-height: 72px; padding: 14px 14px; flex-direction: column; align-items: flex-start; gap: 6px;
+  }
+  .sid { font-family: var(--mono); color: var(--accent); letter-spacing: 0.12em; font-size: 12px; }
+  .stitle { font-weight: 700; }
+  .stag {
+    display: inline-flex; align-items: center; min-height: 24px; padding: 2px 8px;
+    border: 1px solid #f87171; border-radius: 999px; color: #f87171;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+  }
+  .scene-desc { margin: 4px 0 12px; font-weight: 600; }
+  .moves { display: grid; gap: 8px; }
+  .move-row {
+    border: 1px solid var(--line); border-radius: 12px; padding: 12px;
+    background: var(--bg-raise); min-width: 0;
+  }
+  .move-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .move-asset { font-weight: 700; }
+  .move-dir { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; }
+  .move-arrow { font-size: 1.8rem; line-height: 1; font-weight: 700; }
+  .move-up { color: #34d399; }
+  .move-down { color: #f87171; }
+  .move-flat { color: #94a3b8; }
+  .move-why { margin-top: 6px; color: var(--muted); font-size: 0.9rem; }
+
+  .checks { display: grid; gap: 8px; }
+  .check {
+    display: flex; align-items: center; gap: 12px;
+    min-height: 44px; padding: 10px 12px;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg-raise); cursor: pointer; min-width: 0;
+  }
+  .check input {
+    width: 22px; height: 22px; flex: none; accent-color: var(--accent);
+  }
+  .check-text { min-width: 0; }
+  .check-count { margin-top: 12px; font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: 0.08em; color: var(--accent); font-weight: 700; }
+
+  .tape-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .tape-card {
+    min-width: 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px;
+    background: var(--bg-raise);
+  }
+  .tape-k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+  .tape-v { margin-top: 4px; font-size: 0.92rem; }
+  .tape-src { color: var(--faint); font-size: 0.78rem; margin-top: 6px; }
+
+  .disclaimer {
+    margin-top: 14px; border: 1px solid rgba(56, 189, 248, 0.45);
+    background: rgba(56, 189, 248, 0.08); color: var(--ink);
+    border-radius: 12px; padding: 14px 16px; font-size: 0.95rem; font-weight: 700;
+  }
+  .note-copy { color: var(--muted); margin-top: 10px; }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .share-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 12px 20px; border: 1px solid var(--line-strong); background: none; color: var(--ink);
+    cursor: pointer; border-radius: 4px; transition: all .2s; min-height: 44px;
+    display: inline-flex; align-items: center; justify-content: center; text-align: center;
+  }
+  .share-btn:hover { border-color: var(--ink); background: rgba(237, 239, 241, 0.05); }
+  .share-btn.copied { border-color: var(--live); color: var(--live); }
+  .share-canvas-wrap { margin-top: 14px; max-width: 100%; }
+  .share-canvas-wrap canvas { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; display: block; }
+  .share-hint { color: var(--faint); font-size: 0.82rem; margin-top: 8px; }
+
+  footer {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding: 28px var(--pad) 40px; border-top: 1px solid var(--line);
+    max-width: 880px; margin: 0 auto;
+  }
+  footer > span {
+    display: inline-flex; align-items: center; min-height: 44px;
+    min-width: 0; max-width: 100%;
+  }
+  footer a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 0; }
+  footer a:hover { color: var(--ink); }
+  footer .mono { color: var(--faint); }
+
+  @media (min-width: 720px) {
+    .toc { grid-template-columns: 1fr 1fr; }
+    .bet-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .presets { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .tape-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 0 14px; gap: 8px; }
+    .nav-back { font-size: 11px; letter-spacing: 0; }
+    .nav-brand { font-size: 13px; }
+    .nav-lang { padding: 6px 10px; letter-spacing: 0.12em; }
+    .share-btn { padding: 12px 12px; flex: 1 1 100%; }
+    .src-row { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* 禁用所有动画 */
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-back" href="https://build-100.com/" data-en="← BUILD-100">← 返回主站</a>
+  <span class="nav-brand" data-en="CBWEEK<span>·058</span>">CBWEEK<span>·058</span></span>
+  <button class="nav-lang" id="langBtn" type="button" aria-label="Switch language">EN</button>
+</nav>
+
+<main>
+  <header class="hero">
+    <p class="mono eyebrow" data-en="Finance Tools · CBWEEK-058">Finance Tools · CBWEEK-058</p>
+    <h1 data-en="Central Bank Super Week: what markets are betting on the Fed, ECB &amp; BOJ">央行超级周：Fed / ECB / BOJ 一页看清市场押注</h1>
+    <p class="hook" data-en="In 4 days, the Fed decides your wallet.">4 天后，美联储决定你的钱袋子</p>
+    <p class="lede" data-en="92% priced for no hike, but December hike odds are 68% (CME futures-implied / Kalshi, as of 2026-10-24)."><strong>92% 押不加息，但 12 月加息概率 68%</strong>（CME 期货隐含 / Kalshi，截至 2026-10-24）</p>
+    <p class="date-badge" data-en="Data as of 2026-10-24">数据截至 2026-10-24</p>
+    <div class="clock" id="clockBox">
+      <p class="clock-kicker" data-en="Until the FOMC statement (14:00 ET, Oct 28)">距 FOMC 决议（美东 10-28 14:00）</p>
+      <p class="clock-main dyn" id="clockMain"></p>
+      <p class="clock-local dyn" id="clockLocal"></p>
+      <p class="clock-sub dyn" id="clockSub"></p>
+    </div>
+    <nav class="toc" id="tocNav" aria-label="On this page">
+      <a href="#bets"><span class="n" data-en="01">01</span><span data-en="Market bets">市场押注</span></a>
+      <a href="#scenes"><span class="n" data-en="02">02</span><span data-en="Scenarios">情景推演</span></a>
+      <a href="#list"><span class="n" data-en="03">03</span><span data-en="Super-week checklist">超级周清单</span></a>
+      <a href="#tape"><span class="n" data-en="04">04</span><span data-en="Backdrop">背景速览</span></a>
+      <a href="#share"><span class="n" data-en="05">05</span><span data-en="Share">分享</span></a>
+    </nav>
+  </header>
+
+  <section class="field" id="bets">
+    <div class="field-head">
+      <span class="field-no" data-en="01">01</span>
+      <h2 class="field-title" data-en="Three central banks, one week of bets">三家央行押注卡</h2>
+      <p class="field-hint" data-en="Hold vs hike. A cut is not listed separately. Figures as of 2026-10-24, with the source on each card. Fed bar uses CME futures-implied.">不变 vs 加息。降息未单列。数字截至 2026-10-24，每张卡标明来源口径。Fed 主条用 CME 期货隐含。</p>
+    </div>
+    <div class="bet-grid dyn" id="betsGrid"></div>
+  </section>
+
+  <section class="field" id="scenes">
+    <div class="field-head">
+      <span class="field-no" data-en="02">02</span>
+      <h2 class="field-title" data-en="Scenario map">情景推演器</h2>
+      <p class="field-hint" data-en="Pick one path. Arrows are directional only. Scenario B is the larger shock.">三选一。箭头只表示方向。情景 B 冲击更大。</p>
+    </div>
+    <div class="presets scene-btns" id="sceneBtns" role="radiogroup" aria-label="Scenarios">
+      <button type="button" class="preset scene-btn" data-id="A" aria-pressed="true"></button>
+      <button type="button" class="preset scene-btn" data-id="B" aria-pressed="false"></button>
+      <button type="button" class="preset scene-btn" data-id="C" aria-pressed="false"></button>
+    </div>
+    <div class="dyn" id="sceneOut"></div>
+  </section>
+
+  <section class="field" id="list">
+    <div class="field-head">
+      <span class="field-no" data-en="03">03</span>
+      <h2 class="field-title" data-en="Super-week checklist">超级周清单</h2>
+      <p class="field-hint" data-en="FOMC shows your local time. ECB and BOJ show the date; the clock time is approximate and the official release wins. This browser remembers ticks on this device.">FOMC 显示你的本地时间。ECB / BOJ 显示日期，时刻为约数，以官方公布为准。这个浏览器会在本机记住勾选。</p>
+    </div>
+    <div class="checks dyn" id="checkList"></div>
+    <p class="check-count dyn" id="checkCount"></p>
+  </section>
+
+  <section class="field" id="tape">
+    <div class="field-head">
+      <span class="field-no" data-en="04">04</span>
+      <h2 class="field-title" data-en="Backdrop">背景速览</h2>
+      <p class="field-hint" data-en="Market backdrop going into the week. Each card carries its as-of date and source.">进入超级周的市况。每张卡标截至日期与口径。</p>
+    </div>
+    <div class="tape-grid">
+      <article class="tape-card">
+        <p class="tape-k" data-en="CPI">CPI</p>
+        <p class="tape-v" data-en="September CPI 3.7% year-over-year (expected 3.6%), core 2.6%, released 10-14.">9 月 CPI 3.7% 同比（预期 3.6%），核心 2.6%，10-14 公布。</p>
+        <p class="tape-src" data-en="As of 2026-10-24">截至 2026-10-24</p>
+      </article>
+      <article class="tape-card">
+        <p class="tape-k" data-en="US 10Y">美债 10Y</p>
+        <p class="tape-v" data-en="US 10-year yield about 5.08–5.36%.">美债 10Y 约 5.08–5.36%。</p>
+        <p class="tape-src" data-en="As of 2026-10-24 · market pricing">截至 2026-10-24 · 市场定价</p>
+      </article>
+      <article class="tape-card">
+        <p class="tape-k" data-en="Gold">黄金</p>
+        <p class="tape-v" data-en="Spot gold about $4,094 (Oct 23; in the week, first −4.7% then −1.3%).">现货黄金约 $4,094（10-23，周内先 −4.7% 再 −1.3%）。</p>
+        <p class="tape-src" data-en="As of 2026-10-24">截至 2026-10-24</p>
+      </article>
+      <article class="tape-card">
+        <p class="tape-k" data-en="EUR/USD">EUR/USD</p>
+        <p class="tape-v" data-en="EUR/USD −0.23%.">EUR/USD −0.23%。</p>
+        <p class="tape-src" data-en="As of 2026-10-24 · market pricing">截至 2026-10-24 · 市场定价</p>
+      </article>
+      <article class="tape-card">
+        <p class="tape-k" data-en="French bonds">法国国债</p>
+        <p class="tape-v" data-en="French government bond yields at a 24-year high.">法国国债收益率 24 年新高。</p>
+        <p class="tape-src" data-en="As of 2026-10-24 · market pricing">截至 2026-10-24 · 市场定价</p>
+      </article>
+      <article class="tape-card">
+        <p class="tape-k" data-en="Bitcoin">比特币</p>
+        <p class="tape-v" data-en="Bitcoin oscillating around 81,000–83,000 US dollars.">比特币在 8.1–8.3 万美元震荡。</p>
+        <p class="tape-src" data-en="As of 2026-10-24">截至 2026-10-24</p>
+      </article>
+      <article class="tape-card">
+        <p class="tape-k" data-en="Warsh">Warsh</p>
+        <p class="tape-v" data-en="Fed Chair Kevin Warsh, Oct 15 at the IMF: will not pre-judge the meeting.">美联储主席 Kevin Warsh 10-15 在 IMF 表态：不预判会议。</p>
+        <p class="tape-src" data-en="Compiled by predictionmarketspicks, Oct 21 · as of 2026-10-24">据 predictionmarketspicks 10-21 整理 · 截至 2026-10-24</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="field" id="share">
+    <div class="field-head">
+      <span class="field-no" data-en="05">05</span>
+      <h2 class="field-title" data-en="Share">分享</h2>
+      <p class="field-hint" data-en="The card shows the scenario you picked, with arrows and the disclaimer.">分享卡写你选中的情景、方向箭头和免责声明。</p>
+    </div>
+    <div class="share-row">
+      <button class="share-btn" id="copyBtn" type="button" data-en="Copy summary">复制文案</button>
+      <button class="share-btn" id="shareImgBtn" type="button" data-en="Generate share image">生成分享图</button>
+    </div>
+    <div class="share-canvas-wrap" id="shareWrap" hidden>
+      <canvas id="shareCanvas" width="1200" height="630"></canvas>
+      <p class="share-hint" data-en="Long-press or right-click to save.">长按或右键保存。</p>
+    </div>
+  </section>
+
+  <section class="field" id="notes">
+    <div class="field-head">
+      <span class="field-no" data-en="06">06</span>
+      <h2 class="field-title" data-en="Sources, dates, and risk">数据来源与风险提示</h2>
+    </div>
+    <p class="date-badge" data-en="Data as of 2026-10-24">数据截至 2026-10-24</p>
+    <p class="note-copy" data-en="Sources: Kalshi, Polymarket, CME futures-implied, market pricing. Warsh remarks compiled by predictionmarketspicks on Oct 21. September CPI released 10-14. Spot gold as of Oct 23.">数据来源：Kalshi、Polymarket、CME 期货隐含、市场定价。Warsh 表态据 predictionmarketspicks 10-21 整理。9 月 CPI 于 10-14 公布。现货黄金数字截至 10-23。</p>
+    <p class="note-copy" data-en="Not investment advice. Probabilities are prediction-market or futures-implied values and will move with the data. Figures on this page are as of 2026-10-24. The FOMC statement time is 14:00 ET. ECB and BOJ clock times are approximate; the official release wins.">非投资建议；概率为预测市场/期货隐含值，会随数据变化，页面数字截至 2026-10-24。FOMC 决议时间为美东 14:00，ECB/BOJ 时刻为约数，以官方公布为准。</p>
+    <p class="disclaimer" data-en="Directional illustration only. Not a forecast. Not investment advice.">方向性示意，非预测，不构成投资建议</p>
+  </section>
+</main>
+
+<footer>
+  <span class="mono" data-en='<a href="https://build-100.com/">build-100.com</a>'><a href="https://build-100.com/">build-100.com</a></span>
+  <span class="mono" data-en='<a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a>'><a href="https://x.com/JCheng557" target="_blank" rel="noopener">@JCheng557</a></span>
+  <span class="mono" data-en="CBWEEK-058 · Central Bank Super Week">CBWEEK-058 · 央行超级周</span>
+</footer>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  "use strict";
+  var E = window.CbEngine;
+  if (!E) return;
+
+  var lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch (e) {}
+  if (lang !== "en" && lang !== "zh") lang = "zh";
+
+  var CHECK_KEY = "cbweek058-check";
+  var checked = {};
+  var sceneId = "A";
+  var shareOpen = false;
+  var copyTimer = null;
+  var tickTimer = null;
+
+  function t(zh, en) { return lang === "en" ? en : zh; }
+  function $(id) { return document.getElementById(id); }
+  function pair(obj) { return obj ? t(obj.zh, obj.en) : ""; }
+
+  function pct(v) {
+    if (typeof v === "string") return v;
+    if (typeof v === "number" && isFinite(v)) return v + "%";
+    return "—";
+  }
+
+  function eventMs(ev) {
+    if (!ev || !ev.anchor) return 0;
+    var n = Date.parse(ev.anchor);
+    if (!isFinite(n)) n = Date.parse(String(ev.anchor) + "T00:00:00Z");
+    return isFinite(n) ? n : 0;
+  }
+
+  function findScene(id) {
+    var i;
+    for (i = 0; i < E.SCENARIOS.length; i++) {
+      if (E.SCENARIOS[i].id === id) return E.SCENARIOS[i];
+    }
+    return E.SCENARIOS[0];
+  }
+
+  function srcName(id) {
+    if (id === "cme") return t("CME 期货隐含", "CME futures-implied");
+    if (id === "kalshi") return "Kalshi";
+    if (id === "polymarket") return "Polymarket";
+    return id;
+  }
+
+  function loadChecked() {
+    checked = {};
+    try {
+      var raw = localStorage.getItem(CHECK_KEY);
+      var arr = raw ? JSON.parse(raw) : [];
+      if (Array.isArray(arr)) {
+        arr.forEach(function (id) { if (typeof id === "string") checked[id] = true; });
+      }
+    } catch (e) {}
+  }
+
+  function allCheckIds() {
+    var ids = [];
+    E.EVENTS.forEach(function (ev) { ids.push("ev-" + ev.id); });
+    E.PREP.forEach(function (p) { ids.push(p.id); });
+    return ids;
+  }
+
+  function saveChecked() {
+    var ids = [];
+    allCheckIds().forEach(function (id) {
+      if (checked[id]) ids.push(id);
+    });
+    try { localStorage.setItem(CHECK_KEY, JSON.stringify(ids)); } catch (e) {}
+  }
+
+  function renderCountdown() {
+    var now = Date.now();
+    var fomc = E.EVENTS[0];
+    var main = $("clockMain");
+    var localEl = $("clockLocal");
+    var sub = $("clockSub");
+    var c = E.countdown(now, eventMs(fomc));
+    if (main) {
+      main.textContent = c.past
+        ? t("已公布", "Decision is out")
+        : t(
+          "还有 " + c.days + " 天 " + c.hours + " 时 " + c.minutes + " 分 " + c.seconds + " 秒",
+          c.days + "d " + c.hours + "h " + c.minutes + "m " + c.seconds + "s left"
+        );
+    }
+    if (localEl) {
+      localEl.textContent = t("你的本地时间：", "Your local time: ") + E.fmtLocal(fomc.anchor, undefined, lang);
+    }
+    if (sub) {
+      var parts = [];
+      [E.EVENTS[1], E.EVENTS[2]].forEach(function (ev) {
+        var d = E.countdown(now, eventMs(ev));
+        if (d.past) {
+          parts.push(t(ev.name.zh + " " + ev.dateLabel + " 已公布", ev.name.en + " " + ev.dateLabel + " is out"));
+        } else if (d.days === 0) {
+          parts.push(t(
+            ev.name.zh + " " + ev.dateLabel + " 不到 1 天（时刻为约数）",
+            ev.name.en + " " + ev.dateLabel + " in less than 1 day (time approximate)"
+          ));
+        } else {
+          parts.push(t(
+            ev.name.zh + " " + ev.dateLabel + " 还有 " + d.days + " 天（时刻为约数）",
+            ev.name.en + " " + ev.dateLabel + " in " + d.days + " days (time approximate)"
+          ));
+        }
+      });
+      sub.textContent = parts.join(" · ");
+    }
+  }
+
+  function pointsHtml(points) {
+    var h = '<ul class="points">';
+    var i;
+    for (i = 0; i < points.length; i++) h += "<li>" + pair(points[i]) + "</li>";
+    h += "</ul>";
+    return h;
+  }
+
+  function watchHtml(watch) {
+    return '<p class="watch"><strong>' + t("市场在看什么", "What markets are watching") + "</strong> " + pair(watch) + "</p>";
+  }
+
+  function asofLine(src) {
+    return '<p class="asof">' + src + " · " + t("截至 " + E.META.asOf, "As of " + E.META.asOf) + "</p>";
+  }
+
+  function renderBets() {
+    var host = $("betsGrid");
+    if (!host) return;
+    var f = E.BETS.fomc;
+    var cut = t("降息：未单列", "Cut: not listed separately");
+    var holdLab = t("不变", "Hold");
+    var hikeLab = t("加息", "Hike");
+    var restLab = t("其余", "The rest");
+    var html = "";
+
+    html += '<article class="bet-card">';
+    html += '<p class="bet-kicker">FOMC · ' + E.EVENTS[0].dateLabel + "</p>";
+    html += "<h3>" + pair(E.EVENTS[0].name) + "</h3>";
+    html += '<div class="pbar" aria-hidden="true"><span class="pbar-hold" style="width:' + f.bar.hold + '%"></span><span class="pbar-hike" style="width:' + f.bar.hike + '%"></span></div>';
+    html += '<p class="pbar-legend">' + holdLab + " " + f.bar.hold + "% · " + hikeLab + " " + f.bar.hike + "% · " + cut + "</p>";
+    html += asofLine(t("CME 期货隐含", "CME futures-implied"));
+    html += '<p class="rate-line">' + t("联邦基金利率 ", "Fed funds rate ") + f.rate + "</p>";
+    html += '<div class="src-table">';
+    html += '<div class="src-row is-head"><span>' + t("来源", "Source") + "</span><span>" + holdLab + "</span><span>" + hikeLab + "</span></div>";
+    f.sources.forEach(function (s) {
+      var note = s.note ? " · " + s.note : "";
+      html += '<div class="src-row"><span>' + srcName(s.id) + note + "</span><span>" + pct(s.hold) + "</span><span>" + pct(s.hike) + "</span></div>";
+    });
+    html += "</div>";
+    html += asofLine(t("Kalshi / Polymarket / CME 期货隐含", "Kalshi / Polymarket / CME futures-implied"));
+    html += pointsHtml(f.points);
+    html += watchHtml(f.watch);
+    html += "</article>";
+
+    html += '<article class="bet-card">';
+    html += '<p class="bet-kicker">ECB · ' + E.EVENTS[1].dateLabel + "</p>";
+    html += "<h3>" + pair(E.EVENTS[1].name) + "</h3>";
+    html += '<div class="pbar" aria-hidden="true"><span class="pbar-hike" style="width:' + E.BETS.ecb.hike + '%;min-width:8px"></span><span class="pbar-rest"></span></div>';
+    html += '<p class="pbar-legend">' + hikeLab + " " + t("约 ", "about ") + E.BETS.ecb.hike + "% · " + restLab + " · " + cut + "</p>";
+    html += asofLine(t("市场定价", "Market pricing"));
+    html += pointsHtml(E.BETS.ecb.points);
+    html += watchHtml(E.BETS.ecb.watch);
+    html += "</article>";
+
+    html += '<article class="bet-card">';
+    html += '<p class="bet-kicker">BOJ · ' + E.EVENTS[2].dateLabel + "</p>";
+    html += "<h3>" + pair(E.EVENTS[2].name) + "</h3>";
+    html += '<div class="pbar" aria-hidden="true"><span class="pbar-hike" style="width:' + E.BETS.boj.hike + '%;min-width:8px"></span><span class="pbar-rest"></span></div>';
+    html += '<p class="pbar-legend">' + hikeLab + " " + t("约 ", "about ") + E.BETS.boj.hike + "% · " + restLab + " · " + cut + "</p>";
+    html += asofLine(t("市场定价", "Market pricing"));
+    html += pointsHtml(E.BETS.boj.points);
+    html += watchHtml(E.BETS.boj.watch);
+    html += "</article>";
+
+    host.innerHTML = html;
+  }
+
+  function moveClass(mv) {
+    if (mv === "up") return "move-up";
+    if (mv === "down") return "move-down";
+    return "move-flat";
+  }
+
+  function renderScene() {
+    var sc = findScene(sceneId);
+    var btns = document.querySelectorAll("#sceneBtns .scene-btn");
+    btns.forEach(function (btn) {
+      var id = btn.getAttribute("data-id");
+      var item = findScene(id);
+      btn.setAttribute("aria-pressed", id === sc.id ? "true" : "false");
+      var tag = item.tag ? '<span class="stag">' + pair(item.tag) + "</span>" : "";
+      btn.innerHTML = '<span class="sid">' + item.id + "</span><span class=\"stitle\">" + pair(item.title) + "</span>" + tag;
+    });
+    var out = $("sceneOut");
+    if (!out) return;
+    var html = '<p class="scene-desc">' + pair(sc.desc) + "</p>";
+    html += '<div class="moves">';
+    (E.ASSET_ORDER || ["usd", "jpy", "eur", "gold", "stocks"]).forEach(function (k) {
+      var mv = sc.moves[k];
+      var cls = moveClass(mv);
+      html += '<div class="move-row">';
+      html += '<div class="move-head">';
+      html += '<span class="move-asset">' + pair(E.ASSETS[k]) + "</span>";
+      html += '<span class="move-dir ' + cls + '"><span class="move-arrow">' + E.arrow(mv) + "</span> " + pair(E.moveLabel(mv)) + "</span>";
+      html += "</div>";
+      html += '<p class="move-why">' + pair(sc.why[k]) + "</p>";
+      html += "</div>";
+    });
+    html += "</div>";
+    html += '<p class="disclaimer">' + pair(E.DISCLAIMER) + "</p>";
+    out.innerHTML = html;
+  }
+
+  function eventCheckLabel(ev) {
+    if (ev.precise) {
+      var local = E.fmtLocal(ev.anchor, undefined, lang);
+      return t(
+        ev.name.zh + " · " + ev.dateLabel + " · 本地 " + local,
+        ev.name.en + " · " + ev.dateLabel + " · local " + local
+      );
+    }
+    return t(
+      ev.name.zh + " · " + ev.dateLabel + " · 时刻为约数，以官方公布为准",
+      ev.name.en + " · " + ev.dateLabel + " · time approximate; official release wins"
+    );
+  }
+
+  function renderCheckCount() {
+    var el = $("checkCount");
+    if (!el) return;
+    var ids = allCheckIds();
+    var n = 0;
+    ids.forEach(function (id) { if (checked[id]) n += 1; });
+    el.textContent = t("已勾 " + n + "/" + ids.length, "Ticked " + n + "/" + ids.length);
+  }
+
+  function renderChecklist() {
+    var host = $("checkList");
+    if (!host) return;
+    var html = "";
+    html += '<p class="subhead">' + t("决议时间点", "Decision times") + "</p>";
+    E.EVENTS.forEach(function (ev) {
+      var id = "ev-" + ev.id;
+      html += '<label class="check"><input type="checkbox" value="' + id + '"' + (checked[id] ? " checked" : "") + '><span class="check-text">' + eventCheckLabel(ev) + "</span></label>";
+    });
+    html += '<p class="subhead">' + t("决议前 3 件事", "Three things before the decisions") + "</p>";
+    E.PREP.forEach(function (p) {
+      html += '<label class="check"><input type="checkbox" value="' + p.id + '"' + (checked[p.id] ? " checked" : "") + '><span class="check-text">' + pair(p) + "</span></label>";
+    });
+    host.innerHTML = html;
+    renderCheckCount();
+  }
+
+  function fontStack() {
+    return '"Noto Sans CJK SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+  }
+  function setFont(ctx, weight, px) {
+    ctx.font = weight + " " + px + "px " + fontStack();
+  }
+  function fitText(ctx, text, maxW, weight, px, minPx) {
+    var size = px;
+    setFont(ctx, weight, size);
+    while (size > minPx && ctx.measureText(text).width > maxW) {
+      size -= 2;
+      setFont(ctx, weight, size);
+    }
+    return size;
+  }
+  function wrapText(ctx, text, maxW) {
+    var lines = [];
+    var cur = "";
+    var i;
+    for (i = 0; i < text.length; i++) {
+      var next = cur + text.charAt(i);
+      if (cur && ctx.measureText(next).width > maxW) {
+        lines.push(cur);
+        cur = text.charAt(i);
+      } else cur = next;
+    }
+    if (cur) lines.push(cur);
+    return lines;
+  }
+
+  function drawShare() {
+    var canvas = $("shareCanvas");
+    if (!canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    var W = 1200;
+    var H = 630;
+    var pad = 64;
+    var maxW = W - pad * 2;
+    canvas.width = W;
+    canvas.height = H;
+    ctx.fillStyle = "#060709";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(237,239,241,0.045)";
+    var gx;
+    var gy;
+    for (gx = 18; gx < W; gx += 36) {
+      for (gy = 18; gy < H; gy += 36) ctx.fillRect(gx, gy, 1.4, 1.4);
+    }
+    ctx.fillStyle = "#38bdf8";
+    ctx.fillRect(0, 0, 12, H);
+    ctx.textBaseline = "top";
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#38bdf8";
+    setFont(ctx, "700", 22);
+    ctx.fillText("FINANCE TOOLS · CBWEEK-058", pad, 40);
+
+    ctx.fillStyle = "#edeff1";
+    var title = t("央行超级周", "Central Bank Super Week");
+    fitText(ctx, title, maxW, "700", 52, 26);
+    ctx.fillText(title, pad, 78);
+
+    var sc = findScene(sceneId);
+    ctx.fillStyle = "#9aa1a8";
+    var sceneLine = t("情景 " + sc.id + "：" + sc.title.zh, "Scenario " + sc.id + ": " + sc.title.en);
+    fitText(ctx, sceneLine, maxW, "600", 26, 16);
+    ctx.fillText(sceneLine, pad, 148);
+
+    var y = 200;
+    (E.ASSET_ORDER || ["usd", "jpy", "eur", "gold", "stocks"]).forEach(function (k) {
+      var mv = sc.moves[k];
+      var color = mv === "up" ? "#34d399" : mv === "down" ? "#f87171" : "#94a3b8";
+      var line = pair(E.ASSETS[k]) + "  " + E.arrow(mv) + "  " + pair(E.moveLabel(mv));
+      ctx.fillStyle = color;
+      setFont(ctx, "700", 28);
+      ctx.fillText(line, pad, y);
+      y += 38;
+    });
+
+    ctx.fillStyle = "#9aa1a8";
+    setFont(ctx, "600", 20);
+    var discLines = wrapText(ctx, pair(E.DISCLAIMER), maxW);
+    var di;
+    var dy = 430;
+    for (di = 0; di < discLines.length && di < 2; di++) {
+      ctx.fillText(discLines[di], pad, dy + di * 26);
+    }
+
+    ctx.strokeStyle = "rgba(237,239,241,0.16)";
+    ctx.beginPath();
+    ctx.moveTo(pad, 500);
+    ctx.lineTo(W - pad, 500);
+    ctx.stroke();
+    ctx.fillStyle = "#edeff1";
+    setFont(ctx, "600", 28);
+    ctx.fillText("build-100.com/058", pad, 524);
+    ctx.fillStyle = "#9aa1a8";
+    var asof = t("截至 " + E.META.asOf, "As of " + E.META.asOf);
+    fitText(ctx, asof, maxW, "400", 20, 14);
+    ctx.fillText(asof, pad, 572);
+
+    canvas.setAttribute("aria-label", t("央行超级周分享卡", "Central Bank Super Week share image"));
+    var wrap = $("shareWrap");
+    if (wrap) wrap.hidden = false;
+    shareOpen = true;
+  }
+
+  function renderAll() {
+    renderCountdown();
+    renderBets();
+    renderScene();
+    renderChecklist();
+    if (shareOpen) {
+      try { drawShare(); } catch (e) {}
+    }
+  }
+
+  function applyLang(l) {
+    lang = l === "en" ? "en" : "zh";
+    if (copyTimer) { clearTimeout(copyTimer); copyTimer = null; }
+    var copyBtn = $("copyBtn");
+    if (copyBtn) copyBtn.classList.remove("copied");
+    document.querySelectorAll("[data-en]").forEach(function (el) {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+      el.innerHTML = lang === "en" ? el.dataset.en : el.dataset.zh;
+    });
+    document.documentElement.lang = lang === "en" ? "en" : "zh-CN";
+    var langBtn = $("langBtn");
+    if (langBtn) {
+      langBtn.textContent = lang === "en" ? "中文" : "EN";
+      langBtn.setAttribute("aria-label", lang === "en" ? "切换到中文" : "Switch language");
+    }
+    var tocNav = $("tocNav");
+    if (tocNav) tocNav.setAttribute("aria-label", t("目录", "On this page"));
+    var sceneBtns = $("sceneBtns");
+    if (sceneBtns) sceneBtns.setAttribute("aria-label", t("情景", "Scenarios"));
+    try { localStorage.setItem("lang", lang); } catch (e) {}
+    renderAll();
+  }
+
+  function markCopied() {
+    var btn = $("copyBtn");
+    if (!btn) return;
+    btn.classList.add("copied");
+    btn.textContent = t("已复制", "Copied");
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () {
+      btn.classList.remove("copied");
+      if (btn.dataset.zh === undefined) return;
+      btn.innerHTML = lang === "en" ? btn.dataset.en : btn.dataset.zh;
+      copyTimer = null;
+    }, 1600);
+  }
+
+  function fallbackCopy(text) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch (err) {}
+      document.body.removeChild(ta);
+    } catch (err) {}
+  }
+
+  loadChecked();
+
+  var langBtnEl = $("langBtn");
+  if (langBtnEl) {
+    langBtnEl.addEventListener("click", function () {
+      applyLang(lang === "en" ? "zh" : "en");
+    });
+  }
+
+  var sceneHost = $("sceneBtns");
+  if (sceneHost) {
+    sceneHost.addEventListener("click", function (ev) {
+      var btn = ev.target && ev.target.closest ? ev.target.closest(".scene-btn") : null;
+      if (!btn || !sceneHost.contains(btn)) return;
+      sceneId = btn.getAttribute("data-id") || "A";
+      renderScene();
+      if (shareOpen) {
+        try { drawShare(); } catch (e) {}
+      }
+    });
+  }
+
+  var checkHost = $("checkList");
+  if (checkHost) {
+    checkHost.addEventListener("change", function (ev) {
+      var target = ev.target;
+      if (!target || target.type !== "checkbox") return;
+      checked[target.value] = !!target.checked;
+      saveChecked();
+      renderCheckCount();
+    });
+  }
+
+  var copyBtn = $("copyBtn");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", function () {
+      var text;
+      try { text = E.shareText(lang, sceneId); } catch (e) { return; }
+      var finished = false;
+      function finish() {
+        if (finished) return;
+        finished = true;
+        markCopied();
+      }
+      var clipPromise;
+      try {
+        var clip = navigator.clipboard;
+        if (clip && typeof clip.writeText === "function") {
+          var result = clip.writeText(text);
+          clipPromise = result && typeof result.then === "function" ? result : Promise.reject();
+        } else clipPromise = Promise.reject();
+      } catch (e) {
+        clipPromise = Promise.reject();
+      }
+      var timed = new Promise(function (_, reject) {
+        setTimeout(function () { reject(new Error("copy-timeout")); }, 400);
+      });
+      Promise.race([Promise.resolve(clipPromise), timed]).then(finish, function () {
+        fallbackCopy(text);
+        finish();
+      });
+    });
+  }
+
+  var imgBtn = $("shareImgBtn");
+  if (imgBtn) {
+    imgBtn.addEventListener("click", function () {
+      try { drawShare(); } catch (e) {}
+    });
+  }
+
+  applyLang(lang);
+  if (tickTimer) clearInterval(tickTimer);
+  tickTimer = setInterval(function () { renderCountdown(); }, 1000);
+})();
+</script>
+<script src="/beacon.js"></script>
+</body>
+</html>

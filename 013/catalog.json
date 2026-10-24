@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-23",
+  "updated": "2026-10-24",
   "filters": [
     {
       "id": "all",
@@ -742,6 +742,19 @@
       ],
       "live": true,
       "url": "https://build-100.com/057/"
+    },
+    {
+      "id": "058",
+      "code": "CBWEEK",
+      "name": "CBWEEK-058",
+      "sub_zh": "央行超级周——FOMC 10-27/28、ECB 10-29、BOJ 10-30 同周议息：一页看清市场押注、三种情景下美元/日元/欧元/黄金/美股的方向，附决议前清单",
+      "sub_en": "Central Bank Super Week — Fed (Oct 27–28), ECB (Oct 29) and BOJ (Oct 30) in one week: what markets are betting on, how USD, JPY, EUR, gold and US stocks might lean in three scenarios, plus a pre-decision checklist",
+      "cats": [
+        "finance",
+        "tools"
+      ],
+      "live": true,
+      "url": "https://build-100.com/058/"
     }
   ]
 }
