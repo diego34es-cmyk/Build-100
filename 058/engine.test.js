@@ -87,19 +87,20 @@ test("EVENTS has 3 items and FOMC anchor is 2026-10-28T18:00:00Z", function () {
 });
 
 test("BETS numbers match baked facts", function () {
-  assert.equal(E.BETS.fomc.bar.hold, 92);
-  assert.equal(E.BETS.fomc.bar.hike, 8);
-  assert.equal(src("cme").hold, 92);
-  assert.equal(src("cme").hike, 8);
+  assert.equal(E.BETS.fomc.bar.hold, 90);
+  assert.equal(E.BETS.fomc.bar.hike, 10);
+  assert.equal(src("cme").hold, 90);
+  assert.equal(src("cme").hike, 10);
   assert.equal(src("polymarket").hold, 93.5);
   assert.equal(src("polymarket").hike, 6.5);
   assert.equal(src("kalshi").hold, "91–92.5%");
   assert.equal(src("kalshi").hike, "7.5–8%");
   assert.equal(src("kalshi").note, "10-23/24");
-  assert.equal(E.BETS.fomc.dec.kalshiHike, 68);
+  assert.equal(E.BETS.fomc.dec.kalshiHike, 72);
+  assert.equal(E.BETS.fomc.dec.kalshiHikeOver25, 5);
   assert.equal(E.BETS.fomc.rate, "3.75%–4.00%");
   assert.equal(E.BETS.ecb.hike, 3);
-  assert.equal(E.BETS.boj.hike, 2);
+  assert.equal(E.BETS.boj.hike, 3);
   assert.equal(E.BETS.boj.dec18Hike, 76);
 
   ["fomc", "ecb", "boj"].forEach(function (id) {
@@ -195,7 +196,7 @@ test("PREP has 3 bilingual items", function () {
   });
   assert.ok(E.PREP.some(function (item) { return /杠杆/.test(item.zh); }));
   assert.ok(E.PREP.some(function (item) { return /重仓/.test(item.zh); }));
-  assert.ok(E.PREP.some(function (item) { return /68%/.test(item.zh) && /76%/.test(item.zh); }));
+  assert.ok(E.PREP.some(function (item) { return /72%/.test(item.zh) && /76%/.test(item.zh); }));
 });
 
 test("shareText zh/en has exactly one https://build-100.com/058/ and 2026-10-24", function () {

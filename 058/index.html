@@ -3,22 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CBWEEK-058 · 央行超级周：Fed / ECB / BOJ 一页看清市场押注</title>
-<meta name="description" content="10 月 27–30，美联储、欧央行、日本央行同周议息。CME 期货隐含 10 月 FOMC 不变 92%、加息 8%；Kalshi 显示 12 月再加息 25bp 概率 68%。一页看清押注、三种情景与决议前清单。数据截至 2026-10-24。方向性示意，非预测，不构成投资建议。">
+<title>CBWEEK-058 · 央行超级周：Fed / ECB / BOJ 一页看清市场预期</title>
+<meta name="description" content="10 月 27–30，美联储、欧央行、日本央行同周议息。CME 期货隐含（按 FedWatch 方法）10 月 FOMC 不变 90%、加息 10%；Kalshi 显示 12 月再加息 25bp 概率约 72%（另有 5% 认为会加息超过 25bp）。一页看清市场预期、三种情景与决议前清单。数据截至 2026-10-24。方向性示意，非预测，不构成投资建议。">
 <meta name="theme-color" content="#060709">
 <link rel="canonical" href="https://build-100.com/058/">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060709'/%3E%3Ctext x='32' y='42' font-family='Menlo,Consolas,monospace' font-weight='700' font-size='20' fill='%23edeff1' text-anchor='middle'%3E058%3C/text%3E%3C/svg%3E">
 <meta property="og:type" content="website">
-<meta property="og:title" content="CBWEEK-058 · 央行超级周：Fed / ECB / BOJ 一页看清市场押注">
-<meta property="og:description" content="10 月 27–30，美联储、欧央行、日本央行同周议息。CME 期货隐含 10 月 FOMC 不变 92%、加息 8%；Kalshi 显示 12 月再加息 25bp 概率 68%。一页看清押注、三种情景与决议前清单。数据截至 2026-10-24。方向性示意，非预测，不构成投资建议。">
+<meta property="og:title" content="CBWEEK-058 · 央行超级周：Fed / ECB / BOJ 一页看清市场预期">
+<meta property="og:description" content="10 月 27–30，美联储、欧央行、日本央行同周议息。CME 期货隐含（按 FedWatch 方法）10 月 FOMC 不变 90%、加息 10%；Kalshi 显示 12 月再加息 25bp 概率约 72%（另有 5% 认为会加息超过 25bp）。一页看清市场预期、三种情景与决议前清单。数据截至 2026-10-24。方向性示意，非预测，不构成投资建议。">
 <meta property="og:url" content="https://build-100.com/058/">
 <meta property="og:image" content="https://build-100.com/058/og-058.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="628">
-<meta property="og:image:alt" content="CBWEEK-058 · 央行超级周：Fed / ECB / BOJ 一页看清市场押注">
+<meta property="og:image:alt" content="CBWEEK-058 · 央行超级周：Fed / ECB / BOJ 一页看清市场预期">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="CBWEEK-058 · 央行超级周：Fed / ECB / BOJ 一页看清市场押注">
-<meta name="twitter:description" content="Oct 27–30: Fed, ECB and BOJ meet in the same week. CME futures imply a 92% hold and 8% hike for the October FOMC; Kalshi prices a 68% chance of another 25bp hike in December. Bets, three scenarios, and a pre-decision checklist on one page. Data as of 2026-10-24. Directional illustration only. Not a forecast. Not investment advice.">
+<meta name="twitter:title" content="CBWEEK-058 · 央行超级周：Fed / ECB / BOJ 一页看清市场预期">
+<meta name="twitter:description" content="Oct 27–30: Fed, ECB and BOJ meet in the same week. CME futures-implied probabilities (FedWatch method) show a 90% hold and 10% hike for the October FOMC; Kalshi shows about a 72% chance of another 25bp hike in December (plus 5% for more than 25bp). Expectations, three scenarios, and a pre-decision checklist on one page. Data as of 2026-10-24. Directional illustration only. Not a forecast. Not investment advice.">
 <meta name="twitter:image" content="https://build-100.com/058/og-058.png">
 <style>
   :root {
@@ -178,6 +178,7 @@
   }
   .src-row.is-head { color: var(--faint); font-family: var(--mono); letter-spacing: 0.06em; text-transform: uppercase; border-top: 0; padding-top: 0; }
   .src-row span { min-width: 0; }
+  .src-lab { display: none; font-style: normal; color: var(--muted); }
   .points { margin: 10px 0 0; padding-left: 1.1em; color: var(--muted); font-size: 0.9rem; }
   .points li { margin: 4px 0; }
   .watch {
@@ -291,6 +292,8 @@
     .nav-lang { padding: 6px 10px; letter-spacing: 0.12em; }
     .share-btn { padding: 12px 12px; flex: 1 1 100%; }
     .src-row { grid-template-columns: minmax(0, 1fr); }
+    .src-lab { display: inline; }
+    .src-row.is-head { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
     /* 禁用所有动画 */
@@ -309,9 +312,9 @@
 <main>
   <header class="hero">
     <p class="mono eyebrow" data-en="Finance Tools · CBWEEK-058">Finance Tools · CBWEEK-058</p>
-    <h1 data-en="Central Bank Super Week: what markets are betting on the Fed, ECB &amp; BOJ">央行超级周：Fed / ECB / BOJ 一页看清市场押注</h1>
+    <h1 data-en="Central Bank Super Week: what markets expect from the Fed, ECB &amp; BOJ">央行超级周：Fed / ECB / BOJ 一页看清市场预期</h1>
     <p class="hook" data-en="In 4 days, the Fed decides your wallet.">4 天后，美联储决定你的钱袋子</p>
-    <p class="lede" data-en="92% priced for no hike, but December hike odds are 68% (CME futures-implied / Kalshi, as of 2026-10-24)."><strong>92% 押不加息，但 12 月加息概率 68%</strong>（CME 期货隐含 / Kalshi，截至 2026-10-24）</p>
+    <p class="lede" data-en="90% see no hike this time, but the chance of a 25bp December hike is about 72% (CME futures-implied, FedWatch method / Kalshi, as of 2026-10-24)."><strong>90% 认为不加息，但 12 月加息 25bp 概率约 72%</strong>（CME 期货隐含·FedWatch 方法 / Kalshi，截至 2026-10-24）</p>
     <p class="date-badge" data-en="Data as of 2026-10-24">数据截至 2026-10-24</p>
     <div class="clock" id="clockBox">
       <p class="clock-kicker" data-en="Until the FOMC statement (14:00 ET, Oct 28)">距 FOMC 决议（美东 10-28 14:00）</p>
@@ -320,7 +323,7 @@
       <p class="clock-sub dyn" id="clockSub"></p>
     </div>
     <nav class="toc" id="tocNav" aria-label="On this page">
-      <a href="#bets"><span class="n" data-en="01">01</span><span data-en="Market bets">市场押注</span></a>
+      <a href="#bets"><span class="n" data-en="01">01</span><span data-en="Market expectations">市场预期</span></a>
       <a href="#scenes"><span class="n" data-en="02">02</span><span data-en="Scenarios">情景推演</span></a>
       <a href="#list"><span class="n" data-en="03">03</span><span data-en="Super-week checklist">超级周清单</span></a>
       <a href="#tape"><span class="n" data-en="04">04</span><span data-en="Backdrop">背景速览</span></a>
@@ -331,8 +334,8 @@
   <section class="field" id="bets">
     <div class="field-head">
       <span class="field-no" data-en="01">01</span>
-      <h2 class="field-title" data-en="Three central banks, one week of bets">三家央行押注卡</h2>
-      <p class="field-hint" data-en="Hold vs hike. A cut is not listed separately. Figures as of 2026-10-24, with the source on each card. Fed bar uses CME futures-implied.">不变 vs 加息。降息未单列。数字截至 2026-10-24，每张卡标明来源口径。Fed 主条用 CME 期货隐含。</p>
+      <h2 class="field-title" data-en="Three central banks, one week: what markets expect">三家央行预期卡</h2>
+      <p class="field-hint" data-en="Hold vs hike. A cut is not listed separately. Figures as of 2026-10-24, with the source on each card. Fed bar uses CME futures-implied probabilities (FedWatch method, computed by predictionmarketspicks).">不变 vs 加息。降息未单列。数字截至 2026-10-24，每张卡标明来源口径。Fed 主条用 CME 期货隐含（按 FedWatch 方法，predictionmarketspicks 计算）。</p>
     </div>
     <div class="bet-grid dyn" id="betsGrid"></div>
   </section>
@@ -375,22 +378,22 @@
       </article>
       <article class="tape-card">
         <p class="tape-k" data-en="US 10Y">美债 10Y</p>
-        <p class="tape-v" data-en="US 10-year yield about 5.08–5.36%.">美债 10Y 约 5.08–5.36%。</p>
-        <p class="tape-src" data-en="As of 2026-10-24 · market pricing">截至 2026-10-24 · 市场定价</p>
+        <p class="tape-v" data-en="US 10-year yield about 5.00% (Oct 23 close; 4.96–5.15% on the week).">美债 10Y 约 5.00%（10-23 收盘，周内 4.96–5.15%）。</p>
+        <p class="tape-src" data-en="US Treasury par yield curve · Oct 19–23">美国财政部 par yield · 10-19 至 10-23</p>
       </article>
       <article class="tape-card">
         <p class="tape-k" data-en="Gold">黄金</p>
-        <p class="tape-v" data-en="Spot gold about $4,094 (Oct 23; in the week, first −4.7% then −1.3%).">现货黄金约 $4,094（10-23，周内先 −4.7% 再 −1.3%）。</p>
-        <p class="tape-src" data-en="As of 2026-10-24">截至 2026-10-24</p>
+        <p class="tape-v" data-en="Spot gold about $4,008 (Oct 23 close; down about 4.1% on the week).">现货黄金约 $4,008（10-23 收盘，当周跌约 4.1%）。</p>
+        <p class="tape-src" data-en="XAU/USD close, Oct 23 · goldsignals.co">XAU/USD 10-23 收盘 · goldsignals.co</p>
       </article>
       <article class="tape-card">
         <p class="tape-k" data-en="EUR/USD">EUR/USD</p>
-        <p class="tape-v" data-en="EUR/USD −0.23%.">EUR/USD −0.23%。</p>
-        <p class="tape-src" data-en="As of 2026-10-24 · market pricing">截至 2026-10-24 · 市场定价</p>
+        <p class="tape-v" data-en="EUR/USD −0.53% on the week (1.1193 on Oct 23).">EUR/USD 当周 −0.53%（10-23 收 1.1193）。</p>
+        <p class="tape-src" data-en="ECB reference rate · Oct 16 → Oct 23">ECB 参考汇率 · 10-16 → 10-23</p>
       </article>
       <article class="tape-card">
         <p class="tape-k" data-en="French bonds">法国国债</p>
-        <p class="tape-v" data-en="French government bond yields at a 24-year high.">法国国债收益率 24 年新高。</p>
+        <p class="tape-v" data-en="French government bond yields near a 24-year high.">法国国债收益率接近 24 年新高。</p>
         <p class="tape-src" data-en="As of 2026-10-24 · market pricing">截至 2026-10-24 · 市场定价</p>
       </article>
       <article class="tape-card">
@@ -428,7 +431,7 @@
       <h2 class="field-title" data-en="Sources, dates, and risk">数据来源与风险提示</h2>
     </div>
     <p class="date-badge" data-en="Data as of 2026-10-24">数据截至 2026-10-24</p>
-    <p class="note-copy" data-en="Sources: Kalshi, Polymarket, CME futures-implied, market pricing. Warsh remarks compiled by predictionmarketspicks on Oct 21. September CPI released 10-14. Spot gold as of Oct 23.">数据来源：Kalshi、Polymarket、CME 期货隐含、市场定价。Warsh 表态据 predictionmarketspicks 10-21 整理。9 月 CPI 于 10-14 公布。现货黄金数字截至 10-23。</p>
+    <p class="note-copy" data-en="Sources: Kalshi, Polymarket, CME futures-implied, market pricing. The CME futures-implied 90% / 10% (Oct 24) is computed by predictionmarketspicks with the published FedWatch methodology; it is not a figure from the official CME FedWatch page. Kalshi December FOMC and BOJ October figures from Kalshi market pages, Oct 24. US 10Y from the US Treasury par yield curve (Oct 23). Spot gold from the XAU/USD close on Oct 23 (goldsignals.co). EUR/USD from ECB reference rates (Oct 16 → Oct 23). Warsh remarks compiled by predictionmarketspicks on Oct 21. September CPI released 10-14.">数据来源：Kalshi、Polymarket、CME 期货隐含、市场定价。CME 期货隐含的 90% / 10%（10-24）是 predictionmarketspicks 按 FedWatch 公开方法计算的值，不是 CME 官方 FedWatch 页面上的数。Kalshi 12 月 FOMC 与日本央行 10 月数字取自 Kalshi 市场页（10-24）。美债 10Y 取自美国财政部 par yield（10-23）。现货黄金取自 XAU/USD 10-23 收盘（goldsignals.co）。EUR/USD 取自 ECB 参考汇率（10-16 → 10-23）。Warsh 表态据 predictionmarketspicks 10-21 整理。9 月 CPI 于 10-14 公布。</p>
     <p class="note-copy" data-en="Not investment advice. Probabilities are prediction-market or futures-implied values and will move with the data. Figures on this page are as of 2026-10-24. The FOMC statement time is 14:00 ET. ECB and BOJ clock times are approximate; the official release wins.">非投资建议；概率为预测市场/期货隐含值，会随数据变化，页面数字截至 2026-10-24。FOMC 决议时间为美东 14:00，ECB/BOJ 时刻为约数，以官方公布为准。</p>
     <p class="disclaimer" data-en="Directional illustration only. Not a forecast. Not investment advice.">方向性示意，非预测，不构成投资建议</p>
   </section>
@@ -587,13 +590,13 @@
     html += "<h3>" + pair(E.EVENTS[0].name) + "</h3>";
     html += '<div class="pbar" aria-hidden="true"><span class="pbar-hold" style="width:' + f.bar.hold + '%"></span><span class="pbar-hike" style="width:' + f.bar.hike + '%"></span></div>';
     html += '<p class="pbar-legend">' + holdLab + " " + f.bar.hold + "% · " + hikeLab + " " + f.bar.hike + "% · " + cut + "</p>";
-    html += asofLine(t("CME 期货隐含", "CME futures-implied"));
+    html += asofLine(t("CME 期货隐含（FedWatch 方法，predictionmarketspicks 计算）", "CME futures-implied (FedWatch method, computed by predictionmarketspicks)"));
     html += '<p class="rate-line">' + t("联邦基金利率 ", "Fed funds rate ") + f.rate + "</p>";
     html += '<div class="src-table">';
     html += '<div class="src-row is-head"><span>' + t("来源", "Source") + "</span><span>" + holdLab + "</span><span>" + hikeLab + "</span></div>";
     f.sources.forEach(function (s) {
       var note = s.note ? " · " + s.note : "";
-      html += '<div class="src-row"><span>' + srcName(s.id) + note + "</span><span>" + pct(s.hold) + "</span><span>" + pct(s.hike) + "</span></div>";
+      html += '<div class="src-row"><span>' + srcName(s.id) + note + '</span><span><i class="src-lab">' + holdLab + ' </i>' + pct(s.hold) + '</span><span><i class="src-lab">' + hikeLab + ' </i>' + pct(s.hike) + "</span></div>";
     });
     html += "</div>";
     html += asofLine(t("Kalshi / Polymarket / CME 期货隐含", "Kalshi / Polymarket / CME futures-implied"));

@@ -1,6 +1,6 @@
 /**
  * CBWEEK-058 · Central Bank Super Week (no DOM).
- * Baked bets, countdown, scenarios. Illegal input never throws.
+ * Baked market probabilities, countdown, scenarios. Illegal input never throws.
  */
 (function () {
   "use strict";
@@ -54,19 +54,19 @@
       sources: [
         { id: "kalshi", hold: "91–92.5%", hike: "7.5–8%", note: "10-23/24" },
         { id: "polymarket", hold: 93.5, hike: 6.5 },
-        { id: "cme", hold: 92, hike: 8 }
+        { id: "cme", hold: 90, hike: 10, note: "10-24" }
       ],
-      bar: { hold: 92, hike: 8 },
+      bar: { hold: 90, hike: 10 },
       rate: "3.75%–4.00%",
-      dec: { kalshiHike: 68 },
+      dec: { kalshiHike: 72, kalshiHikeOver25: 5 },
       points: [
         {
           zh: "当前联邦基金利率 3.75%–4.00%（9 月加息，三年来首次加息）。截至 2026-10-24。",
           en: "Federal funds rate 3.75%–4.00% (September hike, first in three years). As of 2026-10-24."
         },
         {
-          zh: "12 月 FOMC（12-08/09）：Kalshi 隐含再加息 25bp 概率 68%。截至 2026-10-24。",
-          en: "December FOMC (12-08/09): Kalshi implied odds of another 25bp hike, 68%. As of 2026-10-24."
+          zh: "12 月 FOMC（12-08/09）：Kalshi 显示再加息 25bp 概率约 72%（另有 5% 认为会加息超过 25bp）。截至 2026-10-24。",
+          en: "December FOMC (12-08/09): Kalshi shows about a 72% probability of another 25bp hike (another 5% see a hike of more than 25bp). As of 2026-10-24."
         },
         {
           zh: "9 月 CPI 3.7% 同比（预期 3.6%），核心 2.6%，10-14 公布。截至 2026-10-24。",
@@ -95,21 +95,21 @@
         }
       ],
       watch: {
-        zh: "市场在看欧央行会否继续按兵不动，法国国债收益率已处 24 年新高。",
-        en: "Markets are watching whether the ECB stays on hold, with French government bond yields at a 24-year high."
+        zh: "市场在看欧央行会否继续按兵不动，法国国债收益率接近 24 年新高。",
+        en: "Markets are watching whether the ECB stays on hold, with French government bond yields near a 24-year high."
       }
     },
     boj: {
-      hike: 2,
+      hike: 3,
       dec18Hike: 76,
       points: [
         {
-          zh: "10-30 加息概率约 2%。截至 2026-10-24。",
-          en: "Oct 30 hike odds about 2%. As of 2026-10-24."
+          zh: "10-30 加息概率约 3%（Kalshi）。截至 2026-10-24。",
+          en: "Oct 30 hike probability about 3% (Kalshi). As of 2026-10-24."
         },
         {
           zh: "12-18 会议加息概率约 76%。截至 2026-10-24。",
-          en: "Dec 18 meeting hike odds about 76%. As of 2026-10-24."
+          en: "Dec 18 meeting hike probability about 76%. As of 2026-10-24."
         },
         {
           zh: "降息概率未单列。",
@@ -191,14 +191,14 @@
       id: "C",
       title: { zh: "BOJ 转鹰（12 月加息坐实）", en: "BOJ turns hawkish (December hike locked in)" },
       desc: {
-        zh: "日本央行转鹰，12 月加息被坐实。日元偏强，美元回落，欧元与黄金方向不明，美股偏跌。",
-        en: "The Bank of Japan turns hawkish and a December hike is locked in. The yen firms, the dollar eases, euro and gold have no clear direction, US stocks soften."
+        zh: "日本央行转鹰，12 月加息被坐实。日元偏强，美元兑日元回落，欧元与黄金方向不明，美股偏跌。",
+        en: "The Bank of Japan turns hawkish and a December hike is locked in. The yen firms, USD/JPY eases, euro and gold have no clear direction, US stocks soften."
       },
       moves: { usd: "down", jpy: "up", eur: "flat", gold: "flat", stocks: "down" },
       why: {
         usd: {
-          zh: "日本央行转鹰推高日元，美元相对回落。",
-          en: "A hawkish BOJ lifts the yen and takes some shine off the dollar."
+          zh: "日本央行转鹰推高日元，美元兑日元回落。",
+          en: "A hawkish BOJ lifts the yen, so USD/JPY eases."
         },
         jpy: {
           zh: "12 月加息被坐实，日元偏涨。",
@@ -233,8 +233,8 @@
     },
     {
       id: "december",
-      zh: "记好 12 月押注：Fed 12 月加息 68%（Kalshi），BOJ 12-18 加息 76%。截至 2026-10-24。本周不是终点。",
-      en: "Mark the December bets: Fed December hike 68% (Kalshi), BOJ hike on 12-18 at 76%. As of 2026-10-24. This week is not the end."
+      zh: "记好 12 月预期：Fed 12 月加息 25bp 约 72%（另有 5% 认为会加息超过 25bp，Kalshi），BOJ 12-18 加息 76%。截至 2026-10-24。本周不是终点。",
+      en: "Note what markets expect for December: Fed 25bp hike about 72% (another 5% see more than 25bp; Kalshi), BOJ hike on 12-18 at 76%. As of 2026-10-24. This week is not the end."
     }
   ];
 
@@ -349,8 +349,8 @@
       var lines = [];
       lines.push(
         en
-          ? "Central Bank Super Week: what markets are betting on the Fed, ECB & BOJ"
-          : "央行超级周：Fed / ECB / BOJ 一页看清市场押注"
+          ? "Central Bank Super Week: what markets expect from the Fed, ECB & BOJ"
+          : "央行超级周：Fed / ECB / BOJ 一页看清市场预期"
       );
       var sc = findScenario(scenarioId);
       if (sc) {
