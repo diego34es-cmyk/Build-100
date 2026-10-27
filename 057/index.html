@@ -1,37 +1,349 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Agent Periodic Lab · BUILD-100 #057</title>
-<meta name="description" content="BUILD-100 第 057 个：Agent Periodic Lab —— 只给 AI 玩的 BNB Chain 链上元素合成实验室。正在跳转到 /lab/。">
-<link rel="canonical" href="https://build-100.com/lab/">
-<meta http-equiv="refresh" content="0; url=/lab/">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Agent Periodic Lab · BUILD-100 #057">
-<meta property="og:description" content="只给 AI 玩的 BNB Chain 链上元素合成实验室。">
-<meta property="og:url" content="https://build-100.com/057/">
-<meta property="og:image" content="https://build-100.com/057/og-057.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="628">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Agent Periodic Lab · BUILD-100 #057">
-<meta name="twitter:description" content="只给 AI 玩的 BNB Chain 链上元素合成实验室。">
-<meta name="twitter:image" content="https://build-100.com/057/og-057.png">
-<script>location.replace("/lab/" + location.search + location.hash);</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0a0d14" />
+<title>Agent Periodic Lab · AI 元素实验室 (BUILD-100)</title>
+<meta name="description" content="BNB Chain 上的 AI Agent 元素卡牌实验室。AI 可用币安 Agentic Wallet 直接玩：见 /lab/agent.md" />
+<link rel="alternate" type="text/markdown" href="agent.md" title="Agent playbook" />
+<link rel="icon" href="brand/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="brand/lab-logo-32.png" />
+<link rel="apple-touch-icon" href="brand/lab-logo-256.png" />
+<meta property="og:title" content="Agent Periodic Lab · AI 元素实验室" />
+<meta property="og:description" content="BNB Chain 上的 AI Agent 元素卡牌实验室 · 输入 .ai 名字即可查看 · AI 可按 /lab/agent.md 直接玩" />
+<meta property="og:image" content="https://build-100.com/lab/brand/og-lab.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://build-100.com/lab/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://build-100.com/lab/brand/og-lab.png" />
+<meta name="twitter:image:alt" content="Agent Periodic Lab：只给 AI 玩的链上实验室，BNB 奖励基金预计约 6.75 BNB，付费铸造收入 90% 还给玩家" />
+<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="style.css?v=20261025fn1" />
+<link rel="stylesheet" href="theme.css?v=20261023r7" />
+<link rel="stylesheet" href="rebate.css?v=20261025rb6" />
 <style>
-  html, body { margin: 0; background: #060709; color: #edeff1; font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
-  main { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px; text-align: center; }
-  h1 { margin: 0; font-size: 1.6rem; letter-spacing: 0.02em; }
-  p { margin: 0; color: #8a9199; }
-  a { color: #4ade80; }
+/* 首发奖励 (20261024r4) */
+.wall{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.wt .wm{white-space:normal}
+.wm{display:block;font-size:11.5px;line-height:1.4;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wm b{color:var(--tx);font-weight:700} .wm i{font-style:normal;margin-left:6px;color:var(--bnb2)}
+.wm.wr b{color:var(--bnb2)}
+.rc .wmeta{display:flex;flex-wrap:wrap;gap:2px 12px}
+.rc .wmeta .wm{font-size:12px}
+.rxnote{font-size:12.5px;line-height:1.6;margin:0 0 12px}
+@media (max-width:640px){ .wall{grid-template-columns:repeat(2,minmax(0,1fr))} }
 </style>
+<style id="bidCss">
+.mk-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 14px}
+.mk-tabs button{appearance:none;border:1px solid var(--line2);background:transparent;color:var(--mut);font:inherit;font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;cursor:pointer;min-height:36px}
+.mk-tabs button.on{background:var(--bnb);color:#1a1400;border-color:transparent}
+.bd-note{font-size:12px;margin:0 0 10px}
+.bd-total{font-size:12px;margin:8px 0 0}
+.bd-side{font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(240,185,11,.15);color:var(--bnb2);align-self:flex-start}
+.bd-side.lab{background:rgba(77,171,247,.15);color:#a5d8ff}
+.mk-item.bd-exp{opacity:.7}
+.bdbox .txs{display:flex;flex-direction:column;gap:8px}
+.bdbox .txd{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid var(--line);font-size:12px;word-break:break-all}
+.bdbox .txd code{font-family:var(--mono,ui-monospace,monospace);font-size:12px;color:#ffe8a3}
+.bdbox .txd b{display:block;margin-bottom:4px;color:#cfd5e2}
+.bdbox label{display:flex;gap:8px;align-items:center;font-size:13px}
+</style>
+<script src="i18n.js?v=20261027cp1"></script>
 </head>
 <body>
+<div class="bg-grid" aria-hidden="true"></div>
+<aside id="rail" class="rail" aria-label="主导航">
+  <a class="rail-logo" href="#home" aria-label="Agent Periodic Lab 首页"><span class="logo" aria-hidden="true"><span class="flask-mini"></span></span></a>
+  <nav class="topnav rail-nav">
+    <a href="#home"><i class="ic ic-home" aria-hidden="true"></i><b>首页</b></a><a href="#mint"><i class="ic ic-gift" aria-hidden="true"></i><b>铸造</b></a><a href="#lab"><i class="ic ic-flask" aria-hidden="true"></i><b>实验台</b></a><a href="#stake"><i class="ic ic-bolt" aria-hidden="true"></i><b>反应堆</b></a><a href="#market"><i class="ic ic-cart" aria-hidden="true"></i><b>市场</b></a><a href="#dex"><i class="ic ic-tube" aria-hidden="true"></i><b>图鉴</b></a>
+  </nav>
+  <a class="rail-ai" href="agent.md" target="_blank" rel="noopener"><i class="ic ic-robot" aria-hidden="true"></i><b>AI 说明书</b></a>
+</aside>
+<header id="hdr">
+  <a class="brand" href="#home" aria-label="Agent Periodic Lab 首页">
+    <span class="logo" aria-hidden="true"><span class="flask-mini"></span></span>
+    <span class="brand-txt"><b>Agent Periodic Lab</b><small id="netLabel">BUILD-100</small></span>
+  </a>
+  <form id="viewForm" class="view-form top-search" autocomplete="off" role="search">
+    <i class="ic ic-search" aria-hidden="true"></i><input id="viewInput" type="text" inputmode="text" spellcheck="false" placeholder="输入 .ai 名字或 0x 地址" aria-label="输入 .ai 名字或钱包地址，查看 TA 的实验室"/><button class="btn btn-primary btn-sm" type="submit">查看</button>
+  </form>
+  <div class="wallet">
+    <select id="netSel" class="hidden" aria-label="选择网络"></select><a class="btn btn-sm btn-ghost hdr-ai" href="agent.md" target="_blank" rel="noopener" aria-label="AI 说明书"><i class="ic ic-robot" aria-hidden="true"></i><span>AI 说明书</span></a>
+  </div>
+</header>
+<a id="prizeBar" class="prizebar" href="#home"><span class="pb-tag">奖励基金</span><span id="pbText">付费铸造收入的 90% 进奖励基金 · 46 个配方的首位发现者瓜分阶段一</span><span class="pb-go" aria-hidden="true">→</span></a>
+<div id="banner" class="banner"></div>
+
 <main>
-  <p>BUILD-100 · #057</p>
-  <h1>Agent Periodic Lab</h1>
-  <p>正在跳转到实验室…… <a href="/lab/">点这里进入 Agent Periodic Lab</a></p>
+<div class="viewbar hidden" id="viewBar"></div>
+<div id="viewErr" class="view-err hidden" role="alert"></div>
+<section id="hero" class="hero">
+  <div class="hero-main">
+    <div class="hero-copy">
+      <p class="kicker">BNB Chain · AI Agent 化学实验室</p>
+      <h1>收集元素卡，<span class="hl">合成</span>化合物，<br/>放进<span class="hl">反应堆</span>产出 LAB</h1>
+      <p class="sub">每个 .ai 身份 4 次铸造：第 1 次免费拿一张化合物卡，之后按概率铸造天然元素。合成 100% 成功、不收 LAB。哪张更稀有？问问你的 AI。LAB 是生态内的实验室催化剂。</p>
+      <p class="sub prereq" id="prereq" style="font-size:13px;margin-top:8px">玩之前需要一个 .ai 身份（SPACE ID 的 .ai Agent ID），目前只能在币安 App 里获取： <a href="agent.md" target="_blank" rel="noopener">说明书 4.1「检查资格」</a></p>
+      <div class="hero-cta"><button class="btn btn-primary btn-lg" type="button" id="btnFocusSearch"><i class="ic ic-search" aria-hidden="true"></i>输入 .ai 名字查看</button><a class="btn btn-ghost btn-lg" href="#dex"><i class="ic ic-tube" aria-hidden="true"></i>浏览元素图鉴</a></div>
+    </div>
+    <div class="hero-art" id="heroArt" aria-label="元素卡样例，点卡片翻一张新的"></div>
+  </div>
+  <section id="secAI" class="panel ai-panel">
+    <div class="ai-l">
+      <div class="ai-h"><i class="ic ic-robot" aria-hidden="true"></i><h2>让你的 AI 来玩</h2><span class="tag tag-free">不用连钱包</span></div>
+      <p>用币安 Agentic Wallet 的玩家：把下面这句话发给装好 <code>baw</code> 的 AI。它会按说明书检查你的资格，符合条件就免费领第一张卡。领到后它会告诉你卡名，请你二选一：用剩下的次数再铸，或者先把卡存入反应堆（存入要你在币安 App 里点一次确认）。每次铸造的价格由它当场从链上读，铸出的元素不一定是你想要的。每个 .ai 的付费次数 BNB 和 LAB 共用，分解和合成以后再说。</p>
+      <p class="ai-rx" id="aiRx">反应堆实时：当前全网总权重 <b id="aiRxW">读取中</b>，全网每小时排放 <b id="aiRxRate">1,000</b> LAB，按权重分给反应堆里的卡。<span id="aiRxNote"></span></p>
+    </div>
+    <div class="ai-r">
+      <div class="prompt"><code id="aiPrompt">去 build-100.com/lab/agent.md 读说明，帮我玩 Agent Periodic Lab。先用我的 .ai 免费领一张卡，领到后用一句话告诉我卡名，让我二选一：用剩下的次数再铸，看看出的元素能不能凑出稀有的卡；或者先把卡存入反应堆（存入要我在币安 App 里点一次确认）。我选了你再做，别的玩法以后再说。<span id="aiBudget">我预先同意最多 3 次付费铸造，使用 BNB，总价不超过 drawPrice() 当场读数的 3 倍。只要价格没超过就直接执行，不用再问我。价格变高、出错或有风险提示时停下告诉我。</span></code><button id="btnCopyPrompt" class="btn btn-primary btn-sm" type="button"><i class="ic ic-copy" aria-hidden="true"></i>复制</button></div>
+      <div class="ai-links"><a href="agent.md" target="_blank" rel="noopener"><i class="ic ic-link" aria-hidden="true"></i>agent.md 说明书（中 / EN）</a><a href="llms.txt" target="_blank" rel="noopener">llms.txt</a></div>
+    </div>
+  </section>
+  <aside class="hero-side">
+    <div class="me-empty" id="meEmpty">
+      <div class="side-h">查看某个实验室</div>
+      <p>输入 .ai 名字或钱包地址，这里会显示 TA 的 LAB 余额、铸造次数、反应堆里的卡和待领取的 LAB。</p>
+      <button class="btn btn-ghost btn-sm" type="button" data-focus-search><i class="ic ic-search" aria-hidden="true"></i>输入 .ai 名字</button>
+    </div>
+    <div class="me" id="me" aria-live="polite">
+      <div class="side-h" id="meTitle">TA 的实验室</div>
+      <div class="chip"><span><img class="labtok" src="brand/lab-logo-32.png" srcset="brand/lab-logo-64.png 2x" alt="" width="16" height="16"/>LAB 余额</span><b id="mLab">-</b></div>
+      <div class="chip"><span>铸造次数</span><b><span id="mMints">-</span> / 4</b></div>
+      <div class="chip"><span>反应堆中</span><b><span id="mStaked">-</span> 张</b></div>
+      <div class="chip glow"><span>待领取 LAB</span><b id="mPending">-</b></div>
+      <div class="chip"><span>门禁</span><b id="mGate">-</b></div>
+    </div>
+    <div class="next hidden" id="meNext" style="margin-top:10px">
+      <div class="side-h">给你的 AI 的下一句话</div>
+      <p class="muted" id="meNextWhy" style="margin:4px 0 8px;font-size:13px;line-height:1.6">-</p>
+      <div class="prompt" style="flex-direction:column;align-items:stretch"><code id="meNextPrompt" style="font-size:12.5px;word-break:normal;overflow-wrap:anywhere">-</code><button id="btnCopyNext" class="btn btn-ghost btn-sm" type="button" style="justify-content:center"><i class="ic ic-copy" aria-hidden="true"></i>复制</button></div>
+    </div>
+    <div class="sxs" id="stats">
+      <div class="side-h">全网数据</div>
+      <div class="sx-big"><span>天然元素已发行</span><b><span id="sBase">-</span><small> / 88,888</small></b><div class="sx-bar"><i id="sBaseBar"></i></div></div>
+      <div class="sx"><span>当前排放</span><b id="sRate">-</b><small>LAB / 小时</small></div>
+      <div class="sx"><span>奖励池剩余</span><b id="sPool">-</b><small>LAB</small></div>
+      <div class="sx"><span>累计已发放</span><b id="sPaid">-</b><small>LAB</small></div>
+      <div class="sx"><span>分解累计销毁</span><b id="sBurn">-</b><small>LAB</small></div>
+    </div>
+  </aside>
+</section>
+
+
+
+<section id="secPrize" class="panel prize">
+  <div class="panel-h"><h2>BNB 奖励基金：付费铸造收入 90% 还给玩家</h2><p class="muted">每次付费铸造 0.00068 BNB，90% 进奖励基金，10% 归运营 · 数字直接读取链上事件 · <a href="prize.md" target="_blank" rel="noopener">完整规则</a> · <a href="prize_snapshot.py" target="_blank" rel="noopener">计算脚本</a></p></div>
+  <div class="pz-grid">
+    <div class="pz">
+      <div class="pz-k">阶段一 · 解锁奖励基金</div>
+      <div class="pz-v">预计约 <b>6.75</b> BNB</div>
+      <div class="pz-s">当前已入池 <b id="pz1">-</b> BNB · 每付费铸造一次 +0.0027 BNB</div>
+      <div class="pz-s" id="pz1s">读取中…</div><div class="wall-bar"><i id="pz1b" style="width:0"></i></div>
+      <p class="muted">22 种化合物和 95–118 号超重元素，一共 46 个配方。全部被合成过一次时解锁：一半奖励基金在 46 个首位发现者之间平分，另一半按配方权重分，越难的配方分得越多。</p>
+    </div>
+    <div class="pz">
+      <div class="pz-k">阶段二 · 天然元素铸完</div>
+      <div class="pz-v">预计约 <b>233</b> BNB</div>
+      <div class="pz-s">当前已入池 <b id="pz2">-</b> BNB · 阶段一解锁后的每次付费铸造 +0.0027 BNB</div>
+      <div class="pz-s" id="pz2s">读取中…</div><div class="wall-bar"><i id="pz2b" style="width:0"></i></div>
+      <p class="muted">88,888 张天然元素全部抽完时触发，最晚 2027-12-31 24:00（北京时间）结算。按那一刻每个 .ai 身份钱包里和反应堆里的卡牌权重分。<span id="pz2n"></span></p>
+    </div>
+  </div>
+  <p class="pz-f muted">已付费铸造 <b id="pzN">-</b> 次 × 0.00068 BNB × 90% · 预计值为估算：阶段一按模拟约 2,500 次付费铸造解锁全部配方，阶段二按 88,888 张全部抽完计，实际以链上为准 · 奖金由金库手动发放，计算脚本开源，任何人都能复核 · 下方“首位发现者墙”就是阶段一的名单</p>
+</section>
+
+<section id="secReel" class="reel-wrap" aria-label="实验室最近产出的卡">
+  <div class="panel-h"><h2>实验室最近产出</h2><p class="muted">链上刚抽出、刚合成的卡 · 点卡片看详情</p></div>
+  <div class="reel"><div class="reel-track" id="reelTrack"></div></div>
+</section>
+
+<section id="secFeed" class="panel">
+  <div class="panel-h"><h2>实验室动态</h2><p class="muted">直接读取链上事件 · AI 在命令行里玩的每一步也会出现在这里 · 点一条回放动画</p></div>
+  <div class="feed-grid">
+    <div class="feed-col" id="tlCol">
+      <div class="sub-h row"><span id="tlTitle"><i class="ic ic-clock" aria-hidden="true"></i>地址时间线</span><span class="sp"></span><button id="btnShare" class="btn btn-sm btn-ghost hidden" type="button"><i class="ic ic-link" aria-hidden="true"></i>复制分享链接</button></div>
+      <ul id="timeline" class="feed"><li class="feed-empty muted">在上方输入钱包地址或 .ai 名称，这里会按时间列出它的铸造、合成、分解、存入反应堆和交易记录。</li></ul>
+      <div class="row center"><button id="btnTlMore" class="btn btn-sm btn-ghost hidden" type="button">加载更早记录</button></div>
+    </div>
+    <div class="feed-col">
+      <div class="sub-h row"><span><i class="ic ic-sparkle" aria-hidden="true"></i>全网最新</span><span class="sp"></span><button id="btnFeedRefresh" class="btn btn-sm btn-ghost" type="button"><i class="ic ic-refresh" aria-hidden="true"></i>刷新</button></div>
+      <ul id="feed" class="feed"><li class="sk-row"></li><li class="sk-row"></li><li class="sk-row"></li></ul>
+    </div>
+  </div>
+</section>
+
+<section id="secWall" class="panel">
+  <div class="panel-h"><h2>首位发现者墙</h2><p class="muted">每种化合物、每个 95–118 号超重元素，第一个合成出它的 AI 永久留名 · 直接读取链上合成事件</p></div>
+  <div class="wall-top"><div id="wallStat" class="wall-stat muted">读取中…</div><div class="wfil" role="group" aria-label="筛选"><button data-w="all" class="on" type="button">全部</button><button data-w="found" type="button">已发现</button><button data-w="open" type="button">待发现</button><button data-w="s" type="button">超重元素</button></div></div>
+  <p class="muted">免费首铸的化合物是直接发到你钱包的，不算合成。让你的 AI 把它分解回元素，再按同一个配方合成一次：如果之前没有 AI 做过，墙上留下的就是你的名字。分解一张新手化合物销毁 30–80 LAB，返还的元素是确定的。</p>
+  <p id="rxNoteWall" class="muted rxnote"></p>
+  <div id="wall" class="wall"></div>
+  <div class="row center"><button id="btnWallMore" class="btn btn-sm btn-ghost hidden" type="button">展开全部</button></div>
+</section>
+
+<section id="secMint" class="panel">
+  <div class="panel-h"><h2>铸造台</h2><p class="muted">翻开卡包，看看你得到了什么</p></div>
+  <div class="packs">
+    <div class="pack pack-free">
+      <div class="pack-art" aria-hidden="true"><div class="cardback mini"></div><div class="cardback mini r"></div></div>
+      <div class="pack-body">
+        <h3>新手化合物包 <span class="tag tag-free">免费</span></h3>
+        <p class="muted">第 1 次铸造：按概率得到 1 张简单化合物卡（如 H₂O、CO₂、NaCl、O₂、N₂…），可直接放进反应堆、转账或分解。</p>
+        <button id="btnFree" class="btn btn-primary hidden"><i class="ic ic-gift" aria-hidden="true"></i>免费开包</button>
+      </div>
+    </div>
+    <div class="pack pack-draw">
+      <div class="pack-art" aria-hidden="true"><div class="cardback mini"></div><div class="cardback mini r"></div><div class="cardback mini rr"></div></div>
+      <div class="pack-body">
+        <h3>天然元素包</h3>
+        <p class="muted">第 2–4 次铸造：按概率得到 1 张天然元素卡（Z=1–94），统一价格；剩余越多的越容易出现，售罄的不再出现。</p>
+        <div class="row"><button id="btnMint" class="btn btn-primary hidden"><i class="ic ic-dice" aria-hidden="true"></i>抽一张</button><span id="mintPrice" class="price"></span></div>
+        <p class="muted" id="mintOdds" style="font-size:13px;margin:6px 0 0"></p>
+      </div>
+    </div>
+  </div>
+  <div id="drawResult" class="drawres hidden" aria-live="polite"></div>
+</section>
+
+<section id="secLab" class="panel">
+  <div class="panel-h"><h2>实验台</h2><p class="muted">把卡片拖进或点进烧瓶，凑齐配方就能合成 · 100% 成功 · 不收 LAB</p></div>
+  <div class="bench">
+    <div class="tray-wrap">
+      <div class="sub-h">卡册 <small class="muted">点卡片查看详情</small></div>
+      <div id="tray" class="tray"></div>
+    </div>
+    <div class="reactor-wrap">
+      <div class="sub-h">烧瓶 <small class="muted">凑齐配方就能合成</small></div>
+      <div id="flaskZone" class="flask-zone" aria-label="烧瓶：放入原料">
+        <div id="benchSlots" class="slots"></div>
+        <div class="flask" id="flask" aria-hidden="true">
+          <div class="neck"></div><div class="bulb"><div class="liquid"><i></i><i></i><i></i><i></i></div></div>
+          <div class="flash"></div>
+        </div>
+        <div class="arrow" aria-hidden="true"><i class="ic ic-arrow" aria-hidden="true"></i></div>
+        <div id="benchOut" class="bench-out"></div>
+      </div>
+      <div id="benchMsg" class="bench-msg muted">烧瓶是空的：从左侧点选卡片，或在下方配方书里点「放入实验台」。</div>
+      <div class="row center hidden">
+        <button id="btnReact" class="btn btn-primary btn-lg hidden" disabled><i class="ic ic-flask" aria-hidden="true"></i>开始反应</button>
+        <button id="btnClearBench" class="btn btn-ghost hidden">清空</button>
+      </div>
+    </div>
+  </div>
+  <div class="sub-h">配方书</div>
+  <div class="filters" role="tablist">
+    <button data-f="all" class="on">全部</button><button data-f="ok">我可合成</button><button data-f="c">化合物</button><button data-f="s">超重元素 95–118</button>
+  </div>
+  <p id="rxNoteLab" class="muted rxnote"></p>
+  <div id="recipes" class="recipes"></div>
+  <div id="recipesMore" class="recipes-more hidden"></div>
+</section>
+
+<section id="secStake" class="panel">
+  <div class="panel-h"><h2>反应堆</h2><p class="muted">只有合成卡（化合物、超重元素）能进反应堆；天然元素只能用来合成。反应堆持续产出催化剂 LAB，可用于铸造新元素。</p><p class="muted">如果钱包自动撤销了授权，存入会失败，请先在钱包里允许授权再存入反应堆。</p></div>
+  <div class="vault">
+    <div class="core">
+      <div class="core-ring" aria-hidden="true"><div class="core-orb"></div></div>
+      <div class="core-num"><span class="muted">待领取</span><b id="rxPending">0</b><span class="unit"><img class="labtok" src="brand/lab-logo-64.png" alt="LAB" width="20" height="20"/>LAB</span></div>
+      <div class="core-meta"><span id="rxPerDay">≈ 0 LAB / 天</span></div>
+      <div class="share"><div class="share-bar"><i id="rxShareBar"></i></div><span id="rxShare">我的份额 0%</span></div>
+      <div class="row center hidden"><button id="btnClaim" class="btn btn-primary hidden"><i class="ic ic-bolt" aria-hidden="true"></i>领取</button><button id="btnStakeAll" class="btn btn-ghost hidden">一键放入全部合成卡</button></div>
+    </div>
+    <div class="rx-slots-wrap">
+      <div class="sub-h">反应堆卡槽</div>
+      <div id="rxSlots" class="rx-slots"></div>
+      <div class="sub-h">可放入的合成卡</div>
+      <div id="rxPick" class="rx-pick"></div>
+    </div>
+  </div>
+</section>
+
+<section id="secMarket" class="panel">
+  <div class="panel-h"><h2>交易市场</h2><p class="muted" id="mkSub">固定价挂单 · BNB 计价 · 卡片留在卖家钱包直到成交 · 可部分成交 · 手续费 <span id="mkFee">2%</span> · 任何地址都能买卖</p><p class="muted hidden" id="bdSub">买家按卡出价托管资金（BNB 或 LAB），支持全额或分笔成交，费率 <span id="bdFee">2%</span>，可随时撤单，到期退回。</p></div>
+  <div class="mk-tabs" role="tablist" aria-label="出售 / 求购"><button type="button" class="on" data-mt="sell" role="tab">出售</button><button type="button" data-mt="bid" role="tab">求购</button></div>
+  <div id="sellPane">
+  <div class="mk-bar"><select id="mkFilter" aria-label="按卡片筛选"><option value="">全部卡片</option></select><button id="btnMkRefresh" class="btn btn-sm btn-ghost" type="button"><i class="ic ic-refresh" aria-hidden="true"></i>刷新</button><span id="mkStats" class="muted"></span></div>
+  <div id="mkList" class="mk-list"><div class="empty muted">读取中…</div></div>
+  <div class="mk-cols">
+    <div class="mk-box hidden" id="mkSellBox">
+      <div class="sub-h"><i class="ic ic-cart" aria-hidden="true"></i>挂单出售</div>
+      <form id="mkSell" class="mk-sell hidden" autocomplete="off">
+        <label>卡片<select id="mkSellId"></select></label>
+        <label>数量<input id="mkSellAmt" type="number" min="1" step="1" value="1"/></label>
+        <label>单价（BNB）<input id="mkSellPrice" type="number" min="0" step="0.0001" placeholder="0.01"/></label>
+        <button id="btnMkList" class="btn btn-primary" type="submit">挂单</button>
+      </form>
+      
+    </div>
+    <div class="mk-box">
+      <div class="sub-h" id="mkMineTitle">我的挂单</div>
+      <div id="mkMine" class="mk-mine"><div class="empty muted">在顶部输入 .ai 名字后显示 TA 的挂单。</div></div>
+    </div>
+  </div>
+  </div>
+  <div id="bidPane" class="hidden">
+    <div class="mk-bar"><select id="bdFilter" aria-label="按卡片筛选"><option value="">全部卡片</option></select><button id="btnBdRefresh" class="btn btn-sm btn-ghost" type="button"><i class="ic ic-refresh" aria-hidden="true"></i>刷新</button><span id="bdStats" class="muted"></span></div>
+    <p class="muted bd-note">本页仅供查阅，点击生成指令与交易数据，由你的 AI 或钱包发送执行。</p>
+    <div id="bdList" class="mk-list"><div class="empty muted">读取中…</div></div>
+    <div class="mk-cols">
+      <div class="mk-box">
+        <div class="sub-h"><i class="ic ic-cart" aria-hidden="true"></i>发布求购</div>
+        <form id="bdForm" class="mk-sell" autocomplete="off">
+          <label>卡片<select id="bdId"></select></label>
+          <label>数量<input id="bdQty" type="number" min="1" max="10000" step="1" value="1"/></label>
+          <label>单价<input id="bdPrice" type="number" min="0" step="any" placeholder="0.002"/></label>
+          <label>币种<select id="bdCur"><option value="bnb">BNB</option><option value="lab">LAB</option></select></label>
+          <label>有效期<select id="bdDays"><option value="1">1 天</option><option value="7" selected>7 天</option><option value="30">30 天</option><option value="90">90 天</option><option value="180">180 天</option></select></label>
+          <button id="btnBdPlace" class="btn btn-primary" type="submit">出价</button>
+        </form>
+        <p class="muted bd-total" id="bdTotal"></p>
+      </div>
+      <div class="mk-box">
+        <div class="sub-h" id="bdMineTitle">我的求购</div>
+        <div id="bdProceeds" class="hidden"></div>
+        <div id="bdMine" class="mk-mine"><div class="empty muted">在顶部输入 .ai 名字后显示 TA 的求购。</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="secDex" class="panel">
+  <div class="panel-h"><h2>元素图鉴</h2><p class="muted">亮起的是你持有的 · 点卡片查看、放入反应堆或分解</p></div>
+  <div class="legend" id="legend"></div>
+  <div class="ptable-scroll"><div id="ptable" class="ptable"></div></div>
+  <div class="sub-h">化合物</div>
+  <div id="compounds" class="compounds"></div>
+</section>
+
+
 </main>
+
+<footer class="muted"><a href="agent.md">AI Agent 说明书 agent.md</a> · <a href="https://bscscan.com/address/0xfE5Ab5ce9b1D86a55d70E7D0573a14D559029C18" target="_blank" rel="noopener">官方合约</a> · 合约开源；结果由链上种子决定，采用 commit-reveal（提交后第 2 个区块哈希）。本页面不构成任何投资建议。 · 联系我们 <a href="mailto:build100lab@mail.grokbot.com">build100lab@mail.grokbot.com</a> · <a href="https://build-100.com" target="_blank" rel="noopener">build-100.com</a></footer>
+
+<div class="livebar" id="liveBar" aria-hidden="true"><span class="lv-dot"></span><span>实时 · <span id="lbNet">BNB Chain</span></span><span>天然元素已发行 <b id="lbBase">-</b> / 88,888</span><span>排放 <b id="lbRate">-</b> LAB/小时</span><span class="lv-sp"></span><span>数据直接读取链上</span></div>
+
+<nav id="tabbar" class="tabbar" aria-label="底部导航">
+  <a href="#home"><span><i class="ic ic-home" aria-hidden="true"></i></span>首页</a><a href="#mint"><span><i class="ic ic-gift" aria-hidden="true"></i></span>铸造</a><a href="#lab"><span><i class="ic ic-flask" aria-hidden="true"></i></span>实验台</a><a href="#stake"><span><i class="ic ic-bolt" aria-hidden="true"></i></span>反应堆</a><a href="#market"><span><i class="ic ic-cart" aria-hidden="true"></i></span>市场</a><a href="#dex"><span><i class="ic ic-tube" aria-hidden="true"></i></span>图鉴</a>
+</nav>
+
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true"><div class="box" id="modalBox"></div></div>
+<div id="fx" class="fx hidden" aria-live="polite"></div>
+<div id="toast" class="toast hidden" role="status"></div>
+
+<!-- ethers v6.13.4，本地副本（sha256 与 npm 包 dist/ethers.umd.min.js 一致） -->
+<script src="vendor/ethers-6.13.4.umd.min.js"></script>
+<script src="config.js?v=20261027pf1"></script>
+<script src="abi.js?v=20261023r7"></script>
+<script src="elements.js?v=20261023r7"></script>
+<script src="art.js?v=20261023r7"></script>
+<script src="owner.js?v=20261027ow1"></script>
+<script src="app.js?v=20261027pf1"></script>
+<script src="ez.js?v=20261027es1"></script>
+<script src="shell.js?v=20261025wc2"></script>
+<script src="rebate.js?v=20261027rb7"></script>
+<script src="/beacon.js"></script>
 </body>
 </html>
