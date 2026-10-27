@@ -197,13 +197,27 @@ function wMetaHTML(id, discovered) {
 function rxNote() {
   return "首发奖励发给第一个合成出该配方的非团队玩家。";
 }
+function atomCount(sym) {
+  let n = 0, m; const re = /[A-Z][a-z]?(\d*)/g;
+  while ((m = re.exec(sym || ""))) n += m[1] ? Number(m[1]) : 1;
+  return n || 1;
+}
+// Visual tier only. Family hue stays on --c; frame count marks superheavy band and compound size.
+function tierOf(id) {
+  if (id > 1000) {
+    const n = atomCount(EL[id]?.sym);
+    return "tier-c tier-c" + (n >= 20 ? 4 : n >= 9 ? 3 : n >= 4 ? 2 : 1);
+  }
+  if (id >= 95 && id <= 118) return "tier-sh tier-sh" + (id >= 111 ? 3 : id >= 103 ? 2 : 1);
+  return "tier-el";
+}
 function cardHTML(id, o = {}) {
   const e = EL[id] || { sym: "#" + id, zh: "" };
   const cat = catOf(id), syn = id >= 95 && id <= 118, holo = syn || id > 1000;
   const sym = id > 1000 ? e.sym.replace(/(?<=[A-Za-z)])(\d+)/g, "<sub>$1</sub>") : e.sym;
   const len = e.sym.length;
   const art = id > 1000 ? window.LAB_ART?.molSVG(id) || "" : window.LAB_ART?.orbitSVG(id) || "";
-  const cls = ["card", "cat-" + cat, holo ? "holo" : "", syn ? "syn" : "", len >= 7 ? "xlong" : len >= 4 ? "long" : "", o.cls || ""].join(" ");
+  const cls = ["card", "cat-" + cat, tierOf(id), holo ? "holo" : "", syn ? "syn" : "", len >= 7 ? "xlong" : len >= 4 ? "long" : "", o.cls || ""].join(" ");
   const zh = e.zh && e.zh !== e.sym ? e.zh : "";
   const catTxt = syn ? "合成元素" : CAT_ZH[cat];
   return `<div class="${cls}" data-id="${id}" tabindex="0" role="button" aria-label="${nameOf(id)}">
@@ -321,7 +335,7 @@ function renderDex() {
     const d = el(cardHTML(id, { count: own > 0n ? own.toString() : "", starter: state.starters.has(id), cls: own > 0n ? "" : "dim" }));
     d.title = nameOf(id) + (state.byOut[id] ? "\n配方：" + fmtIns(state.byOut[id]) : ""); cp.appendChild(d);
   }
-  const lg = $("legend"); if (!lg.children.length) lg.innerHTML = Object.entries(CAT_ZH).map(([k, v]) => `<span><i style="background:var(--c-${k})"></i>${v}</span>`).join("") + '<span><i style="background:linear-gradient(90deg,#f0b,#0ef,#fe0)"></i>全息 = 合成产物</span>';
+  const lg = $("legend"); if (!lg.children.length) lg.innerHTML = Object.entries(CAT_ZH).map(([k, v]) => `<span><i style="background:var(--c-${k})"></i>${v}</span>`).join("") + '<span><i style="background:linear-gradient(180deg,#e8c56e,#8a6a2e)"></i>全息 = 合成产物</span>';
 }
 function fmtIns(r) { return r.ins.map((id, k) => `${r.amts[k] > 1 ? r.amts[k] + "×" : ""}${label(id)}`).join(" + "); }
 
@@ -396,16 +410,26 @@ function flyFrom(rect, target) {
 }
 
 // ---------- 合成动画 ----------
-function burst(x, y, n = 36, colors = ["#ffd65a", "#F0B90B", "#fff", "#66d9e8", "#f783ac"]) {
+function burst(x, y) {
   if (RM()) return;
-  for (let i = 0; i < n; i++) {
-    const p = document.createElement("i"); p.className = "particle";
-    p.style.left = x + "px"; p.style.top = y + "px"; p.style.setProperty("--pc", colors[i % colors.length]);
-    const a = Math.random() * Math.PI * 2, d = 60 + Math.random() * 140, s = .5 + Math.random();
-    document.body.appendChild(p);
-    p.animate([{ transform: "translate(-50%,-50%) scale(1)", opacity: 1 }, { transform: `translate(calc(-50% + ${Math.cos(a) * d}px), calc(-50% + ${Math.sin(a) * d}px)) scale(${s})`, opacity: 0 }], { duration: 700 + Math.random() * 500, easing: "cubic-bezier(.1,.8,.3,1)" }).onfinish = () => p.remove();
-  }
+  const p = document.createElement("i"); p.className = "particle";
+  p.style.left = x + "px"; p.style.top = y + "px";
+  document.body.appendChild(p);
+  p.animate([{ transform: "translate(-50%,-50%) scale(.12)", opacity: .65 }, { transform: "translate(-50%,-50%) scale(1)", opacity: 0 }], { duration: 640, easing: "cubic-bezier(.16,.7,.2,1)" }).onfinish = () => p.remove();
 }
+function mountRx(fl, mode) {
+  const flash = fl?.querySelector(".flash"); if (!flash) return;
+  const bonds = mode === "break"
+    ? [[50, 50, 22, 28], [50, 50, 78, 28], [50, 50, 22, 72], [50, 50, 78, 72]]
+    : [[28, 64, 50, 36], [72, 64, 50, 36], [28, 64, 72, 64]];
+  const atoms = mode === "break"
+    ? [[50, 50, 6.5], [22, 28, 4.6], [78, 28, 4.6], [22, 72, 4.6], [78, 72, 4.6]]
+    : [[28, 64, 5], [72, 64, 5], [50, 36, 6]];
+  const lines = bonds.map(([x1, y1, x2, y2], i) => `<line class="bond b${i}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`).join("");
+  const dots = atoms.map(([x, y, r], i) => `<circle class="atom a${i}" cx="${x}" cy="${y}" r="${r}"/>`).join("");
+  flash.innerHTML = `<svg class="rxsvg" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="rgba(236,228,210,.9)" stroke-width="1.7" stroke-linecap="round">${lines}</g>${dots}</svg>`;
+}
+function clearRx(fl) { const flash = fl?.querySelector(".flash"); if (flash) flash.innerHTML = ""; }
 function center(node) { const r = node.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }
 // 把节点克隆成固定定位的飞行卡，飞向目标点
 function flyClone(node, [tx, ty], { scale = .25, dur = 650, delay = 0, fade = true } = {}) {
@@ -413,7 +437,7 @@ function flyClone(node, [tx, ty], { scale = .25, dur = 650, delay = 0, fade = tr
   c.classList.add("flycard"); Object.assign(c.style, { left: r.left + "px", top: r.top + "px", width: r.width + "px", height: r.height + "px" });
   document.body.appendChild(c);
   const dx = tx - (r.left + r.width / 2), dy = ty - (r.top + r.height / 2);
-  const an = c.animate([{ transform: "none", opacity: 1 }, { transform: `translate(${dx * .5}px,${dy * .5 - 40}px) rotate(${(Math.random() - .5) * 30}deg) scale(${(1 + scale) / 2})`, opacity: 1, offset: .55 }, { transform: `translate(${dx}px,${dy}px) scale(${scale})`, opacity: fade ? 0 : 1 }], { duration: RM() ? 1 : dur, delay: RM() ? 0 : delay, easing: "cubic-bezier(.5,0,.3,1)", fill: "forwards" });
+  const an = c.animate([{ transform: "translate(0,0) scale(1)", opacity: 1 }, { transform: `translate(${dx * .42}px,${dy * .42 - 16}px) scale(${(1 + scale) / 2})`, opacity: 1, offset: .58 }, { transform: `translate(${dx}px,${dy}px) scale(${scale})`, opacity: fade ? 0 : 1 }], { duration: RM() ? 1 : dur, delay: RM() ? 0 : delay, easing: "cubic-bezier(.4,0,.2,1)", fill: "forwards" });
   return an.finished.then(() => c.remove());
 }
 async function synth() {
@@ -424,16 +448,16 @@ async function synth() {
   $("benchMsg").className = "bench-msg"; $("benchMsg").textContent = "反应中… 请在钱包中确认";
   $("btnReact").disabled = true;
   await Promise.all(cards.map((c, i) => { const p = flyClone(c, mouth, { delay: i * 110 }); c.closest(".slot").style.visibility = "hidden"; return p; }));
-  fl.classList.add("boil");
-  // 本地链几乎瞬间出块：保证沸腾阶段至少约 1.2 秒，动画才读得出来
+  fl.classList.add("boil", "rx-heat");
+  // 本地链几乎瞬间出块：保证加热阶段至少约 1.2 秒，动画才读得出来
   const [rc] = await Promise.all([tx(w => w.sy.synthesize(r.id), `合成成功：${nameOf(r.out)}`, { quiet: true }), sleep(1200)]);
-  if (!rc) { fl.classList.remove("boil"); busy = false; renderTray(); renderBench(); return; }
-  fl.classList.remove("boil"); fl.classList.add("bang"); burst(...center(fl.querySelector(".bulb")), 48);
-  await sleep(250);
+  if (!rc) { fl.classList.remove("boil", "rx-heat"); clearRx(fl); busy = false; renderTray(); renderBench(); return; }
+  fl.classList.remove("boil", "rx-heat"); mountRx(fl, "form"); fl.classList.add("bang", "rx-bond");
+  await sleep(760);
   const out = $("benchOut"); out.innerHTML = cardHTML(r.out, { cls: "pop" });
   $("benchMsg").className = "bench-msg ok"; setIc($("benchMsg"), "sparkle", `合成成功：${nameOf(r.out)} 已存入你的卡册`);
-  await sleep(1100);
-  fl.classList.remove("bang"); busy = false;
+  await sleep(900);
+  fl.classList.remove("bang", "rx-bond"); clearRx(fl); busy = false;
   bench.clear(); renderTray(); renderBench();
   out.innerHTML = cardHTML(r.out, { cls: "glowpulse" });
   $("benchMsg").className = "bench-msg ok"; setIc($("benchMsg"), "sparkle", `合成成功：${nameOf(r.out)} 已存入你的卡册${stakeable(r.out) ? " · 可以放进反应堆了" : ""}`);
@@ -448,21 +472,21 @@ async function decompose(r) {
   $("benchSlots").innerHTML = ""; out.innerHTML = cardHTML(r.out);
   $("benchMsg").className = "bench-msg"; $("benchMsg").textContent = `分解 ${nameOf(r.out)} … 请在钱包中确认（手续费 ${fmt(r.dfee)} LAB，销毁）`;
   await flyClone(out.querySelector(".card"), center(fl.querySelector(".neck")), { dur: 600 }); out.innerHTML = '<div class="q">?</div>';
-  fl.classList.add("filled", "boil");
+  mountRx(fl, "break"); fl.classList.add("filled", "boil", "rx-heat");
   const [rc] = await Promise.all([tx(async w => {
     const allow = await w.lab.allowance(account, net.contracts.Synthesis);
     if (r.dfee > 0n && allow < r.dfee) { toast("第 1 步：授权 LAB 分解手续费…", 60000); await (await w.lab.approve(net.contracts.Synthesis, r.dfee)).wait(); }
     return w.sy.decompose(r.out);
   }, "", { quiet: true }), sleep(1200)]);
-  fl.classList.remove("boil");
-  if (!rc) { busy = false; renderTray(); renderBench(); return; }
-  fl.classList.add("bang"); burst(...center(fl.querySelector(".bulb")), 40, ["#66d9e8", "#b197fc", "#fff", "#ffd65a"]);
+  fl.classList.remove("boil", "rx-heat");
+  if (!rc) { clearRx(fl); busy = false; renderTray(); renderBench(); return; }
+  fl.classList.add("bang", "rx-break");
   const s = $("benchSlots"); s.innerHTML = r.ins.map((id, i) => `<div class="slot">${cardHTML(id, { count: r.amts[i] > 1 ? "×" + r.amts[i] : "" })}</div>`).join("");
   const [mx, my] = center(fl.querySelector(".bulb"));
   if (!RM()) [...s.querySelectorAll(".card")].forEach((c, i) => { const [cx, cy] = center(c); c.animate([{ transform: `translate(${mx - cx}px,${my - cy}px) scale(.2)`, opacity: 0 }, { transform: "none", opacity: 1 }], { duration: 700, delay: 120 * i, easing: "cubic-bezier(.2,.9,.25,1.15)", fill: "backwards" }); });
   $("benchMsg").className = "bench-msg ok"; setIc($("benchMsg"), "recycle", `分解完成：${nameOf(r.out)} ＝ ${fmtIns(r)}（原料已回到卡册）`);
   busy = false; renderTray(); busy = true; // 托盘立即反映返还的原料
-  await sleep(1400); fl.classList.remove("bang", "filled"); busy = false;
+  await sleep(1400); fl.classList.remove("bang", "rx-break", "filled"); clearRx(fl); busy = false;
   renderTray(); renderBench();
   $("benchMsg").className = "bench-msg ok"; setIc($("benchMsg"), "recycle", `分解完成：${nameOf(r.out)} ＝ ${fmtIns(r)}（原料已回到卡册）`);
   toast(`分解成功：${nameOf(r.out)} ＝ ${fmtIns(r)}`, 4000, "check");
@@ -931,9 +955,9 @@ async function playSynth(r, by, ev) {
   await sleep(600);
   const mouth = center(fl.querySelector(".neck"));
   await Promise.all([...s.querySelectorAll(".slot .card")].map((c, i) => { const p = flyClone(c, mouth, { delay: i * 110 }); c.closest(".slot").style.visibility = "hidden"; return p; }));
-  fl.classList.add("boil"); await sleep(1300); fl.classList.remove("boil"); fl.classList.add("bang"); burst(...center(fl.querySelector(".bulb")), 48);
-  await sleep(250); out.innerHTML = cardHTML(r.out, { cls: "pop" }); msg.className = "bench-msg ok"; setIc(msg, "sparkle", `回放：${fmtIns(r)} ＝ ${nameOf(r.out)}`);
-  await sleep(1700); fl.classList.remove("bang", "filled"); busy = false; bench.clear(); renderTray(); renderBench();
+  fl.classList.add("boil", "rx-heat"); await sleep(1100); fl.classList.remove("boil", "rx-heat"); mountRx(fl, "form"); fl.classList.add("bang", "rx-bond");
+  await sleep(760); out.innerHTML = cardHTML(r.out, { cls: "pop" }); msg.className = "bench-msg ok"; setIc(msg, "sparkle", `回放：${fmtIns(r)} ＝ ${nameOf(r.out)}`);
+  await sleep(1100); fl.classList.remove("bang", "rx-bond", "filled"); clearRx(fl); busy = false; bench.clear(); renderTray(); renderBench();
   out.innerHTML = cardHTML(r.out, { cls: "glowpulse" }); msg.className = "bench-msg ok"; setIc(msg, "sparkle", `回放结束：${by} 合成了 ${nameOf(r.out)}`);
   if (ev && ev.user) { const b = el(`<button class="btn btn-sm" type="button">${ic("sparkle")}生成分享卡</button>`); b.onclick = () => openShare(ev); msg.appendChild(b); }
 }
@@ -943,13 +967,12 @@ async function playDecomp(r, by) {
   s.innerHTML = ""; out.innerHTML = cardHTML(r.out); msg.className = "bench-msg"; setIc(msg, "play", `回放：${by} 分解 ${nameOf(r.out)}`);
   await sleep(500);
   await flyClone(out.querySelector(".card"), center(fl.querySelector(".neck")), { dur: 600 }); out.innerHTML = '<div class="q">?</div>';
-  fl.classList.add("filled", "boil"); await sleep(1200); fl.classList.remove("boil"); fl.classList.add("bang");
-  burst(...center(fl.querySelector(".bulb")), 40, ["#66d9e8", "#b197fc", "#fff", "#ffd65a"]);
+  mountRx(fl, "break"); fl.classList.add("filled", "boil", "rx-heat"); await sleep(1000); fl.classList.remove("boil", "rx-heat"); fl.classList.add("bang", "rx-break");
   s.innerHTML = r.ins.map((id, i) => `<div class="slot">${cardHTML(id, { count: r.amts[i] > 1 ? "×" + r.amts[i] : "" })}</div>`).join("");
   const [mx, my] = center(fl.querySelector(".bulb"));
   if (!RM()) [...s.querySelectorAll(".card")].forEach((c, i) => { const [cx, cy] = center(c); c.animate([{ transform: `translate(${mx - cx}px,${my - cy}px) scale(.2)`, opacity: 0 }, { transform: "none", opacity: 1 }], { duration: 700, delay: 120 * i, easing: "cubic-bezier(.2,.9,.25,1.15)", fill: "backwards" }); });
   msg.className = "bench-msg ok"; setIc(msg, "recycle", `回放：${nameOf(r.out)} ＝ ${fmtIns(r)}`);
-  await sleep(1800); fl.classList.remove("bang", "filled"); busy = false; bench.clear(); renderTray(); renderBench();
+  await sleep(1500); fl.classList.remove("bang", "rx-break", "filled"); clearRx(fl); busy = false; bench.clear(); renderTray(); renderBench();
   msg.className = "bench-msg ok"; setIc(msg, "recycle", `回放结束：${by} 分解了 ${nameOf(r.out)}`);
 }
 function onEvClick(ev) {
@@ -1495,5 +1518,5 @@ if (initBid) { mkTab("bid"); const q = new URLSearchParams(location.search), bi 
 { const q = new URLSearchParams(location.search), qa = q.get("ai") || q.get("addr"); if (qa) { $("viewInput").value = qa; setView(qa, { scroll: false }); } else refresh().catch(e => { console.error(e); toast("读取链上数据失败：" + errMsg(e)); }); }
 loadFeed().catch(e => console.warn("feed", e));
 setInterval(() => { if (document.visibilityState === "visible" && !busy) refresh().catch(() => {}); }, 15000);
-window.__lab = { state: () => state, bench: () => bench, view: () => ({ viewAddr, viewName }), tl: () => tlEvents, feed: () => feedEvents, mk: () => mk, bd: () => bd, mkTab: t => mkTab(t), replay: i => replay(tlEvents[i]), wall: () => wall, share: ev => openShare(ev), card: (id, o) => cardHTML(id, o), go: v => go(v) }; // 调试/自动化用（只读）
+window.__lab = { state: () => state, bench: () => bench, view: () => ({ viewAddr, viewName }), tl: () => tlEvents, feed: () => feedEvents, mk: () => mk, bd: () => bd, mkTab: t => mkTab(t), replay: i => replay(tlEvents[i]), wall: () => wall, share: ev => openShare(ev), card: (id, o) => cardHTML(id, o), go: v => go(v), previewSynth: out => { const r = state.recipes.find(x => x.out === out); return r ? playSynth(r, "实验室") : null; }, previewDecomp: out => { const r = state.recipes.find(x => x.out === out); return r ? playDecomp(r, "实验室") : null; } }; // 调试/自动化用（只读）
 })();

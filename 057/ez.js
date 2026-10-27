@@ -99,13 +99,13 @@
 
   // ---------- 样式（紧凑，复用市场的 mk-* / bdbox 样式）----------
   const css = document.createElement("style"); css.id = "ezCss";
-  css.textContent = `.ez-head{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 12px;padding:10px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid var(--line)}
-.ez-tile{width:44px;height:58px;flex:none;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,rgba(240,185,11,.22),rgba(240,185,11,.05));border:1px solid rgba(240,185,11,.55);color:var(--bnb2);line-height:1}
-.ez-tile b{font-size:24px;font-weight:800} .ez-tile i{font-style:normal;font-size:9px;margin-top:4px;color:var(--mut);white-space:nowrap}
+  css.textContent = `.ez-head{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 12px;padding:10px;border-radius:14px;background:#101114;border:1px solid var(--line);min-width:0}
+.ez-tile{width:44px;height:58px;flex:none;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%, transparent 0 8px, rgba(236,228,210,.85) 8.4px 9.2px, transparent 9.6px), linear-gradient(180deg,#1a1c20,#090a0c);border:1px solid rgba(236,228,210,.72);box-shadow:inset 0 0 0 3px #090a0c, inset 0 0 0 4px rgba(236,228,210,.28);color:#f4efe6;line-height:1}
+.ez-tile b{font-family:var(--disp, inherit);font-size:22px;font-weight:560;letter-spacing:-.04em} .ez-tile i{font-style:normal;font-size:8px;margin-top:3px;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,239,230,.62);white-space:nowrap}
 .mk-card .ez-tile{width:100%;height:auto;aspect-ratio:3/4} .mk-card.sm .ez-tile b{font-size:18px}
-.ez-meta{flex:1;min-width:180px;display:flex;flex-direction:column;gap:2px} .ez-meta small{font-size:12px}
-#ezList{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))} #ezList .mk-item{flex-direction:row;align-items:center} #ezList .mk-item .mk-card{width:40px} #ezList>.empty{padding:14px}
-.ez-off{font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.06);color:var(--mut);align-self:flex-start}`;
+.ez-meta{flex:1;min-width:min(100%,180px);display:flex;flex-direction:column;gap:2px} .ez-meta small{font-size:12px;overflow-wrap:anywhere}
+#ezList{grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr))} #ezList .mk-item{flex-direction:row;align-items:center} #ezList .mk-item .mk-card{width:40px} #ezList>.empty{padding:14px}
+.ez-off{font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.06);color:var(--mut);align-self:flex-start;max-width:100%}`;
   document.head.appendChild(css);
 
   // ---------- 状态 ----------
