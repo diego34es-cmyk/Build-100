@@ -45,14 +45,16 @@ a{color:var(--bnb2)}
 /* ---- chrome ---- */
 .logo{width:32px; height:32px; border-radius:0; background:none; box-shadow:none}
 .flask-mini{width:32px; height:32px; background:url(brand/lab-logo-32.svg) center/contain no-repeat; clip-path:none}
-header{background:rgba(9,10,12,.9); border-bottom:1px solid var(--line); min-width:0}
+.chrome{position:sticky; top:0; z-index:30; background:rgba(9,10,12,.94); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px)}
+header{position:relative; top:auto; z-index:auto; height:auto; min-height:52px; overflow:visible; background:rgba(9,10,12,.9); border-bottom:1px solid var(--line); min-width:0}
 .brand-txt b{font-weight:600; letter-spacing:-.02em}
 .top-search{min-width:0; background:#0e1014; border-color:var(--line2); border-radius:11px}
 .top-search input{min-width:0}
-.prizebar{flex-wrap:wrap; justify-content:center; text-align:center; row-gap:4px; padding:8px 16px; background:rgba(215,181,106,.08); border-bottom-color:rgba(215,181,106,.2); color:#efe2c4}
+.top-search .btn .ic{display:none; margin:0}
+.prizebar{position:relative; z-index:auto; flex-wrap:wrap; align-items:center; height:auto; overflow:visible; justify-content:center; text-align:center; row-gap:4px; padding:8px 16px; background:rgba(215,181,106,.08); border-bottom-color:rgba(215,181,106,.2); color:#efe2c4}
 .pb-tag{letter-spacing:.12em; border-radius:4px; background:var(--bnb); color:var(--ink)}
 .pb-go .ic{width:16px; height:16px; margin:0; vertical-align:middle}
-#pbText{min-width:0}
+#pbText{flex:1 1 16rem; min-width:0; line-height:1.4; white-space:normal; overflow-wrap:break-word}
 .btn{border-radius:10px; font-weight:600; min-height:40px; transition:background .15s, border-color .15s, color .15s, transform .15s}
 .btn-primary{background:var(--bnb); color:var(--ink); box-shadow:none}
 .btn-primary:hover:not(:disabled){background:#e4c57c; box-shadow:none}
@@ -305,8 +307,19 @@ html[lang=en] .tabbar a{font-size:9.5px; letter-spacing:-.02em}
   .flask{grid-area:flask; justify-self:center}
   .arrow{display:grid; grid-area:arrow; align-self:center}
   .bench-out{grid-area:out; justify-self:center}
-  .prizebar{justify-content:flex-start; text-align:left}
+  .prizebar{justify-content:flex-start; text-align:left; padding:8px 12px}
+  #pbText{flex:1 1 100%}
   .tabbar a span .ic{width:18px; height:18px}
+}
+@media (max-width:768px){
+  header{flex-wrap:wrap; align-items:center; padding:8px 12px; gap:8px; overflow:visible}
+  header .brand{flex:none}
+  header .wallet{margin-left:auto; flex:none}
+  header .top-search{order:3; flex:1 1 100%; width:100%; max-width:none; margin:0; height:40px; padding:0 4px 0 10px; gap:6px}
+  .top-search input{font-size:16px}
+  .top-search .btn{position:relative; width:34px; min-width:34px; padding:0; justify-content:center}
+  .top-search .btn .ic{display:inline-block}
+  .top-search .btn span{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0}
 }
 @media (max-width:600px){
   .hero h1{font-size:clamp(26px, 7.4vw, 32px)}

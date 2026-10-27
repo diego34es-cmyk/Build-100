@@ -1510,8 +1510,12 @@ window.addEventListener("popstate", () => showView(viewOf(location.hash.slice(1)
 const initBid = location.hash === "#bid", initEz = location.hash === "#ez";
 { const h = location.hash.slice(1), v = viewOf(h); if (h && h !== v) history.replaceState(null, "", "#" + v); showView(v, !!h); }
 
-const setHdr = () => document.documentElement.style.setProperty("--hdr", $("hdr").offsetHeight + "px");
+const setHdr = () => {
+  const el = document.querySelector(".chrome") || $("hdr");
+  document.documentElement.style.setProperty("--hdr", el.offsetHeight + "px");
+};
 window.addEventListener("resize", setHdr);
+window.addEventListener("load", setHdr);
 setupNet(); setHdr(); setConnUI(); updateButtons(); renderBench();
 window.LAB_EZ_INIT = initEz && hasEZ(); // ez.js 挂载分页后再切过去
 if (initBid) { mkTab("bid"); const q = new URLSearchParams(location.search), bi = Number(q.get("bid")); if (bi > 0) bd.pre = { id: bi, qty: Math.max(1, Math.min(10000, Number(q.get("qty")) || 1)) }; }
