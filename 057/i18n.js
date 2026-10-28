@@ -45,7 +45,6 @@
   css.textContent = ".lang-tg{min-width:44px;justify-content:center;font-weight:700;letter-spacing:.02em}" +
     "@media (max-width:600px){#hdr .top-search{min-width:0} #hdr .wallet{flex:none} .lang-tg{min-width:40px;padding:0 8px}}" +
     "html[lang=en] .card .czh{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 6%;font-size:max(9px,10cqw)}" +
-    "html[lang=en] .ptable .card .czh{display:none} html[lang=en] .ptable .card .csym{top:42%}" +
     "html[lang=en] .ai-steps{margin:8px 0 0;padding-left:20px;line-height:1.6;font-size:13px} html[lang=en] .ai-steps li{margin:2px 0}";
   (document.head || root).appendChild(css);
 

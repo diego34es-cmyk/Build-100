@@ -18,13 +18,13 @@ const T = () => EN() ? {
   nFreeSay: n => `Read build-100.com/lab/agent.md and play Agent Periodic Lab with my ${n}: do the free mint first, then tell me the card's name and let me pick one: mint again, or first deposit the card into the Reactor.`,
   nStake: x => `Deposit ${x} into the Reactor, where it shares LAB by weight. Network fee only; it needs one tap to confirm in your Binance App, and the card can be taken out at any time.`,
   nStakeSay: (x, n) => `Please deposit my ${x} card into the Reactor with my ${n}, following build-100.com/lab/agent.md section 4.6.`,
-  nKit: "Your cards are in the Reactor. Next, see which open recipe you are closest to (kit board below).",
+  nKit: "Your cards are in the Reactor. Next, see which open recipe you are closest to (Formula Book on the Mint page).",
   nKitSay: n => `Read section 4.2.2 in build-100.com/lab/agent.md, then keep playing Agent Periodic Lab with my ${n}: look at the cards I hold and the recipes still open on the discoverer wall, and tell me which one I'm closest to, which cards I'm missing, how to get each one and what it costs.`,
   sayT: "Send this to your AI", copy: "Copy", copied: "Copied. Send it to your AI.",
   wallT: "Discoverer wall", wallP: (d, t, o) => `${d} of ${t} recipe outputs have been made; ${o} are still waiting for their first discoverer. The first .ai to make one is written on the wall.`,
   wallMine: (n, k) => `${n} is on the wall ${k} time${k === 1 ? "" : "s"}.`,
   full: "See the full lab", hide: "Hide",
-  kitT: "Recipe kit board", kitSub: "Which open compound recipes can be put together right now from LabMarket listings (plus the wallet you are viewing). Read live from the chain.",
+  kitT: "Formula Book", kitSub: "Which open compound recipes can be put together right now from LabMarket listings (plus the wallet you are viewing). Read live from the chain.",
   kitReady: "Can be put together now", kitMiss: "Still missing", kitHold: "held", kitList: p => `listed from ${p} BNB`, kitDec: x => `from a ${x} listing, decomposed (LAB fee)`,
   kitNone: "missing", kitEmpty: "No open compound recipe right now.", kitLoading: "Reading listings...",
   kitNote: "Each ingredient is counted on its own. Decomposing costs a LAB fee. Tap a listing to open it in the market.",
@@ -40,13 +40,13 @@ const T = () => EN() ? {
   nFreeSay: n => `去 build-100.com/lab/agent.md 读说明，用我的 ${n} 玩 Agent Periodic Lab：先免费领一张卡，领到后告诉我卡名，让我二选一：再铸，或者先把卡存入反应堆。`,
   nStake: x => `把 ${x} 存入反应堆，按权重分 LAB。只花网络费，需要你在币安 App 里点一次确认，卡可以随时取出。`,
   nStakeSay: (x, n) => `请用我的 ${n} 把 ${x} 卡存入反应堆，按 build-100.com/lab/agent.md 4.6 做。`,
-  nKit: "卡已经在反应堆里。下一步看看离哪个待发现的配方最近（见下面的配方凑齐板）。",
+  nKit: "卡已经在反应堆里。下一步看看离哪个待发现的配方最近（见铸造页的化学配比书）。",
   nKitSay: n => `去 build-100.com/lab/agent.md 读 4.2.2，用我的 ${n} 继续玩 Agent Periodic Lab：读一下我现在持有的卡和首位发现者墙上还没人做的配方，列出我离哪个配方最近、缺哪几张、各自怎么拿到和费用。`,
   sayT: "把这句发给你的 AI", copy: "复制", copied: "已复制，发给你的 AI 吧",
   wallT: "首位发现者墙", wallP: (d, t, o) => `${t} 个配方产出里已经有 ${d} 个被做出来，还有 ${o} 个等着第一个发现者。第一个做出的 .ai 名字会刻在墙上。`,
   wallMine: (n, k) => `${n} 已经在墙上留名 ${k} 次。`,
   full: "看完整实验室", hide: "收起",
-  kitT: "配方凑齐板", kitSub: "用现在市场上的挂单（加上你正在查看的钱包里的卡），哪些待发现的化合物配方能凑齐。直接读取链上数据。",
+  kitT: "化学配比书", kitSub: "用现在市场上的挂单（加上你正在查看的钱包里的卡），哪些待发现的化合物配方能凑齐。直接读取链上数据。",
   kitReady: "现在能凑齐", kitMiss: "还缺", kitHold: "持有", kitList: p => `有挂单，${p} BNB 起`, kitDec: x => `买 ${x} 挂单分解得到（要付 LAB 分解费）`,
   kitNone: "缺", kitEmpty: "现在没有待发现的化合物配方。", kitLoading: "正在读取挂单…",
   kitNote: "每种原料分别计算。分解要付 LAB 分解费。点挂单会跳到市场里对应的卡。",
@@ -57,8 +57,12 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;",
 const SUB = { 0: "₀", 1: "₁", 2: "₂", 3: "₃", 4: "₄", 5: "₅", 6: "₆", 7: "₇", 8: "₈", 9: "₉" };
 const EL = id => ((window.LAB_DATA || {}).elements || {})[id] || null;
 const sym = id => { const e = EL(id); return e ? String(e.sym).replace(/\d/g, d => SUB[d]) : "#" + id; };
-const nm = id => { const e = EL(id); if (!e) return "#" + id; return !EN() && e.zh && e.zh !== e.sym && !/^[A-Za-z0-9]+$/.test(e.zh) ? `${e.zh} ${sym(id)}` : sym(id); };
-const img = id => `meta/img/${id}.png`;
+const nm = id => { const e = EL(id); if (!e) return "#" + id; const name = e.zh && e.zh !== e.sym ? String(e.zh) : ""; const cjk = /[\u3400-\u9fff]/.test(name); if (EN()) return name && !cjk ? `${name} ${sym(id)}` : sym(id); return name && cjk ? `${name} ${sym(id)}` : sym(id); };
+function face(id, box) {
+  const lab = L();
+  if (lab && typeof lab.card === "function") return `<div class="${box}">${lab.card(id)}</div>`;
+  return `<div class="${box}"><b>${esc(nm(id))}</b></div>`;
+}
 const big = v => { try { return BigInt(v || 0); } catch (_) { return 0n; } };
 const bnb = wei => { try { return window.ethers.formatEther(wei); } catch (_) { return "?"; } };
 const L = () => window.__lab;
@@ -72,7 +76,9 @@ css.textContent = `
 .ow-cards{display:flex;gap:12px;flex-wrap:wrap}
 .ow-card{flex:1 1 150px;max-width:230px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:10px;text-align:center}
 .ow-card img{width:100%;aspect-ratio:1/1;object-fit:contain;border-radius:12px;display:block;background:var(--bg2)}
-.ow-card b{display:block;margin-top:6px;font-size:16px}.ow-card small{color:var(--mut)}
+.ow-face{width:100%}
+.ow-face .card{width:100%}
+.ow-card > b{display:block;margin-top:6px;font-size:16px}.ow-card small{color:var(--mut)}
 .ow-card.st{border-color:rgba(240,185,11,.45)}
 .ow-box{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
 .ow-box h3{margin:0 0 8px;font-size:14px;color:var(--mut);font-weight:600}
@@ -85,12 +91,14 @@ css.textContent = `
 .kit-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
 .kit{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;gap:12px}
 .kit.ok{border-color:rgba(74,222,128,.45)}
-.kit img{width:64px;height:64px;object-fit:contain;border-radius:10px;flex:none;background:var(--bg2)}
-.kit b{font-size:16px}.kit .kit-st{font-size:12px;margin-left:6px;color:var(--mut)}.kit.ok .kit-st{color:var(--ok)}
+.kit-face{width:112px;flex:none}
+.kit-face .card{width:100%;pointer-events:auto}
+.kit-face .card .ccat{font-size:8.5px;letter-spacing:-.01em}
+.kit > div > b{font-size:16px}.kit .kit-st{font-size:12px;margin-left:6px;color:var(--mut)}.kit.ok .kit-st{color:var(--ok)}
 .kit ul{list-style:none;margin:6px 0 0;padding:0;font-size:13px;line-height:1.7}
 .kit li span{color:var(--mut)}.kit li.miss{color:var(--bad)}
 .kit a.getl{color:var(--bnb2)}
-@media (max-width:760px){.ow-grid{grid-template-columns:1fr;gap:10px}.ow-card{max-width:none;padding:8px}.ow-card:nth-child(n+3){display:none}.ow-card img{max-height:170px}.ow-card b{font-size:14px}#secOwner h2{font-size:19px}#secOwner{padding:16px}}
+@media (max-width:760px){.ow-grid{grid-template-columns:1fr;gap:10px}.ow-card{max-width:none;padding:8px}.ow-card:nth-child(n+3){display:none}.ow-card > b{font-size:14px}#secOwner h2{font-size:19px}#secOwner{padding:16px}}
 `;
 document.head.appendChild(css);
 
@@ -145,7 +153,7 @@ function renderLanding() {
   }).filter(Boolean).join("");
   const didHead = `<p class="muted" style="margin:0 0 6px;font-size:13px">${esc(t.mintsUsed(st.mints))}</p>`;
   const didBody = didHead + (evs ? `<ul class="ow-did">${evs}</ul>` : `<p class="muted" style="margin:0">${tl.length || st.mints === 0 ? t.didNone : t.didLoading}</p>`);
-  const cardsHTML = cards.length ? cards.slice(0, 4).map(c => `<div class="ow-card${c.st ? " st" : ""}"><img src="${img(c.id)}" alt="${esc(sym(c.id))}" loading="lazy"/><b>${esc(nm(c.id))}${c.n > 1n ? " ×" + c.n : ""}</b><small>${c.st ? t.inReactor : t.inWallet}</small></div>`).join("") : `<p class="muted">${t.noCards}</p>`;
+  const cardsHTML = cards.length ? cards.slice(0, 4).map(c => `<div class="ow-card${c.st ? " st" : ""}">${face(c.id, "ow-face")}<b>${esc(nm(c.id))}${c.n > 1n ? " ×" + c.n : ""}</b><small>${c.st ? t.inReactor : t.inWallet}</small></div>`).join("") : `<p class="muted">${t.noCards}</p>`;
   const pct = tot ? Math.round(disc / tot * 100) : 0;
   s.innerHTML = `<div class="ow-top"><h2>${esc(t.landT(name))}</h2><span class="muted" style="font-size:13px">${t.landSub}</span></div>
     <div class="ow-grid">
@@ -171,7 +179,7 @@ let kitAll = false, kitSig = "";
 function renderKit() {
   const lab = L(); if (!lab) return;
   const st = lab.state(), mk = lab.mk() || { list: [] }, wall = lab.wall() || { first: {} };
-  const s = section("secKit", $("secWall"));
+  const s = section("secKit", $("secMint"));
   const t = T();
   const recs = (st.recipes || []).filter(r => r.active && r.out >= 1001 && !(wall.first || {})[r.out]);
   const list = mk.list || [];
@@ -203,7 +211,7 @@ function renderKit() {
       const ok = have >= need; if (!ok) miss += need - Math.min(have, need);
       return `<li class="${ok ? "" : "miss"}">${esc(sym(e))} ×${need} · ${how.length ? how.join(" · ") : ""}${ok ? "" : `${how.length ? " · " : ""}${t.kitNone} ${need - Math.min(have, need)}`}</li>`;
     });
-    return { r, miss, html: `<div class="kit${miss ? "" : " ok"}"><img src="${img(r.out)}" alt="${esc(sym(r.out))}"/><div><b>${esc(nm(r.out))}</b><span class="kit-st">${miss ? t.kitMiss + " " + miss : t.kitReady}</span><ul>${ins.join("")}</ul></div></div>` };
+    return { r, miss, html: `<div class="kit${miss ? "" : " ok"}">${face(r.out, "kit-face")}<div><b>${esc(nm(r.out))}</b><span class="kit-st">${miss ? t.kitMiss + " " + miss : t.kitReady}</span><ul>${ins.join("")}</ul></div></div>` };
   }).sort((a, b) => a.miss - b.miss || a.r.out - b.r.out);
   const shown = kitAll ? rows : rows.slice(0, 6);
   s.innerHTML = `<div class="panel-h"><h2>${t.kitT}</h2><p class="muted">${t.kitSub}</p></div>
@@ -219,7 +227,7 @@ function tick() {
   try { renderKit(); } catch (e) { console.warn("kit", e); }
 }
 section("secOwner", $("viewErr")).classList.add("hidden"); // always present: app.js VIEWS.home lists it
-section("secKit", $("secWall"));
+section("secKit", $("secMint"));
 setInterval(tick, 1500);
 window.addEventListener("hashchange", () => setTimeout(tick, 50));
 })();

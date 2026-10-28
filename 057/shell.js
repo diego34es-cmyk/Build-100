@@ -5,7 +5,8 @@ const lab = window.__lab; if (!lab) return;
 const EL = window.LAB_DATA.elements;
 const RM = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 const SUBF = s => s.replace(/(?<=[A-Za-z)])(\d+)/g, "<sub>$1</sub>");
-const nameHTML = id => { const e = EL[id]; if (!e) return "#" + id; const sym = id > 1000 ? SUBF(e.sym) : e.sym; return e.zh && e.zh !== e.sym ? `${e.zh} ${sym}` : sym; };
+const UI_EN = () => (document.documentElement.lang || "").startsWith("en");
+const nameHTML = id => { const e = EL[id]; if (!e) return "#" + id; const sym = id > 1000 ? SUBF(e.sym) : e.sym; const n = e.zh && e.zh !== e.sym ? String(e.zh) : ""; if (UI_EN() && /[\u3400-\u9fff]/.test(n)) return sym; return n ? `${n} ${sym}` : sym; };
 
 // ---- 首屏卡牌扇：点一张翻转换新 ----
 const POOL = [79, 1001, 118, 26, 1010, 8, 1007, 112, 1, 1016, 92, 1018, 29, 1009, 6, 1003, 114, 47, 1019, 80];

@@ -25,7 +25,13 @@ setCat("post", [13, 31, 49, 50, 81, 82, 83, 84, 113, 114, 115, 116]);
 setCat("transition", [...rng(21, 30), ...rng(39, 48), ...rng(72, 80), ...rng(104, 112)]);
 setCat("lanth", rng(57, 71)); setCat("actin", rng(89, 103));
 const CAT_ZH = { nonmetal: "非金属", noble: "稀有气体", alkali: "碱金属", alkaline: "碱土金属", metalloid: "类金属", halogen: "卤素", post: "贫金属", transition: "过渡金属", lanth: "镧系", actin: "锕系", compound: "化合物" };
+const CAT_EN = { nonmetal: "Nonmetal", noble: "Noble gas", alkali: "Alkali metal", alkaline: "Alkaline earth", metalloid: "Metalloid", halogen: "Halogen", post: "Post-transition", transition: "Transition metal", lanth: "Lanthanide", actin: "Actinide", compound: "Compound" };
+const UI_EN = () => (window.LAB_LANG || document.documentElement.lang || "zh").startsWith("en");
 const catOf = id => id > 1000 ? "compound" : CAT[id] || "post";
+function catLabel(id) {
+  const syn = id >= 95 && id <= 118;
+  return UI_EN() ? (syn ? "Synthetic element" : CAT_EN[catOf(id)]) : (syn ? "合成元素" : CAT_ZH[catOf(id)]);
+}
 
 const NET_ALIAS = { testnet: "bscTestnet", mainnet: "bscMainnet", bsc: "bscMainnet", local: "local" };
 let netKey = new URLSearchParams(location.search).get("net") || CFG.defaultNetwork;
@@ -168,7 +174,11 @@ async function tx(fn, okMsg, { quiet = false } = {}) {
 const SUB = { "0": "₀", "1": "₁", "2": "₂", "3": "₃", "4": "₄", "5": "₅", "6": "₆", "7": "₇", "8": "₈", "9": "₉" };
 const formula = s => s.replace(/(?<=[A-Za-z)])(\d+)/g, d => [...d].map(c => SUB[c]).join(""));
 function label(id) { const s = EL[id]?.sym; return s ? (id > 1000 ? formula(s) : s) : `#${id}`; }
-function nameOf(id) { const e = EL[id]; return e ? (e.zh && e.zh !== e.sym ? `${e.zh} ${label(id)}` : label(id)) : `#${id}`; }
+function faceName(e) {
+  const n = e && e.zh && e.zh !== e.sym ? String(e.zh) : "";
+  return UI_EN() && /[\u3400-\u9fff]/.test(n) ? "" : n;
+}
+function nameOf(id) { const e = EL[id]; const n = faceName(e); return e ? (n ? `${n} ${label(id)}` : label(id)) : `#${id}`; }
 function isSoldOut(i) { return i && i.cap > 0n && i.minted >= i.cap; }
 // 单次付费铸造得到 id 的概率 = remaining(id) / drawTotal()，按刚读到的链上数据现算（天然元素 1–94；其他返回 null）
 function drawOdds(id) {
@@ -218,13 +228,13 @@ function cardHTML(id, o = {}) {
   const len = e.sym.length;
   const art = id > 1000 ? window.LAB_ART?.molSVG(id) || "" : window.LAB_ART?.orbitSVG(id) || "";
   const cls = ["card", "cat-" + cat, tierOf(id), holo ? "holo" : "", syn ? "syn" : "", len >= 7 ? "xlong" : len >= 4 ? "long" : "", o.cls || ""].join(" ");
-  const zh = e.zh && e.zh !== e.sym ? e.zh : "";
-  const catTxt = syn ? "合成元素" : CAT_ZH[cat];
+  const zh = faceName(e);
+  const catTxt = catLabel(id);
   return `<div class="${cls}" data-id="${id}" tabindex="0" role="button" aria-label="${nameOf(id)}">
     <span class="chd"><b>Periodic Lab</b><b>${id <= 118 ? "Z·" + id : "Compound"}</b></span>${art}
     <span class="cz">${id <= 118 ? id : ""}</span>${o.count ? `<span class="cnt">${o.count}</span>` : ""}
     <span class="csym">${sym}</span><span class="czh">${zh}</span>
-    ${o.staked ? `<span class="cst">反应中 ${o.staked}</span>` : ""}${o.sold ? '<span class="csold tag">售罄</span>' : ""}
+    ${o.staked ? `<span class="cst">${UI_EN() ? "In Reactor " + o.staked : "反应中 " + o.staked}</span>` : ""}${o.sold ? `<span class="csold tag">${UI_EN() ? "Sold out" : "售罄"}</span>` : ""}
     <span class="ccat">${catTxt}</span></div>`;
 }
 const el = html => { const t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; };
@@ -335,7 +345,7 @@ function renderDex() {
     const d = el(cardHTML(id, { count: own > 0n ? own.toString() : "", starter: state.starters.has(id), cls: own > 0n ? "" : "dim" }));
     d.title = nameOf(id) + (state.byOut[id] ? "\n配方：" + fmtIns(state.byOut[id]) : ""); cp.appendChild(d);
   }
-  const lg = $("legend"); if (!lg.children.length) lg.innerHTML = Object.entries(CAT_ZH).map(([k, v]) => `<span><i style="background:var(--c-${k})"></i>${v}</span>`).join("") + '<span><i style="background:linear-gradient(180deg,#e8c56e,#8a6a2e)"></i>全息 = 合成产物</span>';
+  const lg = $("legend"); if (!lg.children.length) lg.innerHTML = Object.entries(UI_EN() ? CAT_EN : CAT_ZH).map(([k, v]) => `<span><i style="background:var(--c-${k})"></i>${v}</span>`).join("") + (UI_EN() ? '<span><i style="background:linear-gradient(180deg,#e8c56e,#8a6a2e)"></i>Holo = synthesized</span>' : '<span><i style="background:linear-gradient(180deg,#e8c56e,#8a6a2e)"></i>全息 = 合成产物</span>');
 }
 function fmtIns(r) { return r.ins.map((id, k) => `${r.amts[k] > 1 ? r.amts[k] + "×" : ""}${label(id)}`).join(" + "); }
 
@@ -1135,8 +1145,8 @@ function drawCard(g, id, x, y, w, h) {
   g.fillStyle = col; g.textAlign = "left"; g.textBaseline = "top"; g.font = `700 30px ${FONT}`; if (id <= 118) g.fillText(String(id), x + 22, y + 18);
   g.textAlign = "center"; g.textBaseline = "middle"; g.fillStyle = "#ffffff";
   const sym = id > 1000 ? formula(e.sym) : e.sym; fitText(g, sym, w - 40, sym.length > 4 ? 96 : 140); g.fillText(sym, x + w / 2, y + h * .42);
-  g.font = `600 34px ${FONT}`; g.fillStyle = "#e8ecf4"; if (e.zh && e.zh !== e.sym) g.fillText(e.zh, x + w / 2, y + h * .68);
-  g.font = `600 22px ${FONT}`; g.fillStyle = col; g.fillText((id >= 95 && id <= 118) ? "合成元素" : CAT_ZH[cat], x + w / 2, y + h * .86);
+  g.font = `600 34px ${FONT}`; g.fillStyle = "#e8ecf4"; const face = faceName(e); if (face) g.fillText(face, x + w / 2, y + h * .68);
+  g.font = `600 22px ${FONT}`; g.fillStyle = col; g.fillText(catLabel(id), x + w / 2, y + h * .86);
 }
 function evVerb(e) { return e.k === "syn" ? "合成了" : e.k === "free" ? "免费首铸翻出" : e.k === "paid" ? "付费铸造翻出" : "拥有"; }
 async function makeShareCard(ev) {
@@ -1472,18 +1482,30 @@ fz.addEventListener("dragover", e => { e.preventDefault(); fz.classList.add("dra
 fz.addEventListener("dragleave", () => fz.classList.remove("drag"));
 fz.addEventListener("drop", e => { e.preventDefault(); fz.classList.remove("drag"); const id = Number(e.dataTransfer.getData("text/plain")); if (id) addBench(id); });
 // 分页：首页（搜索 + 动态 + 全网数据）与各功能页，顶部导航 / 底部标签栏切换
-const VIEWS = { home: ["secOwner", "hero", "secAI", "secPrize", "secReel", "secFeed", "secWall", "secKit"], mint: ["secMint"], lab: ["secLab"], stake: ["secStake"], market: ["secMarket"], dex: ["secDex"] };
-const VIEW_ALIAS = { secMint: "mint", secLab: "lab", secStake: "stake", secMarket: "market", secDex: "dex", bid: "market", ez: "market" };
+const VIEWS = { home: ["secOwner", "hero", "secAI", "secPrize", "secReel", "secFeed", "secWall"], mint: ["secMint", "secKit"], lab: ["secLab"], stake: ["secStake"], market: ["secMarket"], dex: ["secDex"] };
+const VIEW_ALIAS = { secMint: "mint", secLab: "lab", secStake: "stake", secMarket: "market", secDex: "dex", bid: "market", ez: "market", secKit: "mint", kit: "mint" };
+const KIT_ANCHOR = { secKit: "secKit", kit: "secKit" };
 const viewOf = h => VIEWS[h] ? h : VIEW_ALIAS[h] || "home";
 function showView(v, scroll = true) {
-  for (const [k, ids] of Object.entries(VIEWS)) ids.forEach(id => $(id).classList.toggle("view-off", k !== v));
+  for (const [k, ids] of Object.entries(VIEWS)) ids.forEach(id => { const n = $(id); if (n) n.classList.toggle("view-off", k !== v); });
   document.querySelectorAll("#tabbar a, .topnav a").forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + v));
   if (scroll) window.scrollTo({ top: 0, behavior: "instant" });
 }
+function showFromHash(scroll) {
+  const h = location.hash.slice(1);
+  const v = viewOf(h);
+  const anchor = KIT_ANCHOR[h];
+  if (h && h !== v && !anchor) history.replaceState(null, "", "#" + v);
+  showView(v, scroll && !anchor);
+  if (anchor) requestAnimationFrame(() => document.getElementById(anchor)?.scrollIntoView({ block: "start" }));
+}
 function go(v) {
-  v = viewOf(v);
-  if (location.hash !== "#" + v) history.pushState(null, "", "#" + v);
-  showView(v);
+  const anchor = KIT_ANCHOR[v];
+  const view = viewOf(v);
+  const hash = anchor || view;
+  if (location.hash !== "#" + hash) history.pushState(null, "", "#" + hash);
+  showView(view, !anchor);
+  if (anchor) requestAnimationFrame(() => document.getElementById(anchor)?.scrollIntoView({ block: "start" }));
 }
 document.addEventListener("click", e => {
   const g = e.target.closest("a.getl"); if (!g) return;
@@ -1506,9 +1528,9 @@ document.addEventListener("click", e => {
   const a = e.target.closest('a[href^="#"]'); if (!a) return;
   e.preventDefault(); go(a.getAttribute("href").slice(1));
 });
-window.addEventListener("popstate", () => showView(viewOf(location.hash.slice(1))));
+window.addEventListener("popstate", () => showFromHash(true));
 const initBid = location.hash === "#bid", initEz = location.hash === "#ez";
-{ const h = location.hash.slice(1), v = viewOf(h); if (h && h !== v) history.replaceState(null, "", "#" + v); showView(v, !!h); }
+showFromHash(!!location.hash.slice(1));
 
 const setHdr = () => {
   const el = document.querySelector(".chrome") || $("hdr");
