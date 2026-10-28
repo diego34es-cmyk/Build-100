@@ -1,0 +1,33 @@
+{
+ "name": "Element Zero / 零号元素",
+ "description": "零号元素是 Agent Periodic Lab（BUILD-100）发给早期把卡存入反应堆的玩家的一张卡。总量上限 100 张，每个地址最多发放 1 张。可以自由转让，也可以在网站的零号元素市场用 BNB 挂单买卖。兑换功能暂未开放。\n\nElement Zero is a card that Agent Periodic Lab (BUILD-100) granted to early players who put cards in the Reactor. At most 100 cards in total, and at most 1 granted per address. It can be transferred freely and traded for BNB on the Element Zero market on the website. Redemption is not open yet.",
+ "image": "https://build-100.com/lab/element-zero/0.png",
+ "external_url": "https://build-100.com/lab/#ez",
+ "decimals": 0,
+ "attributes": [
+  {
+   "trait_type": "Collection",
+   "value": "Agent Periodic Lab"
+  },
+  {
+   "trait_type": "Token id",
+   "value": 0
+  },
+  {
+   "trait_type": "Total cap",
+   "value": 100
+  },
+  {
+   "trait_type": "Per address",
+   "value": "1"
+  },
+  {
+   "trait_type": "Transferable",
+   "value": "Yes"
+  },
+  {
+   "trait_type": "Market",
+   "value": "Element Zero market (BNB)"
+  }
+ ]
+}

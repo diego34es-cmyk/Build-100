@@ -1,0 +1,77 @@
+/* 铸造返还 LAB (staging 20261025rb6): slim strip / small card / drawer. Never a full-width page section. */
+.rb-strip{margin-top:14px;border:1px solid rgba(240,185,11,.28);border-radius:14px;background:rgba(240,185,11,.05)}
+.rb-strip-bar{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;cursor:pointer;font-size:13.5px;line-height:1.45;color:var(--tx)}
+.rb-strip-bar:focus-visible{outline:2px solid var(--bnb);outline-offset:2px;border-radius:14px}
+.rb-dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--bnb)}
+.rb-strip-t{flex:1;min-width:0}
+.rb-strip-go{flex:none;font-weight:700;color:var(--bnb2);font-size:13px}
+.rb-strip.s-closed{border-color:var(--line2);background:rgba(255,255,255,.02)} .rb-strip.s-closed .rb-dot{background:var(--mut)}
+.rb-strip .rb-panel{padding:0 14px 14px;max-width:760px}
+.rb-panel{font-size:13.5px}
+.rb-sub{margin:2px 0 10px;color:var(--mut);font-size:13px;line-height:1.6}
+.rb-amt{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}
+.rb-amt div{flex:1;min-width:130px;padding:8px 10px;border-radius:10px;background:rgba(240,185,11,.08);border:1px solid rgba(240,185,11,.22)}
+.rb-amt b{display:block;font-size:15px;color:var(--bnb2)} .rb-amt span{font-size:12px;color:var(--mut)}
+.rb-steps{list-style:none;margin:0 0 10px;padding:0;display:flex;flex-direction:column;gap:6px}
+.rb-steps li{display:flex;gap:10px;align-items:center;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02)}
+.rb-n{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:12px;background:rgba(240,185,11,.15);color:var(--bnb2)}
+.rb-steps .rb-t{flex:1;min-width:0;line-height:1.45}
+.rb-steps .btn{flex:none}
+#rbForm{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;margin:0 0 8px}
+#rbForm label{font-size:12px;color:var(--mut);display:flex;flex-direction:column;gap:4px;min-width:0}
+#rbForm input{font:inherit;font-size:14px;color:var(--tx);background:rgba(0,0,0,.25);border:1px solid var(--line2);border-radius:10px;padding:8px 10px;min-height:40px;width:100%;box-sizing:border-box}
+#rbForm input:focus{outline:2px solid var(--bnb);outline-offset:1px}
+.rb-btns{display:flex;gap:6px}
+#rbForm.rb-closed label:first-child,#rbForm.rb-closed #rbSubmit{display:none}
+#rbForm.rb-closed{grid-template-columns:1fr auto}
+.rb-st{padding:9px 12px;border-radius:10px;font-size:13px;line-height:1.55;border:1px solid var(--line2);background:rgba(255,255,255,.03)}
+.rb-st b{display:block;font-size:13.5px;margin-bottom:1px}
+.rb-st.s-pending,.rb-st.s-checking,.rb-st.s-manual{border-color:rgba(240,185,11,.4)}
+.rb-st.s-verified,.rb-st.s-paid{border-color:rgba(61,220,151,.45)} .rb-st.s-verified b,.rb-st.s-paid b{color:var(--ok)}
+.rb-st.s-failed,.rb-st.s-claimed,.rb-st.s-closed{border-color:rgba(255,107,107,.45)} .rb-st.s-failed b,.rb-st.s-claimed b,.rb-st.s-closed b{color:#ffa8a8}
+.rb-st a{color:var(--bnb2)}
+.rb-rules{margin-top:8px;font-size:12.5px;color:var(--mut)}
+.rb-rules summary{cursor:pointer;color:var(--tx);font-weight:600;padding:4px 0}
+.rb-rules ol{margin:4px 0 0;padding-left:18px;line-height:1.65}
+.rb-demo{margin-top:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.rb-demo h3{grid-column:1/-1;margin:4px 0 0;font-size:12.5px;color:var(--mut);font-weight:700}
+.rb-panel .hidden,.rb-strip .hidden{display:none}
+/* side-panel hint (strip layout) and card (card layout) */
+.rb-hint{display:flex;align-items:stretch;gap:4px;margin-top:10px;border:1px solid rgba(240,185,11,.3);border-radius:12px;background:rgba(240,185,11,.06)}
+.rb-hint-go{all:unset;box-sizing:border-box;flex:1;display:flex;gap:8px;align-items:center;padding:8px 10px;font-size:12.5px;line-height:1.45;cursor:pointer;color:var(--tx)}
+.rb-hint-go b{flex:none;color:var(--bnb2);font-size:12.5px}
+.rb-x{all:unset;cursor:pointer;padding:0 10px;color:var(--mut);font-size:16px;display:grid;place-items:center}
+.rb-x:hover{color:var(--tx)}
+.rb-card{position:relative;margin-top:10px;padding:12px 14px;border:1px solid rgba(240,185,11,.3);border-radius:14px;background:rgba(240,185,11,.06);font-size:13px}
+.rb-card b{display:block;margin-bottom:4px} .rb-card p{margin:0 0 8px;color:var(--mut);line-height:1.55}
+.rb-card .rb-x{position:absolute;top:6px;right:2px}
+/* drawer (card / link layouts): right sheet on desktop, bottom sheet on mobile */
+.rb-drawer{position:fixed;inset:0;z-index:80}
+.rb-scrim{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+.rb-sheet{position:absolute;top:0;right:0;bottom:0;width:min(440px,100%);overflow:auto;background:var(--bg2,#14161c);border-left:1px solid var(--line2);padding:14px 16px 24px;box-sizing:border-box}
+.rb-sheet-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.rb-sheet #rbForm{grid-template-columns:1fr 1fr} .rb-sheet .rb-btns{grid-column:1/-1}
+body.rb-noscroll{overflow:hidden}
+.rb-hdr{white-space:nowrap}
+@media (max-width:820px){
+  #rbForm{grid-template-columns:1fr 1fr} .rb-btns{grid-column:1/-1}
+  .rb-sheet{top:auto;left:0;width:100%;max-height:82vh;border-left:0;border-top:1px solid var(--line2);border-radius:16px 16px 0 0}
+}
+@media (max-width:480px){
+  #rbForm,.rb-sheet #rbForm{grid-template-columns:1fr} .rb-steps li{flex-wrap:wrap} .rb-steps .btn{margin-left:32px}
+  .rb-strip-bar{font-size:13px;padding:9px 12px} .rb-hdr span{display:none}
+}
+/* entry popup: headline, one line, one button; big close */
+.rb-pop{position:fixed;inset:0;z-index:95;display:grid;place-items:center;padding:16px}
+.rb-pop-scrim{position:absolute;inset:0;background:rgba(0,0,0,.55)}
+.rb-pop-box{position:relative;width:min(340px,100%);box-sizing:border-box;padding:44px 28px 28px;border-radius:20px;border:1px solid rgba(240,185,11,.45);background:var(--bg2,#10141f);box-shadow:0 24px 70px -20px rgba(0,0,0,.85);text-align:center}
+.rb-pop-box b{display:block;font-size:38px;line-height:1.15;font-weight:800;letter-spacing:.04em;color:var(--bnb2);margin:0 0 12px}
+.rb-pop-box p{margin:0 0 24px;font-size:15px;line-height:1.6;color:var(--tx)}
+.rb-pop-box .btn{width:100%;justify-content:center;min-height:46px;font-size:16px}
+.rb-pop-x{all:unset;box-sizing:border-box;position:absolute;top:6px;right:6px;width:44px;height:44px;display:grid;place-items:center;border-radius:50%;font-size:28px;line-height:1;color:var(--tx);cursor:pointer;background:rgba(255,255,255,.06)}
+.rb-pop-x:hover,.rb-pop-x:focus-visible{background:rgba(255,255,255,.14);outline:2px solid var(--bnb);outline-offset:0}
+@media (max-width:600px){
+  .rb-pop{place-items:end stretch;padding:0}
+  .rb-pop-box{width:100%;border-radius:20px 20px 0 0;padding:44px 24px calc(24px + env(safe-area-inset-bottom))}
+  .rb-pop-box b{font-size:34px}
+}
